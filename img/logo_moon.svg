@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="333px" height="324px" viewBox="0 0 333 324" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>logo_Moon Copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0.0004 0.6814 333.017 0.6814 333.017 325 0.0004 325"></polygon>
+    </defs>
+    <g id="-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Main" transform="translate(-524.000000, -175.000000)">
+            <g id="logo_Moon-Copy" transform="translate(524.000000, 174.000000)">
+                <g id="Group-3" transform="translate(0.000000, 0.319000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Clip-2"></g>
+                    <path d="M198.0004,15.6814 C251.3614,15.6814 299.4084,38.4054 333.0174,74.6934 C299.2664,29.7534 245.5294,0.6814 185.0004,0.6814 C82.8274,0.6814 0.0004,83.5084 0.0004,185.6814 C0.0004,241.2494 24.5044,291.0884 63.2904,325.0004 C32.7134,292.1464 14.0004,248.1024 14.0004,199.6814 C14.0004,98.0604 96.3794,15.6814 198.0004,15.6814" id="Fill-1" fill="#FFFFFF" mask="url(#mask-2)"></path>
+                </g>
+                <polygon id="Fill-4" fill="#FFFFFF" points="267.3276 92.2729 196.0006 228.0259 124.6716 92.2729 82.1056 288.9999 109.7166 288.9999 133.8756 165.9019 196.0006 288.9999 258.1246 165.9019 281.1336 288.9999 309.8946 288.9999"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

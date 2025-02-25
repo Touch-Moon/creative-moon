@@ -1,0 +1,63 @@
+/* Image Path */
+$font-path: "../creative-moon/fonts/";
+
+@font-face {
+    font-family: "PPNeueMontreal";
+    src: local("PPNeueMontreal-Thin"),
+        url("#{$font-path}PPNeueMontreal-Thin.woff2") format("woff2"),
+        url("#{$font-path}PPNeueMontreal-Thin.woff") format("woff");
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "PPNeueMontreal";
+    src: local("PPNeueMontreal-Book"),
+        url("#{$font-path}PPNeueMontreal-Book.woff2") format("woff2"),
+        url("#{$font-path}PPNeueMontreal-Book.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "PPNeueMontreal";
+    src: local("PPNeueMontreal-Italic"),
+        url("#{$font-path}PPNeueMontreal-Italic.woff2") format("woff2"),
+        url("#{$font-path}PPNeueMontreal-Italic.woff") format("woff");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: "PPNeueMontreal";
+    src: local("PPNeueMontreal-Medium"),
+        url("##{$font-path}PPNeueMontreal-Medium.woff2") format("woff2"),
+        url("#{$font-path}PPNeueMontreal-Medium.woff") format("woff");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "PPNeueMontreal";
+    src: local("PPNeueMontreal-SemiBolditalic"),
+        url("#{$font-path}PPNeueMontreal-SemiBolditalic.woff2") format("woff2"),
+        url("#{$font-path}PPNeueMontreal-SemiBolditalic.woff") format("woff");
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "PPNeueMontreal";
+    src: local("PPNeueMontreal-Bold"),
+        url("#{$font-path}PPNeueMontreal-Bold.woff2") format("woff2"),
+        url("#{$font-path}PPNeueMontreal-Bold.woff") format("woff");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}

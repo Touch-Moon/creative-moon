@@ -1,0 +1,434 @@
+@use "resources/variables.scss" as *;
+@use "resources/mixins.scss" as *;
+
+header {
+    .nav-menu-btn {}
+}
+
+/*Nav*/
+#nav-main {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: $black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    z-index: -1;
+    transition-duration: 0.4s;
+    visibility: hidden;
+    box-sizing: border-box;
+    padding-left: 14.0625vw;
+    padding-right: 18.2291666667vw;
+
+    @include mq-below(md) {
+        padding-left: 14.0625vw;
+        padding-right: 18.2291666667vw
+    }
+
+    @include mq-below(sm) {
+        padding-bottom: 12.8205128205vw;
+        padding-left: 10.2564102564vw;
+        padding-right: 10.2564102564vw
+    }
+
+    &.visible {
+        visibility: visible;
+        opacity: 1;
+        z-index: 1000;
+    }
+
+    .nav-main {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        margin: auto;
+        padding-bottom: 10vh;
+        padding-top: 5vh;
+        width: 100%;
+    }
+
+    .nav-logo {
+        width: calc(1/12 * 6 * 100%);
+        position: relative;
+
+        .item {
+            img {
+                width: 180px;
+            }
+        }
+    }
+
+    .nav-parent {
+        width: calc(1/12 * 6 * 100%);
+
+        &>li {
+            .item {
+                overflow: hidden;
+
+                a {
+                    font-size: 5.12vw;
+                    font-weight: 100;
+                    color: $white;
+                    transition-duration: 0.4s;
+                    transform: translateY(100%);
+                    display: inline-block;
+                    line-height: 1.2;
+
+                    @include mq-below(md) {
+                        font-size: 7.291vw;
+                    }
+
+                    @include mq-below(sm) {
+                        font-size: 11.282vw;
+                    }
+                }
+            }
+
+            &.animate {
+                .item {
+                    a {
+                        transform: translateY(0);
+                    }
+                }
+            }
+        }
+    }
+}
+
+.extra-menu {
+    padding-top: 1rem;
+
+    ul {
+        li {
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            a {
+                font-size: 1.67vw;
+                color: $white;
+                transform: translateY(100%);
+                display: inline-block;
+            }
+        }
+    }
+}
+
+.Logo_Moon {
+    position: fixed;
+    top: 2.2vw;
+    left: 3.3vw;
+    overflow: hidden;
+    z-index: 100;
+    mix-blend-mode: difference;
+
+    &.d-none {
+        display: none;
+    }
+
+    .full-moon {
+        width: 48px;
+        height: 48px;
+        overflow: hidden;
+        position: relative;
+
+        a {
+            display: block;
+
+            #moon-mask {
+                .mask-circle {
+                    transition-duration: 0.4s;
+                    transform: translate(2px, 2px);
+                    animation: logo-hover 2s ease-in-out;
+                }
+
+                @keyframes logo-hover {
+                    0% {
+                        transform: translate(40px, 0);
+                    }
+
+                    50% {
+                        transform: translate(8px, 0);
+                    }
+
+                    100% {
+                        transform: translate(2px, 2px);
+                    }
+                }
+            }
+
+            .logo-m {
+                position: absolute;
+                bottom: 2px;
+                right: 6px;
+                transform: translate(48px, 48px);
+                transition-duration: 0.4s;
+                animation: logo-m 1s ease-out forwards;
+                animation-delay: 1s;
+                mix-blend-mode: difference;
+                opacity: 0;
+            }
+
+            @keyframes logo-m {
+                0% {
+                    opacity: 0;
+                    transform: translate(48px, 48px) scale(0);
+                }
+
+                90% {
+                    opacity: 1;
+                    transform: translate(0, 0) scale(0.9);
+                }
+
+                100% {
+                    opacity: 1;
+                    transform: translate(0, 0) scale(1);
+                }
+            }
+
+
+            &:hover {
+                #moon-mask {
+                    .mask-circle {
+                        transform: translate(48px, 48px);
+                    }
+                }
+
+                .logo-m {
+                    bottom: 3px;
+                    right: 8px;
+                }
+            }
+        }
+    }
+
+    .logo-text {
+        position: relative;
+        display: inline-block;
+        height: 39px;
+        overflow: hidden;
+
+        .ico-text {
+            fill: $white;
+            width: 81px;
+            height: 39px;
+            animation: ani-logo-text-opacity 8s linear infinite;
+
+        }
+
+        .ico-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 38px;
+            height: 38px;
+            animation: ani-logo-img-opacity 8s linear infinite;
+
+            svg {
+                fill: $white;
+                width: 38px;
+                height: 38px;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+        }
+    }
+}
+
+.nav-ico {
+    top: 2.2vw;
+    right: 3.3vw;
+    position: fixed;
+    width: 48px;
+    height: 48px;
+    z-index: 9999;
+    cursor: pointer;
+    mix-blend-mode: difference;
+
+    .nav-hamburger {
+        width: 48px;
+        height: 48px;
+        position: relative;
+
+        #moon-nav-mask {
+            position: relative;
+        }
+
+        .mask-nav-circle {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(2px, 2px);
+            transition-duration: 0.4s;
+        }
+
+        .nav-bars {
+            top: calc(50% - 26px);
+            left: calc(50% - 26px);
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            mix-blend-mode: difference;
+            transition-duration: 0.4s;
+            transform: translateY(2px);
+
+            span {
+                width: 28px;
+                height: 2px;
+                background-color: $white;
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: calc(50% - 10px);
+                transform: translateY(-5px) rotate(0deg);
+                transition-duration: 0.4s;
+
+                &:last-child {
+                    width: 24px;
+                    transform: translateY(5px);
+                }
+            }
+        }
+    }
+
+    &:hover {
+        .nav-hamburger {
+            .mask-nav-circle {
+                transform: translate(48px, 0);
+            }
+        }
+    }
+
+    &.nav-btn__active {
+        .nav-bars {
+            transform: translate(-1px, 2px);
+
+            span {
+                transform: translate(0px) rotate(45deg);
+
+                &:last-child {
+                    width: 28px;
+                    transform: rotate(-45deg);
+                }
+            }
+        }
+    }
+}
+
+
+@keyframes ani-logo-text-opacity {
+    0% {
+        opacity: 1;
+    }
+
+    45% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    75% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes ani-logo-img-opacity {
+    0% {
+        opacity: 0;
+    }
+
+    45% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    95% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+
+@keyframes ani-logo-text {
+    0% {
+        transform: translateY(0);
+    }
+
+    45% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-40px);
+        opacity: 1;
+    }
+
+    50.000001% {
+        transform: translateY(-40px);
+        opacity: 0;
+    }
+
+    51% {
+        transform: translateY(40px);
+        opacity: 0;
+    }
+
+    95% {
+        transform: translateY(40px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes ani-logo-img {
+    0% {
+        transform: translateY(40px);
+    }
+
+    45% {
+        transform: translateY(40px);
+    }
+
+    50% {
+        transform: translateY(0);
+    }
+
+    95% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-40px);
+    }
+}

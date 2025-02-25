@@ -1,0 +1,135 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <div class="home--title">
+        <h1 class="home--title__intro">
+            <div class="home--title__ani"></div>
+            <div class="home--title__base">Transform ideas into fluid digital solutions.</div>
+        </h1>
+    </div>
+
+
+    <div class="home--moon section effect">
+        <div class="home--moon__content">
+            <div class="home--moon__logo">
+                
+            </div>
+            <h2>
+                With Moon Always
+            </h2>
+            <div class="home--moon__text text">
+                I'm a creative developer who evolves with the times, staying true to my core. Like the moon, I adapt to trends while my essence remains unchanged, always by your side through time and change.<br><br>
+
+                Check out my work below and feel free to contact me at touch[at]creative-moon.com.
+            </div>
+        </div>
+        <div class="home--moon__bg">
+            <div class="home--moon__img">
+                <img src="{{ theme.link }}/img/bg_main.webp">
+            </div>
+        </div>
+    </div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        gsap.registerPlugin(ScrollTrigger);
+
+        const baseTitle = document.querySelector(".home--title__base");
+        const aniTitle = document.querySelector(".home--title__ani");
+        const homeTitle = document.querySelector(".home--title");
+
+        if (baseTitle && aniTitle && homeTitle) {
+            let words = baseTitle.innerText.trim().split(" ");
+
+            // ✅ 초기 스타일 설정 (100vh)
+            homeTitle.style.height = "100vh";
+
+            // 단어별 `<div>`로 감싸기
+            aniTitle.innerHTML = words.map(word => 
+                `<div class="home--title__word">
+                    <div class="home--title__word-child">${word}</div>
+                </div>`
+            ).join(" ");
+
+            // 애니메이션 실행 (딜레이 적용)
+            let wordElements = aniTitle.querySelectorAll(".home--title__word-child");
+            let lastWordIndex = wordElements.length - 1;
+
+            wordElements.forEach((word, index) => {
+                setTimeout(() => {
+                    word.classList.add("animate");
+
+                    // 마지막 단어 애니메이션이 끝난 후 `.expand` 클래스 추가
+                    if (index === lastWordIndex) {
+                        setTimeout(() => {
+                            homeTitle.classList.add("expand");
+                            homeTitle.style.height = "80vh"; // ✅ .expand가 추가되면 높이를 80vh로 변경
+                            console.log("[DEBUG] .expand 클래스 추가됨! height 업데이트 실행...");
+
+                            updateBodyHeight(); // ✅ height 업데이트 실행
+                        }, 600);
+                    }
+                }, index * 150);
+            });
+
+            baseTitle.remove();
+        }
+
+        // ✅ IntersectionObserver를 활용해 `.home--title`이 화면에 나타날 때 강제 업데이트
+        const titleObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    console.log("[DEBUG] .home--title이 보임, height 업데이트 실행...");
+                    updateBodyHeight();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        titleObserver.observe(document.querySelector(".home--title"));
+
+        // ✅ 페럴럭스 스크롤 정상 작동을 위해 `ScrollTrigger.refresh()` 실행
+        ScrollTrigger.refresh();
+
+        // ✅ 패럴럭스 효과 적용 (배경 이미지가 더 빠르게 올라감)
+        gsap.to(".home--moon__img img", {
+            yPercent: -45, // 배경 이미지가 더 빠르게 이동
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".home--moon",
+                scroller: ".smooth-content", // Locomotive Scroll과 연동
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.5
+            }
+        });
+
+        console.log("[DEBUG] 페럴럭스 스크롤 초기화 완료.");
+    });
+
+    // ✅ body height를 실시간으로 업데이트하는 함수
+    function updateBodyHeight() {
+        const smoothContent = document.querySelector(".smooth-content");
+        if (!smoothContent) {
+            console.warn("[DEBUG] .smooth-content 요소를 찾을 수 없음.");
+            return;
+        }
+
+        const newHeight = smoothContent.scrollHeight;
+        document.body.style.height = `${newHeight}px`;
+
+        console.log(`[DEBUG] body height 업데이트됨: ${newHeight}px`);
+
+        if (typeof locoScroll !== "undefined") {
+            console.log("[DEBUG] locoScroll 업데이트 실행...");
+            locoScroll.update();
+        } else {
+            console.warn("[DEBUG] locoScroll이 정의되지 않음.");
+        }
+
+        // ✅ ScrollTrigger 강제 업데이트
+        ScrollTrigger.refresh();
+    }
+</script>
+{% endblock %}
+

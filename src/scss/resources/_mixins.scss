@@ -1,0 +1,136 @@
+@use "sass:map";
+@use "sass:math";
+
+//
+//  MEDIA QUERIES
+//––––––––––––––––––––––––––––––––––––––––––––––––––
+
+// A map of breakpoints.
+$breakpoints: (
+    xs: 575.98px,
+    sm: 767.98px,
+    md: 991.98px,
+    lg: 1199.98px,
+    xl: 1399.98px,
+    xxl: 1399.98px
+);
+
+//
+//  RESPOND ABOVE
+//––––––––––––––––––––––––––––––––––––––––––––––––––
+
+// @include mq-above(sm) {}
+@mixin mq-above($breakpoint) {
+
+    // If the breakpoint exists in the map.
+    @if map.has-key($breakpoints, $breakpoint) {
+        // ✅ 변경됨
+
+        // Get the breakpoint value.
+        $breakpoint-value: map.get($breakpoints, $breakpoint); // ✅ 변경됨
+
+        // Write the media query.
+        @media (min-width: $breakpoint-value) {
+            @content;
+        }
+
+        // If the breakpoint doesn't exist in the map.
+    }
+
+    @else {
+        @warn 'Invalid breakpoint: #{$breakpoint}.';
+    }
+}
+
+//
+//  RESPOND BELOW
+//––––––––––––––––––––––––––––––––––––––––––––––––––
+
+// @include mq-below(sm) {}
+@mixin mq-below($breakpoint) {
+
+    // If the breakpoint exists in the map.
+    @if map.has-key($breakpoints, $breakpoint) {
+        // ✅ 변경됨
+
+        // Get the breakpoint value.
+        $breakpoint-value: map.get($breakpoints, $breakpoint); // ✅ 변경됨
+
+        // Write the media query.
+        @media (max-width: ($breakpoint-value - 1)) {
+            @content;
+        }
+
+        // If the breakpoint doesn't exist in the map.
+    }
+
+    @else {
+        @warn 'Invalid breakpoint: #{$breakpoint}.';
+    }
+}
+
+//
+//  RESPOND BETWEEN
+//––––––––––––––––––––––––––––––––––––––––––––––––––
+
+// @include mq-between(sm, md) {}
+@mixin mq-between($lower, $upper) {
+
+    // If both the lower and upper breakpoints exist in the map.
+    @if map.has-key($breakpoints, $lower) and map.has-key($breakpoints, $upper) {
+        // ✅ 변경됨
+
+        // Get the lower and upper breakpoints.
+        $lower-breakpoint: map.get($breakpoints, $lower); // ✅ 변경됨
+        $upper-breakpoint: map.get($breakpoints, $upper); // ✅ 변경됨
+
+        // Write the media query.
+        @media (min-width: $lower-breakpoint) and (max-width: ($upper-breakpoint - 1)) {
+            @content;
+        }
+
+        // If one or both of the breakpoints don't exist.
+    }
+
+    @else {
+
+        // If lower breakpoint is invalid.
+        @if (map.has-key($breakpoints, $lower)==false) {
+            // ✅ 변경됨
+            @warn 'Your lower breakpoint was invalid: #{$lower}.';
+        }
+
+        // If upper breakpoint is invalid.
+        @if (map.has-key($breakpoints, $upper)==false) {
+            // ✅ 변경됨
+            @warn 'Your upper breakpoint was invalid: #{$upper}.';
+        }
+    }
+}
+
+//
+//  RESPOND LANDSCAPE BELOW
+//––––––––––––––––––––––––––––––––––––––––––––––––––
+
+// @include mq-landscape-below(sm) {}
+@mixin mq-landscape-below($breakpoint) {
+
+    // If the breakpoint exists in the map.
+    @if map.has-key($breakpoints, $breakpoint) {
+        // ✅ 변경됨
+
+        // Get the breakpoint value.
+        $breakpoint-value: map.get($breakpoints, $breakpoint); // ✅ 변경됨
+
+        // Write the media query.
+        @media (max-width: ($breakpoint-value - 1)) and (orientation: landscape) {
+            @content;
+        }
+
+        // If the breakpoint doesn't exist in the map.
+    }
+
+    @else {
+        @warn 'Invalid breakpoint for landscape mode: #{$breakpoint}.';
+    }
+}

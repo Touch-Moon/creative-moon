@@ -1,0 +1,47 @@
+@use "resources/variables.scss" as *;
+@use "resources/mixins.scss" as *;
+
+html {
+    background-color: $white;
+    height: 100%;
+    overflow: hidden;
+
+    touch-action: none;
+    overscroll-behavior: none;
+
+    #smooth-wrapper {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      
+      .smooth-content {
+        width: 100%;
+        transform: translate3d(0, 0, 0);
+        will-change: transform;
+      }
+}
+
+.section {
+    padding-left: 3.3vw;
+    padding-right: 3.3vw;
+
+    @include mq-below(md) {
+        padding-left:2.6vw;
+        padding-right: 2.6vw;
+    }
+
+    @include mq-below(sm) {
+        padding-left:5.13vw;
+        padding-right: 5.13vw;
+    }
+}
+
+.no-scroll {
+    overflow: hidden;
+    height: 100vh;
+    touch-action: none; /* 모바일 터치 스크롤 차단 */
+}
+

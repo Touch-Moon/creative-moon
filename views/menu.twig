@@ -1,0 +1,32 @@
+<div class="nav-logo">
+	<div class="item">
+		<img src="{{ theme.link }}/img/logo_moon.svg" alt="I am Moon">
+	</div>
+
+	{% if extra_menu and extra_menu.items|length > 0 %}
+		<div class="extra-menu">
+			<ul>
+				{% for item in extra_menu.items %}
+					<li>
+						<a target="{{ item.target }}" href="{{ item.link }}">{{ item.title }}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endif %}
+</div>
+
+{% if primary_menu and primary_menu.items|length > 0 %}
+	<ul class="nav-parent">
+		{% for item in primary_menu.items %}
+			<li class="{{ item.classes | join(' ') }}">
+				<div class="item">
+					<a target="{{ item.target }}" href="{{ item.link }}">{{ item.title }}</a>
+				</div>
+				{% if item.children is not empty %}
+					{% include "menu.twig" with {'items': item.children} %}
+				{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
+{% endif %}
