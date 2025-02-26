@@ -1,0 +1,48 @@
+@charset "UTF-8";
+/* Image Path */
+/* Colors */
+/* Gradient */
+html {
+  background-color: rgb(255, 255, 255);
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+html #smooth-wrapper {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+html .smooth-content {
+  width: 100%;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.section {
+  padding-left: 3.3vw;
+  padding-right: 3.3vw;
+}
+@media (max-width: 990.98px) {
+  .section {
+    padding-left: 2.6vw;
+    padding-right: 2.6vw;
+  }
+}
+@media (max-width: 766.98px) {
+  .section {
+    padding-left: 5.13vw;
+    padding-right: 5.13vw;
+  }
+}
+
+.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+  touch-action: none; /* 모바일 터치 스크롤 차단 */
+}
+
+/*# sourceMappingURL=common.css.map */

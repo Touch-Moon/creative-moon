@@ -15,13 +15,21 @@ html {
         width: 100%;
         height: 100%;
         overflow: hidden;
-      }
-      
-      .smooth-content {
+    }
+
+    .smooth-content {
         width: 100%;
         transform: translate3d(0, 0, 0);
         will-change: transform;
-      }
+        background-color: $white;
+        transition-duration: 0.4s;
+    }
+
+    body.bg-black {
+        .smooth-content {
+            background-color: $black;
+        }
+    }
 }
 
 .section {
@@ -29,12 +37,12 @@ html {
     padding-right: 3.3vw;
 
     @include mq-below(md) {
-        padding-left:2.6vw;
+        padding-left: 2.6vw;
         padding-right: 2.6vw;
     }
 
     @include mq-below(sm) {
-        padding-left:5.13vw;
+        padding-left: 5.13vw;
         padding-right: 5.13vw;
     }
 }
@@ -42,6 +50,6 @@ html {
 .no-scroll {
     overflow: hidden;
     height: 100vh;
-    touch-action: none; /* 모바일 터치 스크롤 차단 */
+    touch-action: none;
+    /* 모바일 터치 스크롤 차단 */
 }
-

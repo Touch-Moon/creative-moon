@@ -1,0 +1,55 @@
+/* Image Path */
+/* Colors */
+/* Gradient */
+.work__row {
+  position: relative;
+}
+.work__container {
+  width: 100%;
+  position: relative;
+}
+.work__container .work-head {
+  width: 46.666666%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.work__container .work-head h2 {
+  padding-top: 1.67vw;
+  border-top: 1px solid rgb(20, 16, 28);
+  font-size: 3.33vw;
+  display: block;
+  padding-bottom: 1.67vw;
+  text-transform: uppercase;
+  line-height: 100%;
+}
+.work__container .work-content p {
+  font-size: 1.25vw;
+  line-height: 140%;
+  font-weight: 400;
+}
+.work__container .work-list ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.33vw;
+  padding-bottom: 32.85vw;
+  direction: rtl;
+}
+.work__container .work-list ul li {
+  width: 100%;
+  text-align: left;
+}
+.work__container .work-list ul li:nth-child(even) {
+  transform: translateY(32.85vw);
+}
+.work__container .work-list ul li .work-content img {
+  width: 100%;
+  height: 56.94vw;
+  object-fit: cover;
+}
+.work__container .work-list ul li .work-list-head .work-title h5 {
+  font-size: 1.11vw;
+  color: rgba(20, 16, 28, 0.4);
+}
+
+/*# sourceMappingURL=work.css.map */

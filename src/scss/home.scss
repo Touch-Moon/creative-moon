@@ -159,6 +159,8 @@
             transform: translateY(100%);
             clip-path: inset(0 0 100% 0);
             transition: transform 0.8s ease-out, clip-path 0.8s ease-out;
+            color: $white;
+            mix-blend-mode: difference;
             &.animate {
                 transform: translateY(0);
                 clip-path: inset(0 0 0 0);}
@@ -191,6 +193,13 @@
             padding-bottom: 6rem;  
         }
 
+        &__logo {
+            img {
+                width: 16.67vw;
+                height: auto;
+            }
+        }
+
         &__bg {                      
             position: relative;
 
@@ -209,7 +218,8 @@
 
         &__img {
             height: 100vh;
-            max-height: 880px;
+            min-height: 880px;
+            max-height: 1280px;
             overflow: hidden; 
             position: relative;
             z-index: 1;
@@ -217,7 +227,7 @@
                 position: absolute;
                 top: 50%;
                 left: 50%;
-                transform: translateX(-50%) translateY(-50%);
+                transform: translateX(-50%) translateY(-50%) scale(1.2);
                 width: 100%;
                 object-fit: cover;
                 z-index: 1;

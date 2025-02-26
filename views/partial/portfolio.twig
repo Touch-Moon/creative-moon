@@ -1,0 +1,26 @@
+
+{% for item in portfolio_data %}
+    {% set image_src = TimberImage(item.image_list).src %}    
+    <li class="work-item effect_class_early">
+        <a href="{{ item.link }}" 
+            class="animsition-link" 
+            data-animsition-out-class="overlay-slide-out-top"
+            data-animsition-out-duration="1000">
+            
+            <div class="work-content" style="background-color:#ebebeb;">
+                <img class="lazy" 
+                    data-srcset="{{ image_src }}"
+                    src="{{ image_src }}" 
+                    loading="lazy"
+                    alt="{{ item.title_list }}">                                  
+            </div>
+
+            <div class="work-list-head">
+                <div class="work-title">
+                    <h5>{{ item.sub_title_list }}</h5>
+                    <h4>{{ item.title_list }}</h4>
+                </div>
+            </div>
+        </a>
+    </li>
+{% endfor %}

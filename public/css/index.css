@@ -270,11 +270,6 @@ html .smooth-content {
   width: 100%;
   transform: translate3d(0, 0, 0);
   will-change: transform;
-  background-color: rgb(255, 255, 255);
-  transition-duration: 0.4s;
-}
-html body.bg-black .smooth-content {
-  background-color: rgb(20, 16, 28);
 }
 
 .section {
@@ -297,8 +292,7 @@ html body.bg-black .smooth-content {
 .no-scroll {
   overflow: hidden;
   height: 100vh;
-  touch-action: none;
-  /* 모바일 터치 스크롤 차단 */
+  touch-action: none; /* 모바일 터치 스크롤 차단 */
 }
 
 /*Nav*/
@@ -799,8 +793,6 @@ html body.bg-black .smooth-content {
   transform: translateY(100%);
   clip-path: inset(0 0 100% 0);
   transition: transform 0.8s ease-out, clip-path 0.8s ease-out;
-  color: rgb(255, 255, 255);
-  mix-blend-mode: difference;
 }
 .home--title__word-child.animate {
   transform: translateY(0);
@@ -899,38 +891,20 @@ html body.bg-black .smooth-content {
   position: absolute;
   left: 0;
   top: 0;
-  mix-blend-mode: difference;
 }
 .work__container .work-head h2 {
   padding-top: 1.67vw;
-  border-top: 1px solid rgb(255, 255, 255);
+  border-top: 1px solid rgb(20, 16, 28);
   font-size: 3.33vw;
-  color: rgb(255, 255, 255);
   display: block;
   padding-bottom: 1.67vw;
   text-transform: uppercase;
   line-height: 100%;
-  mix-blend-mode: difference;
 }
 .work__container .work-content p {
   font-size: 1.25vw;
   line-height: 140%;
   font-weight: 400;
-  color: rgb(255, 255, 255);
-}
-.work__container .work-list {
-  position: relative;
-}
-.work__container .work-list::before {
-  content: "";
-  display: block;
-  height: 67.22vw;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #ffffff 50%, #ffffff 100%);
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
 }
 .work__container .work-list ul {
   display: grid;
@@ -951,50 +925,9 @@ html body.bg-black .smooth-content {
   height: 56.94vw;
   object-fit: cover;
 }
-.work__container .work-list ul li .work-list-head .work-title {
-  padding-top: 2.22vw;
-  padding-bottom: 3.33vw;
-}
 .work__container .work-list ul li .work-list-head .work-title h5 {
-  padding-bottom: 1.11vw;
   font-size: 1.11vw;
-  color: rgba(255, 255, 255, 0.4);
-  line-height: 100%;
-  display: block;
-  mix-blend-mode: difference;
-}
-.work__container .work-list ul li .work-list-head .work-title h4 {
-  font-size: 2.22vw;
-  font-weight: 700;
-  color: rgb(255, 255, 255);
-  line-height: 95%;
-  mix-blend-mode: difference;
-}
-.work__container .work-list .work-more-btn {
-  background-color: rgb(255, 255, 255);
-  padding: 1.53vw 3.33vw;
-  border-radius: 6.66vw;
-  position: absolute;
-  bottom: 8.75vw;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  mix-blend-mode: difference;
-}
-.work__container .work-list .work-more-btn .work-more-title {
-  font-size: 2.78vw;
-  font-weight: 400;
-  text-transform: uppercase;
-  color: rgb(255, 255, 255);
-  text-align: center;
-  mix-blend-mode: difference;
-}
-.work__container .work-list .work-more-btn .work-more-subtitle {
-  font-size: 1.11vw;
-  font-weight: 400;
-  color: rgb(255, 255, 255);
-  text-align: center;
-  mix-blend-mode: difference;
+  color: rgba(20, 16, 28, 0.4);
 }
 
-/*# sourceMappingURL=style.css.map */
+/*# sourceMappingURL=index.css.map */

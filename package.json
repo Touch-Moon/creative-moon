@@ -172,7 +172,7 @@
   },
   "scripts": {
     "build": "sass src/style.scss style.css --style=compressed",
-    "watch": "sass --watch src/style.scss:style.css"
+    "watch": "sass --watch src/style.scss:style.css --style=expanded --source-map"
   },
   "keywords": [],
   "author": "",
