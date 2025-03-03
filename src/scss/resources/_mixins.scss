@@ -134,3 +134,21 @@ $breakpoints: (
         @warn 'Invalid breakpoint for landscape mode: #{$breakpoint}.';
     }
 }
+
+
+/*Mobile*/
+@function vw-mobile($px-value, $base-width: 425px) {
+    @return calc(($px-value / $base-width) * 100vw);
+}
+
+@function vw-tablet($px-value, $base-width: 992px) {
+    @return calc(($px-value / $base-width) * 100vw);
+}
+
+@function vw-desktop($px-value, $base-width: 1140px) {
+    @return calc(($px-value / $base-width) * 100vw);
+}
+
+@function vw($px-value, $base-width: 1440px) {
+    @return calc(($px-value / $base-width) * 100vw);
+}

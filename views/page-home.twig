@@ -1,7 +1,7 @@
 {% extends "base.twig" %}
 
 {% block content %}
-    <div class="home--title">
+    <div class="home--title section bg-change-white">
         <h1 class="home--title__intro">
             <div class="home--title__ani"></div>
             <div class="home--title__base">Transform ideas into fluid digital solutions.</div>
@@ -9,20 +9,20 @@
     </div>
 
 
-    <div class="home--moon section effect effect-class bg-change-black">
+    <div class="home--moon section effect effect_class bg-change-black">
         <div class="home--moon__content">
             <div class="home--moon__logo">
-                <div class="effect__01">
+                <div class="">
                     <img src="{{ theme.link }}/img/logo_moon.svg" alt="Creative Moon Logo">
                 </div>
             </div>
-            <h2 class="effect__02">
+            <h2 class="">
                 <div>
                     With Moon Always
                 </div>
             </h2>
             <div class="home--moon__text text">
-                <div class="effect__03">
+                <div class="">
                     I'm a creative developer who evolves with the times, staying true to my core. Like the moon, I adapt to trends while my essence remains unchanged, always by your side through time and change.<br><br>
 
                     Check out my work below and feel free to contact me at touch[at]creative-moon.com.
@@ -36,146 +36,112 @@
         </div>
     </div>
 
-    <div>
-        <div class="work__container section">
-            <div class="work__row">
-                <div class="work-head">
-                    <h2>Highlighted Work</h2>
-                    <div class="work-content">
-                        <p>
-                            Expertise spans web design, development, and graphic design, shaping visually engaging and seamlessly interactive digital experiences. Every project blends aesthetics with functionality, ensuring intuitive and impactful results across diverse platforms.
-                        </p>
-                    </div>
+    <div class="work__container section bg-change-white">
+        <div class="work__row">
+            <div class="work-head effect_class">
+                <h2>Highlighted Work</h2>
+                <div class="work-content">
+                    <p>
+                        Expertise spans web design, development, and graphic design, shaping visually engaging and seamlessly interactive digital experiences. Every project blends aesthetics with functionality, ensuring intuitive and impactful results across diverse platforms.
+                    </p>
                 </div>
+            </div>
 
-                <div class="work-list">
-                    <ul>
-                        {% include "/partial/portfolio.twig" with { portfolio: portfolio_home_args } %}
-                    </ul>
+            <div class="work-list">
+                <ul class="effect_class">
+                    {% include "/partial/portfolio.twig" with { portfolio: portfolio_data } %}
+                </ul>
 
-                    <a href="/portfolio/" class="work-more-btn">
-                        <div class="work-more-title">Explore more work.</div>
-                        <div class="work-more-subtitle">Discover projects that blend design, technology, and creativity.</div>
-                    </a>
-                </div>
+                <a href="/portfolio/" class="work-more-btn">
+                    <div class="work-more-title">Explore more work.</div>
+                    <div class="work-more-subtitle">Discover projects that blend design, technology, and creativity.</div>
+                </a>
             </div>
         </div>
     </div>
 
+    <div class="home--about section effect_class bg-change-black">
+        <span class="line"></span>
+        <span class="line"></span>        
 
-<script>
- document.addEventListener("DOMContentLoaded", function () {
-    gsap.registerPlugin(ScrollTrigger);
+        <div class="home-about-head">            
+            <h2>Who am I.</h2>
+            <p>A digital creator crafting intuitive designs and seamless experiences, blending creativity with technology to bring ideas to life.</p>
+            <span class="line"></span>
+        </div>
+        <div class="home-about-content">
+            <div class="home-about-item">
+                <a href="/manifesto/">                    
+                    <div class="home-about-image">
+                        <img src="{{ theme.link }}/img/img-manifesto-thumb.jpg" alt="Manifesto">
+                    </div>
+                    <div class="home-about-title">
+                        Manifesto.
+                    </div>
+                </a>
+            </div>
+            <div class="home-about-item">
+                <a href="/about/">
+                    <div class="home-about-image">
+                        <img src="{{ theme.link }}/img/img-about-thumb.jpg" alt="About me">
+                    </div>
+                    
+                    <div class="home-about-title">
+                        About.
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
 
-    const baseTitle = document.querySelector(".home--title__base");
-    const aniTitle = document.querySelector(".home--title__ani");
-    const homeTitle = document.querySelector(".home--title");
+    {% include "/partial/footer.twig" %}
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const baseTitle = document.querySelector(".home--title__base");
+            const aniTitle = document.querySelector(".home--title__ani");
+            const homeTitle = document.querySelector(".home--title");
 
-    if (baseTitle && aniTitle && homeTitle) {
-        let words = baseTitle.innerText.trim().split(" ");
+            if (baseTitle && aniTitle && homeTitle) {
+                let words = baseTitle.innerText.trim().split(" ");
 
-        // ✅ 초기 스타일 설정 (100vh)
-        homeTitle.style.height = "100vh";
+                // ✅ 초기 스타일 설정 (100vh)
+                homeTitle.style.height = "100vh";
 
-        // 단어별 `<div>`로 감싸기
-        aniTitle.innerHTML = words.map(word =>
-            `<div class="home--title__word">
-                <div class="home--title__word-child">${word}</div>
-            </div>`
-        ).join(" ");
+                // 단어별 `<div>`로 감싸기
+                aniTitle.innerHTML = words.map(word =>
+                    `<div class="home--title__word">
+                        <div class="home--title__word-child">${word}</div>
+                    </div>`
+                ).join(" ");
 
-        // 애니메이션 실행 (딜레이 적용)
-        let wordElements = aniTitle.querySelectorAll(".home--title__word-child");
-        let lastWordIndex = wordElements.length - 1;
+                // 애니메이션 실행 (딜레이 적용)
+                let wordElements = aniTitle.querySelectorAll(".home--title__word-child");
+                let lastWordIndex = wordElements.length - 1;
 
-        wordElements.forEach((word, index) => {
-            setTimeout(() => {
-                word.classList.add("animate");
-
-                // 마지막 단어 애니메이션이 끝난 후 `.expand` 클래스 추가
-                if (index === lastWordIndex) {
+                wordElements.forEach((word, index) => {
                     setTimeout(() => {
-                        homeTitle.classList.add("expand");
-                        homeTitle.style.height = "80vh"; // ✅ .expand가 추가되면 높이를 80vh로 변경
+                        word.classList.add("animate");
 
-                        updateBodyHeight(); // ✅ height 업데이트 실행
-                    }, 600);
-                }
-            }, index * 150);
+                        // 마지막 단어 애니메이션이 끝난 후 `.expand` 클래스 추가
+                        if (index === lastWordIndex) {
+                            setTimeout(() => {
+                                homeTitle.classList.add("expand");
+
+                                // ✅ 575.98px 이하(모바일) / 576px 초과(데스크탑) 높이 다르게 적용
+                                let newHeight = window.innerWidth <= 575.98 ? "55vh" : "70vh";
+                                homeTitle.style.height = newHeight;
+
+                                updateBodyHeight(); // ✅ 즉시 body 높이 업데이트
+                            }, 600);
+                        }
+                    }, index * 150);
+                });
+
+                baseTitle.remove();
+            }
         });
-
-        baseTitle.remove();
-    }
-
-    // ✅ Lazy Load 이미지 감지 (MutationObserver 활용)
-    function observeLazyImages() {
-        const lazyImages = document.querySelectorAll(".lazy");
-        if (lazyImages.length > 0) {
-            const observer = new MutationObserver(() => {
-                requestAnimationFrame(updateBodyHeight); // ✅ 성능 최적화
-            });
-
-            lazyImages.forEach(img => {
-                observer.observe(img, { attributes: true, attributeFilter: ['src', 'data-src', 'class'] });
-            });
-        }
-    }
-
-    // ✅ DOM 변경 감지 (포트폴리오 이미지나 추가 콘텐츠가 동적으로 로드될 때)
-    const domObserver = new MutationObserver(() => {
-        requestAnimationFrame(updateBodyHeight);
-    });
-
-    domObserver.observe(document.body, { childList: true, subtree: true });
-
-    // ✅ Lazy Load 감지 시작
-    observeLazyImages();
-
-    
-
-    // ✅ 페럴럭스 스크롤 정상 작동을 위해 `ScrollTrigger.refresh()` 실행
-    ScrollTrigger.refresh();
-
-    // ✅ 패럴럭스 효과 적용 (배경 이미지가 더 빠르게 올라감)
-    gsap.to(".home--moon__img img", {
-        yPercent: -15, // 배경 이미지가 더 빠르게 이동
-        ease: "none",
-        scrollTrigger: {
-            trigger: ".home--moon",
-            scroller: ".smooth-content", // Locomotive Scroll과 연동
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.5
-        }
-    });
-
-    console.log("[DEBUG] 페럴럭스 스크롤 초기화 완료.");
-
-    // ✅ 최초 로드 후 높이 업데이트 (0.5초 후 실행)
-    setTimeout(() => {
-        updateBodyHeight();
-    }, 500);
-
-    
-});
-
-// ✅ body height를 실시간으로 업데이트하는 함수
-function updateBodyHeight() {
-    const smoothContent = document.querySelector(".smooth-content");
-    if (!smoothContent) {
-        console.warn("[DEBUG] .smooth-content 요소를 찾을 수 없음.");
-        return;
-    }
-
-    const newHeight = smoothContent.scrollHeight;
-    document.body.style.height = `${newHeight}px`;
-
-    // ✅ ScrollTrigger 강제 업데이트
-    ScrollTrigger.refresh();
-}
-
-</script>
+    </script>
 
 
 

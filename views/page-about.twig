@@ -1,0 +1,137 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <div class="hero hero-about section hero--title">
+        <div class="hero--title__wrap">
+            <strong>{{ post.title }} |</strong>
+            <div class="hero--title__intro">
+                <h1 class="hero--title__ani"></h1>
+                <h1 class="hero--title__base">Designed for simplicity. Built for everyday life.</h1>
+            </div>            
+            <div class="crescent">
+                <svg class="nav-logo-img" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <mask id="moon-logo-hero-mask">
+                            <rect width="48" height="48" fill="white"></rect>
+                            <circle class="mask-circle-logo" cx="24" cy="24" r="24" fill="black"></circle>
+                        </mask>
+                    </defs>
+                    <circle cx="24" cy="24" r="24" fill="white" mask="url(#moon-logo-hero-mask)"></circle>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="about--head ani-load">
+            <div class="img-mask">
+                <img src="{{ theme.link }}/img/bg-about.webp">
+            </div>
+
+            <div class="about-text">
+                Designed to be invisible when it should be, intuitive when it matters. Every interaction feels natural, every detail is intentional. Simplicity isn't about less—it's about creating space for what truly matters.
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="about-me">
+            <div class="about-col">
+                <div class="about-item">
+                    <div class="about-item--number">
+                        01.
+                    </div>
+                    <div class="about-item--content">
+                        <h2 class="about-item--subtitle">
+                            Who am I —?!
+                        </h2>
+                        <h3 class="about-item--title">
+                            Web design. Development. User friendly.
+                        </h3>
+                        <div class="about-item--text">
+                            I'm a web designer and full-stack developer with 15+ years of experience, crafting intuitive, scalable, and responsive digital experiences. My expertise spans UI/UX, front-end aesthetics, and back-end functionality, ensuring every project is both visually compelling and technically sound. Always evolving, I explore emerging trends, integrating AI and Machine Learning into digital solutions. I thrive on pushing creative and technical boundaries, transforming ideas into impactful, user-driven experiences.Recently, I've developed an interest in Machine Learning and AI, seeking ways to incorporate these technologies into my work. I'm excited to continue exploring this field and applying my knowledge to solve new challenges.
+                        </div>
+                    </div>
+                </div>  
+
+                <div class="about-item">
+                    <div class="about-item--number">
+                        02.
+                    </div>
+                    <div class="about-item--content">
+                        <h2 class="about-item--subtitle">
+                            What can I do —?!
+                        </h2>
+                        <h3 class="about-item--title">
+                            Digital. Data. Design.
+                        </h3>
+                        <div class="about-item--text">
+                            Design and build seamless digital experiences—where form meets function, and simplicity enhances usability. With over 15 years of expertise, I craft intuitive, scalable, and responsive interfaces that evolve with technology.<br><br>
+
+                            The digital landscape is always shifting. I stay ahead—exploring AI, Machine Learning, and emerging trends to push boundaries and rethink possibilities.
+                            <br><br>
+
+                            Good design isn't just about aesthetics. It's about clarity, efficiency, and experience. Every project is built to create intuitive, user-driven solutions that work effortlessly.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-item">
+                    <div class="about-item--number">
+                        03.
+                    </div>
+                    <div class="about-item--content">
+                        <h2 class="about-item--subtitle">
+                           Why is Moon —?!
+                        </h2>
+                        <h3 class="about-item--title">
+                            Always by your side, Adapting to the changing times.
+                        </h3>
+                        <div class="about-item--text">
+                            The moon transforms, yet never changes. It adapts to light, shifts with time, but remains constant at its core. And I move with it.<br><br>
+                            
+                            Design trends come and go. Technology pushes forward. I embrace every shift, every evolution—refining, redefining, and staying ahead. But at my foundation, I remain the same: focused on clarity, function, and the seamless fusion of design and technology.<br><br>
+                            
+                            The earth represents you. Time moves the era forward. The moon's changing form mirrors the trends I navigate. And like the moon, I am always here—evolving, adapting, but never losing sight of what truly matters.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-item about-skills">
+                    <div class="about-skills-col">
+                        <h2>Front-end</h2>
+                        <ul class="about-skills-details">
+                            <li>GitHub & Version Control</li>
+                            <li>JavaScript</li>
+                            <li>PHP & WordPress Development</li>
+                            <li>HTML5, CSS3 & SASS</li>
+                            <li>Responsive Web Design.</li>
+                            <li>Cross-browser Compatibility.</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-skills-col">
+                        <h2>Design skills</h2>
+                        <ul class="about-skills-details">
+                            <li>UX/UI Design [Web & Application]</li>
+                            <li>Graphic [Printing & Digital]</li>
+                            <li>Photo & Video Editing</li>
+                            <li>Expert in design tools.</li>
+                            <li>Skilled in development across platforms</li>
+                        </ul>
+                    </div>
+                </div>               
+            </div>
+
+            <div class="about-col align-items-start">
+                <div class="pin-spacer">
+                    <div class="about-image services-list__animation">
+                        <img src="{{ theme.link }}/img/moon-portrait-compressed.webp" alt="Moon's portrait">
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

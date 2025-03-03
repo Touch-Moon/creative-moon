@@ -99,6 +99,7 @@
     "last-run": "^2.0.0",
     "lead": "^4.0.0",
     "liftoff": "^5.0.0",
+    "locomotive-scroll": "^4.1.4",
     "lodash.clonedeep": "^4.5.0",
     "map-cache": "^0.2.2",
     "micromatch": "^4.0.8",

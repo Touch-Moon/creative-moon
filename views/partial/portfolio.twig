@@ -1,5 +1,4 @@
-
-{% for item in portfolio_data %}
+{% for item in portfolio %}
     {% set image_src = TimberImage(item.image_list).src %}    
     <li class="work-item effect_class_early">
         <a href="{{ item.link }}" 
@@ -7,9 +6,8 @@
             data-animsition-out-class="overlay-slide-out-top"
             data-animsition-out-duration="1000">
             
-            <div class="work-content" style="background-color:#ebebeb;">
+            <div class="work-content image-container">
                 <img class="lazy" 
-                    data-srcset="{{ image_src }}"
                     src="{{ image_src }}" 
                     loading="lazy"
                     alt="{{ item.title_list }}">                                  

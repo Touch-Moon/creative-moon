@@ -1,0 +1,96 @@
+{% extends "base.twig" %}
+
+
+{% block content %}
+
+	<div class="hero-wrok hero section">
+		<div class="row">
+			<h1>
+				{{ post.title }}
+			</h1>
+            <div class="hero-category-wrap">
+                <div class="hero-category-ico">
+                    <img src="{{ theme.link }}/img/ico-moon-category-black.svg">
+                </div>
+                <ul class="hero-category hover-animation-parent">
+                    {% set portfolio_categories = function('get_terms', {
+                        taxonomy: 'category',
+                        hide_empty: false
+                    }) %}
+
+                    {% set total_posts = function('wp_count_posts', 'portfolio').publish %}
+                    
+                    <li>
+                        <a href="{{ site.url }}/portfolio">All<span>({{ total_posts }})</span></a>
+                    </li>
+
+                    {% for category in portfolio_categories %}
+                        {% set category_count = category.count  %}
+                        <li>
+                            <a href="{{ category.link }}">{{ category.name }} <span>({{ category_count }})</span></a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+			
+		</div>
+	</div>
+
+
+	<div class="work__container section bg-change-white">
+		<div class="work__row">
+			<div class="work-head effect_class">
+				<h2>Highlighted Work</h2>
+				<div class="work-content">
+					<p>
+						Expertise spans web design, development, and graphic design, shaping visually engaging and seamlessly interactive digital experiences. Every project blends aesthetics with functionality, ensuring intuitive and impactful results across diverse platforms.
+					</p>
+				</div>
+			</div>
+
+			<div class="work-list">
+				<ul class="effect_class">
+					{% include "/partial/portfolio.twig" with { portfolio: portfolio_all } %}
+				</ul>
+			</div>
+		</div>
+	</div>
+
+    <div class="bg-change-black">
+        {% include "/partial/footer.twig" %}
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.body.classList.add("work");
+
+            document.querySelectorAll(".hero-category li").forEach(li => {
+                if (li.textContent.includes("Uncategorized")) {
+                    li.style.display = "none";
+                }
+            });
+
+            let $workListItems = $(".work-list ul li");
+
+            if ($workListItems.length >= 2) {
+                // ✅ 마지막 li에 .bg-change-black 클래스 추가
+                $workListItems.last().addClass("bg-change-black");
+
+                // ✅ 마지막에서 두 번째 li에 .bg-change-white 클래스 추가
+                $workListItems.eq(-2).addClass("bg-change-white");
+            }
+        });
+
+        $(document).ready(function () {
+            $(".hero-category li:not(:first-child) a").hover(
+                function () {
+                    $(".hero-category-ico").addClass("active"); // ✅ 첫 번째 li 제외 후 .active 추가
+                },
+                function () {
+                    $(".hero-category-ico").removeClass("active"); // ✅ 마우스 아웃 시 .active 제거
+                }
+            );
+        });
+    </script>
+
+{% endblock %}

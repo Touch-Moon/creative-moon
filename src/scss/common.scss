@@ -3,9 +3,6 @@
 
 html {
     background-color: $white;
-    height: 100%;
-    overflow: hidden;
-
     touch-action: none;
     overscroll-behavior: none;
 
@@ -30,6 +27,14 @@ html {
             background-color: $black;
         }
     }
+
+    &.has-scroll-smooth {
+        overflow: inherit !important;
+
+        body {
+            overflow: inherit !important;
+        }
+    }
 }
 
 .section {
@@ -52,4 +57,123 @@ html {
     height: 100vh;
     touch-action: none;
     /* 모바일 터치 스크롤 차단 */
+}
+
+.contact {
+    &--talk {
+        .contact-talk-box {
+            padding-top: 20vw;
+            @include mq-below(xs) {
+                padding-top: 25vh;
+            }
+
+            h2 {
+                a {
+                    font-size: 9.72vw;
+                    font-weight: 500;
+                    color: $white;
+                    line-height: 100%;
+                    mix-blend-mode: difference;
+                    display: inline-block;
+                    position: relative;
+                    transition-duration: 0.4s;
+                    letter-spacing: 0px;
+
+                    @include mq-below(lg) {
+                        font-size: vw-desktop(120px);
+                    }   
+
+                    @include mq-below(xs) {
+                        font-size: vw-mobile(80px);
+                    }
+
+                    span {
+                        position: absolute;
+                        right: -1.4vw;
+                        bottom: 1.39vw;
+                        mix-blend-mode: difference;
+                        transition-duration: 0.4s;
+                        transform: translateX(0);
+                        opacity: 0;                        
+                        &:nth-child(1) {opacity: 1;}
+                    }
+
+                    &:hover {
+                        letter-spacing: 0.56vw;
+                        span {
+                            &:nth-child(1) {transform: translateX(0vw);}
+                            &:nth-child(2) {transform: translateX(1.67vw);}
+                            &:nth-child(3) {transform: translateX(3.34vw);}
+                            &:nth-child(4) {transform: translateX(5.01vw);}
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        .contact-talk-tail {
+            letter-spacing: 0.05em;
+            padding-top: 1.67vw;
+            font-size: 1.11vw;
+            color: $white;
+            mix-blend-mode: difference;
+
+            @include mq-below(lg) {
+                font-size: vw-desktop(24px);
+            }   
+
+            @include mq-below(xs) {
+                font-size: vw-mobile(16px);
+            }            
+        }
+    }
+}
+
+.ico-moon-full,
+.ico-moon-gibbous,
+.ico-moon-half,
+.ico-moon-crescent {
+    width: 1.11vw;
+    height: 1.11vw;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.ico-moon-full { background-image: url(#{$img-path}ico-moon-full.webp); }
+.ico-moon-gibbous { background-image: url(#{$img-path}ico-moon-gibbous.webp); }
+.ico-moon-half { background-image: url(#{$img-path}ico-moon-half.webp); }
+.ico-moon-crescent { background-image: url(#{$img-path}ico-moon-crescent.webp); }
+
+footer#footer {
+    padding-top: 20vw;
+    padding-bottom: vw(20px);
+    font-size: vw(14px);
+    display: block;
+    color: $white;
+    mix-blend-mode: difference;
+
+    @include mq-below(lg) {
+        font-size: vw-desktop(12px);
+    }
+
+    @include mq-below(md) {
+        font-size: vw-tablet(14px);
+    }
+
+    @include mq-below(xs) {
+        padding-top: 20vh;
+        font-size: vw-mobile(12px);
+    }
+}
+
+body.admin-bar {
+    .nav-ico, .Logo_Moon {
+        transform: translateY(32px);
+
+        @include mq-below(sm) {
+            transform: translateY(46px);
+        }
+    }
 }

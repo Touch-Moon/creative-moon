@@ -3,6 +3,8 @@ html {
     -webkit-text-size-adjust: 100%;
     line-height: 1.15;
     font-family: "PPNeueMontreal", sans-serif;
+    position: relative;
+    height: auto;
 }
 
 body {
@@ -169,9 +171,6 @@ body {
     line-height: 1.4
 }
 
-ol,ul {
-    list-style: none
-}
 
 blockquote,q {
     quotes: none

@@ -1,0 +1,148 @@
+@use "resources/variables.scss" as *;
+@use "resources/mixins.scss" as *;
+
+.about {
+    &--head {
+        transform-origin: center;
+        will-change: transform;
+        padding-bottom: vw(232px);
+
+        &.ani-load {
+            .img-mask {
+                width: 100%;
+                overflow: hidden;
+
+                img {
+                    transform: scale(1.5);
+                    opacity: 0;
+                    height: 60vh;
+                    max-height: 980px;
+                }
+            }
+
+            &.ani-loaded {
+                .img-mask {
+                    img {
+                        width: 100%;
+                        object-fit: cover;
+                        transform: scale(1);
+                        transition-duration: 3s;
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+
+        .about-text {
+            padding-top: vw(24px);
+            width: calc(10/12 * 100%);
+            font-size: vw(26px);
+            line-height: 150%;
+        }
+    }
+}
+
+.about-me {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 48px;
+   
+    .about-col {
+        width: calc(100% - 48px);
+        .about-image {
+            overflow: hidden;
+            min-height: 720px;
+            position: relative;
+
+            @include mq-below(xs) {
+                display: none;
+            }
+
+
+            img {
+                position: absolute;
+                left: 50%;
+                right: 50%;
+                transform: translate(-50%) scale(1);
+                transition-duration: 0.4s;
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+}
+
+.about-item {
+    color: $black;
+    padding-bottom: vw(120px);
+    &:last-child {
+        padding-bottom: 0;
+    }
+
+
+    &--number {
+        font-size: vw(24px);
+        border-bottom: 1px solid $black;
+        padding-bottom: vw(20px);
+    }
+
+    &--content {
+        
+    }
+
+    &--subtitle {
+        padding-top: vw(28px);
+        padding-bottom: vw(12px);
+        font-size: vw(20px);
+        display: block;
+    }
+
+    &--title {
+        font-size: vw(36px);
+        padding-bottom: vw(32px);
+        display: block;
+        padding-right: vw(30px);
+        font-weight: 500;
+        line-height: 115%;
+        text-transform: capitalize;
+    }
+
+    &--text {
+        font-size: vw(16px);
+        line-height: 150%;
+    }
+}
+
+.about-skills {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    .about-skills-col {
+        border-top: 1px solid $black;
+        padding-top: vw(32px);
+
+        h2 {
+            font-size: vw(24px);
+            text-transform: capitalize;
+            font-weight: 500;
+            padding-bottom: vw(16px);
+            color: $black;
+            display: block;
+        }
+
+        ul {
+            li {
+                font-size: vw(14px);
+                color: $black;
+                list-style: none;
+                margin: 0;
+                padding: 0 0 vw(6px);
+            }
+        }
+    }
+}
+
+.pin-spacer {
+    will-change: transform; /* 애니메이션 최적화 */
+    transition: transform 0.3s ease-out; /* 부드러운 이동 */
+}

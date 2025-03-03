@@ -77,3 +77,16 @@ add_filter('timber/context', 'creative_moon_add_portfolio_to_context');
 
 // ✅ 7️⃣ StarterSite 클래스 실행
 new StarterSite();
+
+function remove_unwanted_body_classes($classes) {
+    $remove_classes = [
+        'home',               // 홈 페이지 클래스
+        'page-template-default', // 기본 페이지 템플릿 클래스
+        'page',               // 페이지 클래스
+        'page-id-11'         // 특정 페이지 ID 클래스
+    ];
+
+    return array_diff($classes, $remove_classes);
+}
+add_filter('body_class', 'remove_unwanted_body_classes');
+

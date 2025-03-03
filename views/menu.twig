@@ -1,6 +1,28 @@
+
 <div class="nav-logo">
 	<div class="item">
-		<img src="{{ theme.link }}/img/logo_moon.svg" alt="I am Moon">
+		<svg class="nav-logo-img" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+			<defs>
+				<mask id="moon-logo-menu-mask">
+					<rect width="48" height="48" fill="white"></rect>
+					<circle class="mask-circle-logo" cx="24" cy="24" r="24" fill="black"></circle>
+				</mask>
+			</defs>
+			<circle cx="24" cy="24" r="24" fill="white" mask="url(#moon-logo-menu-mask)"></circle>
+		</svg>
+		<a href="/">
+			<div class="nav-text-mask">
+				<div class="nav-text-item">
+					Creative
+				</div>
+			</div>
+			<div class="nav-text-mask">
+				<div class="nav-text-item">
+					Moon
+				</div>
+			</div>
+			{# <img src="{{ theme.link }}/img/logo-text-only.svg" alt="I am Moon"> #}
+		</a>
 	</div>
 
 	{% if extra_menu and extra_menu.items|length > 0 %}

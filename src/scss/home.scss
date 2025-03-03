@@ -161,9 +161,11 @@
             transition: transform 0.8s ease-out, clip-path 0.8s ease-out;
             color: $white;
             mix-blend-mode: difference;
+
             &.animate {
                 transform: translateY(0);
-                clip-path: inset(0 0 0 0);}
+                clip-path: inset(0 0 0 0);
+            }
         }
 
         &__intro,
@@ -174,6 +176,16 @@
             text-align: center;
             text-transform: uppercase;
             line-height: 95%;
+
+            @include mq-below(lg) {
+                width: 83.33333%;
+                font-size: vw-desktop(92px);
+            }
+
+            @include mq-below(xs) {
+                width: 100%;
+                font-size: vw-mobile(40px);
+            }
         }
 
         &__ani {
@@ -189,19 +201,61 @@
         &.section {
             overflow: hidden;
             position: relative;
-            padding-top: 6rem;
-            padding-bottom: 6rem;  
+            margin: 6.67vw 3.3vw;
+            transition-duration: 0.2s;
+            display: flex;
+            justify-self: center;
+            align-items: center;
+
+            @include mq-below(xs) {
+                min-height: 50vh;
+            }
+
+            .home--moon__logo div,
+            h2,
+            .home--moon__text div {
+                opacity: 0;
+                transition-duration: 0.4s;
+                transform: scale(0.4);
+            }
+
+            &.active {
+                margin: 6.67vw 0;
+
+                .home--moon__logo div,
+                h2,
+                .home--moon__text div {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+
+                .home--moon__img img {
+                    opacity: 1;
+                }
+
+            }
         }
 
         &__logo {
             img {
                 width: 16.67vw;
                 height: auto;
+
+                @include mq-below(lg) {
+                    width: vw-desktop(240px);
+                }
+
+                @include mq-below(xs) {
+                    width: vw-mobile(140px);
+                }
             }
         }
 
-        &__bg {                      
-            position: relative;
+        &__bg {
+            position: absolute;
+            inset: 0 0;
+            transition-duration: 0.2s;
+            background-color: rgb(28, 24, 38);
 
             &::before {
                 content: '';
@@ -217,40 +271,56 @@
         }
 
         &__img {
-            height: 100vh;
-            min-height: 880px;
-            max-height: 1280px;
-            overflow: hidden; 
-            position: relative;
+            overflow: hidden;
+            position: absolute;
+            inset: 0px 0;
             z-index: 1;
+
             img {
                 position: absolute;
                 top: 50%;
                 left: 50%;
-                transform: translateX(-50%) translateY(-50%) scale(1.2);
+                transition-duration: 0.2s;
                 width: 100%;
                 object-fit: cover;
                 z-index: 1;
+                opacity: 0;
             }
         }
 
         &__content {
-            position: absolute;
-            z-index: 2;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            position: relative;
+            inset: 0px 0px;
             z-index: 3;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            
+            box-sizing: border-box;
+            min-height: 50vw;
+            padding-top: 6.67vw;
+            padding-bottom: 6.67vw;
+
+            @include mq-below(lg) {
+                min-height: 60vh;
+            }
+
             h2 {
                 font-size: 5vw;
                 font-weight: 500;
                 color: $white;
+
+                div {
+                    text-align: center;
+                }
+
+                @include mq-below(lg) {
+                    font-size: vw-desktop(96px);
+                }
+
+                @include mq-below(xs) {
+                    font-size: vw-mobile(40px);
+                }
             }
         }
 
@@ -260,7 +330,276 @@
             font-size: 1.39vw;
             color: $white;
             padding-top: 24px;
+
+            @include mq-below(lg) {
+                width: calc(8 / 12 * 100%);
+                font-size: vw-desktop(24px);
+            }
+
+            @include mq-below(xs) {
+                width: 100%;
+                font-size: vw-mobile(18px);
+            }
+        }
+    }
+
+    &--about {
+        display: flex;
+        position: relative;
+
+        @include mq-below(xs) {
+            display: block;
+        }
+
+        &>.line {
+            position: absolute;
+            height: 1px;
+            background-color: $white;
+            mix-blend-mode: difference;
+            opacity: 1;
+            transition-duration: 0.4s;
+
+            &:nth-child(1) {
+                left: 3.3vw;
+                right: calc(100% - 3.3vw);
+                top: 0;
+
+                @include mq-below(xs) {
+                    left: 5.13vw;
+                    right: calc(100% - 5.13vw);
+                }
+            }
+
+            &:nth-child(2) {
+                left: calc(100% - 3.3vw);
+                right: 3.3vw;
+                bottom: 0;
+
+                @include mq-below(xs) {
+                    left: calc(100% - 5.13vw);
+                    right: 5.13vw;
+                }
+            }
+        }
+
+        &.active {
+            &>.line {
+                &:nth-child(1) {
+                    right: 3.3vw;
+
+                    @include mq-below(xs) {
+                        left: 5.13vw;
+                        right: 5.13vw;
+                    }
+                }
+
+                &:nth-child(2) {
+                    left: 3.3vw;
+
+                    @include mq-below(xs) {
+                        left: 5.13vw;
+                        right: 5.13vw;
+                    }
+                }
+            }
+
+            .home-about-head {
+                &>.line {
+                    bottom: 0;
+                }
+            }
+        }
+
+        .home-about-head {
+            width: 28.47vw;
+            padding: 2.78vw 2.78vw 2.78vw 0;
+            box-sizing: border-box;
+            position: relative;
+
+            @include mq-below(xs) {
+                width: 100%;
+                padding: 2.78vw 0 2.78vw 0;
+            }
+
+            h2 {
+                font-size: 2.64vw;
+                padding-bottom: 1.39vw;
+                display: block;
+                line-height: 100%;
+                color: $white;
+                mix-blend-mode: difference;
+                text-transform: uppercase;
+
+                @include mq-below(lg) {
+                    font-size: vw-desktop(44px);
+                }
+
+                @include mq-below(xs) {
+                    font-size: vw-mobile(32px);
+                }
+            }
+
+            p {
+                font-size: 1.11vw;
+                line-height: 140%;
+                color: $white;
+                mix-blend-mode: difference;
+
+                @include mq-below(lg) {
+                    font-size: vw-desktop(16px);
+                }
+
+                @include mq-below(xs) {
+                    font-size: vw-mobile(16px);
+                }
+            }
+
+            &>.line {
+                width: 1px;
+                background-color: $white;
+                mix-blend-mode: difference;
+                position: absolute;
+                top: 0;
+                bottom: 100%;
+                right: 0;
+                transition-duration: 0.4s;
+
+                @include mq-below(xs) {
+                    width: auto;
+                    height: 1px;
+                    top: 100%;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    display: none;
+                }
+            }
+        }
+
+        .home-about-content {
+            width: 71.53vw;
+            padding: 2.78vw 0 2.78vw 2.78vw;
+            box-sizing: border-box;
+            display: flex;
+            gap: 2.78vw;
+            position: relative;
+
+            @include mq-below(xs) {
+                width: 100%;
+                padding: vw-mobile(24px) 0 0;
+                display: block;
+            }
+
+            .home-about-item {
+                width: 50%;
+
+
+                @include mq-below(xs) {
+                    width: 100%;
+                }
+
+                &:nth-child(1) {
+                    @include mq-below(xs) {
+                        position: relative;
+                        &::before {
+                            content: '';
+                            display: block;
+                            height: 1px;
+                            background-color: $white;
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            right: 0;
+                            display: none;
+                        }
+                    }
+                }
+
+                &:nth-child(2) {
+                    @include mq-below(xs) {
+                        border-top: 1px solid $white;
+                        margin-top: vw-mobile(12px);
+                        padding-top: vw-mobile(12px);
+                    }
+                }
+
+                a {
+                    display: block;
+                    position: relative;
+                    @include mq-below(xs) {
+                        &::before {
+                            content: '';
+                            display: block;
+                            opacity: 0.7;
+                            background-color: $black;
+                            position: absolute;
+                            inset: 0 0;
+                            z-index: 2;
+                        }
+                    }
+
+                    .home-about-image {
+                        width: 100%;
+                        height: 29.17vw;
+                        overflow: hidden;
+                        position: relative;
+
+                        @include mq-below(xs) {
+                            height: auto;
+                        }
+
+                        img {
+                            width: 100%;
+                            height: 29.17vw;
+                            object-fit: cover;
+                            display: block;
+                            transition-duration: 0.4s;
+                            transform: scale(1.05);
+
+                            @include mq-below(xs) {
+                                height: auto;
+                            }
+
+                        }
+                    }
+
+                    .home-about-title {
+                        padding-top: 1.39vw;
+                        color: $white;
+                        mix-blend-mode: difference;
+                        font-size: 2.22vw;
+                        font-weight: 400;
+
+                        @include mq-below(lg) {
+                            font-size: vw-desktop(28px);
+                        }
+
+                        @include mq-below(xs) {
+                            font-size: vw-mobile(40px);
+                            font-weight: 700;
+                            color: $white;
+                            padding-top: 0;
+                            padding-bottom: 0;
+                            line-height: 100%;
+
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%);
+                            z-index: 3;
+                            mix-blend-mode: normal;
+                        }
+                    }
+
+                    &:hover {
+                        .home-about-image {
+                            img {
+                                transform: scale(1.1);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
-
