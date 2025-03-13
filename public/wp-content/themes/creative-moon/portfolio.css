@@ -1,0 +1,37 @@
+/* Image Path */
+/* Colors */
+/* Gradient */
+/*Mobile*/
+.d-none {
+  display: none !important;
+}
+
+@media (max-width: 574.98px) {
+  .d-xs-none {
+    display: none !important;
+  }
+}
+
+@media (max-width: 766.98px) {
+  .d-sm-none {
+    display: none !important;
+  }
+}
+
+@media (max-width: 990.98px) {
+  .d-md-none {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1198.98px) {
+  .d-lg-none {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1398.98px) {
+  .d-xl-none {
+    display: none !important;
+  }
+}

@@ -1,0 +1,105 @@
+/* Image Path */
+/* Colors */
+/* Gradient */
+/*Mobile*/
+.d-none {
+  display: none !important;
+}
+
+@media (max-width: 574.98px) {
+  .d-xs-none {
+    display: none !important;
+  }
+}
+
+@media (max-width: 766.98px) {
+  .d-sm-none {
+    display: none !important;
+  }
+}
+
+@media (max-width: 990.98px) {
+  .d-md-none {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1198.98px) {
+  .d-lg-none {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1398.98px) {
+  .d-xl-none {
+    display: none !important;
+  }
+}
+
+.manifesto-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-between;
+}
+.manifesto-section .manifesto-col-image .image-mask {
+  width: 22.6388888889vw;
+}
+.manifesto-section .manifesto-col-image .image-mask img {
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.manifesto-section .manifesto-col-wrap {
+  color: rgb(255, 255, 255);
+  mix-blend-mode: difference;
+}
+.manifesto-section .manifesto-col-wrap .manifesto-order-number {
+  font-size: 1.1111111111vw;
+  padding-bottom: 1.6666666667vw;
+  position: relative;
+}
+.manifesto-section .manifesto-col-wrap .manifesto-order-number:before {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgb(255, 255, 255);
+  height: 1px;
+}
+.manifesto-section .manifesto-col-wrap .manifesto-wrap {
+  padding-top: 2.2222222222vw;
+  display: flex;
+  justify-content: space-between;
+}
+.manifesto-section .manifesto-col-wrap .manifesto-title {
+  width: 21.1805555556vw;
+}
+.manifesto-section .manifesto-col-wrap .manifesto-title h2 {
+  font-size: 2.6388888889vw;
+  font-weight: 400;
+}
+.manifesto-section .manifesto-col-wrap .manifesto-content {
+  width: 32.5694444444vw;
+}
+.manifesto-section .manifesto-col-wrap .manifesto-content h3 {
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: capitalize;
+  display: block;
+  padding-bottom: 2.2222222222vw;
+}
+.manifesto-section .manifesto-col-wrap .manifesto-content .manifest-text {
+  font-size: 1.1111111111vw;
+}
+.manifesto-section .manifesto-col-wrap .manifesto-content ul.manifesto-keyword {
+  padding-top: 2.7777777778vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  justify-content: space-between;
+}
+.manifesto-section .manifesto-col-wrap .manifesto-content ul.manifesto-keyword li {
+  list-style: none;
+}
