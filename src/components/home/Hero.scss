@@ -1,0 +1,44 @@
+/* Hero.scss */
+.home-hero {
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #fff;
+  padding: 0 8vw;
+  overflow: hidden;
+
+  // 💡 mix-blend-mode 추가 (배경과 글자가 겹칠 때 반전 효과 등)
+  // 부모나 형제 요소의 색상에 따라 반응합니다.
+  // mix-blend-mode: exclusion;
+
+  // 초기 상태는 100vh로 설정 (framer-motion이 제어할 예정)
+  height: 100vh;
+
+  .home-hero-title {
+    font-family: var(--font-neue-montreal), sans-serif;
+    font-size: clamp(40px, 7.5vw, 115px);
+    font-weight: 300;
+    text-transform: uppercase;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: #000;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.05em;
+  }
+
+  .home-hero-word {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.22em;
+    overflow: hidden;
+    justify-content: center;
+  }
+
+  .home-hero-word-module {
+    display: inline-block;
+  }
+}
