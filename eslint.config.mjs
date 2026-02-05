@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
@@ -16,3 +17,8 @@ const eslintConfig = defineConfig([
 ]);
 
 export default eslintConfig;
+=======
+import studio from '@sanity/eslint-config-studio'
+
+export default [...studio]
+>>>>>>> 46eb985730d61ae86666ff053aaac360341ffd44
