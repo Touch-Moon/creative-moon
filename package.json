@@ -2,12 +2,15 @@
   "name": "portfolio-2026",
   "version": "1.0.0",
   "private": true,
+  "main": "package.json",
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "sanity": "sanity dev"
+    "sanity": "sanity dev",
+    "sanity:build": "sanity build"
   },
   "dependencies": {
     "@portabletext/react": "^6.0.2",
@@ -37,5 +40,11 @@
     "prettier": "^3.5",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.8"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100,
+    "bracketSpacing": false,
+    "singleQuote": true
   }
 }
