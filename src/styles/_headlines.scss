@@ -113,3 +113,25 @@
     font-size: 5.1282051282vw
   }
 }
+
+// ── iPad Pro 11" (1024px) ────────────────────────────────────
+@media (max-width: 1024px) {
+  .headline-1  { font-size: 64px; }
+  .headline-2  { font-size: 32px; }
+  .headline-3  { font-size: 28px; }
+  .headline-4  { font-size: 24px; }
+  .headline-4b { font-size: 22px; }
+  .headline-5  { font-size: 20px; }
+  .headline-6  { font-size: 16px; }
+}
+
+// ── Mobile iPhone 17 (402px) ────────────────────────────────
+@media (max-width: 402px) {
+  .headline-1  { font-size: 40px; }
+  .headline-2  { font-size: 32px; }
+  .headline-3  { font-size: 26px; }
+  .headline-4  { font-size: 22px; }
+  .headline-4b { font-size: 20px; }
+  .headline-5  { font-size: 18px; }
+  .headline-6  { font-size: 14px; }
+}
