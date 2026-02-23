@@ -6,10 +6,10 @@
    ================================================ */
 
 .headline-1 {
-  font-size: var(--fs-h1);
-  font-weight: var(--fw-regular);
-  letter-spacing: var(--ls-tight);
-  line-height: var(--lh-h1);
+  font-size: #{$fs-h1};
+  font-weight: #{$fw-regular};
+  letter-spacing: #{$ls-tight};
+  line-height: #{$lh-h1};
 }
 
 @media (max-width: 575.98px) {
@@ -20,10 +20,10 @@
 }
 
 .headline-2 {
-  font-size: var(--fs-h2);
-  font-weight: var(--fw-regular);
-  letter-spacing: var(--ls-tight);
-  line-height: var(--lh-h2);
+  font-size: #{$fs-h2};
+  font-weight: #{$fw-regular};
+  letter-spacing: #{$ls-tight};
+  line-height: #{$lh-h2};
 }
 
 @media (max-width: 575.98px) {
@@ -35,10 +35,10 @@
 }
 
 .headline-3 {
-  font-size: var(--fs-h3);
-  font-weight: var(--fw-regular);
-  letter-spacing: var(--ls-tight);
-  line-height: var(--lh-h3);
+  font-size: #{$fs-h3};
+  font-weight: #{$fw-regular};
+  letter-spacing: #{$ls-tight};
+  line-height: #{$lh-h3};
 }
 
 @media (max-width: 575.98px) {
@@ -50,10 +50,10 @@
 }
 
 .headline-4 {
-  font-size: var(--fs-h4);
-  font-weight: var(--fw-regular);
-  letter-spacing: var(--ls-tight);
-  line-height: var(--lh-h4);
+  font-size: #{$fs-h4};
+  font-weight: #{$fw-regular};
+  letter-spacing: #{$ls-tight};
+  line-height: #{$lh-h4};
 }
 
 @media (max-width: 575.98px) {
@@ -64,10 +64,10 @@
 }
 
 .headline-4b {
-  font-size: var(--fs-h4b);
-  font-weight: var(--fw-regular);
-  letter-spacing: var(--ls-tight);
-  line-height: var(--lh-h4b);
+  font-size: #{$fs-h4b};
+  font-weight: #{$fw-regular};
+  letter-spacing: #{$ls-tight};
+  line-height: #{$lh-h4b};
 }
 
 @media (max-width: 575.98px) {
@@ -78,9 +78,9 @@
 }
 
 .headline-5 {
-  font-size: var(--fs-h5);
-  font-weight: var(--fw-regular);
-  line-height: var(--lh-h5);
+  font-size: #{$fs-h5};
+  font-weight: #{$fw-regular};
+  line-height: #{$lh-h5};
 }
 
 @media (max-width: 768.98px) {
@@ -96,10 +96,10 @@
 }
 
 .headline-6 {
-  font-size: var(--fs-h6);
-  font-weight: var(--fw-regular);
-  letter-spacing: var(--ls-base);
-  line-height: var(--lh-h6);
+  font-size: #{$fs-h6};
+  font-weight: #{$fw-regular};
+  letter-spacing: #{$ls-base};
+  line-height: #{$lh-h6};
 }
 
 @media (max-width: 768.98px) {

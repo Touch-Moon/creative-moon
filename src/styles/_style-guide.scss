@@ -268,8 +268,8 @@
   color: var(--cm-fg);
   letter-spacing: 0.01em;
   background-color:#e4e4e4;
-  margin: var(--space-4) 0 0 var(--space-2);
-  padding: var(--space-1) var(--space-2);
+  margin: #{$space-4} 0 0 #{$space-2};
+  padding: #{$space-1} #{$space-2};
   border-radius: 4px;
   display: inline-block;
 }

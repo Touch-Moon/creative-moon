@@ -4,18 +4,34 @@
    Scale: 4 / 8 / 12 / 16 / 24 / 32 / 40 / 48 / 64 / 80 / 96 / 128 / 160px
    ================================================ */
 
+// ── SCSS 변수 (컴파일 시 실제 값으로 치환됨) ──────────────────
+$space-1:  0.2778vw;
+$space-2:  0.5556vw;
+$space-3:  0.8333vw;
+$space-4:  1.1111vw;
+$space-6:  1.6667vw;
+$space-8:  2.2222vw;
+$space-10: 2.7778vw;
+$space-12: 3.3333vw;
+$space-16: 4.4444vw;
+$space-20: 5.5556vw;
+$space-24: 6.6667vw;
+$space-32: 8.8889vw;
+$space-40: 11.1111vw;
+
+// ── CSS Custom Properties (:root) ────────────────────────────
 :root {
-  --space-1:  0.2778vw;  /*   4px */
-  --space-2:  0.5556vw;  /*   8px */
-  --space-3:  0.8333vw;  /*  12px */
-  --space-4:  1.1111vw;  /*  16px */
-  --space-6:  1.6667vw;  /*  24px */
-  --space-8:  2.2222vw;  /*  32px */
-  --space-10: 2.7778vw;  /*  40px */
-  --space-12: 3.3333vw;  /*  48px */
-  --space-16: 4.4444vw;  /*  64px */
-  --space-20: 5.5556vw;  /*  80px */
-  --space-24: 6.6667vw;  /*  96px */
-  --space-32: 8.8889vw;  /* 128px */
-  --space-40: 11.1111vw; /* 160px */
+  --space-1:  #{$space-1};  /*   4px */
+  --space-2:  #{$space-2};  /*   8px */
+  --space-3:  #{$space-3};  /*  12px */
+  --space-4:  #{$space-4};  /*  16px */
+  --space-6:  #{$space-6};  /*  24px */
+  --space-8:  #{$space-8};  /*  32px */
+  --space-10: #{$space-10}; /*  40px */
+  --space-12: #{$space-12}; /*  48px */
+  --space-16: #{$space-16}; /*  64px */
+  --space-20: #{$space-20}; /*  80px */
+  --space-24: #{$space-24}; /*  96px */
+  --space-32: #{$space-32}; /* 128px */
+  --space-40: #{$space-40}; /* 160px */
 }
