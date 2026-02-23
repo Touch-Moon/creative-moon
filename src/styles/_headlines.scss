@@ -1,0 +1,115 @@
+/* ================================================
+   HEADLINES — Display & Title
+   Display:   .headline-1 | .headline-2 | .headline-3
+   Title:     .headline-4 | .headline-4b
+   Sub:       .headline-5 | .headline-6
+   ================================================ */
+
+.headline-1 {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-h1);
+}
+
+@media (max-width: 575.98px) {
+  .headline-1 {
+    font-size: 14.358974359vw;
+    letter-spacing: normal
+  }
+}
+
+.headline-2 {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-h2);
+}
+
+@media (max-width: 575.98px) {
+  .headline-2 {
+    font-size: 12.3076923077vw;
+    letter-spacing: normal;
+    line-height: 116%
+  }
+}
+
+.headline-3 {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-h3);
+}
+
+@media (max-width: 575.98px) {
+  .headline-3 {
+    font-size: 9.2307692308vw;
+    letter-spacing: normal;
+    line-height: 110%
+  }
+}
+
+.headline-4 {
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-h4);
+}
+
+@media (max-width: 575.98px) {
+  .headline-4 {
+    font-size: 8.2051282051vw;
+    line-height: 112%
+  }
+}
+
+.headline-4b {
+  font-size: var(--fs-h4b);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-h4b);
+}
+
+@media (max-width: 575.98px) {
+  .headline-4b {
+    font-size: 8.2051282051vw;
+    line-height: 110%
+  }
+}
+
+.headline-5 {
+  font-size: var(--fs-h5);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-h5);
+}
+
+@media (max-width: 768.98px) {
+  .headline-5 {
+    font-size: 2.8645833333vw
+  }
+}
+
+@media (max-width: 575.98px) {
+  .headline-5 {
+    font-size: 6.1538461538vw
+  }
+}
+
+.headline-6 {
+  font-size: var(--fs-h6);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-base);
+  line-height: var(--lh-h6);
+}
+
+@media (max-width: 768.98px) {
+  .headline-6 {
+    font-size: 2.0833333333vw
+  }
+}
+
+@media (max-width: 575.98px) {
+  .headline-6 {
+    font-size: 5.1282051282vw
+  }
+}

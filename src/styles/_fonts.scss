@@ -1,0 +1,48 @@
+/* ================================================
+   FONTS — Inter Display Variable Font
+   Variable font via Google Fonts
+   Weights: 100–900 (normal + italic)
+   ================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter+Display:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+  /* ─── Font Size ─── */
+  --fs-body-1:    2.1978021978vw;
+  --fs-body-2:    1.8315018315vw;
+  --fs-body-3:    1.4652014652vw;
+  --fs-body-4:    1.1904761905vw;
+  --fs-body-5:    0.9157509158vw;
+  --fs-body-caps: 0.8241758242vw;
+  --fs-h1:        9.706959707vw;
+  --fs-h2:        6.043956044vw;
+  --fs-h3:        5.1282051282vw;
+  --fs-h4:        2.9304029304vw;
+  --fs-h4b:       2.2893772894vw;
+  --fs-h5:        1.8315018315vw;
+  --fs-h6:        1.4652014652vw;
+
+  /* ─── Font Weight ─── */
+  --fw-light:   300;
+  --fw-regular: 400;
+
+  /* ─── Line Height ─── */
+  --lh-body-1:    120%;
+  --lh-body-2:    140%;
+  --lh-body-3:    130%;
+  --lh-body-4:    140%;
+  --lh-body-5:    150%;
+  --lh-body-caps: 100%;
+  --lh-h1:  96%;
+  --lh-h2:  98%;
+  --lh-h3:  98%;
+  --lh-h4:  110%;
+  --lh-h4b: 100%;
+  --lh-h5:  110%;
+  --lh-h6:  120%;
+
+  /* ─── Letter Spacing ─── */
+  --ls-tight: -0.01em;
+  --ls-base:   0.01em;
+  --ls-wide:   0.04em;
+}
