@@ -42,7 +42,7 @@
 
 .body-text-2 {
   font-size: #{$fs-body-2};
-  font-weight: #{$fw-light};
+  font-weight: #{$fw-regular};
   line-height: #{$lh-body-2};
 }
 
@@ -60,7 +60,7 @@
 
 .body-text-3 {
   font-size: #{$fs-body-3};
-  font-weight: #{$fw-light};
+  font-weight: #{$fw-regular};
   letter-spacing: #{$ls-base};
   line-height: #{$lh-body-3};
 }
@@ -79,7 +79,7 @@
 
 .body-text-4 {
   font-size: #{$fs-body-4};
-  font-weight: #{$fw-light};
+  font-weight: #{$fw-regular};
   letter-spacing: #{$ls-base};
   line-height: #{$lh-body-4};
 }
@@ -143,7 +143,7 @@
 
 .body-text-caps {
   font-size: #{$fs-body-caps};
-  font-weight: #{$fw-light};
+  font-weight: #{$fw-regular};
   letter-spacing: #{$ls-wide};
   line-height: #{$lh-body-caps};
   text-transform: uppercase;
@@ -177,4 +177,24 @@
   .body-text-caps {
     font-size: 3.5897435897vw
   }
+}
+
+// ── iPad Pro 11" (1024px) ────────────────────────────────────
+@media (max-width: 1024px) {
+  .body-text-1    { font-size: 32px; }
+  .body-text-2    { font-size: 26px; }
+  .body-text-3    { font-size: 24px; }
+  .body-text-4    { font-size: 16px; }
+  .body-text-5    { font-size: 14px; }
+  .body-text-caps { font-size: 12px; }
+}
+
+// ── Mobile iPhone 17 (402px) ────────────────────────────────
+@media (max-width: 402px) {
+  .body-text-1    { font-size: 32px; }
+  .body-text-2    { font-size: 26px; }
+  .body-text-3    { font-size: 24px; }
+  .body-text-4    { font-size: 16px; }
+  .body-text-5    { font-size: 14px; }
+  .body-text-caps { font-size: 12px; }
 }
