@@ -10,9 +10,9 @@
    ================================================ */
 
 .body-text-1 {
-  font-size: var(--fs-body-1);
-  font-weight: var(--fw-light);
-  line-height: var(--lh-body-1);
+  font-size: #{$fs-body-1};
+  font-weight: #{$fw-light};
+  line-height: #{$lh-body-1};
 }
 
 @media (max-width:1439.98px) {
@@ -41,9 +41,9 @@
 }
 
 .body-text-2 {
-  font-size: var(--fs-body-2);
-  font-weight: var(--fw-light);
-  line-height: var(--lh-body-2);
+  font-size: #{$fs-body-2};
+  font-weight: #{$fw-light};
+  line-height: #{$lh-body-2};
 }
 
 @media (max-width:768.98px) {
@@ -59,10 +59,10 @@
 }
 
 .body-text-3 {
-  font-size: var(--fs-body-3);
-  font-weight: var(--fw-light);
-  letter-spacing: var(--ls-base);
-  line-height: var(--lh-body-3);
+  font-size: #{$fs-body-3};
+  font-weight: #{$fw-light};
+  letter-spacing: #{$ls-base};
+  line-height: #{$lh-body-3};
 }
 
 @media (max-width:768.98px) {
@@ -78,10 +78,10 @@
 }
 
 .body-text-4 {
-  font-size: var(--fs-body-4);
-  font-weight: var(--fw-light);
-  letter-spacing: var(--ls-base);
-  line-height: var(--lh-body-4);
+  font-size: #{$fs-body-4};
+  font-weight: #{$fw-light};
+  letter-spacing: #{$ls-base};
+  line-height: #{$lh-body-4};
 }
 
 @media (max-width:1439.98px) {
@@ -110,10 +110,10 @@
 }
 
 .body-text-5 {
-  font-size: var(--fs-body-5);
-  font-weight: var(--fw-regular);
-  letter-spacing: var(--ls-base);
-  line-height: var(--lh-body-5);
+  font-size: #{$fs-body-5};
+  font-weight: #{$fw-regular};
+  letter-spacing: #{$ls-base};
+  line-height: #{$lh-body-5};
 }
 
 @media (max-width:1280.98px) {
@@ -142,10 +142,10 @@
 }
 
 .body-text-caps {
-  font-size: var(--fs-body-caps);
-  font-weight: var(--fw-light);
-  letter-spacing: var(--ls-wide);
-  line-height: var(--lh-body-caps);
+  font-size: #{$fs-body-caps};
+  font-weight: #{$fw-light};
+  letter-spacing: #{$ls-wide};
+  line-height: #{$lh-body-caps};
   text-transform: uppercase;
 }
 

@@ -6,43 +6,75 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter+Display:ital,wght@0,100..900;1,100..900&display=swap');
 
+// ── SCSS 변수 (컴파일 시 실제 값으로 치환됨) ──────────────────
+$fs-body-1:    2.1978021978vw;
+$fs-body-2:    1.8315018315vw;
+$fs-body-3:    1.4652014652vw;
+$fs-body-4:    1.1904761905vw;
+$fs-body-5:    0.9157509158vw;
+$fs-body-caps: 0.8241758242vw;
+$fs-h1:        9.706959707vw;
+$fs-h2:        6.043956044vw;
+$fs-h3:        5.1282051282vw;
+$fs-h4:        2.9304029304vw;
+$fs-h4b:       2.2893772894vw;
+$fs-h5:        1.8315018315vw;
+$fs-h6:        1.4652014652vw;
+
+$fw-light:   300;
+$fw-regular: 400;
+
+$lh-body-1:    120%;
+$lh-body-2:    140%;
+$lh-body-3:    130%;
+$lh-body-4:    140%;
+$lh-body-5:    150%;
+$lh-body-caps: 100%;
+$lh-h1:  96%;  $lh-h2:  98%;  $lh-h3: 98%;
+$lh-h4:  110%; $lh-h4b: 100%; $lh-h5: 110%; $lh-h6: 120%;
+
+$ls-tight: -0.01em;
+$ls-base:   0.01em;
+$ls-wide:   0.04em;
+
+// ── CSS Custom Properties (:root) ────────────────────────────
 :root {
   /* ─── Font Size ─── */
-  --fs-body-1:    2.1978021978vw;
-  --fs-body-2:    1.8315018315vw;
-  --fs-body-3:    1.4652014652vw;
-  --fs-body-4:    1.1904761905vw;
-  --fs-body-5:    0.9157509158vw;
-  --fs-body-caps: 0.8241758242vw;
-  --fs-h1:        9.706959707vw;
-  --fs-h2:        6.043956044vw;
-  --fs-h3:        5.1282051282vw;
-  --fs-h4:        2.9304029304vw;
-  --fs-h4b:       2.2893772894vw;
-  --fs-h5:        1.8315018315vw;
-  --fs-h6:        1.4652014652vw;
+  --fs-body-1:    #{$fs-body-1};
+  --fs-body-2:    #{$fs-body-2};
+  --fs-body-3:    #{$fs-body-3};
+  --fs-body-4:    #{$fs-body-4};
+  --fs-body-5:    #{$fs-body-5};
+  --fs-body-caps: #{$fs-body-caps};
+  --fs-h1:        #{$fs-h1};
+  --fs-h2:        #{$fs-h2};
+  --fs-h3:        #{$fs-h3};
+  --fs-h4:        #{$fs-h4};
+  --fs-h4b:       #{$fs-h4b};
+  --fs-h5:        #{$fs-h5};
+  --fs-h6:        #{$fs-h6};
 
   /* ─── Font Weight ─── */
-  --fw-light:   300;
-  --fw-regular: 400;
+  --fw-light:   #{$fw-light};
+  --fw-regular: #{$fw-regular};
 
   /* ─── Line Height ─── */
-  --lh-body-1:    120%;
-  --lh-body-2:    140%;
-  --lh-body-3:    130%;
-  --lh-body-4:    140%;
-  --lh-body-5:    150%;
-  --lh-body-caps: 100%;
-  --lh-h1:  96%;
-  --lh-h2:  98%;
-  --lh-h3:  98%;
-  --lh-h4:  110%;
-  --lh-h4b: 100%;
-  --lh-h5:  110%;
-  --lh-h6:  120%;
+  --lh-body-1:    #{$lh-body-1};
+  --lh-body-2:    #{$lh-body-2};
+  --lh-body-3:    #{$lh-body-3};
+  --lh-body-4:    #{$lh-body-4};
+  --lh-body-5:    #{$lh-body-5};
+  --lh-body-caps: #{$lh-body-caps};
+  --lh-h1:  #{$lh-h1};
+  --lh-h2:  #{$lh-h2};
+  --lh-h3:  #{$lh-h3};
+  --lh-h4:  #{$lh-h4};
+  --lh-h4b: #{$lh-h4b};
+  --lh-h5:  #{$lh-h5};
+  --lh-h6:  #{$lh-h6};
 
   /* ─── Letter Spacing ─── */
-  --ls-tight: -0.01em;
-  --ls-base:   0.01em;
-  --ls-wide:   0.04em;
+  --ls-tight: #{$ls-tight};
+  --ls-base:  #{$ls-base};
+  --ls-wide:  #{$ls-wide};
 }
