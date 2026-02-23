@@ -1,0 +1,18 @@
+// 1. Base Colors (High-Contrast Foundation)
+$m-white: #ffffff;          // Pure white for backgrounds and primary highlights
+$m-black: #000000;          // Solid black for crisp typography and deep shadows
+$m-deep-grey: #111111;      // Charcoal grey for dark mode elements or secondary text
+
+// 2. Surface & Borders (Functional Neutrals for Material Texture)
+$m-grey-light: #f5f5f5;     // Off-white for section dividers and card backgrounds
+$m-grey-medium: #e2e2e2;    // Neutral grey for structural borders and grid lines
+$m-grey-dark: #888888;      // Muted grey for metadata, captions, and secondary info
+
+// 3. Accent (Signature Energy)
+$m-accent: #ff4d00;         // Signature vibrant orange-red for high-energy accents
+
+// 4. Material Effects (Glassmorphism & Depth)
+// Essential for the "Plastic/Material" aesthetic with translucent layering.
+$m-glass-bg: rgba(255, 255, 255, 0.7);   // Translucent white for frosted glass backdrops
+$m-glass-border: rgba(255, 255, 255, 0.3); // Delicate edge stroke for glass-like surfaces
+$m-shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05); // Diffused shadow for subtle organic depth
