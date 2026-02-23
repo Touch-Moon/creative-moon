@@ -1,0 +1,180 @@
+/* ================================================
+   TYPOGRAPHY
+   Body text scale (largest → smallest):
+     .body-text-1   — 2.20vw  | font-weight: 300 | line-height: 120%
+     .body-text-2   — 1.83vw  | font-weight: 300 | line-height: 140%
+     .body-text-3   — 1.47vw  | font-weight: 300 | line-height: 130%
+     .body-text-4   — 1.19vw  | font-weight: 300 | line-height: 140%
+     .body-text-5   — 0.92vw  | font-weight: 400 | line-height: 150%
+     .body-text-caps — 0.82vw | font-weight: 300 | uppercase | letter-spacing: .04em
+   ================================================ */
+
+.body-text-1 {
+  font-size: var(--fs-body-1);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-body-1);
+}
+
+@media (max-width:1439.98px) {
+  .body-text-1 {
+    font-size: 2.380952381vw
+  }
+}
+
+@media (max-width:1280.98px) {
+  .body-text-1 {
+    font-size: 2.5641025641vw
+  }
+}
+
+@media (max-width:768.98px) {
+  .body-text-1 {
+    font-size: 2.6041666667vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .body-text-1 {
+    font-size: 6.1538461538vw;
+    line-height: 130%
+  }
+}
+
+.body-text-2 {
+  font-size: var(--fs-body-2);
+  font-weight: var(--fw-light);
+  line-height: var(--lh-body-2);
+}
+
+@media (max-width:768.98px) {
+  .body-text-2 {
+    font-size: 2.6041666667vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .body-text-2 {
+    font-size: 6.1538461538vw
+  }
+}
+
+.body-text-3 {
+  font-size: var(--fs-body-3);
+  font-weight: var(--fw-light);
+  letter-spacing: var(--ls-base);
+  line-height: var(--lh-body-3);
+}
+
+@media (max-width:768.98px) {
+  .body-text-3 {
+    font-size: 2.0833333333vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .body-text-3 {
+    font-size: 5.1282051282vw
+  }
+}
+
+.body-text-4 {
+  font-size: var(--fs-body-4);
+  font-weight: var(--fw-light);
+  letter-spacing: var(--ls-base);
+  line-height: var(--lh-body-4);
+}
+
+@media (max-width:1439.98px) {
+  .body-text-4 {
+    font-size: 1.2820512821vw
+  }
+}
+
+@media (max-width:1024.98px) {
+  .body-text-4 {
+    font-size: 1.4194139194vw
+  }
+}
+
+@media (max-width:768.98px) {
+  .body-text-4 {
+    font-size: 1.8229166667vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .body-text-4 {
+    font-size: 4.1025641026vw;
+    line-height: 150%
+  }
+}
+
+.body-text-5 {
+  font-size: var(--fs-body-5);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-base);
+  line-height: var(--lh-body-5);
+}
+
+@media (max-width:1280.98px) {
+  .body-text-5 {
+    font-size: 1.0531135531vw
+  }
+}
+
+@media (max-width:1024.98px) {
+  .body-text-5 {
+    font-size: 1.2820512821vw
+  }
+}
+
+@media (max-width:768.98px) {
+  .body-text-5 {
+    font-size: 1.8229166667vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .body-text-5 {
+    font-size: 4.1025641026vw;
+    line-height: 130%
+  }
+}
+
+.body-text-caps {
+  font-size: var(--fs-body-caps);
+  font-weight: var(--fw-light);
+  letter-spacing: var(--ls-wide);
+  line-height: var(--lh-body-caps);
+  text-transform: uppercase;
+}
+
+@media (max-width:1439.98px) {
+  .body-text-caps {
+    font-size: .9157509158vw
+  }
+}
+
+@media (max-width:1280.98px) {
+  .body-text-caps {
+    font-size: .9615384615vw
+  }
+}
+
+@media (max-width:1024.98px) {
+  .body-text-caps {
+    font-size: 1.0989010989vw
+  }
+}
+
+@media (max-width:768.98px) {
+  .body-text-caps {
+    font-size: 1.4322916667vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .body-text-caps {
+    font-size: 3.5897435897vw
+  }
+}

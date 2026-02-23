@@ -1,0 +1,32 @@
+/* ================================================
+   BASE — Colors, Font Family, HTML/Body Reset
+   ================================================ */
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --font-inter-display: 'Inter Display', 'Inter', sans-serif;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+  font-size: 100%;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-inter-display), sans-serif;
+  font-weight: 400;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
