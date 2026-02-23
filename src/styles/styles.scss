@@ -1,0 +1,1098 @@
+/* ================================================
+   STYLE GUIDE — Design Tokens & Base Styles
+   (moved from downloads/styles.css)
+   ================================================ */
+
+/* ------------------------------------------------
+   FONTS — Inter Display
+   Variable font via Google Fonts
+   Weights: 100–900 (normal + italic)
+   ------------------------------------------------ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter+Display:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* ------------------------------------------------
+   SPACING
+   Base unit: 1.1111vw ≈ 16px @ 1440px
+   Scale: 4 / 8 / 12 / 16 / 24 / 32 / 40 / 48 / 64 / 80 / 96 / 128 / 160px
+   ------------------------------------------------ */
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --font-inter-display: 'Inter Display', 'Inter', sans-serif;
+
+  --space-1: 0.2778vw;
+  /*   4px */
+  --space-2: 0.5556vw;
+  /*   8px */
+  --space-3: 0.8333vw;
+  /*  12px */
+  --space-4: 1.1111vw;
+  /*  16px */
+  --space-6: 1.6667vw;
+  /*  24px */
+  --space-8: 2.2222vw;
+  /*  32px */
+  --space-10: 2.7778vw;
+  /*  40px */
+  --space-12: 3.3333vw;
+  /*  48px */
+  --space-16: 4.4444vw;
+  /*  64px */
+  --space-20: 5.5556vw;
+  /*  80px */
+  --space-24: 6.6667vw;
+  /*  96px */
+  --space-32: 8.8889vw;
+  /* 128px */
+  --space-40: 11.1111vw;
+  /* 160px */
+}
+
+/* ------------------------------------------------
+   BASE
+   ------------------------------------------------ */
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+  font-size: 100%;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-inter-display), sans-serif;
+  font-weight: 400;
+}
+
+/* ------------------------------------------------
+   TYPOGRAPHY
+   Body text scale (largest → smallest):
+     .body-text-1   — 2.20vw  | font-weight: 300 | line-height: 120%
+     .body-text-2   — 1.83vw  | font-weight: 300 | line-height: 140%
+     .body-text-3   — 1.47vw  | font-weight: 300 | line-height: 130%
+     .body-text-4   — 1.19vw  | font-weight: 300 | line-height: 140%
+     .body-text-5   — 0.92vw  | font-weight: 400 | line-height: 150%
+     .body-text-caps — 0.82vw | font-weight: 300 | uppercase | letter-spacing: .04em
+   ------------------------------------------------ */
+
+.body-text-1 {
+  font-size: 2.1978021978vw;
+  font-weight: 300;
+  line-height: 120%
+}
+
+@media (max-width:1439.98px) {
+  .body-text-1 {
+    font-size: 2.380952381vw
+  }
+}
+
+@media (max-width:1280.98px) {
+  .body-text-1 {
+    font-size: 2.5641025641vw
+  }
+}
+
+@media (max-width:768.98px) {
+  .body-text-1 {
+    font-size: 2.6041666667vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .body-text-1 {
+    font-size: 6.1538461538vw;
+    line-height: 130%
+  }
+}
+
+.body-text-2 {
+  font-size: 1.8315018315vw;
+  font-weight: 300;
+  line-height: 140%
+}
+
+@media (max-width:768.98px) {
+  .body-text-2 {
+    font-size: 2.6041666667vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .body-text-2 {
+    font-size: 6.1538461538vw
+  }
+}
+
+.body-text-3 {
+  font-size: 1.4652014652vw;
+  font-weight: 300;
+  letter-spacing: .01em;
+  line-height: 130%
+}
+
+@media (max-width:768.98px) {
+  .body-text-3 {
+    font-size: 2.0833333333vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .body-text-3 {
+    font-size: 5.1282051282vw
+  }
+}
+
+.body-text-4 {
+  font-size: 1.1904761905vw;
+  font-weight: 300;
+  letter-spacing: .01em;
+  line-height: 140%
+}
+
+@media (max-width:1439.98px) {
+  .body-text-4 {
+    font-size: 1.2820512821vw
+  }
+}
+
+@media (max-width:1024.98px) {
+  .body-text-4 {
+    font-size: 1.4194139194vw
+  }
+}
+
+@media (max-width:768.98px) {
+  .body-text-4 {
+    font-size: 1.8229166667vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .body-text-4 {
+    font-size: 4.1025641026vw;
+    line-height: 150%
+  }
+}
+
+.body-text-5 {
+  font-size: .9157509158vw;
+  font-weight: 400;
+  letter-spacing: .01em;
+  line-height: 150%
+}
+
+@media (max-width:1280.98px) {
+  .body-text-5 {
+    font-size: 1.0531135531vw
+  }
+}
+
+@media (max-width:1024.98px) {
+  .body-text-5 {
+    font-size: 1.2820512821vw
+  }
+}
+
+@media (max-width:768.98px) {
+  .body-text-5 {
+    font-size: 1.8229166667vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .body-text-5 {
+    font-size: 4.1025641026vw;
+    line-height: 130%
+  }
+}
+
+.body-text-caps {
+  font-size: .8241758242vw;
+  font-weight: 300;
+  letter-spacing: .04em;
+  line-height: 100%;
+  text-transform: uppercase
+}
+
+@media (max-width:1439.98px) {
+  .body-text-caps {
+    font-size: .9157509158vw
+  }
+}
+
+@media (max-width:1280.98px) {
+  .body-text-caps {
+    font-size: .9615384615vw
+  }
+}
+
+@media (max-width:1024.98px) {
+  .body-text-caps {
+    font-size: 1.0989010989vw
+  }
+}
+
+@media (max-width:768.98px) {
+  .body-text-caps {
+    font-size: 1.4322916667vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .body-text-caps {
+    font-size: 3.5897435897vw
+  }
+}
+
+/* ------------------------------------------------
+   HEADINGS
+   Display:   .headline-1 | .headline-2 | .headline-3
+   Title:     .headline-4 | .headline-4b
+   Sub:       .headline-5 | .headline-6
+   ------------------------------------------------ */
+
+.headline-1 {
+  font-size: 9.706959707vw;
+  font-weight: 400;
+  letter-spacing: -.01em;
+  line-height: 96%
+}
+
+@media (max-width: 575.98px) {
+  .headline-1 {
+    font-size: 14.358974359vw;
+    letter-spacing: normal
+  }
+}
+
+.headline-2 {
+  font-size: 6.043956044vw;
+  font-weight: 400;
+  letter-spacing: -.01em;
+  line-height: 98%
+}
+
+@media (max-width: 575.98px) {
+  .headline-2 {
+    font-size: 12.3076923077vw;
+    letter-spacing: normal;
+    line-height: 116%
+  }
+}
+
+.headline-3 {
+  font-size: 5.1282051282vw;
+  font-weight: 400;
+  letter-spacing: -.01em;
+  line-height: 98%
+}
+
+@media (max-width: 575.98px) {
+  .headline-3 {
+    font-size: 9.2307692308vw;
+    letter-spacing: normal;
+    line-height: 110%
+  }
+}
+
+.headline-4 {
+  font-size: 2.9304029304vw;
+  font-weight: 400;
+  letter-spacing: -.01em;
+  line-height: 110%
+}
+
+@media (max-width: 575.98px) {
+  .headline-4 {
+    font-size: 8.2051282051vw;
+    line-height: 112%
+  }
+}
+
+.headline-4b {
+  font-size: 2.2893772894vw;
+  font-weight: 400;
+  letter-spacing: -.01em;
+  line-height: 100%
+}
+
+@media (max-width: 575.98px) {
+  .headline-4b {
+    font-size: 8.2051282051vw;
+    line-height: 110%
+  }
+}
+
+.headline-5 {
+  font-size: 1.8315018315vw;
+  font-weight: 400;
+  line-height: 110%
+}
+
+@media (max-width: 768.98px) {
+  .headline-5 {
+    font-size: 2.8645833333vw
+  }
+}
+
+@media (max-width: 575.98px) {
+  .headline-5 {
+    font-size: 6.1538461538vw
+  }
+}
+
+.headline-6 {
+  font-size: 1.4652014652vw;
+  font-weight: 400;
+  letter-spacing: .01em;
+  line-height: 120%
+}
+
+@media (max-width: 768.98px) {
+  .headline-6 {
+    font-size: 2.0833333333vw
+  }
+}
+
+@media (max-width: 575.98px) {
+  .headline-6 {
+    font-size: 5.1282051282vw
+  }
+}
+
+/* ------------------------------------------------
+   BUTTONS
+   Base:      .button
+   Variant:   .button--secondary
+   Sizes:     .button--s | .button--m | .button--l | .button--xl
+   Modifier:  .button--block (full width)
+   ------------------------------------------------ */
+
+.button {
+  background: transparent;
+  border: none;
+  border-radius: 9999em;
+  box-shadow: inset 0 0 0 1.5px #fff;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  overflow: hidden;
+  position: relative;
+  text-align: center
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio:1.25),
+only screen and (-webkit-min-device-pixel-ratio:2.0833333333333335),
+only screen and (min-device-pixel-ratio:1.25),
+only screen and (min-resolution:1.25dppx),
+only screen and (min-resolution:200dpi) {
+  .button {
+    box-shadow: inset 0 0 0 1.5px #fff
+  }
+}
+
+@media (max-width:768.98px) {
+  .button {
+    box-shadow: inset 0 0 0 1px #fff
+  }
+}
+
+.button span {
+  align-items: center;
+  display: flex;
+  font-size: .9157509158vw;
+  height: 2.3351648352vw;
+  justify-content: center;
+  line-height: 137%;
+  mix-blend-mode: difference;
+  padding: 0 1.0989010989vw;
+  position: relative;
+  text-align: center;
+  width: 100%
+}
+
+@media (max-width:1439.98px) {
+  .button span {
+    font-size: 1.0073260073vw
+  }
+}
+
+@media (max-width:1280.98px) {
+  .button span {
+    font-size: 1.0531135531vw;
+    height: 2.7472527473vw;
+    padding: 0 1.3736263736vw
+  }
+}
+
+@media (max-width:768.98px) {
+  .button span {
+    font-size: 1.6927083333vw;
+    height: 4.1666666667vw;
+    padding: 0 1.953125vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .button span {
+    font-size: 4.1025641026vw;
+    height: 10.7692307692vw;
+    padding: 0 5.1282051282vw
+  }
+}
+
+.button div {
+  background: #fff;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: scaleY(0);
+  transform-origin: 0 0;
+  transition: transform .3s cubic-bezier(.52, .24, .08, 1);
+  will-change: transform
+}
+
+@media (hover:hover) and (pointer:fine) {
+  .button:hover div {
+    transform: scaleY(1);
+    transform-origin: 0 bottom
+  }
+}
+
+.button--secondary {
+  background: #fff;
+  border: 1px solid #fff;
+  -webkit-mask-image: -webkit-radial-gradient(#fff, #000);
+  mix-blend-mode: difference
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio:1.25),
+only screen and (-webkit-min-device-pixel-ratio:2.0833333333333335),
+only screen and (min-device-pixel-ratio:1.25),
+only screen and (min-resolution:1.25dppx),
+only screen and (min-resolution:200dpi) {
+  .button--secondary {
+    border: 1.5px solid #fff
+  }
+}
+
+@media (max-width:768.98px) {
+  .button--secondary {
+    border: 1px solid #fff
+  }
+}
+
+.button--secondary div {
+  background: #000
+}
+
+.button--s span {
+  font-size: .7326007326vw;
+  font-weight: 400;
+  height: 2.1978021978vw;
+  letter-spacing: .01em;
+  line-height: 150%;
+  padding: 0 1.9230769231vw
+}
+
+@media (max-width:768.98px) {
+  .button--s span {
+    font-size: 2.0833333333vw;
+    height: 6.5104166667vw;
+    padding: 0 3.90625vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .button--s span {
+    font-size: 3.5897435897vw;
+    height: 12.3076923077vw;
+    padding: 0 7.6923076923vw
+  }
+}
+
+.button--m span {
+  font-size: 1.0073260073vw;
+  font-weight: 400;
+  height: 2.6556776557vw;
+  letter-spacing: .01em;
+  line-height: 150%;
+  padding: 0 1.9230769231vw
+}
+
+@media (max-width:768.98px) {
+  .button--m span {
+    font-size: 2.6041666667vw;
+    height: 7.2916666667vw;
+    padding: 0 3.90625vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .button--m span {
+    font-size: 4.1025641026vw;
+    height: 13.8461538462vw;
+    padding: 0 7.6923076923vw
+  }
+}
+
+.button--l span {
+  font-size: 1.1904761905vw;
+  font-weight: 400;
+  height: 3.9377289377vw;
+  letter-spacing: .01em;
+  line-height: 140%;
+  padding: 0 5.4945054945vw
+}
+
+@media (max-width:1439.98px) {
+  .button--l span {
+    font-size: 1.2820512821vw
+  }
+}
+
+@media (max-width:1024.98px) {
+  .button--l span {
+    font-size: 1.4194139194vw
+  }
+}
+
+@media (max-width:768.98px) {
+  .button--l span {
+    font-size: 1.8229166667vw;
+    height: 6.5104166667vw;
+    padding: 0 15.625vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .button--l span {
+    font-size: 4.1025641026vw;
+    height: 14.8717948718vw;
+    line-height: 150%;
+    padding: 0 30.7692307692vw
+  }
+}
+
+.button--xl span {
+  font-size: 1.4652014652vw;
+  font-weight: 400;
+  height: 4.6703296703vw;
+  line-height: 130%;
+  padding: 0 1.3736263736vw
+}
+
+@media (max-width:768.98px) {
+  .button--xl span {
+    font-size: 2.0833333333vw;
+    height: 6.5104166667vw;
+    letter-spacing: .01em;
+    padding: 0 3.90625vw
+  }
+}
+
+@media (max-width:575.98px) {
+  .button--xl span {
+    font-size: 5.1282051282vw;
+    height: 17.4358974359vw;
+    padding: 0 7.6923076923vw
+  }
+}
+
+.button--block {
+  width: 100%
+}
+
+/* ------------------------------------------------
+   FORMS
+   Structure:  .form-group > .form-control > .form-placeholder + .form-input/.form-textarea
+   States:     .is-input | .is-textarea           (type)
+               .is-focused | .has-content | .is-error  (applied via JS)
+   Checkbox:   .form-checkbox > label > input + .form-checkbox__check + .form-checkbox__text
+   ------------------------------------------------ */
+
+.form-group {
+  margin-bottom: 1px;
+  position: relative;
+}
+
+.form-group .form-control {
+  position: relative;
+}
+
+/* Underline — base (faded, always visible) */
+.form-group .form-control::before,
+.form-group .form-control::after {
+  background: #000;
+  bottom: 0;
+  content: '';
+  display: block;
+  height: 1px;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  will-change: transform;
+}
+
+.form-group .form-control::before {
+  opacity: 0.15;
+}
+
+/* Underline — animated active line */
+.form-group .form-control::after {
+  opacity: 1;
+  transform: scaleX(0);
+  transform-origin: 0 0;
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Floating placeholder */
+.form-group .form-placeholder {
+  color: #6d6d6d;
+  font-family: 'Inter Display', 'Inter', sans-serif;
+  font-size: 1.1904761905vw;
+  /* body-text-4 */
+  font-weight: 400;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 1.6941vw;
+  /* (4.5788 - 1.1905) / 2 — vertically centred */
+  transition: opacity 0.2s ease-in-out, top 0.2s ease-in-out, font-size 0.2s ease-in-out;
+  width: 100%;
+}
+
+@media (max-width: 1439.98px) {
+  .form-group .form-placeholder {
+    font-size: 1.2820512821vw;
+    top: 1.6484vw;
+    /* (4.5788 - 1.2821) / 2 */
+  }
+}
+
+@media (max-width: 1024.98px) {
+  .form-group .form-placeholder {
+    font-size: 1.4194139194vw;
+    top: 1.5797vw;
+    /* (4.5788 - 1.4194) / 2 */
+  }
+}
+
+@media (max-width: 768.98px) {
+  .form-group .form-placeholder {
+    font-size: 1.8229166667vw;
+    top: 2.9948vw;
+    /* (7.8125 - 1.8229) / 2 */
+  }
+}
+
+@media (max-width: 575.98px) {
+  .form-group .form-placeholder {
+    font-size: 4.1025641026vw;
+    top: 7.4359vw;
+    /* (18.9744 - 4.1026) / 2 */
+  }
+}
+
+/* Input / Textarea base */
+.form-group .form-input,
+.form-group .form-textarea {
+  background: transparent;
+  border: none;
+  box-sizing: border-box;
+  color: #000;
+  font-family: 'Inter Display', 'Inter', sans-serif;
+  font-size: 1.1904761905vw;
+  /* body-text-4 */
+  font-weight: 400;
+  outline: none;
+  resize: none;
+  width: 100%;
+}
+
+/* Textarea — prevent internal scroll; height grows via JS */
+.form-group .form-textarea {
+  overflow: hidden;
+}
+
+@media (max-width: 1439.98px) {
+
+  .form-group .form-input,
+  .form-group .form-textarea {
+    font-size: 1.2820512821vw;
+  }
+}
+
+@media (max-width: 1024.98px) {
+
+  .form-group .form-input,
+  .form-group .form-textarea {
+    font-size: 1.4194139194vw;
+  }
+}
+
+/* Autofill override */
+.form-group .form-input:-webkit-autofill,
+.form-group .form-input:-webkit-autofill:active,
+.form-group .form-input:-webkit-autofill:focus,
+.form-group .form-input:-webkit-autofill:hover,
+.form-group .form-textarea:-webkit-autofill,
+.form-group .form-textarea:-webkit-autofill:active,
+.form-group .form-textarea:-webkit-autofill:focus,
+.form-group .form-textarea:-webkit-autofill:hover {
+  -webkit-text-fill-color: #000;
+  background: #fff !important;
+  -webkit-box-shadow: inset 0 0 0 1000px #fff;
+  font-family: 'Inter Display', 'Inter', sans-serif !important;
+}
+
+@media (max-width: 768.98px) {
+
+  .form-group .form-input:-webkit-autofill,
+  .form-group .form-input:-webkit-autofill:active,
+  .form-group .form-input:-webkit-autofill:focus,
+  .form-group .form-input:-webkit-autofill:hover,
+  .form-group .form-textarea:-webkit-autofill,
+  .form-group .form-textarea:-webkit-autofill:active,
+  .form-group .form-textarea:-webkit-autofill:focus,
+  .form-group .form-textarea:-webkit-autofill:hover {
+    font-size: 1.8229166667vw;
+    /* body-text-4 */
+  }
+}
+
+@media (max-width: 575.98px) {
+
+  .form-group .form-input:-webkit-autofill,
+  .form-group .form-input:-webkit-autofill:active,
+  .form-group .form-input:-webkit-autofill:focus,
+  .form-group .form-input:-webkit-autofill:hover,
+  .form-group .form-textarea:-webkit-autofill,
+  .form-group .form-textarea:-webkit-autofill:active,
+  .form-group .form-textarea:-webkit-autofill:focus,
+  .form-group .form-textarea:-webkit-autofill:hover {
+    font-size: 4.1025641026vw;
+    /* body-text-4 */
+  }
+}
+
+/* Input — sizing */
+.form-group.is-input .form-input {
+  height: 4.5787545788vw;
+  padding-top: 1.6025641026vw;
+  transition: height 0.2s ease-in-out;
+}
+
+@media (max-width: 768.98px) {
+  .form-group.is-input .form-input {
+    font-size: 1.8229166667vw;
+    /* body-text-4 */
+    height: 7.8125vw;
+    padding-top: 2.6041666667vw;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .form-group.is-input .form-input {
+    font-size: 4.1025641026vw;
+    /* body-text-4 */
+    height: 18.9743589744vw;
+    padding-top: 7.6923076923vw;
+  }
+}
+
+/* Textarea — sizing */
+.form-group.is-textarea .form-control {
+  min-height: 4.5787545788vw;
+  transition: padding 0.2s ease-in-out;
+}
+
+@media (max-width: 768.98px) {
+  .form-group.is-textarea .form-control {
+    min-height: 7.8125vw;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .form-group.is-textarea .form-control {
+    min-height: 18.9743589744vw;
+  }
+}
+
+.form-group.is-textarea .form-textarea {
+  padding-top: 1.6025641026vw;
+  /* matches input padding-top */
+}
+
+@media (max-width: 768.98px) {
+  .form-group.is-textarea .form-textarea {
+    font-size: 1.8229166667vw;
+    /* body-text-4 */
+    padding-top: 2.6041666667vw;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .form-group.is-textarea .form-textarea {
+    font-size: 4.1025641026vw;
+    /* body-text-4 */
+    padding-top: 7.6923076923vw;
+  }
+}
+
+/* === FOCUSED === */
+.form-group.is-focused .form-control::after {
+  transform: scaleX(1);
+}
+
+.form-group.is-focused .form-placeholder {
+  font-size: clamp(9px, 0.73vw, 11px);
+  opacity: 0.45;
+  top: 0.7326007326vw;
+}
+
+@media (max-width: 768.98px) {
+  .form-group.is-focused .form-placeholder {
+    font-size: 1.5625vw;
+    top: 1.3020833333vw;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .form-group.is-focused .form-placeholder {
+    font-size: 3.0769230769vw;
+    top: 4.1025641026vw;
+  }
+}
+
+.form-group.is-focused.is-input .form-input {
+  height: 5.9523809524vw;
+}
+
+@media (max-width: 768.98px) {
+  .form-group.is-focused.is-input .form-input {
+    height: 7.8125vw;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .form-group.is-focused.is-input .form-input {
+    height: 18.9743589744vw;
+  }
+}
+
+.form-group.is-focused.is-textarea .form-control,
+.form-group.has-content.is-textarea .form-control {
+  min-height: 5.9523809524vw;
+}
+
+@media (max-width: 768.98px) {
+
+  .form-group.is-focused.is-textarea .form-control,
+  .form-group.has-content.is-textarea .form-control {
+    min-height: 7.8125vw;
+  }
+}
+
+@media (max-width: 575.98px) {
+
+  .form-group.is-focused.is-textarea .form-control,
+  .form-group.has-content.is-textarea .form-control {
+    min-height: 18.9743589744vw;
+  }
+}
+
+/* Textarea focused/has-content — text padding-top to align with centred input text */
+.form-group.is-focused.is-textarea .form-textarea,
+.form-group.has-content.is-textarea .form-textarea {
+  padding-top: 2.9vw;
+}
+
+@media (max-width: 1439.98px) {
+
+  .form-group.is-focused.is-textarea .form-textarea,
+  .form-group.has-content.is-textarea .form-textarea {
+    padding-top: 2.85vw;
+  }
+}
+
+@media (max-width: 1024.98px) {
+
+  .form-group.is-focused.is-textarea .form-textarea,
+  .form-group.has-content.is-textarea .form-textarea {
+    padding-top: 2.76vw;
+  }
+}
+
+@media (max-width: 768.98px) {
+
+  .form-group.is-focused.is-textarea .form-textarea,
+  .form-group.has-content.is-textarea .form-textarea {
+    padding-top: 2.6041666667vw;
+    /* base 값 복원 */
+  }
+}
+
+@media (max-width: 575.98px) {
+
+  .form-group.is-focused.is-textarea .form-textarea,
+  .form-group.has-content.is-textarea .form-textarea {
+    padding-top: 7.6923076923vw;
+    /* base 값 복원 */
+  }
+}
+
+/* === HAS-CONTENT === */
+.form-group.has-content .form-control::after {
+  transform: scaleX(0);
+}
+
+.form-group.has-content .form-placeholder {
+  font-size: clamp(9px, 0.73vw, 11px);
+  opacity: 0.45;
+  top: 0.7326007326vw;
+}
+
+@media (max-width: 768.98px) {
+  .form-group.has-content .form-placeholder {
+    font-size: 1.5625vw;
+    top: 1.3020833333vw;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .form-group.has-content .form-placeholder {
+    font-size: 3.0769230769vw;
+    top: 4.1025641026vw;
+  }
+}
+
+.form-group.has-content.is-input .form-input {
+  height: 5.9523809524vw;
+}
+
+@media (max-width: 768.98px) {
+  .form-group.has-content.is-input .form-input {
+    height: 7.8125vw;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .form-group.has-content.is-input .form-input {
+    height: 18.9743589744vw;
+  }
+}
+
+/* (handled above) */
+
+/* === ERROR === */
+.form-group.is-error .form-control::before,
+.form-group.is-error .form-control::after {
+  background: #FB6262 !important;
+  opacity: 1;
+}
+
+.form-group .error-message {
+  bottom: -1.3736263736vw;
+  color: #FB6262;
+  font-family: 'Inter Display', 'Inter', sans-serif;
+  font-size: clamp(9px, 0.73vw, 11px);
+  letter-spacing: 0.01em;
+  line-height: 150%;
+  position: absolute;
+  right: 0;
+}
+
+@media (max-width: 575.98px) {
+  .form-group .error-message {
+    bottom: -6.1538461538vw;
+    font-size: 3.0769230769vw;
+  }
+}
+
+/* === CHECKBOX === */
+.form-group .form-checkbox label {
+  align-items: flex-start;
+  cursor: pointer;
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.form-group .form-checkbox label input {
+  opacity: 0;
+  position: absolute;
+  visibility: hidden;
+}
+
+.form-group .form-checkbox label input:checked~.form-checkbox__check svg {
+  opacity: 1;
+}
+
+.form-group .form-checkbox label .form-checkbox__check {
+  align-items: center;
+  border: 1px solid #000;
+  color: #000;
+  cursor: pointer;
+  display: flex;
+  flex-shrink: 0;
+  height: 1.1446886447vw;
+  justify-content: center;
+  left: 0;
+  min-height: 16px;
+  min-width: 16px;
+  position: absolute;
+  top: 0.1em;
+  transition: border-color 0.2s ease-in-out;
+  width: 1.1446886447vw;
+}
+
+@media (max-width: 768.98px) {
+  .form-group .form-checkbox label .form-checkbox__check {
+    height: 20px;
+    width: 20px;
+  }
+}
+
+.form-group .form-checkbox label .form-checkbox__check svg {
+  height: 0.8241758242vw;
+  min-height: 11px;
+  min-width: 11px;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  width: 0.8241758242vw;
+}
+
+@media (max-width: 768.98px) {
+  .form-group .form-checkbox label .form-checkbox__check svg {
+    height: 15px;
+    width: 15px;
+  }
+}
+
+.form-group .form-checkbox label .form-checkbox__text {
+  color: #000;
+  flex: 1;
+  font-family: 'Inter Display', 'Inter', sans-serif;
+  font-size: clamp(11px, 0.88vw, 13px);
+  font-weight: 400;
+  line-height: 1.6;
+  padding-left: 1.8315018315vw;
+}
+
+@media (max-width: 768.98px) {
+  .form-group .form-checkbox label .form-checkbox__text {
+    padding-left: 30px;
+  }
+}
+
+.form-group.is-error .form-checkbox__check {
+  border-color: #FB6262;
+}
