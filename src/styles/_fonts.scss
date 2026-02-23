@@ -6,20 +6,32 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter+Display:ital,wght@0,100..900;1,100..900&display=swap');
 
+// ── Font size helper ─────────────────────────────────────────
+// 기준 viewport: 1092px
+// 사용: fvw(24) → calc(24 / 1092 * 100vw)
+// 브레이크포인트별 계산: Xpx × (viewport / 1092)
+//   예) fvw(24) @ 1440px → 24 × 1440/1092 ≈ 31.6px
+//       fvw(24) @ 1024px → 24 × 1024/1092 ≈ 22.5px
+//       fvw(24) @ 768px  → 24 × 768/1092  ≈ 16.9px
+$_fp: 1092;
+@function fvw($px) {
+  @return calc(#{$px} / #{$_fp} * 100vw);
+}
+
 // ── SCSS 변수 (컴파일 시 실제 값으로 치환됨) ──────────────────
-$fs-body-1:    2.1978021978vw;
-$fs-body-2:    1.8315018315vw;
-$fs-body-3:    1.4652014652vw;
-$fs-body-4:    1.1904761905vw;
-$fs-body-5:    0.9157509158vw;
-$fs-body-caps: 0.8241758242vw;
-$fs-h1:        9.706959707vw;
-$fs-h2:        6.043956044vw;
-$fs-h3:        5.1282051282vw;
-$fs-h4:        2.9304029304vw;
-$fs-h4b:       2.2893772894vw;
-$fs-h5:        1.8315018315vw;
-$fs-h6:        1.4652014652vw;
+$fs-body-1:    fvw(24);  //  24px @ 1092px
+$fs-body-2:    fvw(20);  //  20px @ 1092px
+$fs-body-3:    fvw(16);  //  16px @ 1092px
+$fs-body-4:    fvw(13);  //  13px @ 1092px
+$fs-body-5:    fvw(10);  //  10px @ 1092px
+$fs-body-caps: fvw(9);   //   9px @ 1092px
+$fs-h1:        fvw(106); // 106px @ 1092px
+$fs-h2:        fvw(66);  //  66px @ 1092px
+$fs-h3:        fvw(56);  //  56px @ 1092px
+$fs-h4:        fvw(32);  //  32px @ 1092px
+$fs-h4b:       fvw(25);  //  25px @ 1092px
+$fs-h5:        fvw(20);  //  20px @ 1092px
+$fs-h6:        fvw(16);  //  16px @ 1092px
 
 $fw-light:   300;
 $fw-regular: 400;
