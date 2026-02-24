@@ -47,10 +47,16 @@
     color: #000;
   }
 
-  // ── disabled ──
+  // ── disabled — 화살표 숨김 + gray 배경 ──
   &:disabled {
-    opacity: 0.2;
     cursor: default;
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.12);
+    pointer-events: none;
+
+    svg {
+      opacity: 0;
+    }
   }
 
   // ── Tablet ──
