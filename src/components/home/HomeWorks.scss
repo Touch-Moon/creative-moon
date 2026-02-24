@@ -156,6 +156,7 @@
   &__counter-sep,
   &__counter-total {
     display: block;
+    font-weight: $fw-light;
   }
 
   &__arrows {
@@ -291,7 +292,7 @@
       flex: none;
       flex-direction: row;
       align-items: center;
-      padding: 32px fvw(24);
+      padding: 32px $gutter-tablet;
       border-right: none;
       border-bottom: 1px solid var(--foreground-dim);
     }
@@ -305,8 +306,12 @@
       align-items: center;
     }
 
+    &__arrows {
+      display: none;
+    }
+
     &__track {
-      padding: 32px fvw(24);
+      padding: 32px fvw(24) 32px $gutter-tablet;
       gap: 20px;
     }
 
@@ -321,8 +326,12 @@
 
   // ── Mobile ────────────────────────────────────
   @media (max-width: 575.98px) {
+    &__sidebar {
+      padding: 24px $gutter-mobile;
+    }
+
     &__track {
-      padding: 24px 16px;
+      padding: 24px 16px 24px $gutter-mobile;
       gap: 16px;
     }
 

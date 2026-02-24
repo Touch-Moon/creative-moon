@@ -1,0 +1,5 @@
+.page-transition-container {
+  /* 최소 높이로 빈 화면 깜빡임 방지 */
+  min-height: 100vh;
+  will-change: opacity;
+}

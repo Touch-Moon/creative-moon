@@ -4,7 +4,7 @@
 
 .home-stories {
   background-color: transparent;
-  padding: fvw(100) $space-12 fvw(120);
+  padding: fvw(100) $gutter-desktop fvw(120);
 
   // ── 헤더 ─────────────────────────────────────
   &__header {
@@ -19,7 +19,7 @@
   }
 
   &__title {
-    font-size: $fs-h2;     // 88px
+    font-size: $fs-h2; // 88px
     font-weight: $fw-light;
     letter-spacing: -0.04em;
     line-height: 1;
@@ -43,11 +43,13 @@
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
-    // section padding을 벗어나 브라우저 전체 너비 확보
-    margin-left: -$space-12;
-    width: calc(100% + #{$space-12} * 2);
+    // 왼쪽은 section padding에 맞추고, 오른쪽만 화면 끝까지 확장
+    margin-right: -$gutter-desktop;
+    width: calc(100% + #{$gutter-desktop});
 
-    &::-webkit-scrollbar { display: none; }
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   &__card {
@@ -66,7 +68,9 @@
     overflow: hidden;
     background: $m-deep-grey;
 
-    img { transition: transform 0.7s ease; }
+    img {
+      transition: transform 0.7s ease;
+    }
 
     .home-stories__card:hover & img {
       transform: scale(1.04);
@@ -74,14 +78,14 @@
   }
 
   &__card-category {
-    font-size: $fs-body-caps;  // 12px
+    font-size: $fs-body-caps; // 12px
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--foreground-muted);
   }
 
   &__card-title {
-    font-size: $fs-body-2;   // 26px
+    font-size: $fs-body-2; // 26px
     font-weight: $fw-light;
     color: inherit;
     letter-spacing: -0.02em;
@@ -91,42 +95,79 @@
 
   // ── Tablet ──────────────────────────────────
   @media (max-width: 1023.98px) {
-    padding: 80px $space-8 100px;
+    padding: 80px $gutter-tablet 100px;
 
     &__track {
-      margin-left: -$space-8;
-      width: calc(100% + #{$space-8} * 2);
+      margin-right: -$gutter-tablet;
+      width: calc(100% + #{$gutter-tablet});
     }
 
-    &__header { padding: 0 0 36px; }
-    &__title-wrap {
-    overflow: hidden;
-  }
+    &__header {
+      padding: 0 0 36px;
+    }
 
-  &__title { font-size: clamp(40px, 7vw, 88px); }
-    &__track { padding: 0; gap: 16px; }
-    &__card { flex: 0 0 65vw; }
-    &__card-img { height: 44vw; }
+    &__title-wrap {
+      overflow: hidden;
+    }
+
+    &__title {
+      font-size: clamp(40px, 7vw, 88px);
+    }
+
+    &__arrows {
+      display: none;
+    }
+
+    &__track {
+      padding: 0;
+      gap: 16px;
+    }
+
+    &__card {
+      flex: 0 0 65vw;
+    }
+
+    &__card-img {
+      height: 44vw;
+    }
   }
 
   // ── Mobile ───────────────────────────────────
   @media (max-width: 575.98px) {
-    padding: 60px $space-4 80px;
+    padding: 60px $gutter-mobile 80px;
 
     &__track {
-      margin-left: -$space-4;
-      width: calc(100% + #{$space-4} * 2);
+      margin-right: -$gutter-mobile;
+      width: calc(100% + $gutter-mobile);
     }
 
-    &__header { padding: 0 0 24px; }
-    &__title-wrap {
-    overflow: hidden;
-  }
+    &__header {
+      padding: 0 0 24px;
+    }
 
-  &__title { font-size: clamp(36px, 11vw, 56px); }
-    &__track { padding: 0; gap: 14px; }
-    &__card { flex: 0 0 80vw; }
-    &__card-img { height: 56vw; }
-    &__card-title { font-size: clamp(15px, 4vw, 20px); }
+    &__title-wrap {
+      overflow: hidden;
+    }
+
+    &__title {
+      font-size: clamp(36px, 11vw, 56px);
+    }
+
+    &__track {
+      padding: 0;
+      gap: 14px;
+    }
+
+    &__card {
+      flex: 0 0 80vw;
+    }
+
+    &__card-img {
+      height: 56vw;
+    }
+
+    &__card-title {
+      font-size: clamp(15px, 4vw, 20px);
+    }
   }
 }

@@ -89,7 +89,6 @@ export default function HomeStories() {
           />
         </motion.div>
       </div>
-      </div>
 
       {/* ── 카드 캐러셀 ── */}
       <div className="home-stories__track" ref={trackRef}>
@@ -116,6 +115,7 @@ export default function HomeStories() {
             <h3 className="home-stories__card-title">{item.title}</h3>
           </MotionLink>
         ))}
+      </div>
       </div>
     </section>
   );

@@ -11,24 +11,24 @@
   overflow: hidden;
   background-color: transparent;
   height: 100vh;
-  padding-left: $space-12;
-  padding-right: $space-12;
+  padding-left: $gutter-desktop;
+  padding-right: $gutter-desktop;
 
   @media (max-width: 1023.98px) {
-    padding-left: $space-8;
-    padding-right: $space-8;
+    padding-left: $gutter-tablet;
+    padding-right: $gutter-tablet;
   }
 
   @media (max-width: 575.98px) {
-    padding-left: $space-4;
-    padding-right: $space-4;
+    padding-left: $gutter-mobile;
+    padding-right: $gutter-mobile;
   }
 
   // BEM: Element (__ 사용)
   &__title {
     font-family: var(--font-inter-display), sans-serif;
     font-size: clamp(40px, 7.5vw, 115px);
-    font-weight: 400;
+    font-weight: 300;
     text-transform: uppercase;
     line-height: 0.95;
     letter-spacing: -0.02em;
@@ -49,7 +49,16 @@
   }
 
   &__module {
+    position: relative;
     display: inline-block;
-    will-change: transform, clip-path;
+    will-change: clip-path;
+    // Initial clip hides content — Framer Motion animates to full reveal
+    clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
+  }
+
+  &__module-child {
+    position: relative;
+    display: inline-block;
+    will-change: transform;
   }
 }
