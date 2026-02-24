@@ -264,6 +264,53 @@ Component SCSS는 해당 컴포넌트 파일 옆에 배치 후 직접 import.
 
 ---
 
+## Line Animation Convention (자동 적용 규칙)
+
+섹션에 구분선(라인)이 존재하면 **반드시 자동으로** 아래 패턴의 애니메이션을 추가한다.
+
+### 수평 라인 (border, hr, __rule, __line-h 등)
+```tsx
+// 트랙 (흐린 배경선) + 이너 (채움선)
+<div className="__line">
+  <motion.span
+    className="__line-inner"
+    initial={{ scaleX: 0 }}
+    animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+    transition={{ duration: 0.67, ease: EASE_OUT, delay }}
+  />
+</div>
+```
+```scss
+.__line        { position: relative; height: 1px; width: 100%; background: var(--foreground-dim); }
+.__line-inner  { position: absolute; inset: 0; background: var(--foreground); transform-origin: left center; will-change: transform; display: block; }
+```
+
+### 수직 라인 (__line-v)
+```tsx
+<motion.span
+  className="__line-v"
+  initial={{ scaleY: 0 }}
+  animate={isInView ? { scaleY: 1 } : { scaleY: 0 }}
+  transition={{ duration: 0.67, ease: EASE_OUT, delay }}
+/>
+```
+```scss
+.__line-v { position: absolute; width: 1px; height: ...; background: var(--foreground-dim); transform-origin: left top; will-change: transform; }
+```
+
+### 복수 라인 시퀀스 (plastic.design 방식)
+여러 라인이 함께 있으면 **순서대로 딜레이**를 주어 사각형을 그리듯 연출:
+- top 수평선: `delay: 0`
+- 수직선: `delay: 0.3`
+- bottom 수평선: `delay: 0.67` (top 완료 시점)
+
+### 적용 기준
+- `border-top`, `border-bottom`, `border-right` 등 CSS border → 애니메이션 라인 span으로 교체
+- `<hr>`, `__rule`, `__divider`, `__line` 등 구분선 역할 태그 → inner span 추가
+- 트리거: 해당 섹션 또는 아이템의 `useInView` (`once: true`)에 연동
+
+---
+
 ## Theme System
 
 **Style Guide 전용** — `.cm-root[data-theme='dark|light']`
