@@ -61,7 +61,7 @@ type SkillItemProps = {
 
 function SkillItem({ item, index, isRevealed, setItemRef }: SkillItemProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '0px 0px -70% 0px' });
+  const inView = useInView(ref, { once: true, margin: '0px 0px -50% 0px' });
 
   return (
     <motion.div
