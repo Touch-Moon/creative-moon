@@ -49,34 +49,34 @@ function WaveImage({ src, alt, sizes }: { src: string; alt: string; sizes: strin
   const isHoveringRef = useRef(false);
   const tRef = useRef(0); // 전역 타임 (idle 연속성 유지)
 
-  // plastic.design 수치: cX=1.8, cY=0.2 → X freq이 Y의 9배
-  // idle amplitude ≈ 0.006 (feTurbulence baseFreq), hover ≈ 0.014
-  // scale: idle 3 / hover 7 (subtle)
-  const IDLE_FREQ_X = 0.006;
-  const IDLE_FREQ_Y = 0.0007; // cX:cY = 1.8:0.2 비율
-  const HOVER_FREQ_X = 0.014;
-  const HOVER_FREQ_Y = 0.0016;
-  const IDLE_SCALE = 3;
-  const HOVER_SCALE = 7;
+  // fractalNoise = 부드러운 사인파형 (turbulence는 너무 거친 노이즈)
+  // plastic.design cX:cY = 1.8:0.2 비율 유지
+  // idle: 거의 안 보임 / hover: 명확한 물결 효과
+  const IDLE_FREQ_X  = 0.004;
+  const IDLE_FREQ_Y  = 0.0005;
+  const HOVER_FREQ_X = 0.022;
+  const HOVER_FREQ_Y = 0.0025;
+  const IDLE_SCALE   = 1;
+  const HOVER_SCALE  = 24;
 
   useEffect(() => {
-    // 컴포넌트 마운트 시 idle 웨이브 시작
     const loop = () => {
       tRef.current++;
       const t = tRef.current;
-      const targetFreqX = isHoveringRef.current ? HOVER_FREQ_X : IDLE_FREQ_X;
-      const targetFreqY = isHoveringRef.current ? HOVER_FREQ_Y : IDLE_FREQ_Y;
-      const targetScale = isHoveringRef.current ? HOVER_SCALE : IDLE_SCALE;
+      const hovering = isHoveringRef.current;
+      const targetFreqX = hovering ? HOVER_FREQ_X : IDLE_FREQ_X;
+      const targetFreqY = hovering ? HOVER_FREQ_Y : IDLE_FREQ_Y;
+      const targetScale = hovering ? HOVER_SCALE  : IDLE_SCALE;
 
-      // 현재 값 부드럽게 lerp
       const curStr = turbRef.current?.getAttribute('baseFrequency') || '0 0';
       const [cx, cy] = curStr.split(' ').map(Number);
-      const curScale = parseFloat(dispRef.current?.getAttribute('scale') || '3');
+      const curScale = parseFloat(dispRef.current?.getAttribute('scale') || '1');
 
-      const lerpFactor = 0.035;
-      const nx = cx + (targetFreqX + Math.sin(t * 0.018) * targetFreqX * 0.4 - cx) * lerpFactor;
-      const ny = cy + (targetFreqY + Math.sin(t * 0.012) * targetFreqY * 0.3 - cy) * lerpFactor;
-      const ns = curScale + (targetScale - curScale) * 0.04;
+      // hover 진입 시 빠르게, 퇴장 시 느리게 복귀
+      const lerpF = hovering ? 0.07 : 0.025;
+      const nx = cx + (targetFreqX + Math.sin(t * 0.02) * targetFreqX * 0.35 - cx) * lerpF;
+      const ny = cy + (targetFreqY + Math.sin(t * 0.013) * targetFreqY * 0.25 - cy) * lerpF;
+      const ns = curScale + (targetScale - curScale) * (hovering ? 0.07 : 0.03);
 
       turbRef.current?.setAttribute('baseFrequency', `${nx.toFixed(5)} ${ny.toFixed(5)}`);
       dispRef.current?.setAttribute('scale', ns.toFixed(2));
@@ -126,7 +126,7 @@ function WaveImage({ src, alt, sizes }: { src: string; alt: string; sizes: strin
           <filter id={filterId} x="-5%" y="-5%" width="110%" height="110%">
             <feTurbulence
               ref={turbRef}
-              type="turbulence"
+              type="fractalNoise"
               baseFrequency="0 0"
               numOctaves="3"
               result="noise"
@@ -180,8 +180,8 @@ export default function HomeWorks() {
   const isScrollingRef = useRef(false);
   const scrollTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  // 드래그 상태
-  const dragRef = useRef({ active: false, startX: 0, scrollLeft: 0 });
+  // 드래그 상태 — hasDragged: 3px 이상 움직임 발생 시 true → 클릭 방지
+  const dragRef = useRef({ active: false, startX: 0, scrollLeft: 0, hasDragged: false });
 
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-8%' });
@@ -228,17 +228,27 @@ export default function HomeWorks() {
       active: true,
       startX: e.pageX - trackRef.current.offsetLeft,
       scrollLeft: trackRef.current.scrollLeft,
+      hasDragged: false, // 매번 리셋
     };
-    trackRef.current.style.cursor = 'grabbing';
-    trackRef.current.style.userSelect = 'none';
   };
 
   const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!dragRef.current.active || !trackRef.current) return;
-    e.preventDefault();
     const x = e.pageX - trackRef.current.offsetLeft;
-    const walk = (x - dragRef.current.startX) * 1.5;
-    trackRef.current.scrollLeft = dragRef.current.scrollLeft - walk;
+    const moved = Math.abs(x - dragRef.current.startX);
+
+    // 3px 이상 이동 시 드래그 의도 확정
+    if (!dragRef.current.hasDragged && moved > 3) {
+      dragRef.current.hasDragged = true;
+      trackRef.current.style.cursor = 'grabbing';
+      trackRef.current.style.userSelect = 'none';
+    }
+
+    if (dragRef.current.hasDragged) {
+      e.preventDefault();
+      const walk = (x - dragRef.current.startX) * 1.5;
+      trackRef.current.scrollLeft = dragRef.current.scrollLeft - walk;
+    }
   };
 
   const onDragEnd = () => {
@@ -354,10 +364,7 @@ export default function HomeWorks() {
               animate={isInView ? 'visible' : 'hidden'}
               draggable={false}
               onClick={(e) => {
-                // 드래그 후 클릭 방지
-                if (Math.abs(dragRef.current.scrollLeft - (trackRef.current?.scrollLeft ?? 0)) > 5) {
-                  e.preventDefault();
-                }
+                if (dragRef.current.hasDragged) e.preventDefault();
               }}
             >
               <WaveImage
