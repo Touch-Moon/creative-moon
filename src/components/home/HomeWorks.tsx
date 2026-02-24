@@ -63,28 +63,23 @@ export default function HomeWorks() {
     setCurrent(Math.min(idx, works.length - 1));
   }, []);
 
-  // 라인 공통 transition
-  const lineTransition = (delay = 0) => ({
-    duration: 1.0, ease: EASE_OUT, delay,
-  });
-
   return (
     <section ref={sectionRef} className="home-works" data-theme="dark">
 
-      {/* ── 수평 라인 TOP ── */}
+      {/* ── 수평 라인 TOP — 가장 먼저 ── */}
       <motion.span
         className="home-works__line-h home-works__line-h--top"
         initial={{ scaleX: 0 }}
         animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-        transition={lineTransition(0)}
+        transition={{ duration: 0.67, ease: EASE_OUT, delay: 0 }}
       />
 
-      {/* ── 수직 라인 (사이드바 우측) ── */}
+      {/* ── 수직 라인 — TOP 시작 후 0.3s ── */}
       <motion.span
         className="home-works__line-v"
         initial={{ scaleY: 0 }}
         animate={isInView ? { scaleY: 1 } : { scaleY: 0 }}
-        transition={lineTransition(0.15)}
+        transition={{ duration: 0.67, ease: EASE_OUT, delay: 0.3 }}
       />
 
       <div className="home-works__inner">
@@ -164,12 +159,12 @@ export default function HomeWorks() {
 
       </div>
 
-      {/* ── 수평 라인 BOTTOM ── */}
+      {/* ── 수평 라인 BOTTOM — TOP 완료 후 시작 (delay 0.67s) ── */}
       <motion.span
         className="home-works__line-h home-works__line-h--bottom"
         initial={{ scaleX: 0 }}
         animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-        transition={lineTransition(0.1)}
+        transition={{ duration: 0.67, ease: EASE_OUT, delay: 0.67 }}
       />
 
     </section>
