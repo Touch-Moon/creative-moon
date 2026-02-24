@@ -4,7 +4,38 @@
 
 .home-works {
   background-color: transparent;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative; // 라인 absolute 기준
+
+  // ── 수평 라인 (TOP / BOTTOM) ──────────────────
+  &__line-h {
+    display: block;
+    height: 1px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.35);
+    transform-origin: left top;
+    will-change: transform;
+
+    &--bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+  }
+
+  // ── 수직 라인 (사이드바 우측) ─────────────────
+  &__line-v {
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: fvw(424);
+    width: 1px;
+    height: calc(100% - 2px);
+    background: rgba(255, 255, 255, 0.35);
+    transform-origin: left top;
+    will-change: transform;
+
+    @media (max-width: 1023.98px) { display: none; }
+  }
 
   &__inner {
     display: flex;
@@ -18,7 +49,7 @@
     flex-direction: column;
     justify-content: space-between;
     padding: fvw(48) fvw(40);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    // border-right은 __line-v 가 대체
   }
 
   &__title {

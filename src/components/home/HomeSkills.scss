@@ -76,9 +76,19 @@
   }
 
   &__rule {
+    position: relative;
     height: 1px;
-    background-color: $m-grey-medium;
     width: 100%;
+    background: var(--foreground-dim); // 트랙 (흐린 배경선)
+  }
+
+  &__rule-inner {
+    position: absolute;
+    inset: 0;
+    background: var(--foreground);    // 채워지는 선
+    transform-origin: left center;
+    will-change: transform;
+    display: block;
   }
 
   // ── Tablet ──────────────────────────────────
