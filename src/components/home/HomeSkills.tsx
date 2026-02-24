@@ -35,9 +35,9 @@ const skills = [
 ];
 
 const itemVariants: Variants = {
-  hidden:  { opacity: 0, y: 32 },
+  hidden:  { opacity: 0.5, y: 32 },
   visible: {
-    opacity: 0.25,
+    opacity: 1,
     y: 0,
     transition: { duration: 1.0, ease: EASE_OUT },
   },
@@ -71,7 +71,7 @@ function SkillItem({ item, index, isRevealed, setItemRef }: SkillItemProps) {
       }}
       variants={itemVariants}
       initial="hidden"
-      animate={inView ? (isRevealed ? { opacity: 1, y: 0 } : 'visible') : 'hidden'}
+      animate={inView ? 'visible' : 'hidden'}
       className="home-skills__item"
     >
       <div className="home-skills__item-inner">
