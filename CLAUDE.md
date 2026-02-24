@@ -1,5 +1,16 @@
 # CLAUDE.md — Creative Moon Portfolio
 
+## Git Workflow (자동 커밋 규칙)
+
+- **수정 완료 → 새 작업 시작 전에 반드시 커밋**
+- 커밋 타이밍: 하나의 기능/수정이 끝난 직후, 다음 태스크로 넘어가기 전
+- 커밋 메시지 형식: `feat|fix|refactor|style: 한 줄 요약 (영문)`
+- `Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>` 항상 포함
+- push는 자동으로 하지 않음 — 사용자가 직접 터미널에서 `git push` 실행
+- Remote: `https://github.com/Touch-Moon/creative-moon.git`
+
+---
+
 ## Code Edit Rules (토큰 절약 원칙)
 
 - 전체 파일 재작성 금지. 수정이 필요한 함수/클래스/CSS 선택자 블록만 출력.
