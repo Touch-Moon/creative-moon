@@ -23,7 +23,7 @@ const cardVariants: Variants = {
   hidden: { clipPath: 'inset(0 0 100% 0)' },
   visible: (i: number) => ({
     clipPath: 'inset(0 0 0% 0)',
-    transition: { duration: 1.1, ease: EASE_OUT, delay: 3.01 + i * 0.18 },
+    transition: { duration: 1.1, ease: EASE_OUT, delay: 2.01 + i * 0.18 },
   }),
 };
 
@@ -52,12 +52,12 @@ function WaveImage({ src, alt, sizes }: { src: string; alt: string; sizes: strin
   // plastic.design 수치: cX=1.8, cY=0.2 → X freq이 Y의 9배
   // idle amplitude ≈ 0.006 (feTurbulence baseFreq), hover ≈ 0.014
   // scale: idle 3 / hover 7 (subtle)
-  const IDLE_FREQ_X  = 0.006;
-  const IDLE_FREQ_Y  = 0.0007; // cX:cY = 1.8:0.2 비율
+  const IDLE_FREQ_X = 0.006;
+  const IDLE_FREQ_Y = 0.0007; // cX:cY = 1.8:0.2 비율
   const HOVER_FREQ_X = 0.014;
   const HOVER_FREQ_Y = 0.0016;
-  const IDLE_SCALE   = 3;
-  const HOVER_SCALE  = 7;
+  const IDLE_SCALE = 3;
+  const HOVER_SCALE = 7;
 
   useEffect(() => {
     // 컴포넌트 마운트 시 idle 웨이브 시작
@@ -66,7 +66,7 @@ function WaveImage({ src, alt, sizes }: { src: string; alt: string; sizes: strin
       const t = tRef.current;
       const targetFreqX = isHoveringRef.current ? HOVER_FREQ_X : IDLE_FREQ_X;
       const targetFreqY = isHoveringRef.current ? HOVER_FREQ_Y : IDLE_FREQ_Y;
-      const targetScale = isHoveringRef.current ? HOVER_SCALE  : IDLE_SCALE;
+      const targetScale = isHoveringRef.current ? HOVER_SCALE : IDLE_SCALE;
 
       // 현재 값 부드럽게 lerp
       const curStr = turbRef.current?.getAttribute('baseFrequency') || '0 0';
@@ -85,17 +85,36 @@ function WaveImage({ src, alt, sizes }: { src: string; alt: string; sizes: strin
     };
     rafRef.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafRef.current);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleMouseEnter = () => { isHoveringRef.current = true; };
-  const handleMouseLeave = () => { isHoveringRef.current = false; };
+  // ── DRAG 커스텀 커서 ────────────────────────────
+  const dragCursorRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseEnter = () => {
+    isHoveringRef.current = true;
+    dragCursorRef.current?.classList.add('is-visible');
+  };
+
+  const handleMouseLeave = () => {
+    isHoveringRef.current = false;
+    dragCursorRef.current?.classList.remove('is-visible');
+  };
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!dragCursorRef.current) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    dragCursorRef.current.style.transform = `translate(${x}px, ${y}px)`;
+  }, []);
 
   return (
     <div
       className="home-works__card-img"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onMouseMove={handleMouseMove}
     >
       {/* 필터 정의 — 0×0 SVG로 DOM에만 존재 */}
       <svg
@@ -135,6 +154,18 @@ function WaveImage({ src, alt, sizes }: { src: string; alt: string; sizes: strin
           sizes={sizes}
           draggable={false}
         />
+      </div>
+
+      {/* DRAG 커스텀 커서 배지 — 마우스 따라다님 */}
+      <div ref={dragCursorRef} className="home-works__drag-cursor" aria-hidden="true">
+        <span className="home-works__drag-cursor-inner">
+          {/* 좌우 화살표 아이콘 */}
+          <svg width="18" height="10" viewBox="0 0 18 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M1 5H17M1 5L4.5 1.5M1 5L4.5 8.5M17 5L13.5 1.5M17 5L13.5 8.5"
+              stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          DRAG
+        </span>
       </div>
     </div>
   );

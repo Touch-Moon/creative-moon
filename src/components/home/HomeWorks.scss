@@ -158,6 +158,43 @@
     overflow: hidden;
     background: rgba(255, 255, 255, 0.05);
     border-radius: fvw(4);
+    cursor: none; // 시스템 커서 숨김 → 커스텀 DRAG 배지로 대체
+  }
+
+  // ── DRAG 커스텀 커서 배지 ─────────────────────
+  &__drag-cursor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 10;
+    // JS로 translate(x, y) 주입 — 마우스 따라다님
+  }
+
+  &__drag-cursor-inner {
+    display: flex;
+    align-items: center;
+    gap: fvw(6);
+    transform: translate(-50%, -50%);
+    background: #0a0a0a;
+    color: #fff;
+    font-size: fvw(12);
+    font-weight: $fw-light;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-radius: 99px;
+    padding: fvw(12) fvw(20);
+
+    // 진입/퇴장 애니메이션
+    opacity: 0;
+    scale: 0.7;
+    transition: opacity 0.25s ease, scale 0.25s ease;
+  }
+
+  &__drag-cursor.is-visible &__drag-cursor-inner {
+    opacity: 1;
+    scale: 1;
   }
 
   // wave filter 래퍼 — filter가 overflow 잘라내지 않도록 분리
