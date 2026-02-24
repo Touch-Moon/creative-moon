@@ -120,10 +120,12 @@
 
   // ── 우측 카드 트랙 ────────────────────────────
   &__track {
+    position: relative; // card.offsetLeft 기준점 고정
     flex: 1;
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    scroll-padding-left: fvw(40); // snap 시 padding 반영
     scroll-behavior: smooth;
     padding: fvw(48) fvw(48) fvw(48) fvw(40);
     gap: fvw(24);
