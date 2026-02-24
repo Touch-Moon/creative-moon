@@ -10,6 +10,7 @@
 
 ```
 📦 Push 먼저 해주세요
+cd /Users/jin-chulmoon/Documents/Work/01_CreativeMoon/my-portfolio
 git push origin <현재 브랜치명>
 완료되면 말씀해 주시면 바로 시작하겠습니다.
 ```
