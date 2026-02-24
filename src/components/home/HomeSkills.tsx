@@ -36,11 +36,11 @@ const skills = [
 
 const itemVariants: Variants = {
   hidden:  { opacity: 0, y: 32 },
-  visible: (i: number) => ({
+  visible: {
     opacity: 0.25,
     y: 0,
-    transition: { duration: 1.0, ease: EASE_OUT, delay: i * 0.08 },
-  }),
+    transition: { duration: 1.0, ease: EASE_OUT },
+  },
 };
 
 const labelVariants: Variants = {
@@ -51,12 +51,45 @@ const labelVariants: Variants = {
   },
 };
 
+// ── 각 아이템이 독립적으로 뷰포트 진입 감지 ──
+type SkillItemProps = {
+  item: typeof skills[0];
+  index: number;
+  isRevealed: boolean;
+  setItemRef: (el: HTMLDivElement | null) => void;
+};
+
+function SkillItem({ item, index, isRevealed, setItemRef }: SkillItemProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: '0px 0px -25% 0px' });
+
+  return (
+    <motion.div
+      ref={(el: HTMLDivElement | null) => {
+        (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
+        setItemRef(el);
+      }}
+      variants={itemVariants}
+      initial="hidden"
+      animate={inView ? (isRevealed ? { opacity: 1, y: 0 } : 'visible') : 'hidden'}
+      className="home-skills__item"
+    >
+      <div className="home-skills__item-inner">
+        <span className="home-skills__number">{item.number}</span>
+        <h3 className="home-skills__title">{item.title}</h3>
+        <p className="home-skills__desc">{item.desc}</p>
+      </div>
+      <div className="home-skills__rule" />
+    </motion.div>
+  );
+}
+
 export default function HomeSkills() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex]   = useState(0);
   const [revealedItems, setRevealedItems] = useState<Set<number>>(new Set());
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const sectionRef = useRef(null);
+  const sectionRef  = useRef(null);
   const sectionInView = useInView(sectionRef, { once: true, margin: '0px 0px -40% 0px' });
 
   // 한 번 active된 항목은 영구 revealed 처리
@@ -95,25 +128,16 @@ export default function HomeSkills() {
         </motion.div>
       </div>
 
-      {/* ── 우측 번호 목록 ── */}
+      {/* ── 우측 번호 목록 — 각 항목 개별 진입 감지 ── */}
       <div className="home-skills__list">
         {skills.map((item, i) => (
-          <motion.div
+          <SkillItem
             key={item.number}
-            ref={el => { itemRefs.current[i] = el; }}
-            custom={i}
-            variants={itemVariants}
-            initial="hidden"
-            animate={sectionInView ? (revealedItems.has(i) ? { opacity: 1, y: 0 } : 'visible') : 'hidden'}
-            className={`home-skills__item ${i === activeIndex ? 'is-active' : ''}`}
-          >
-            <div className="home-skills__item-inner">
-              <span className="home-skills__number">{item.number}</span>
-              <h3 className="home-skills__title">{item.title}</h3>
-              <p className="home-skills__desc">{item.desc}</p>
-            </div>
-            <div className="home-skills__rule" />
-          </motion.div>
+            item={item}
+            index={i}
+            isRevealed={revealedItems.has(i)}
+            setItemRef={el => { itemRefs.current[i] = el; }}
+          />
         ))}
       </div>
     </section>
