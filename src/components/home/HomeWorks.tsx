@@ -63,8 +63,30 @@ export default function HomeWorks() {
     setCurrent(Math.min(idx, works.length - 1));
   }, []);
 
+  // 라인 공통 transition
+  const lineTransition = (delay = 0) => ({
+    duration: 1.0, ease: EASE_OUT, delay,
+  });
+
   return (
     <section ref={sectionRef} className="home-works" data-theme="dark">
+
+      {/* ── 수평 라인 TOP ── */}
+      <motion.span
+        className="home-works__line-h home-works__line-h--top"
+        initial={{ scaleX: 0 }}
+        animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+        transition={lineTransition(0)}
+      />
+
+      {/* ── 수직 라인 (사이드바 우측) ── */}
+      <motion.span
+        className="home-works__line-v"
+        initial={{ scaleY: 0 }}
+        animate={isInView ? { scaleY: 1 } : { scaleY: 0 }}
+        transition={lineTransition(0.15)}
+      />
+
       <div className="home-works__inner">
 
         {/* ── 왼쪽 사이드바 ── */}
@@ -141,6 +163,15 @@ export default function HomeWorks() {
         </div>
 
       </div>
+
+      {/* ── 수평 라인 BOTTOM ── */}
+      <motion.span
+        className="home-works__line-h home-works__line-h--bottom"
+        initial={{ scaleX: 0 }}
+        animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+        transition={lineTransition(0.1)}
+      />
+
     </section>
   );
 }

@@ -79,7 +79,16 @@ function SkillItem({ item, index, isRevealed, setItemRef }: SkillItemProps) {
         <h3 className="home-skills__title">{item.title}</h3>
         <p className="home-skills__desc">{item.desc}</p>
       </div>
-      <div className="home-skills__rule" />
+
+      {/* ── 라인 애니메이션 (plastic.design home-service__line 방식) ── */}
+      <div className="home-skills__rule">
+        <motion.span
+          className="home-skills__rule-inner"
+          initial={{ scaleX: 0 }}
+          animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
+          transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.15 }}
+        />
+      </div>
     </motion.div>
   );
 }
