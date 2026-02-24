@@ -1,19 +1,8 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
+/* ------------------------------------------------
+   THEME
+   ------------------------------------------------ */
 @theme {
-  --font-neue: var(--font-neue-montreal);
-}
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: var(--font-neue-montreal), sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  --font-neue-montreal: 'neueMontreal', 'neueMontreal Fallback';
+  --font-sans: var(--font-inter-display);
 }

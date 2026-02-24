@@ -1,0 +1,49 @@
+/* ================================================
+   TOKENS — Typography
+   CSS custom properties for font size, weight,
+   line-height, and letter-spacing
+   ================================================ */
+
+@use '../primitives/type' as *;
+
+// ── CSS Custom Properties (:root) ────────────────────────────
+:root {
+  /* ─── Font Size ─── */
+  --fs-body-1:    #{$fs-body-1};
+  --fs-body-2:    #{$fs-body-2};
+  --fs-body-3:    #{$fs-body-3};
+  --fs-body-4:    #{$fs-body-4};
+  --fs-body-5:    #{$fs-body-5};
+  --fs-body-caps: #{$fs-body-caps};
+  --fs-h1:        #{$fs-h1};
+  --fs-h2:        #{$fs-h2};
+  --fs-h3:        #{$fs-h3};
+  --fs-h4:        #{$fs-h4};
+  --fs-h4b:       #{$fs-h4b};
+  --fs-h5:        #{$fs-h5};
+  --fs-h6:        #{$fs-h6};
+
+  /* ─── Font Weight ─── */
+  --fw-light:   #{$fw-light};
+  --fw-regular: #{$fw-regular};
+
+  /* ─── Line Height ─── */
+  --lh-body-1:    #{$lh-body-1};
+  --lh-body-2:    #{$lh-body-2};
+  --lh-body-3:    #{$lh-body-3};
+  --lh-body-4:    #{$lh-body-4};
+  --lh-body-5:    #{$lh-body-5};
+  --lh-body-caps: #{$lh-body-caps};
+  --lh-h1:  #{$lh-h1};
+  --lh-h2:  #{$lh-h2};
+  --lh-h3:  #{$lh-h3};
+  --lh-h4:  #{$lh-h4};
+  --lh-h4b: #{$lh-h4b};
+  --lh-h5:  #{$lh-h5};
+  --lh-h6:  #{$lh-h6};
+
+  /* ─── Letter Spacing ─── */
+  --ls-tight: #{$ls-tight};
+  --ls-base:  #{$ls-base};
+  --ls-wide:  #{$ls-wide};
+}

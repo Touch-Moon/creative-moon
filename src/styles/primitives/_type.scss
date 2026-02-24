@@ -1,0 +1,46 @@
+// ================================================
+// PRIMITIVES — Typography
+// Fluid scale function, font sizes, weights,
+// line-heights, letter-spacing
+// ================================================
+
+// ── Fluid viewport scale ─────────────────────────────────────
+// Base: 1440px  →  fvw(32) → calc(32 / 1440 * 100vw)
+$_fp: 1440;
+@function fvw($px) {
+  @return calc(#{$px} / #{$_fp} * 100vw);
+}
+
+// ── Font sizes ────────────────────────────────────────────────
+$fs-body-1:    fvw(32);  //  32px @ 1440px
+$fs-body-2:    fvw(26);  //  26px @ 1440px
+$fs-body-3:    fvw(22);  //  22px @ 1440px
+$fs-body-4:    fvw(18);  //  18px @ 1440px
+$fs-body-5:    fvw(14);  //  14px @ 1440px
+$fs-body-caps: fvw(12);  //  12px @ 1440px
+$fs-h1:        fvw(140); // 140px @ 1440px
+$fs-h2:        fvw(88);  //  88px @ 1440px
+$fs-h3:        fvw(74);  //  74px @ 1440px
+$fs-h4:        fvw(42);  //  42px @ 1440px
+$fs-h4b:       fvw(32);  //  32px @ 1440px
+$fs-h5:        fvw(26);  //  26px @ 1440px
+$fs-h6:        fvw(22);  //  22px @ 1440px
+
+// ── Font weights ──────────────────────────────────────────────
+$fw-light:   300;
+$fw-regular: 400;
+
+// ── Line heights ──────────────────────────────────────────────
+$lh-body-1:    120%;
+$lh-body-2:    140%;
+$lh-body-3:    130%;
+$lh-body-4:    140%;
+$lh-body-5:    150%;
+$lh-body-caps: 100%;
+$lh-h1:  96%;  $lh-h2:  98%;  $lh-h3: 98%;
+$lh-h4:  110%; $lh-h4b: 100%; $lh-h5: 110%; $lh-h6: 120%;
+
+// ── Letter spacing ────────────────────────────────────────────
+$ls-tight: -0.01em;
+$ls-base:   0.01em;
+$ls-wide:   0.04em;

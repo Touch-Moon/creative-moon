@@ -9,6 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "styleguide:build": "sass src/styles/styles.scss:/Users/jin-chulmoon/Downloads/styles.css --no-source-map",
+    "styleguide:watch": "sass --watch src/styles/styles.scss:/Users/jin-chulmoon/Downloads/styles.css --no-source-map",
     "sanity": "sanity dev",
     "sanity:build": "sanity build"
   },

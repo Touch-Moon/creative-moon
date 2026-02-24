@@ -1,22 +1,17 @@
 /* ================================================
-   HEADLINES — Display & Title
+   TYPE — Headlines
    Display:   .headline-1 | .headline-2 | .headline-3
    Title:     .headline-4 | .headline-4b
    Sub:       .headline-5 | .headline-6
    ================================================ */
+
+@use '../primitives/type' as *;
 
 .headline-1 {
   font-size: #{$fs-h1};
   font-weight: #{$fw-regular};
   letter-spacing: #{$ls-tight};
   line-height: #{$lh-h1};
-}
-
-@media (max-width: 575.98px) {
-  .headline-1 {
-    font-size: 14.358974359vw;
-    letter-spacing: normal
-  }
 }
 
 .headline-2 {
@@ -26,27 +21,11 @@
   line-height: #{$lh-h2};
 }
 
-@media (max-width: 575.98px) {
-  .headline-2 {
-    font-size: 12.3076923077vw;
-    letter-spacing: normal;
-    line-height: 116%
-  }
-}
-
 .headline-3 {
   font-size: #{$fs-h3};
   font-weight: #{$fw-regular};
   letter-spacing: #{$ls-tight};
   line-height: #{$lh-h3};
-}
-
-@media (max-width: 575.98px) {
-  .headline-3 {
-    font-size: 9.2307692308vw;
-    letter-spacing: normal;
-    line-height: 110%
-  }
 }
 
 .headline-4 {
@@ -56,13 +35,6 @@
   line-height: #{$lh-h4};
 }
 
-@media (max-width: 575.98px) {
-  .headline-4 {
-    font-size: 8.2051282051vw;
-    line-height: 112%
-  }
-}
-
 .headline-4b {
   font-size: #{$fs-h4b};
   font-weight: #{$fw-regular};
@@ -70,29 +42,10 @@
   line-height: #{$lh-h4b};
 }
 
-@media (max-width: 575.98px) {
-  .headline-4b {
-    font-size: 8.2051282051vw;
-    line-height: 110%
-  }
-}
-
 .headline-5 {
   font-size: #{$fs-h5};
   font-weight: #{$fw-regular};
   line-height: #{$lh-h5};
-}
-
-@media (max-width: 768.98px) {
-  .headline-5 {
-    font-size: 2.8645833333vw
-  }
-}
-
-@media (max-width: 575.98px) {
-  .headline-5 {
-    font-size: 6.1538461538vw
-  }
 }
 
 .headline-6 {
@@ -102,20 +55,8 @@
   line-height: #{$lh-h6};
 }
 
-@media (max-width: 768.98px) {
-  .headline-6 {
-    font-size: 2.0833333333vw
-  }
-}
-
-@media (max-width: 575.98px) {
-  .headline-6 {
-    font-size: 5.1282051282vw
-  }
-}
-
-// ── iPad Pro 11" (1024px) ────────────────────────────────────
-@media (max-width: 1024px) {
+// ── Tablet (1024px) ──────────────────────────────────────────
+@media (max-width: 1023.98px) {
   .headline-1  { font-size: 64px; }
   .headline-2  { font-size: 32px; }
   .headline-3  { font-size: 28px; }
@@ -125,8 +66,8 @@
   .headline-6  { font-size: 16px; }
 }
 
-// ── Mobile iPhone 17 (402px) ────────────────────────────────
-@media (max-width: 402px) {
+// ── Mobile (640px) ───────────────────────────────────────────
+@media (max-width: 575.98px) {
   .headline-1  { font-size: 40px; }
   .headline-2  { font-size: 32px; }
   .headline-3  { font-size: 26px; }

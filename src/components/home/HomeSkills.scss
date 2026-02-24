@@ -1,0 +1,127 @@
+@use '@/styles/primitives/colors' as *;
+@use '@/styles/primitives/type' as *;
+@use '@/styles/primitives/space' as *;
+
+.home-skills {
+  background-color: transparent;
+  display: grid;
+  grid-template-columns: fvw(240) 1fr;
+  padding: fvw(80) fvw(80) fvw(160);
+  border-top: 1px solid $m-grey-medium;
+
+  // ── 좌측 sticky 라벨 ─────────────────────────
+  &__label-wrap {
+    overflow: hidden;
+  }
+
+  &__label {
+    font-size: $fs-body-caps;   // 12px
+    font-weight: $fw-regular;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $m-black;
+    padding-top: fvw(20);
+    position: sticky;
+    top: fvw(80);
+    align-self: start;
+    height: fit-content;
+  }
+
+  // ── 우측 목록 ────────────────────────────────
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__item {
+    opacity: 0.25;
+    transition: opacity 0.5s ease;
+    cursor: default;
+
+    &.is-active {
+      opacity: 1;
+    }
+  }
+
+  &__item-inner {
+    display: grid;
+    grid-template-columns: fvw(80) 1fr 1fr;
+    gap: 0 fvw(40);
+    padding: fvw(48) 0;
+    align-items: start;
+  }
+
+  &__number {
+    font-size: $fs-body-5;   // 14px
+    font-weight: $fw-regular;
+    color: $m-grey-dark;
+    padding-top: 0.3em;
+  }
+
+  &__title {
+    font-size: $fs-h5;   // 26px
+    font-weight: $fw-regular;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: $m-black;
+    margin: 0;
+  }
+
+  &__desc {
+    font-size: $fs-body-4;   // 18px
+    font-weight: $fw-light;
+    line-height: 1.55;
+    color: $m-black;
+    margin: 0;
+  }
+
+  &__rule {
+    height: 1px;
+    background-color: $m-grey-medium;
+    width: 100%;
+  }
+
+  // ── Tablet ──────────────────────────────────
+  @media (max-width: 1023.98px) {
+    grid-template-columns: 1fr;
+    padding: 60px 5vw 100px;
+
+    &__label-wrap {
+    overflow: hidden;
+  }
+
+  &__label {
+      position: static;
+      margin-bottom: 40px;
+      font-size: 11px;
+    }
+
+    &__item-inner {
+      grid-template-columns: 40px 1fr;
+      gap: 0 20px;
+      padding: 36px 0;
+    }
+
+    &__desc {
+      grid-column: 2;
+      margin-top: 8px;
+      font-size: clamp(14px, 1.6vw, 18px);
+    }
+
+    &__title { font-size: clamp(18px, 2.2vw, 26px); }
+  }
+
+  // ── Mobile ───────────────────────────────────
+  @media (max-width: 575.98px) {
+    padding: 50px 6vw 80px;
+
+    &__item-inner {
+      grid-template-columns: 1fr;
+      padding: 28px 0;
+    }
+
+    &__number { margin-bottom: 8px; }
+    &__title { font-size: clamp(17px, 4.5vw, 22px); margin-bottom: 10px; }
+    &__desc   { font-size: 14px; }
+  }
+}

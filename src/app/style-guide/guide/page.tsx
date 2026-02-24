@@ -1,5 +1,5 @@
-import StyleGuideMenu from '../guide';
+import StyleGuide from '../guide';
 
 export default function StyleGuideGuidePage() {
-  return <StyleGuideMenu />;
+  return <StyleGuide />;
 }

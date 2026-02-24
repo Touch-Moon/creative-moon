@@ -1,0 +1,141 @@
+@use '@/styles/primitives/colors' as *;
+@use '@/styles/primitives/type' as *;
+@use '@/styles/primitives/space' as *;
+
+.home-works {
+  background-color: transparent;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  &__inner {
+    display: flex;
+    align-items: stretch;
+  }
+
+  // ── 좌측 사이드바 ──────────────────────────────
+  &__sidebar {
+    flex: 0 0 fvw(424);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: fvw(48) fvw(40);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  &__title {
+    font-size: $fs-h4;
+    font-weight: $fw-light;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: inherit;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  &__title-line {
+    overflow: hidden;
+    display: block;
+    span { display: block; }
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: fvw(20);
+  }
+
+  &__counter {
+    font-size: $fs-body-5;
+    color: var(--foreground-muted);
+    letter-spacing: 0.04em;
+  }
+
+  &__arrows {
+    display: flex;
+    gap: fvw(8);
+  }
+
+  // ── 우측 카드 트랙 ────────────────────────────
+  &__track {
+    flex: 1;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding: fvw(48) fvw(48) fvw(48) fvw(40);
+    gap: fvw(24);
+
+    &::-webkit-scrollbar { display: none; }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  &__card {
+    flex: 0 0 fvw(660);
+    scroll-snap-align: start;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  &__card-img {
+    width: 100%;
+    height: fvw(520);
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: fvw(4);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+
+    &:hover img { transform: scale(1.03); }
+  }
+
+  &__card-title {
+    font-size: $fs-body-5;
+    font-weight: $fw-light;
+    color: var(--foreground);
+    letter-spacing: 0.02em;
+    margin: fvw(14) 0 0;
+  }
+
+  // ── Tablet ───────────────────────────────────
+  @media (max-width: 1023.98px) {
+    &__inner { flex-direction: column; }
+
+    &__sidebar {
+      flex: none;
+      flex-direction: row;
+      align-items: center;
+      padding: 32px 5vw;
+      border-right: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    &__title { font-size: clamp(32px, 5vw, 56px); }
+
+    &__nav { flex-direction: row; align-items: center; }
+
+    &__track {
+      padding: 32px 5vw;
+      gap: 20px;
+    }
+
+    &__card { flex: 0 0 min(420px, 85vw); }
+
+    &__card-img { height: clamp(240px, 45vw, 420px); }
+  }
+
+  // ── Mobile ────────────────────────────────────
+  @media (max-width: 575.98px) {
+    &__track { padding: 24px 6vw; gap: 16px; }
+
+    &__card { flex: 0 0 85vw; }
+
+    &__card-img { height: 55vw; }
+  }
+}

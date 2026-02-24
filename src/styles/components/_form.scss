@@ -1,5 +1,5 @@
 /* ================================================
-   FORMS
+   COMPONENTS — Form
    Structure:  .form-group > .form-control > .form-placeholder + .form-input/.form-textarea
    States:     .is-input | .is-textarea           (type)
                .is-focused | .has-content | .is-error  (applied via JS)
@@ -62,14 +62,14 @@
   }
 }
 
-@media (max-width: 1024.98px) {
+@media (max-width: 1023.98px) {
   .form-group .form-placeholder {
     font-size: 1.4194139194vw;
     top: 1.5797vw; /* (4.5788 - 1.4194) / 2 */
   }
 }
 
-@media (max-width: 768.98px) {
+@media (max-width: 1023.98px) {
   .form-group .form-placeholder {
     font-size: 1.8229166667vw;
     top: 2.9948vw; /* (7.8125 - 1.8229) / 2 */
@@ -110,7 +110,7 @@
   }
 }
 
-@media (max-width: 1024.98px) {
+@media (max-width: 1023.98px) {
   .form-group .form-input,
   .form-group .form-textarea {
     font-size: 1.4194139194vw;
@@ -132,7 +132,7 @@
   font-family: 'Inter Display', 'Inter', sans-serif !important;
 }
 
-@media (max-width: 768.98px) {
+@media (max-width: 1023.98px) {
   .form-group .form-input:-webkit-autofill,
   .form-group .form-input:-webkit-autofill:active,
   .form-group .form-input:-webkit-autofill:focus,
@@ -165,7 +165,7 @@
   transition: height 0.2s ease-in-out;
 }
 
-@media (max-width: 768.98px) {
+@media (max-width: 1023.98px) {
   .form-group.is-input .form-input {
     font-size: 1.8229166667vw; /* body-text-4 */
     height: 7.8125vw;
@@ -187,7 +187,7 @@
   transition: padding 0.2s ease-in-out;
 }
 
-@media (max-width: 768.98px) {
+@media (max-width: 1023.98px) {
   .form-group.is-textarea .form-control {
     min-height: 7.8125vw;
   }
@@ -203,7 +203,7 @@
   padding-top: 1.6025641026vw; /* matches input padding-top */
 }
 
-@media (max-width: 768.98px) {
+@media (max-width: 1023.98px) {
   .form-group.is-textarea .form-textarea {
     font-size: 1.8229166667vw; /* body-text-4 */
     padding-top: 2.6041666667vw;
@@ -228,7 +228,7 @@
   top: 0.7326007326vw;
 }
 
-@media (max-width: 768.98px) {
+@media (max-width: 1023.98px) {
   .form-group.is-focused .form-placeholder {
     font-size: 1.5625vw;
     top: 1.3020833333vw;
@@ -246,7 +246,7 @@
   height: 5.9523809524vw;
 }
 
-@media (max-width: 768.98px) {
+@media (max-width: 1023.98px) {
   .form-group.is-focused.is-input .form-input {
     height: 7.8125vw;
   }
@@ -263,7 +263,7 @@
   min-height: 5.9523809524vw;
 }
 
-@media (max-width: 768.98px) {
+@media (max-width: 1023.98px) {
   .form-group.is-focused.is-textarea .form-control,
   .form-group.has-content.is-textarea .form-control {
     min-height: 7.8125vw;
@@ -290,14 +290,14 @@
   }
 }
 
-@media (max-width: 1024.98px) {
+@media (max-width: 1023.98px) {
   .form-group.is-focused.is-textarea .form-textarea,
   .form-group.has-content.is-textarea .form-textarea {
     padding-top: 2.76vw;
   }
 }
 
-@media (max-width: 768.98px) {
+@media (max-width: 1023.98px) {
   .form-group.is-focused.is-textarea .form-textarea,
   .form-group.has-content.is-textarea .form-textarea {
     padding-top: 2.6041666667vw; /* base 값 복원 */
@@ -322,7 +322,7 @@
   top: 0.7326007326vw;
 }
 
-@media (max-width: 768.98px) {
+@media (max-width: 1023.98px) {
   .form-group.has-content .form-placeholder {
     font-size: 1.5625vw;
     top: 1.3020833333vw;
@@ -340,7 +340,7 @@
   height: 5.9523809524vw;
 }
 
-@media (max-width: 768.98px) {
+@media (max-width: 1023.98px) {
   .form-group.has-content.is-input .form-input {
     height: 7.8125vw;
   }
@@ -414,7 +414,7 @@
   width: 1.1446886447vw;
 }
 
-@media (max-width: 768.98px) {
+@media (max-width: 1023.98px) {
   .form-group .form-checkbox label .form-checkbox__check {
     height: 20px;
     width: 20px;
@@ -430,7 +430,7 @@
   width: 0.8241758242vw;
 }
 
-@media (max-width: 768.98px) {
+@media (max-width: 1023.98px) {
   .form-group .form-checkbox label .form-checkbox__check svg {
     height: 15px;
     width: 15px;
@@ -447,7 +447,7 @@
   padding-left: 1.8315018315vw;
 }
 
-@media (max-width: 768.98px) {
+@media (max-width: 1023.98px) {
   .form-group .form-checkbox label .form-checkbox__text {
     padding-left: 30px;
   }
