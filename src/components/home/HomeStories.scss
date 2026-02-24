@@ -1,16 +1,17 @@
 @use '@/styles/primitives/colors' as *;
 @use '@/styles/primitives/type' as *;
+@use '@/styles/primitives/space' as *;
 
 .home-stories {
   background-color: transparent;
-  padding: fvw(100) 0 fvw(120);
+  padding: fvw(100) $space-12 fvw(120);
 
   // ── 헤더 ─────────────────────────────────────
   &__header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    padding: 0 fvw(80) fvw(48);
+    padding: 0 0 fvw(48);
   }
 
   &__title-wrap {
@@ -38,10 +39,13 @@
   &__track {
     display: flex;
     gap: fvw(24);
-    padding: 0 fvw(80);
+    padding: 0;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
+    // section padding을 벗어나 브라우저 전체 너비 확보
+    margin-left: -$space-12;
+    width: calc(100% + #{$space-12} * 2);
 
     &::-webkit-scrollbar { display: none; }
   }
@@ -87,30 +91,40 @@
 
   // ── Tablet ──────────────────────────────────
   @media (max-width: 1023.98px) {
-    padding: 80px 0 100px;
+    padding: 80px $space-8 100px;
 
-    &__header { padding: 0 5vw 36px; }
+    &__track {
+      margin-left: -$space-8;
+      width: calc(100% + #{$space-8} * 2);
+    }
+
+    &__header { padding: 0 0 36px; }
     &__title-wrap {
     overflow: hidden;
   }
 
   &__title { font-size: clamp(40px, 7vw, 88px); }
-    &__track { padding: 0 5vw; gap: 16px; }
+    &__track { padding: 0; gap: 16px; }
     &__card { flex: 0 0 65vw; }
     &__card-img { height: 44vw; }
   }
 
   // ── Mobile ───────────────────────────────────
   @media (max-width: 575.98px) {
-    padding: 60px 0 80px;
+    padding: 60px $space-4 80px;
 
-    &__header { padding: 0 6vw 24px; }
+    &__track {
+      margin-left: -$space-4;
+      width: calc(100% + #{$space-4} * 2);
+    }
+
+    &__header { padding: 0 0 24px; }
     &__title-wrap {
     overflow: hidden;
   }
 
   &__title { font-size: clamp(36px, 11vw, 56px); }
-    &__track { padding: 0 6vw; gap: 14px; }
+    &__track { padding: 0; gap: 14px; }
     &__card { flex: 0 0 80vw; }
     &__card-img { height: 56vw; }
     &__card-title { font-size: clamp(15px, 4vw, 20px); }

@@ -10,15 +10,53 @@
   &__line-h {
     display: block;
     height: 1px;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.25);
+    background: var(--foreground-dim);
     transform-origin: left top;
-    will-change: transform;
+    transform: scaleX(0);
+    transition: transform 0.67s cubic-bezier(0.19, 1, 0.22, 1);
 
+    // ① TOP: 블록 요소 — margin-left + 계산 width로 인셋
+    &--top {
+      margin-left: $space-12;
+      width: calc(100% - #{$space-12} * 2);
+
+      @media (max-width: 1023.98px) {
+        margin-left: $space-8;
+        width: calc(100% - #{$space-8} * 2);
+      }
+
+      @media (max-width: 575.98px) {
+        margin-left: $space-4;
+        width: calc(100% - #{$space-4} * 2);
+      }
+    }
+
+    &--top.is-revealed {
+      transform: scaleX(1);
+      transition-delay: 0s;
+    }
+
+    // ③ BOTTOM: absolute — left + 계산 width로 인셋
     &--bottom {
       position: absolute;
       bottom: 0;
-      left: 0;
+      left: $space-12;
+      width: calc(100% - #{$space-12} * 2);
+
+      @media (max-width: 1023.98px) {
+        left: $space-8;
+        width: calc(100% - #{$space-8} * 2);
+      }
+
+      @media (max-width: 575.98px) {
+        left: $space-4;
+        width: calc(100% - #{$space-4} * 2);
+      }
+    }
+
+    &--bottom.is-revealed {
+      transform: scaleX(1);
+      transition-delay: 1.34s;
     }
   }
 
@@ -30,9 +68,16 @@
     left: fvw(376);
     width: 1px;
     height: calc(100% - 2px);
-    background: rgba(255, 255, 255, 0.25);
+    background: var(--foreground-dim);
     transform-origin: left top;
-    will-change: transform;
+    transform: scaleY(0);
+    transition: transform 0.67s cubic-bezier(0.19, 1, 0.22, 1);
+    // ② 수직: delay 0.67s (top 후)
+    transition-delay: 0.67s;
+
+    &.is-revealed {
+      transform: scaleY(1);
+    }
 
     @media (max-width: 1023.98px) {
       display: none;
@@ -127,7 +172,7 @@
     scroll-snap-type: x mandatory;
     scroll-padding-left: fvw(40); // snap 시 padding 반영
     scroll-behavior: smooth;
-    padding: fvw(48) fvw(48) fvw(48) fvw(40);
+    padding: fvw(48) fvw(40);
     gap: fvw(24);
     cursor: grab;
 
@@ -156,8 +201,8 @@
     width: 100%;
     height: fvw(520);
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: fvw(4);
+    background: color-mix(in srgb, var(--foreground) 5%, transparent);
+    border-radius: 0;
     cursor: none; // 시스템 커서 숨김 → 커스텀 DRAG 배지로 대체
   }
 
@@ -184,8 +229,14 @@
     height: fvw(80);
     border-radius: 50%;
 
-    background: #0a0a0a;
+    // 다크모드: 흰 배경 + 검은 텍스트 / 라이트모드: 검은 배경 + 흰 텍스트
+    background: var(--foreground);
     color: #fff;
+
+    body[data-theme="dark"] & {
+      color: #000;
+    }
+
     font-size: fvw(10);
     font-weight: $fw-light;
     letter-spacing: 0.12em;
@@ -195,7 +246,8 @@
     // 진입/퇴장 애니메이션
     opacity: 0;
     scale: 0.7;
-    transition: opacity 0.3s ease, scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: opacity 0.3s ease,
+    scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   &__drag-cursor.is-visible &__drag-cursor-inner {
@@ -203,12 +255,22 @@
     scale: 1;
   }
 
-  // wave filter 래퍼 — filter가 overflow 잘라내지 않도록 분리
+  // scale 래퍼
   &__card-img-inner {
     position: absolute;
-    inset: -3%; // 가장자리 displacement 아티팩트 숨김
-    width: 106%;
-    height: 106%;
+    inset: 0;
+    overflow: hidden;
+    transform-origin: center;
+    transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  // Canvas — 이미지 + 파동 드로우 대상
+  &__card-img-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
   &__card-title {
@@ -229,9 +291,9 @@
       flex: none;
       flex-direction: row;
       align-items: center;
-      padding: 32px 5vw;
+      padding: 32px fvw(24);
       border-right: none;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid var(--foreground-dim);
     }
 
     &__title {
@@ -244,7 +306,7 @@
     }
 
     &__track {
-      padding: 32px 5vw;
+      padding: 32px fvw(24);
       gap: 20px;
     }
 
@@ -260,7 +322,7 @@
   // ── Mobile ────────────────────────────────────
   @media (max-width: 575.98px) {
     &__track {
-      padding: 24px 6vw;
+      padding: 24px 16px;
       gap: 16px;
     }
 

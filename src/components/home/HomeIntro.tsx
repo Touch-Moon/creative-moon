@@ -25,6 +25,7 @@ export default function HomeIntro() {
 
   return (
     <section className="home-intro" data-theme="light">
+      <div className="wrap">
       {/* ── 이미지 2개 — 높이 오프셋 ── */}
       <div ref={imgRef} className="home-intro__images">
         <motion.div
@@ -74,6 +75,7 @@ export default function HomeIntro() {
           project is both visually compelling and technically sound.
         </p>
       </motion.div>
+      </div>
     </section>
   );
 }

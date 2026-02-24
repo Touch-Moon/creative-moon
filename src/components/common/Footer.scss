@@ -1,16 +1,17 @@
 @use '@/styles/primitives/colors' as *;
 @use '@/styles/primitives/type' as *;
+@use '@/styles/primitives/space' as *;
 
 .footer {
   background-color: transparent;
-  padding: fvw(120) fvw(80) fvw(60);
+  padding: fvw(120) $space-12 fvw(60);
   display: flex;
   flex-direction: column;
   gap: fvw(80);
 
   // ── 대형 CTA ─────────────────────────────────
   &__cta {
-    font-size: $fs-h1;      // 140px
+    font-size: $fs-h1; // 140px
     font-weight: $fw-light;
     line-height: 0.9;
     letter-spacing: -0.04em;
@@ -19,7 +20,9 @@
     display: block;
     transition: opacity 0.3s ease;
 
-    &:hover { opacity: 0.7; }
+    &:hover {
+      opacity: 0.7;
+    }
   }
 
   // ── 하단 영역 ────────────────────────────────
@@ -27,7 +30,6 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    border-top: 1px solid var(--foreground-dim);
     padding-top: fvw(32);
   }
 
@@ -37,14 +39,16 @@
     flex-direction: column;
 
     a {
-      font-size: $fs-body-caps;   // 12px
+      font-size: $fs-body-caps; // 12px
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--foreground-muted);
       text-decoration: none;
       transition: color 0.2s;
 
-      &:hover { color: inherit; }
+      &:hover {
+        color: inherit;
+      }
     }
   }
 
@@ -62,7 +66,9 @@
       text-decoration: none;
       transition: color 0.2s;
 
-      &:hover { color: inherit; }
+      &:hover {
+        color: inherit;
+      }
     }
   }
 
@@ -74,25 +80,41 @@
 
   // ── Tablet ──────────────────────────────────
   @media (max-width: 1023.98px) {
-    padding: 80px 5vw 48px;
+    padding: 80px $space-8 48px;
     gap: 60px;
 
-    &__cta { font-size: clamp(48px, 9vw, 120px); }
+    &__cta {
+      font-size: clamp(48px, 9vw, 120px);
+    }
 
-    &__bottom { flex-direction: column; align-items: flex-start; gap: 40px; }
+    &__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 40px;
+    }
 
-    &__social { flex-direction: row; flex-wrap: wrap; gap: 20px; }
+    &__social {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
 
-    &__legal { align-items: flex-start; }
+    &__legal {
+      align-items: flex-start;
+    }
   }
 
   // ── Mobile ───────────────────────────────────
   @media (max-width: 575.98px) {
-    padding: 60px 6vw 40px;
+    padding: 60px $space-4 40px;
     gap: 48px;
 
-    &__cta { font-size: clamp(36px, 12vw, 64px); }
+    &__cta {
+      font-size: clamp(36px, 12vw, 64px);
+    }
 
-    &__social { gap: 14px; }
+    &__social {
+      gap: 14px;
+    }
   }
 }

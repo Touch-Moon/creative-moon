@@ -57,6 +57,7 @@ export default function HomeStories() {
   return (
     <section ref={sectionRef} className="home-stories" data-theme="dark">
       {/* ── 헤더 ── */}
+      <div className="wrap">
       <div className="home-stories__header">
         <div className="home-stories__title-wrap">
           <motion.h2
@@ -87,6 +88,7 @@ export default function HomeStories() {
             ariaLabel="Next story"
           />
         </motion.div>
+      </div>
       </div>
 
       {/* ── 카드 캐러셀 ── */}

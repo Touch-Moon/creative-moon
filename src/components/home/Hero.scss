@@ -1,5 +1,6 @@
 // src/components/home/hero.scss
 @use "@/styles/primitives/colors" as *;
+@use "@/styles/primitives/space" as *;
 
 .home-hero {
   position: relative;
@@ -7,10 +8,21 @@
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  padding: 0 8vw;
   overflow: hidden;
   background-color: transparent;
   height: 100vh;
+  padding-left: $space-12;
+  padding-right: $space-12;
+
+  @media (max-width: 1023.98px) {
+    padding-left: $space-8;
+    padding-right: $space-8;
+  }
+
+  @media (max-width: 575.98px) {
+    padding-left: $space-4;
+    padding-right: $space-4;
+  }
 
   // BEM: Element (__ 사용)
   &__title {

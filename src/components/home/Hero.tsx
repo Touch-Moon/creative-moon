@@ -45,6 +45,7 @@ export default function Hero() {
       initial="initial"
       animate="animate"
     >
+      <div className="wrap">
       <h1 className="home-hero__title">
         {lines.map((line, lineIndex) => (
           <div key={lineIndex} className="home-hero__word">
@@ -63,6 +64,7 @@ export default function Hero() {
           </div>
         ))}
       </h1>
+      </div>
     </motion.section>
   );
 }

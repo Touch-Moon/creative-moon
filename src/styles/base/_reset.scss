@@ -1,6 +1,7 @@
 /* ================================================
    BASE — Colors, Font Family, HTML/Body Reset
    ================================================ */
+@use '../primitives/space' as *;
 
 :root {
   --background: #ffffff;
@@ -33,6 +34,7 @@ body[data-theme="dark"] {
   --foreground-muted: rgba(255, 255, 255, 0.45);
   --foreground-dim:   rgba(255, 255, 255, 0.2);
 }
+
 
 a {
   text-decoration: none;
