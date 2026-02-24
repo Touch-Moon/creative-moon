@@ -1,3 +1,8 @@
+// ================================================
+// PRIMITIVES — Colors
+// Base colors, surface/border, accent, material effects
+// ================================================
+
 // 1. Base Colors (High-Contrast Foundation)
 $m-white: #ffffff;          // Pure white for backgrounds and primary highlights
 $m-black: #000000;          // Solid black for crisp typography and deep shadows
@@ -12,7 +17,6 @@ $m-grey-dark: #888888;      // Muted grey for metadata, captions, and secondary 
 $m-accent: #ff4d00;         // Signature vibrant orange-red for high-energy accents
 
 // 4. Material Effects (Glassmorphism & Depth)
-// Essential for the "Plastic/Material" aesthetic with translucent layering.
-$m-glass-bg: rgba(255, 255, 255, 0.7);   // Translucent white for frosted glass backdrops
-$m-glass-border: rgba(255, 255, 255, 0.3); // Delicate edge stroke for glass-like surfaces
-$m-shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05); // Diffused shadow for subtle organic depth
+$m-glass-bg: rgba(255, 255, 255, 0.7);
+$m-glass-border: rgba(255, 255, 255, 0.3);
+$m-shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);

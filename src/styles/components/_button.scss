@@ -1,5 +1,5 @@
 /* ================================================
-   COMPONENTS — Buttons
+   COMPONENTS — Button
    Base:      .button
    Variant:   .button--secondary
    Sizes:     .button--s | .button--m | .button--l | .button--xl
@@ -29,7 +29,7 @@ only screen and (min-resolution:200dpi) {
   }
 }
 
-@media (max-width:768.98px) {
+@media (max-width:1023.98px) {
   .button {
     box-shadow: inset 0 0 0 1px #fff
   }
@@ -55,7 +55,7 @@ only screen and (min-resolution:200dpi) {
   }
 }
 
-@media (max-width:1280.98px) {
+@media (max-width:1439.98px) {
   .button span {
     font-size: 1.0531135531vw;
     height: 2.7472527473vw;
@@ -63,7 +63,7 @@ only screen and (min-resolution:200dpi) {
   }
 }
 
-@media (max-width:768.98px) {
+@media (max-width:1023.98px) {
   .button span {
     font-size: 1.6927083333vw;
     height: 4.1666666667vw;
@@ -116,7 +116,7 @@ only screen and (min-resolution:200dpi) {
   }
 }
 
-@media (max-width:768.98px) {
+@media (max-width:1023.98px) {
   .button--secondary {
     border: 1px solid #fff
   }
@@ -135,7 +135,7 @@ only screen and (min-resolution:200dpi) {
   padding: 0 1.9230769231vw
 }
 
-@media (max-width:768.98px) {
+@media (max-width:1023.98px) {
   .button--s span {
     font-size: 2.0833333333vw;
     height: 6.5104166667vw;
@@ -160,7 +160,7 @@ only screen and (min-resolution:200dpi) {
   padding: 0 1.9230769231vw
 }
 
-@media (max-width:768.98px) {
+@media (max-width:1023.98px) {
   .button--m span {
     font-size: 2.6041666667vw;
     height: 7.2916666667vw;
@@ -191,13 +191,13 @@ only screen and (min-resolution:200dpi) {
   }
 }
 
-@media (max-width:1024.98px) {
+@media (max-width:1023.98px) {
   .button--l span {
     font-size: 1.4194139194vw
   }
 }
 
-@media (max-width:768.98px) {
+@media (max-width:1023.98px) {
   .button--l span {
     font-size: 1.8229166667vw;
     height: 6.5104166667vw;
@@ -222,7 +222,7 @@ only screen and (min-resolution:200dpi) {
   padding: 0 1.3736263736vw
 }
 
-@media (max-width:768.98px) {
+@media (max-width:1023.98px) {
   .button--xl span {
     font-size: 2.0833333333vw;
     height: 6.5104166667vw;
@@ -241,4 +241,37 @@ only screen and (min-resolution:200dpi) {
 
 .button--block {
   width: 100%
+}
+
+/* Dark-outline variant — for use on light backgrounds */
+.button.button--dark {
+  box-shadow: inset 0 0 0 1.5px #000;
+  color: #000;
+}
+
+.button.button--dark div {
+  background: #000;
+}
+
+.cm-root[data-theme='light'] .button.button--dark {
+  box-shadow: none;
+  border: 1.5px solid #fff;
+
+  div {
+    background: #fff;
+  }
+}
+
+.cm-root[data-theme='dark'] .button.button--dark {
+  box-shadow: inset 0 0 0 1.5px #000;
+}
+
+.cm-root[data-theme='light'] .button.button--dark span {
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
+.cm-root[data-theme='dark'] .button.button--dark span {
+  color: #fff;
+  mix-blend-mode: difference;
 }

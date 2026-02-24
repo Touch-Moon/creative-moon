@@ -1,36 +1,34 @@
-/* Hero.scss */
+// src/components/home/hero.scss
+@use "@/styles/primitives/colors" as *;
+
 .home-hero {
   position: relative;
   display: flex;
-  width: 100%;
   flex-direction: column;
   justify-content: center;
-  background-color: #fff;
+  width: 100%;
   padding: 0 8vw;
   overflow: hidden;
-
-  // 💡 mix-blend-mode 추가 (배경과 글자가 겹칠 때 반전 효과 등)
-  // 부모나 형제 요소의 색상에 따라 반응합니다.
-  // mix-blend-mode: exclusion;
-
-  // 초기 상태는 100vh로 설정 (framer-motion이 제어할 예정)
+  background-color: transparent;
   height: 100vh;
 
-  .home-hero-title {
+  // BEM: Element (__ 사용)
+  &__title {
     font-family: var(--font-neue-montreal), sans-serif;
     font-size: clamp(40px, 7.5vw, 115px);
-    font-weight: 300;
+    font-weight: 400;
     text-transform: uppercase;
     line-height: 0.95;
     letter-spacing: -0.02em;
-    color: #000;
+    color: $m-black;
     margin: 0;
     display: flex;
     flex-direction: column;
     gap: 0.05em;
+    -webkit-font-smoothing: antialiased;
   }
 
-  .home-hero-word {
+  &__word {
     display: flex;
     flex-wrap: wrap;
     column-gap: 0.22em;
@@ -38,7 +36,8 @@
     justify-content: center;
   }
 
-  .home-hero-word-module {
+  &__module {
     display: inline-block;
+    will-change: transform, clip-path;
   }
 }

@@ -1,0 +1,67 @@
+@use '@/styles/primitives/type' as *;
+
+// =============================================
+// ArrowButton — 공통 화살표 버튼
+// plastic.design 기준: 46×24px pill shape
+// =============================================
+.arrow-btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fvw(46);
+  height: fvw(24);
+  border-radius: 9999px;
+  border: none;
+  padding: 0;
+  // inset box-shadow = 테두리 (border 대신 사용)
+  box-shadow: rgba(255, 255, 255, 0.35) 0 0 0 1px inset;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition:
+    box-shadow 0.35s ease,
+    color 0.35s ease;
+
+  // ── 호버 fill 레이어 — JS로 제어 (enter: 아래→위, leave: 위→밖) ──
+  &__fill {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    border-radius: 0;
+    transform: translateY(100%); // 초기: 버튼 아래 대기
+    pointer-events: none;
+  }
+
+  svg {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    transition: color 0.3s ease;
+  }
+
+  // ── hover (box-shadow · 텍스트 색은 CSS로) ──
+  &:hover:not(:disabled) {
+    box-shadow: #fff 0 0 0 1px inset;
+    color: #000;
+  }
+
+  // ── disabled ──
+  &:disabled {
+    opacity: 0.2;
+    cursor: default;
+  }
+
+  // ── Tablet ──
+  @media (max-width: 1023.98px) {
+    width: 40px;
+    height: 22px;
+  }
+
+  // ── Mobile ──
+  @media (max-width: 575.98px) {
+    width: 36px;
+    height: 20px;
+  }
+}

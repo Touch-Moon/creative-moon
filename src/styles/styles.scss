@@ -3,11 +3,12 @@
    Import order matters for CSS cascade
    ================================================ */
 
-@import 'base';        /* Colors, font family, html/body, a/button reset */
-@import 'fonts';       /* Google Fonts, font size/weight/lh/ls variables  */
-@import 'spacing';     /* --space-* tokens                                */
-@import 'typography';  /* .body-text-* classes                            */
-@import 'headlines';   /* .headline-* classes                             */
-@import 'components';  /* .button, sizes, variants                        */
-@import 'forms';       /* .form-group, states, checkbox                   */
-@import 'style-guide'; /* .cm-* style guide page styles                   */
+@use 'base/reset';             /* HTML/body reset, :root color vars        */
+@use 'tokens/typography';      /* --fs-*, --fw-*, --lh-*, --ls-* tokens    */
+@use 'tokens/spacing';         /* --space-* tokens                         */
+@use 'type/body';              /* .body-text-* classes                     */
+@use 'type/headlines';         /* .headline-* classes                      */
+@use 'components/button';      /* .button, sizes, variants                 */
+@use 'components/form';        /* .form-group, states, checkbox            */
+@use 'pages/style-guide';      /* .cm-* style guide page styles            */
+@use 'pages/css-doc';          /* .cd-* CSS doc page styles                */

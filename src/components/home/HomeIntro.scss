@@ -1,0 +1,88 @@
+@use '@/styles/primitives/colors' as *;
+@use '@/styles/primitives/type' as *;
+@use '@/styles/primitives/space' as *;
+
+.home-intro {
+  background-color: transparent;
+  padding: 0 fvw(80) fvw(160);
+
+  // ── 이미지 2개 ─────────────────────────────
+  &__images {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: fvw(16);
+    margin-bottom: fvw(80);
+    align-items: start;
+  }
+
+  &__img {
+    position: relative;
+    overflow: hidden;
+
+    &--left {
+      height: fvw(580);
+      margin-top: fvw(-60); // 위로 올려서 오프셋
+    }
+
+    &--right {
+      height: fvw(440);
+      margin-top: fvw(80);  // 아래 오프셋
+    }
+
+    img {
+      transition: transform 0.8s ease;
+    }
+
+    &:hover img {
+      transform: scale(1.03);
+    }
+  }
+
+  // ── 소개 텍스트 ──────────────────────────────
+  &__text {
+    max-width: fvw(900);
+
+    p {
+      font-size: $fs-body-1;   // 32px
+      font-weight: $fw-light;
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      color: $m-black;
+      margin: 0;
+    }
+  }
+
+  // ── Tablet ──────────────────────────────────
+  @media (max-width: 1023.98px) {
+    padding: 0 5vw 100px;
+
+    &__images {
+      gap: 10px;
+      margin-bottom: 60px;
+    }
+
+    &__img {
+      &--left  { height: 46vw; margin-top: -30px; }
+      &--right { height: 36vw; margin-top: 50px; }
+    }
+
+    &__text p { font-size: clamp(20px, 2.6vw, 32px); }
+  }
+
+  // ── Mobile ───────────────────────────────────
+  @media (max-width: 575.98px) {
+    padding: 0 6vw 80px;
+
+    &__images {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    &__img {
+      &--left  { height: 70vw; margin-top: 0; }
+      &--right { height: 55vw; margin-top: 0; }
+    }
+
+    &__text p { font-size: clamp(17px, 4.5vw, 22px); }
+  }
+}

@@ -1,64 +1,67 @@
+/* ================================================
+   PAGES — Style Guide
+   Page-specific styles for /style-guide
+   ================================================ */
+
+@use '../primitives/space' as *;
+
 /* @property — CSS 변수를 애니메이션 가능하게 등록 */
-@property --sg-bg {
+@property --cm-bg {
   syntax: '<color>';
   initial-value: #ffffff;
   inherits: true;
 }
 
-@property --sg-fg {
+@property --cm-fg {
   syntax: '<color>';
   initial-value: #000000;
   inherits: true;
 }
 
-@property --sg-border {
+@property --cm-border {
   syntax: '<color>';
   initial-value: #e4e4e4;
   inherits: true;
 }
 
-@property --sg-soft-border {
+@property --cm-soft-border {
   syntax: '<color>';
   initial-value: #f0f0f0;
   inherits: true;
 }
 
-/* ============================================
-   Style Guide Layout
-   ============================================ */
-
 /* ---- Theme (Style Guide only) ---- */
-.sg-root {
+.cm-root {
   /* Breakpoints — unitless px values, read by JS via getComputedStyle */
-  --sg-bp-mobile:   575;
-  --sg-bp-tablet:   768;
-  --sg-bp-laptop:  1024;
-  --sg-bp-laptop-l: 1280;
-  --sg-bp-desktop: 1440;
+  --cm-bp-mobile:   575;
+  --cm-bp-tablet:   768;
+  --cm-bp-laptop:  1024;
+  --cm-bp-laptop-l: 1280;
+  --cm-bp-desktop: 1440;
 
-  --sg-bg: #ffffff;
-  --sg-fg: #000000;
-  --sg-border: #e4e4e4;
-  --sg-soft-border: #f0f0f0;
+  --cm-bg: #ffffff;
+  --cm-fg: #000000;
+  --cm-border: #e4e4e4;
+  --cm-soft-border: #f0f0f0;
 
-  background: var(--sg-bg);
-  color: var(--sg-fg);
+  background: var(--cm-bg);
+  color: var(--cm-fg);
   min-height: 100vh;
   transition:
-    --sg-bg 0.4s ease,
-    --sg-fg 0.4s ease,
-    --sg-border 0.4s ease,
-    --sg-soft-border 0.4s ease;
+    --cm-bg 0.4s ease,
+    --cm-fg 0.4s ease,
+    --cm-border 0.4s ease,
+    --cm-soft-border 0.4s ease;
 }
 
-.sg-root[data-theme='dark'] {
-  --sg-bg: #000000;
-  --sg-fg: #ffffff;
-  --sg-border: rgba(255, 255, 255, 0.14);
-  --sg-soft-border: rgba(255, 255, 255, 0.1);
+.cm-root[data-theme='dark'] {
+  --cm-bg: #000000;
+  --cm-fg: #ffffff;
+  --cm-border: rgba(255, 255, 255, 0.14);
+  --cm-soft-border: rgba(255, 255, 255, 0.1);
 }
 
-.sg-theme-toggle {
+.cm-theme-toggle {
   position: fixed;
   right: clamp(16px, 1.67vw, 24px);
   bottom: clamp(16px, 1.67vw, 24px);
@@ -75,9 +78,9 @@
   width: clamp(36px, 2.78vw, 44px);
   height: clamp(36px, 2.78vw, 44px);
   border-radius: 50%;
-  box-shadow: inset 0 0 0 1px var(--sg-fg);
+  box-shadow: inset 0 0 0 1px var(--cm-fg);
   background: transparent;
-  color: var(--sg-fg);
+  color: var(--cm-fg);
 
   /* Center icon */
   display: flex;
@@ -89,66 +92,49 @@
 }
 
 /* Hover fill — circle expands from center */
-.sg-theme-toggle::before {
+.cm-theme-toggle::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: var(--sg-fg);
+  background: var(--cm-fg);
   transform: scale(0);
   transition: transform 0.3s cubic-bezier(0.52, 0.24, 0.08, 1);
   will-change: transform;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .sg-theme-toggle:hover::before {
+  .cm-theme-toggle:hover::before {
     transform: scale(1);
   }
 
-  .sg-theme-toggle:hover {
-    color: var(--sg-bg);
+  .cm-theme-toggle:hover {
+    color: var(--cm-bg);
   }
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-button {
-  font-family: inherit;
-}
-
 /* ---- Header ---- */
-.sg-header {
+.cm-header {
   background: #000;
   color: #fff;
   padding: 3vw 4.17vw 4.5vw;
   transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-.sg-root[data-theme='dark'] .sg-header {
+.cm-root[data-theme='dark'] .cm-header {
   background: #fff;
   color: #000;
 }
 
-.sg-root[data-theme='dark'] .sg-header__desc {
+.cm-root[data-theme='dark'] .cm-header__desc {
   color: rgba(0, 0, 0, 0.65);
 }
 
-.sg-root[data-theme='dark'] .sg-header__link {
+.cm-root[data-theme='dark'] .cm-header__link {
   color: rgba(0, 0, 0, 0.9);
 }
 
-.sg-logo {
+.cm-logo {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -163,11 +149,11 @@ button {
   transition: border-color 0.4s ease;
 }
 
-.sg-root[data-theme='dark'] .sg-logo {
+.cm-root[data-theme='dark'] .cm-logo {
   border-color: rgba(0, 0, 0, 0.75);
 }
 
-.sg-header__title {
+.cm-header__title {
   font-size: clamp(2.5rem, 6vw, 6.5rem);
   font-weight: 400;
   line-height: 0.95;
@@ -175,20 +161,20 @@ button {
   margin-bottom: 3.5vw;
 }
 
-.sg-header__body {
+.cm-header__body {
   max-width: 860px;
   margin-bottom: 2.5vw;
 }
 
-.sg-header__desc {
+.cm-header__desc {
   font-size: clamp(12px, 0.95vw, 14px);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.65);
   margin-bottom: 1.5vw;
 }
 
-.sg-header__link {
+.cm-header__link {
   font-size: clamp(10px, 0.82vw, 12px);
   font-weight: 300;
   color: rgba(255, 255, 255, 0.9);
@@ -199,23 +185,22 @@ button {
 }
 
 /* ---- Section Layout ---- */
-.sg-section {
+.cm-section {
   display: grid;
-  grid-template-columns: 22vw 1fr;
-  border-top: 1px solid var(--sg-border);
+  grid-template-columns: 25vw 1fr;
+  border-top: 1px solid var(--cm-border);
 }
 
-.sg-section__left {
+.cm-section__left {
   padding: 3.5vw 2.8vw 3.5vw 4.17vw;
-  border-right: 1px solid var(--sg-border);
 }
 
-.sg-section__right {
+.cm-section__right {
   padding: 3.5vw 4.17vw;
 }
 
 /* ---- Section Meta ---- */
-.sg-section__meta {
+.cm-section__meta {
   display: flex;
   align-items: center;
   gap: 0.4em;
@@ -224,10 +209,10 @@ button {
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--sg-fg);
+  color: var(--cm-fg);
 }
 
-.sg-section__title {
+.cm-section__title {
   font-size: clamp(1.25rem, 1.83vw, 2rem);
   font-weight: 400;
   line-height: 1.1;
@@ -235,91 +220,103 @@ button {
   margin-bottom: 1.5vw;
 }
 
-.sg-section__desc {
+.cm-section__desc {
   font-size: clamp(11px, 0.88vw, 13px);
   font-weight: 400;
   line-height: 1.8;
-  color: var(--sg-fg);
+  color: var(--cm-fg);
 }
 
 /* ---- Badge ---- */
-.sg-badge {
+.cm-badge {
   display: inline-flex;
   align-items: center;
-  background: var(--sg-fg);
-  color: var(--sg-bg);
+  background: var(--cm-fg);
+  color: var(--cm-bg);
   border-radius: 9999px;
   padding: 0.5em 1.2em;
   font-size: clamp(9px, 0.73vw, 11px);
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 0.04em;
-  margin-bottom: 3.5vw;
 }
 
 /* ---- Typography Specimens ---- */
-.sg-specimen {
+.cm-specimen {
   display: flex;
   flex-direction: column;
   gap: 0.8vw;
   padding: 2.8vw 0;
-  border-bottom: 1px solid var(--sg-soft-border);
 }
 
-.sg-specimen:first-of-type {
+.cm-specimen:first-of-type {
   padding-top: 0;
 }
 
-.sg-specimen:last-child {
+.cm-specimen:last-child {
   border-bottom: none;
   padding-bottom: 0;
 }
 
-.sg-specimen__text {
+.cm-specimen__text {
   font-weight: 400;
 }
 
-.sg-specimen__spec {
+.cm-specimen__spec {
+  min-width: 25%;
   font-size: clamp(9px, 0.73vw, 11px);
   font-weight: 400;
-  color: var(--sg-fg);
+  color: var(--cm-fg);
   letter-spacing: 0.01em;
+  background-color:#e4e4e4;
+  margin: #{$space-2} 0 0 0;
+  padding: #{$space-1} #{$space-2};
+  border-radius: 4px;
+  display: inline-block;
+  align-self: flex-start;
+
+  @media (max-width: 1023.98px) {
+    min-width: 75%;
+  }
+}
+
+.cm-root[data-theme='dark'] .cm-specimen__spec {
+  background-color: #2b2b2b;
 }
 
 /* ---- Font Weights Grid ---- */
-.sg-weights {
+.cm-weights {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border-top: 1px solid var(--sg-soft-border);
 }
 
-.sg-weight-item {
+.cm-weight-item {
   padding: 2vw 0;
-  border-bottom: 1px solid var(--sg-soft-border);
+  border-bottom: 1px solid var(--cm-soft-border);
 }
 
-.sg-weight-item:nth-child(odd) {
+.cm-weight-item:nth-child(odd) {
   padding-right: 3vw;
-  border-right: 1px solid var(--sg-soft-border);
+  border-right: 1px solid var(--cm-soft-border);
 }
 
-.sg-weight-item:nth-child(even) {
+.cm-weight-item:nth-child(even) {
   padding-left: 3vw;
 }
 
-.sg-weight-item:nth-last-child(-n+2) {
+.cm-weight-item:nth-last-child(-n+2) {
   border-bottom: none;
 }
 
-.sg-weight-item__text {
+.cm-weight-item__text {
   font-size: clamp(1rem, 1.83vw, 2rem);
   line-height: 1.2;
   margin-bottom: 0.8vw;
 }
 
-.sg-weight-item__spec {
+.cm-weight-item__spec {
   font-size: clamp(9px, 0.73vw, 11px);
-  font-weight: 300;
-  color: var(--sg-fg);
+  font-weight: 400;
+  color: var(--cm-fg);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -328,102 +325,169 @@ button {
 /* .button span 의 difference 는 전역 styles.scss 값을 그대로 사용
    → div 가 올라올 때 텍스트가 자연스럽게 반전되어 깜빡임 없음
    .button--secondary 엘리먼트 자체만 normal 로 고정 */
-.sg-root .button--secondary {
+.cm-root .button--secondary {
   mix-blend-mode: normal;
+  box-shadow: none !important;
+  border: 1.5px solid var(--cm-fg);
+  background: var(--cm-bg);
+  color: var(--cm-fg);
 }
 
+.cm-root .button--secondary div {
+  background: var(--cm-fg);
+}
 
-.sg-root .sg-btn-dark .button span {
+.cm-root .cm-btn-dark .button span {
   font-weight: 400;
 }
 
 /* Light mode — white bg 위에서 버튼이 보이도록 */
-.sg-root[data-theme='light'] .sg-btn-dark .button {
+.cm-root[data-theme='light'] .cm-btn-dark .button {
   box-shadow: inset 0 0 0 1.5px #000;
 }
 
-.sg-root[data-theme='light'] .sg-btn-dark .button div {
+.cm-root[data-theme='light'] .cm-btn-dark .button div {
   background: #000;
 }
 
-.sg-root[data-theme='light'] .sg-btn-dark .button--secondary {
-  background: #000 !important;
-  border: none;
-  box-shadow: none;
+/* Light mode — cm-btn-dark secondary */
+.cm-root[data-theme='light'] .cm-btn-dark .button--secondary {
+  border: 1.5px solid #000;
+  background: #000;
+  box-shadow: none !important;
+  color: #000;
 }
 
-.sg-root[data-theme='light'] .sg-btn-dark .button--secondary div {
+.cm-root[data-theme='light'] .cm-btn-dark .button--secondary div {
   background: #fff;
 }
 
-/* Dark mode — secondary: border로 outline 표시 */
-.sg-root[data-theme='dark'] .sg-btn-dark .button--secondary {
-  background: transparent !important;
-  border: 1.5px solid #fff;
-  box-shadow: none;
+.cm-root[data-theme='light'] .cm-btn-dark .button--secondary span {
+  color: #fff;
+  mix-blend-mode: difference;
 }
 
-.sg-root[data-theme='dark'] .sg-btn-dark .button--secondary div {
+/* Dark mode — cm-btn-dark secondary */
+.cm-root[data-theme='dark'] .cm-btn-dark .button--secondary {
+  border: 1.5px solid #fff;
+  background: #fff;
+  box-shadow: none !important;
+  color: #fff;
+}
+
+.cm-root[data-theme='dark'] .cm-btn-dark .button--secondary div {
   background: #000;
 }
 
+.cm-root[data-theme='dark'] .cm-btn-dark .button--secondary span {
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
 /* ---- Buttons Section ---- */
-.sg-btn-group {
+.cm-btn-group {
   margin-bottom: 2.5vw;
 }
 
-.sg-btn-group:last-child {
+.cm-btn-group:last-child {
   margin-bottom: 0;
 }
 
-.sg-btn-label {
+.cm-btn-label {
   font-size: clamp(9px, 0.73vw, 11px);
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--sg-fg);
+  color: var(--cm-fg);
   margin-bottom: 1vw;
 }
 
-.sg-btn-dark {
-  background: var(--sg-bg);
-  border: 1px solid var(--sg-soft-border);
+.cm-btn-dark {
+  background: var(--cm-bg);
+  border: 1px solid var(--cm-soft-border);
   padding: 2.5vw 3vw;
   border-radius: 6px;
 }
 
-.sg-btn-row {
+.cm-btn-row {
   display: flex;
   align-items: center;
   gap: 1.2vw;
   flex-wrap: wrap;
 }
 
-.sg-btn-row + .sg-btn-row {
+.cm-btn-row + .cm-btn-row {
   margin-top: 1.5vw;
 }
 
+/* ---- Font Token List ---- */
+.cm-font-token-group {
+  border-top: 1px solid var(--cm-soft-border);
+  margin-bottom: 3vw;
+}
+
+.cm-font-token-group:last-child {
+  margin-bottom: 0;
+}
+
+.cm-font-token-group__label {
+  font-size: clamp(9px, 0.73vw, 11px);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cm-fg);
+  padding: 1.2vw 0 0.6vw;
+  opacity: 0.5;
+}
+
+.cm-font-token-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 1.1vw 0;
+  border-bottom: 1px solid var(--cm-soft-border);
+}
+
+.cm-font-token-item:last-child {
+  border-bottom: none;
+}
+
+.cm-font-token-item__name {
+  font-size: clamp(11px, 0.9vw, 13px);
+  font-weight: 400;
+  color: var(--cm-fg);
+  font-family: monospace;
+}
+
+.cm-font-token-item__value {
+  font-size: clamp(9px, 0.73vw, 11px);
+  font-weight: 400;
+  color: var(--cm-fg);
+  letter-spacing: 0.02em;
+  opacity: 0.6;
+}
+
 /* ---- Spacing ---- */
-.sg-space-list {
+.cm-space-list {
   display: flex;
   flex-direction: column;
   gap: 0;
-  border-top: 1px solid var(--sg-soft-border);
+  border-top: 1px solid var(--cm-soft-border);
 }
 
-.sg-space-item {
+.cm-space-item {
   display: flex;
   align-items: center;
   gap: 2.5vw;
   padding: 1.4vw 0;
-  border-bottom: 1px solid var(--sg-soft-border);
+  border-bottom: 1px solid var(--cm-soft-border);
 }
 
-.sg-space-item:last-child {
+.cm-space-item:last-child {
   border-bottom: none;
 }
 
-.sg-space-item__meta {
+.cm-space-item__meta {
   display: flex;
   flex-direction: column;
   gap: 0.3em;
@@ -431,132 +495,132 @@ button {
   flex-shrink: 0;
 }
 
-.sg-space-item__name {
+.cm-space-item__name {
   font-size: clamp(11px, 0.9vw, 13px);
   font-weight: 400;
-  color: var(--sg-fg);
+  color: var(--cm-fg);
 }
 
-.sg-space-item__value {
+.cm-space-item__value {
   font-size: clamp(9px, 0.73vw, 11px);
   font-weight: 400;
-  color: var(--sg-fg);
+  color: var(--cm-fg);
   letter-spacing: 0.02em;
 }
 
-.sg-space-item__bar-wrap {
+.cm-space-item__bar-wrap {
   flex: 1;
   display: flex;
   align-items: center;
 }
 
-.sg-space-item__bar {
+.cm-space-item__bar {
   height: 6px;
   background: #FB6262;
   border-radius: 9999px;
 }
 
 /* ---- Responsive ---- */
-@media (max-width: 960px) {
-  .sg-section {
+@media (max-width: 1023.98px) {
+  .cm-section {
     grid-template-columns: 1fr;
   }
 
-  .sg-section__left {
+  .cm-section__left {
     border-right: none;
-    border-bottom: 1px solid var(--sg-border);
+    border-bottom: 1px solid var(--cm-border);
   }
 
-  .sg-weights {
+  .cm-weights {
     grid-template-columns: 1fr;
   }
 
-  .sg-weight-item:nth-child(odd) {
-    border-right: none;
-    padding-right: 0;
-  }
-
-  .sg-weight-item:nth-child(even) {
-    padding-left: 0;
-  }
-
-  .sg-form-states {
-    grid-template-columns: 1fr;
-  }
-
-  .sg-form-state:nth-child(odd) {
+  .cm-weight-item:nth-child(odd) {
     border-right: none;
     padding-right: 0;
   }
 
-  .sg-form-state:nth-child(even) {
+  .cm-weight-item:nth-child(even) {
     padding-left: 0;
   }
 
-  .sg-form-state:nth-last-child(-n+2) {
-    border-bottom: 1px solid var(--sg-soft-border);
+  .cm-form-states {
+    grid-template-columns: 1fr;
   }
 
-  .sg-form-state:last-child {
+  .cm-form-state:nth-child(odd) {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .cm-form-state:nth-child(even) {
+    padding-left: 0;
+  }
+
+  .cm-form-state:nth-last-child(-n+2) {
+    border-bottom: 1px solid var(--cm-soft-border);
+  }
+
+  .cm-form-state:last-child {
     border-bottom: none;
   }
 }
 
 /* ---- Forms Section ---- */
-.sg-form-states {
+.cm-form-states {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0;
 }
 
-.sg-form-state {
+.cm-form-state {
   padding: 2vw 0;
-  border-bottom: 1px solid var(--sg-soft-border);
+  border-bottom: 1px solid var(--cm-soft-border);
 }
 
-.sg-form-state:nth-child(odd) {
+.cm-form-state:nth-child(odd) {
   padding-right: 3vw;
-  border-right: 1px solid var(--sg-soft-border);
+  border-right: 1px solid var(--cm-soft-border);
 }
 
-.sg-form-state:nth-child(even) {
+.cm-form-state:nth-child(even) {
   padding-left: 3vw;
 }
 
-.sg-form-state:nth-last-child(-n+2) {
+.cm-form-state:nth-last-child(-n+2) {
   border-bottom: none;
 }
 
-.sg-form-state__label {
+.cm-form-state__label {
   font-size: clamp(9px, 0.73vw, 11px);
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--sg-fg);
+  color: var(--cm-fg);
   margin-bottom: 1.5vw;
 }
 
-.sg-form-divider {
+.cm-form-divider {
   border: none;
-  border-top: 1px solid var(--sg-soft-border);
+  border-top: 1px solid var(--cm-soft-border);
   margin: 2.5vw 0;
 }
 
-.sg-form-sub {
+.cm-form-sub {
   padding: 2vw 0;
-  border-top: 1px solid var(--sg-soft-border);
+  border-top: 1px solid var(--cm-soft-border);
 }
 
-.sg-form-sub__label {
+.cm-form-sub__label {
   font-size: clamp(9px, 0.73vw, 11px);
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--sg-fg);
+  color: var(--cm-fg);
   margin-bottom: 1.5vw;
 }
 
-.sg-form-checkboxes {
+.cm-form-checkboxes {
   display: flex;
   flex-direction: column;
   gap: 1.5vw;
@@ -564,41 +628,41 @@ button {
 
 /* ---- Textarea — prevent JS auto-grow in style guide demo ---- */
 /*
- * styles.scss의 JS가 textarea에 el.style.height 를 인라인으로 직접 세팅함.
+ * JS가 textarea에 el.style.height 를 인라인으로 직접 세팅함.
  * form-control 을 flex 컨테이너로, textarea 를 flex:1 로 만들어
  * CSS 레이아웃이 높이를 결정하게 하고, !important 로 인라인 height 를 무력화.
  */
-.sg-root .form-group.is-textarea .form-control {
+.cm-root .form-group.is-textarea .form-control {
   display: flex;
   flex-direction: column;
 }
 
-.sg-root .form-group.is-textarea .form-textarea {
+.cm-root .form-group.is-textarea .form-textarea {
   flex: 1;
   height: unset !important;
 }
 
 /* ---- Dark mode — form overrides ---- */
-.sg-root[data-theme='dark'] .form-group .form-input,
-.sg-root[data-theme='dark'] .form-group .form-textarea {
+.cm-root[data-theme='dark'] .form-group .form-input,
+.cm-root[data-theme='dark'] .form-group .form-textarea {
   color: #fff;
 }
 
-.sg-root[data-theme='dark'] .form-group .form-control::before,
-.sg-root[data-theme='dark'] .form-group .form-control::after {
+.cm-root[data-theme='dark'] .form-group .form-control::before,
+.cm-root[data-theme='dark'] .form-group .form-control::after {
   background: #fff;
 }
 
-.sg-root[data-theme='dark'] .form-group .form-placeholder {
+.cm-root[data-theme='dark'] .form-group .form-placeholder {
   color: rgba(255, 255, 255, 0.45);
 }
 
-.sg-root[data-theme='dark'] .form-group .form-checkbox label .form-checkbox__check {
+.cm-root[data-theme='dark'] .form-group .form-checkbox label .form-checkbox__check {
   border-color: #fff;
   color: #fff;
 }
 
-.sg-root[data-theme='dark'] .form-group .form-checkbox label .form-checkbox__text {
+.cm-root[data-theme='dark'] .form-group .form-checkbox label .form-checkbox__text {
   color: #fff;
 }
 
@@ -608,7 +672,7 @@ button {
 }
 
 /* ---- Theme toggle icon ---- */
-.sg-theme-icon {
+.cm-theme-icon {
   width: clamp(14px, 1.1vw, 18px);
   height: clamp(14px, 1.1vw, 18px);
   display: block;

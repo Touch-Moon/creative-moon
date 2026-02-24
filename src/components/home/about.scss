@@ -1,0 +1,17 @@
+@use '../../styles/primitives/colors' as *;
+
+.home-about {
+    height: 80vh;
+    max-height: 620px;
+    display: block;
+    padding: 0 3.3vw;
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;        
+        background-color: $m-grey-dark;
+    }
+}

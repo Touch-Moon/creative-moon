@@ -1,0 +1,118 @@
+@use '@/styles/primitives/colors' as *;
+@use '@/styles/primitives/type' as *;
+
+.home-stories {
+  background-color: transparent;
+  padding: fvw(100) 0 fvw(120);
+
+  // ── 헤더 ─────────────────────────────────────
+  &__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 fvw(80) fvw(48);
+  }
+
+  &__title-wrap {
+    overflow: hidden;
+  }
+
+  &__title {
+    font-size: $fs-h2;     // 88px
+    font-weight: $fw-light;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: inherit;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  &__arrows {
+    display: flex;
+    gap: fvw(8);
+    align-items: center;
+    padding-bottom: fvw(8);
+  }
+
+  // ── 카드 트랙 ────────────────────────────────
+  &__track {
+    display: flex;
+    gap: fvw(24);
+    padding: 0 fvw(80);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  &__card {
+    flex: 0 0 fvw(420);
+    scroll-snap-align: start;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: fvw(16);
+  }
+
+  &__card-img {
+    position: relative;
+    width: 100%;
+    height: fvw(320);
+    overflow: hidden;
+    background: $m-deep-grey;
+
+    img { transition: transform 0.7s ease; }
+
+    .home-stories__card:hover & img {
+      transform: scale(1.04);
+    }
+  }
+
+  &__card-category {
+    font-size: $fs-body-caps;  // 12px
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--foreground-muted);
+  }
+
+  &__card-title {
+    font-size: $fs-body-2;   // 26px
+    font-weight: $fw-light;
+    color: inherit;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  // ── Tablet ──────────────────────────────────
+  @media (max-width: 1023.98px) {
+    padding: 80px 0 100px;
+
+    &__header { padding: 0 5vw 36px; }
+    &__title-wrap {
+    overflow: hidden;
+  }
+
+  &__title { font-size: clamp(40px, 7vw, 88px); }
+    &__track { padding: 0 5vw; gap: 16px; }
+    &__card { flex: 0 0 65vw; }
+    &__card-img { height: 44vw; }
+  }
+
+  // ── Mobile ───────────────────────────────────
+  @media (max-width: 575.98px) {
+    padding: 60px 0 80px;
+
+    &__header { padding: 0 6vw 24px; }
+    &__title-wrap {
+    overflow: hidden;
+  }
+
+  &__title { font-size: clamp(36px, 11vw, 56px); }
+    &__track { padding: 0 6vw; gap: 14px; }
+    &__card { flex: 0 0 80vw; }
+    &__card-img { height: 56vw; }
+    &__card-title { font-size: clamp(15px, 4vw, 20px); }
+  }
+}

@@ -1,0 +1,74 @@
+/* ================================================
+   TYPE — Body
+   Body text scale (largest → smallest):
+
+     .body-text-1   — 2.22vw  | font-weight: 300 | line-height: 120%
+     .body-text-2   — 1.81vw  | font-weight: 300 | line-height: 140%
+     .body-text-3   — 1.53vw  | font-weight: 300 | line-height: 130%
+     .body-text-4   — 1.25vw  | font-weight: 300 | line-height: 140%
+     .body-text-5   — 0.97vw  | font-weight: 400 | line-height: 150%
+     .body-text-caps — 0.83vw | font-weight: 300 | uppercase | letter-spacing: .04em
+   ================================================ */
+
+@use '../primitives/type' as *;
+
+.body-text-1 {
+  font-size: #{$fs-body-1};
+  font-weight: #{$fw-light};
+  line-height: #{$lh-body-1};
+}
+
+.body-text-2 {
+  font-size: #{$fs-body-2};
+  font-weight: #{$fw-regular};
+  line-height: #{$lh-body-2};
+}
+
+.body-text-3 {
+  font-size: #{$fs-body-3};
+  font-weight: #{$fw-regular};
+  letter-spacing: #{$ls-base};
+  line-height: #{$lh-body-3};
+}
+
+.body-text-4 {
+  font-size: #{$fs-body-4};
+  font-weight: #{$fw-regular};
+  letter-spacing: #{$ls-base};
+  line-height: #{$lh-body-4};
+}
+
+.body-text-5 {
+  font-size: #{$fs-body-5};
+  font-weight: #{$fw-regular};
+  letter-spacing: #{$ls-base};
+  line-height: #{$lh-body-5};
+}
+
+.body-text-caps {
+  font-size: #{$fs-body-caps};
+  font-weight: #{$fw-regular};
+  letter-spacing: #{$ls-wide};
+  line-height: #{$lh-body-caps};
+  text-transform: uppercase;
+}
+
+// ── Tablet (1024px) ──────────────────────────────────────────
+@media (max-width: 1023.98px) {
+  .body-text-1    { font-size: 32px; }
+  .body-text-2    { font-size: 26px; }
+  .body-text-3    { font-size: 24px; }
+  .body-text-4    { font-size: 16px; }
+  .body-text-5    { font-size: 14px; }
+  .body-text-caps { font-size: 12px; }
+}
+
+// ── Mobile (640px) ───────────────────────────────────────────
+@media (max-width: 575.98px) {
+  .body-text-1    { font-size: 32px; }
+  .body-text-2    { font-size: 26px; }
+  .body-text-3    { font-size: 24px; }
+  .body-text-4    { font-size: 16px; }
+  .body-text-5    { font-size: 14px; }
+  .body-text-caps { font-size: 12px; }
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Specimen from '@/components/style-guide/Specimen';
 
 export default function StyleGuidePage() {
   type Theme = 'light' | 'dark';
@@ -145,7 +146,7 @@ export default function StyleGuidePage() {
             visual integrity and functional efficiency across all development stages, reflecting our
             commitment to professional and modern web design.
           </p>
-          <button className="button button--s" onClick={() => window.open('/style-guide/guide', '_blank')}>
+          <button className="button button--s button--dark" onClick={() => window.open('/style-guide/guide', '_blank')}>
             <div></div>
             <span>CSS Code Guide Menual</span>
           </button>
@@ -167,41 +168,16 @@ export default function StyleGuidePage() {
           </p>
         </div>
         <div className="cm-section__right">
-
-          <div className="cm-specimen">
-            <div className="cm-specimen__text headline-1">Display</div>
-            <span className="cm-specimen__spec">headline-1 · 9.71vw · 400 · 96% · ls −0.01em</span>
+          <div className="cm-badge">
+            {vpWidth > 0 ? (({ label, px }) => `${label} · ${px}`)(getBreakpoint(vpWidth)) : ''}
           </div>
-
-          <div className="cm-specimen">
-            <div className="cm-specimen__text headline-2">The quick brown fox</div>
-            <div className="cm-specimen__spec">headline-2 · 6.04vw · 400 · 98% · ls −0.01em</div>
-          </div>
-
-          <div className="cm-specimen">
-            <div className="cm-specimen__text headline-3">The quick brown fox jumps</div>
-            <div className="cm-specimen__spec">headline-3 · 5.13vw · 400 · 98% · ls −0.01em</div>
-          </div>
-
-          <div className="cm-specimen">
-            <div className="cm-specimen__text headline-4">The quick brown fox jumps over the lazy dog</div>
-            <div className="cm-specimen__spec">headline-4 · 2.93vw · 400 · 110% · ls −0.01em</div>
-          </div>
-
-          <div className="cm-specimen">
-            <div className="cm-specimen__text headline-4b">The quick brown fox jumps over the lazy dog</div>
-            <div className="cm-specimen__spec">headline-4b · 2.29vw · 400 · 100% · ls −0.01em</div>
-          </div>
-
-          <div className="cm-specimen">
-            <div className="cm-specimen__text headline-5">The quick brown fox jumps over the lazy dog and keeps going</div>
-            <div className="cm-specimen__spec">headline-5 · 1.83vw · 400 · 110%</div>
-          </div>
-
-          <div className="cm-specimen">
-            <div className="cm-specimen__text headline-6">The quick brown fox jumps over the lazy dog and keeps going to fill</div>
-            <div className="cm-specimen__spec">headline-6 · 1.47vw · 400 · 120% · ls 0.01em</div>
-          </div>
+          <Specimen className="headline-1"  vpWidth={vpWidth}>DISPLAY</Specimen>
+          <Specimen className="headline-2"  vpWidth={vpWidth}>The quick brown fox</Specimen>
+          <Specimen className="headline-3"  vpWidth={vpWidth}>The quick brown fox jumps</Specimen>
+          <Specimen className="headline-4"  vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog</Specimen>
+          <Specimen className="headline-4b" vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog</Specimen>
+          <Specimen className="headline-5"  vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog and keeps going</Specimen>
+          <Specimen className="headline-6"  vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog and keeps going to fill</Specimen>
 
         </div>
       </section>
@@ -222,64 +198,30 @@ export default function StyleGuidePage() {
           </p>
         </div>
         <div className="cm-section__right">
-          <div className="cm-badge">
-            {vpWidth > 0 ? (({ label, px }) => `${label} · ${px}`)(getBreakpoint(vpWidth)) : ''}
-          </div>
+          <Specimen className="body-text-1" vpWidth={vpWidth}>
+            The quick brown fox jumps over the lazy dog
+          </Specimen>
 
-          <div className="cm-specimen">
-            <div className="cm-specimen__text body-text-1">
-              The quick brown fox jumps over the lazy dog
-            </div>
-            <div className="cm-specimen__spec">
-              body-text-1 · 2.20vw · 300 · 120%
-            </div>
-          </div>
+          <Specimen className="body-text-2" vpWidth={vpWidth}>
+            The quick brown fox jumps over the lazy dog
+          </Specimen>
 
-          <div className="cm-specimen">
-            <div className="cm-specimen__text body-text-2">
-              The quick brown fox jumps over the lazy dog
-            </div>
-            <div className="cm-specimen__spec">
-              body-text-2 · 1.83vw · 300 · 140%
-            </div>
-          </div>
+          <Specimen className="body-text-3" vpWidth={vpWidth}>
+            The quick brown fox jumps over the lazy dog and keeps going to fill the line
+          </Specimen>
 
-          <div className="cm-specimen">
-            <div className="cm-specimen__text body-text-3">
-              The quick brown fox jumps over the lazy dog and keeps going to fill the line
-            </div>
-            <div className="cm-specimen__spec">
-              body-text-3 · 1.47vw · 300 · 130% · ls 0.01em
-            </div>
-          </div>
+          <Specimen className="body-text-4" vpWidth={vpWidth}>
+            The quick brown fox jumps over the lazy dog and keeps going for a longer demonstration of this text size
+          </Specimen>
 
-          <div className="cm-specimen">
-            <div className="cm-specimen__text body-text-4">
-              The quick brown fox jumps over the lazy dog and keeps going for a longer demonstration of this text size
-            </div>
-            <div className="cm-specimen__spec">
-              body-text-4 · 1.19vw · 300 · 140% · ls 0.01em
-            </div>
-          </div>
+          <Specimen className="body-text-5" vpWidth={vpWidth}>
+            The quick brown fox jumps over the lazy dog and keeps going for a longer demonstration. This size is typically
+            used for supporting text, captions, and supplementary information throughout the interface.
+          </Specimen>
 
-          <div className="cm-specimen">
-            <div className="cm-specimen__text body-text-5">
-              The quick brown fox jumps over the lazy dog and keeps going for a longer demonstration. This size is typically
-              used for supporting text, captions, and supplementary information throughout the interface.
-            </div>
-            <div className="cm-specimen__spec">
-              body-text-5 · 0.92vw · 400 · 150% · ls 0.01em
-            </div>
-          </div>
-
-          <div className="cm-specimen">
-            <div className="cm-specimen__text body-text-caps">
-              Inter Display · Body Text Caps · Uppercase tracking
-            </div>
-            <div className="cm-specimen__spec">
-              body-text-caps · 0.82vw · 300 · 100% · ls 0.04em · uppercase
-            </div>
-          </div>
+          <Specimen className="body-text-caps" vpWidth={vpWidth}>
+            Inter Display · Body Text Caps · Uppercase tracking
+          </Specimen>
         </div>
       </section>
 

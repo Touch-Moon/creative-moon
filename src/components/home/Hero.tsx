@@ -1,14 +1,17 @@
 'use client';
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
+import type { BezierDefinition } from "framer-motion";
 import "./Hero.scss";
+
+const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
+const EASE_INOUT: BezierDefinition = [0.76, 0, 0.24, 1];
 
 export default function Hero() {
   const lines = ["Transform ideas", "into fluid digital", "solutions."];
 
-  // 1. 텍스트 마스크 애니메이션 (기존 유지)
-  const maskVariants = {
-    hidden: { 
-      y: "115%", 
+  const maskVariants: Variants = {
+    hidden: {
+      y: "115%",
       clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)"
     },
     visible: (i: number) => ({
@@ -16,43 +19,42 @@ export default function Hero() {
       clipPath: "polygon(0% -20%, 100% -20%, 100% 120%, 0% 120%)",
       transition: {
         duration: 1.6,
-        ease: [0.19, 1, 0.22, 1],
+        ease: EASE_OUT,
         delay: i * 0.12,
       },
     }),
   };
 
-  // 2. 섹션 높이 애니메이션 설정
-  const sectionVariants = {
+  const sectionVariants: Variants = {
     initial: { height: "100vh" },
-    animate: { 
+    animate: {
       height: "80vh",
       transition: {
         duration: 1.4,
-        ease: [0.76, 0, 0.24, 1], // 쫀득한 가속도
-        delay: 2.0, // 텍스트가 거의 다 올라온 뒤 시작
+        ease: EASE_INOUT,
+        delay: 0.75,
       }
     }
   };
 
   return (
-    <motion.section 
+    <motion.section
       className="home-hero"
+      data-theme="light"
       variants={sectionVariants}
       initial="initial"
       animate="animate"
     >
-      <h1 className="home-hero-title">
+      <h1 className="home-hero__title">
         {lines.map((line, lineIndex) => (
-          <div key={lineIndex} className="home-hero-word">
+          <div key={lineIndex} className="home-hero__word">
             {line.split(" ").map((word, wordIndex) => (
-              <div key={wordIndex} className="home-hero-word-module">
+              <div key={wordIndex} className="home-hero__module">
                 <motion.div
                   custom={lineIndex * 1.5 + wordIndex}
                   variants={maskVariants}
                   initial="hidden"
                   animate="visible"
-                  style={{ willChange: 'transform, clip-path' }}
                 >
                   {word}
                 </motion.div>

@@ -3,7 +3,15 @@
     "allow": [
       "mcp__Claude_Preview__preview_start",
       "Bash(git checkout:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(node -e:*)",
+      "Bash(npm run build:*)",
+      "Bash(git stash:*)",
+      "Bash(npx tsc:*)",
+      "Bash(curl:*)"
     ]
   }
 }
