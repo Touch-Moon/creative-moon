@@ -162,7 +162,8 @@ export default function HomeWorks() {
 
     const card = trackRef.current.children[idx] as HTMLElement;
     if (card) {
-      trackRef.current.scrollTo({ left: card.offsetLeft, behavior: 'smooth' });
+      const paddingLeft = parseFloat(getComputedStyle(trackRef.current).paddingLeft) || 0;
+      trackRef.current.scrollTo({ left: card.offsetLeft - paddingLeft, behavior: 'smooth' });
     }
 
     clearTimeout(scrollTimerRef.current);
@@ -175,11 +176,14 @@ export default function HomeWorks() {
   const handleScroll = useCallback(() => {
     if (isScrollingRef.current || !trackRef.current) return;
     const { scrollLeft } = trackRef.current;
+    const paddingLeft = parseFloat(getComputedStyle(trackRef.current).paddingLeft) || 0;
     const cards = Array.from(trackRef.current.children) as HTMLElement[];
     let closestIdx = 0;
     let minDist = Infinity;
     cards.forEach((card, i) => {
-      const dist = Math.abs(card.offsetLeft - scrollLeft);
+      // paddingLeft를 빼서 track 기준 snap 위치와 비교
+      const snapPos = card.offsetLeft - paddingLeft;
+      const dist = Math.abs(snapPos - scrollLeft);
       if (dist < minDist) { minDist = dist; closestIdx = i; }
     });
     setCurrent(Math.max(0, Math.min(closestIdx, works.length - 1)));
