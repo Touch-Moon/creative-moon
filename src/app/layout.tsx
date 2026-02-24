@@ -14,6 +14,7 @@ import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import ThemeBackground from "@/components/common/ThemeBackground";
 import FontLoader from "@/components/common/FontLoader";
+import SmoothScroll from "@/components/common/SmoothScroll";
 
 export const metadata: Metadata = {
   title: "Creative Moon | Portfolio",
@@ -32,17 +33,19 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
       {/* 2. body 태그에도 속성 추가 */}
       <body suppressHydrationWarning>
         <FontLoader>
-          {/* ✅ 뷰포트 기반 배경 전환 레이어 */}
-          <ThemeBackground />
+          <SmoothScroll>
+            {/* ✅ 뷰포트 기반 배경 전환 레이어 */}
+            <ThemeBackground />
 
-          {/* ✅ 모든 페이지 위에 Header 노출 */}
-          <Header />
+            {/* ✅ 모든 페이지 위에 Header 노출 */}
+            <Header />
 
-          {/* ✅ 실제 페이지 내용들 */}
-          {children}
+            {/* ✅ 실제 페이지 내용들 */}
+            {children}
 
-          {/* ✅ 모든 페이지 아래에 Footer 노출 */}
-          <Footer />
+            {/* ✅ 모든 페이지 아래에 Footer 노출 */}
+            <Footer />
+          </SmoothScroll>
         </FontLoader>
       </body>
     </html>
