@@ -11,7 +11,7 @@
     display: block;
     height: 1px;
     width: 100%;
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.25);
     transform-origin: left top;
     will-change: transform;
 
@@ -27,14 +27,16 @@
     display: block;
     position: absolute;
     top: 1px;
-    left: fvw(424);
+    left: fvw(376);
     width: 1px;
     height: calc(100% - 2px);
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.25);
     transform-origin: left top;
     will-change: transform;
 
-    @media (max-width: 1023.98px) { display: none; }
+    @media (max-width: 1023.98px) {
+      display: none;
+    }
   }
 
   &__inner {
@@ -65,7 +67,10 @@
   &__title-line {
     overflow: hidden;
     display: block;
-    span { display: block; }
+
+    span {
+      display: block;
+    }
   }
 
   &__nav {
@@ -95,7 +100,10 @@
     padding: fvw(48) fvw(48) fvw(48) fvw(40);
     gap: fvw(24);
 
-    &::-webkit-scrollbar { display: none; }
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
@@ -109,6 +117,7 @@
   }
 
   &__card-img {
+    position: relative;
     width: 100%;
     height: fvw(520);
     overflow: hidden;
@@ -123,7 +132,9 @@
       transition: transform 0.6s ease;
     }
 
-    &:hover img { transform: scale(1.03); }
+    &:hover img {
+      transform: scale(1.03);
+    }
   }
 
   &__card-title {
@@ -136,7 +147,9 @@
 
   // ── Tablet ───────────────────────────────────
   @media (max-width: 1023.98px) {
-    &__inner { flex-direction: column; }
+    &__inner {
+      flex-direction: column;
+    }
 
     &__sidebar {
       flex: none;
@@ -147,26 +160,42 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    &__title { font-size: clamp(32px, 5vw, 56px); }
+    &__title {
+      font-size: clamp(32px, 5vw, 56px);
+    }
 
-    &__nav { flex-direction: row; align-items: center; }
+    &__nav {
+      flex-direction: row;
+      align-items: center;
+    }
 
     &__track {
       padding: 32px 5vw;
       gap: 20px;
     }
 
-    &__card { flex: 0 0 min(420px, 85vw); }
+    &__card {
+      flex: 0 0 min(420px, 85vw);
+    }
 
-    &__card-img { height: clamp(240px, 45vw, 420px); }
+    &__card-img {
+      height: clamp(240px, 45vw, 420px);
+    }
   }
 
   // ── Mobile ────────────────────────────────────
   @media (max-width: 575.98px) {
-    &__track { padding: 24px 6vw; gap: 16px; }
+    &__track {
+      padding: 24px 6vw;
+      gap: 16px;
+    }
 
-    &__card { flex: 0 0 85vw; }
+    &__card {
+      flex: 0 0 85vw;
+    }
 
-    &__card-img { height: 55vw; }
+    &__card-img {
+      height: 55vw;
+    }
   }
 }

@@ -15,14 +15,14 @@
   }
 
   &__label {
-    font-size: $fs-body-caps;   // 12px
+    font-size: $fs-h4; // 12px
     font-weight: $fw-regular;
-    letter-spacing: 0.12em;
+    letter-spacing: -0.01em;
     text-transform: uppercase;
     color: $m-black;
     padding-top: fvw(20);
     position: sticky;
-    top: fvw(80);
+    top: fvw(20);
     align-self: start;
     height: fit-content;
   }
@@ -52,14 +52,14 @@
   }
 
   &__number {
-    font-size: $fs-body-5;   // 14px
+    font-size: $fs-body-5; // 14px
     font-weight: $fw-regular;
     color: $m-grey-dark;
     padding-top: 0.3em;
   }
 
   &__title {
-    font-size: $fs-h5;   // 26px
+    font-size: $fs-h5; // 26px
     font-weight: $fw-regular;
     line-height: 1.2;
     letter-spacing: -0.02em;
@@ -68,8 +68,8 @@
   }
 
   &__desc {
-    font-size: $fs-body-4;   // 18px
-    font-weight: $fw-light;
+    font-size: $fs-body-4; // 18px
+    font-weight: $fw-regular;
     line-height: 1.55;
     color: $m-black;
     margin: 0;
@@ -85,7 +85,7 @@
   &__rule-inner {
     position: absolute;
     inset: 0;
-    background: var(--foreground);    // 채워지는 선
+    background: var(--foreground); // 채워지는 선
     transform-origin: left center;
     will-change: transform;
     display: block;
@@ -97,10 +97,10 @@
     padding: 60px 5vw 100px;
 
     &__label-wrap {
-    overflow: hidden;
-  }
+      overflow: hidden;
+    }
 
-  &__label {
+    &__label {
       position: static;
       margin-bottom: 40px;
       font-size: 11px;
@@ -115,10 +115,12 @@
     &__desc {
       grid-column: 2;
       margin-top: 8px;
-      font-size: clamp(14px, 1.6vw, 18px);
+      font-size: calc(18 / 1440 * 100vw);
     }
 
-    &__title { font-size: clamp(18px, 2.2vw, 26px); }
+    &__title {
+      font-size: clamp(18px, 2.2vw, 26px);
+    }
   }
 
   // ── Mobile ───────────────────────────────────
@@ -130,8 +132,17 @@
       padding: 28px 0;
     }
 
-    &__number { margin-bottom: 8px; }
-    &__title { font-size: clamp(17px, 4.5vw, 22px); margin-bottom: 10px; }
-    &__desc   { font-size: 14px; }
+    &__number {
+      margin-bottom: 8px;
+    }
+
+    &__title {
+      font-size: clamp(17px, 4.5vw, 22px);
+      margin-bottom: 10px;
+    }
+
+    &__desc {
+      font-size: 14px;
+    }
   }
 }
