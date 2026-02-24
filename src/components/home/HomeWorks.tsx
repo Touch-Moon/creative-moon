@@ -66,7 +66,7 @@ export default function HomeWorks() {
   return (
     <section ref={sectionRef} className="home-works" data-theme="dark">
 
-      {/* ── 수평 라인 TOP — 가장 먼저 ── */}
+      {/* ① 수평 라인 TOP — 0s ~0.67s */}
       <motion.span
         className="home-works__line-h home-works__line-h--top"
         initial={{ scaleX: 0 }}
@@ -74,12 +74,12 @@ export default function HomeWorks() {
         transition={{ duration: 0.67, ease: EASE_OUT, delay: 0 }}
       />
 
-      {/* ── 수직 라인 — TOP 시작 후 0.3s ── */}
+      {/* ② 수직 라인 — TOP 완료 후 시작 0.67s ~1.34s */}
       <motion.span
         className="home-works__line-v"
         initial={{ scaleY: 0 }}
         animate={isInView ? { scaleY: 1 } : { scaleY: 0 }}
-        transition={{ duration: 0.67, ease: EASE_OUT, delay: 0.3 }}
+        transition={{ duration: 0.67, ease: EASE_OUT, delay: 0.67 }}
       />
 
       <div className="home-works__inner">
@@ -159,12 +159,12 @@ export default function HomeWorks() {
 
       </div>
 
-      {/* ── 수평 라인 BOTTOM — TOP 완료 후 시작 (delay 0.67s) ── */}
+      {/* ③ 수평 라인 BOTTOM — vertical 완료 후 시작 1.34s ~2.01s */}
       <motion.span
         className="home-works__line-h home-works__line-h--bottom"
         initial={{ scaleX: 0 }}
         animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-        transition={{ duration: 0.67, ease: EASE_OUT, delay: 0.67 }}
+        transition={{ duration: 0.67, ease: EASE_OUT, delay: 1.34 }}
       />
 
     </section>
