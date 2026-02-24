@@ -265,7 +265,7 @@ export default function HomeWorks() {
               <div className="home-works__counter-current">
                 <div
                   className="home-works__counter-list"
-                  style={{ transform: `translateY(-${current * 100}%)` }}
+                  style={{ transform: `translateY(-${current}em)` }}
                 >
                   {works.map((_, i) => (
                     <span key={i} aria-hidden={i !== current}>

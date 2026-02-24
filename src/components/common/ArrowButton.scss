@@ -47,15 +47,13 @@
     color: #000;
   }
 
-  // ── disabled — 화살표 숨김 + gray 배경 ──
+  // ── disabled — svg opacity 낮춤
   &:disabled {
     cursor: default;
-    box-shadow: none;
-    background: rgba(255, 255, 255, 0.12);
     pointer-events: none;
 
     svg {
-      opacity: 0;
+      opacity: 0.2;
     }
   }
 
