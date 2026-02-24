@@ -57,7 +57,7 @@ export default function HomeSkills() {
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const sectionRef = useRef(null);
-  const sectionInView = useInView(sectionRef, { once: true, margin: '-8%' });
+  const sectionInView = useInView(sectionRef, { once: true, margin: '0px 0px -40% 0px' });
 
   // 한 번 active된 항목은 영구 revealed 처리
   useEffect(() => {
