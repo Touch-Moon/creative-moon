@@ -220,37 +220,28 @@ export default function StyleGuidePage() {
           </Specimen>
 
           <Specimen className="body-text-caps" vpWidth={vpWidth}>
-            Inter Display · Body Text Caps · Uppercase tracking
+            Figtree · Body Text Caps · Uppercase tracking
           </Specimen>
         </div>
       </section>
 
 
       {/* ==============================
-          03 — FONTS (Inter Display)
+          03 — FONTS (Figtree)
           ============================== */}
       <section className="cm-section">
         <div className="cm-section__left">
           <div className="cm-section__meta">03 — Fonts</div>
-          <h2 className="cm-section__title">Inter Display</h2>
+          <h2 className="cm-section__title">Figtree</h2>
           <p className="cm-section__desc">
-            Inter Display is the primary typeface — a variable font supporting weights
-            100–900 with corresponding italic variants. Optimized for display sizes,
+            Figtree is the primary typeface — a geometric sans-serif variable font supporting weights
+            300–900 with corresponding italic variants. Designed for clarity and readability,
             it offers superior legibility at both large and small scales.
             The primary weights used across the system are Light (300) and Regular (400).
           </p>
         </div>
         <div className="cm-section__right">
           <div className="cm-weights">
-
-            <div className="cm-weight-item">
-              <div className="cm-weight-item__text" style={{ fontWeight: 100 }}>Thin</div>
-              <div className="cm-weight-item__spec">100 · Thin</div>
-            </div>
-            <div className="cm-weight-item">
-              <div className="cm-weight-item__text" style={{ fontWeight: 200 }}>ExtraLight</div>
-              <div className="cm-weight-item__spec">200 · ExtraLight</div>
-            </div>
 
             <div className="cm-weight-item">
               <div className="cm-weight-item__text" style={{ fontWeight: 300 }}>Light</div>

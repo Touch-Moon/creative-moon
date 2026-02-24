@@ -44,7 +44,7 @@
 /* Floating placeholder */
 .form-group .form-placeholder {
   color: #6d6d6d;
-  font-family: 'Inter Display', 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1.1904761905vw; /* body-text-4 */
   font-weight: 400;
   left: 0;
@@ -90,7 +90,7 @@
   border: none;
   box-sizing: border-box;
   color: #000;
-  font-family: 'Inter Display', 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1.1904761905vw; /* body-text-4 */
   font-weight: 400;
   outline: none;
@@ -129,7 +129,7 @@
   -webkit-text-fill-color: #000;
   background: #fff !important;
   -webkit-box-shadow: inset 0 0 0 1000px #fff;
-  font-family: 'Inter Display', 'Inter', sans-serif !important;
+  font-family: 'Figtree', sans-serif !important;
 }
 
 @media (max-width: 1023.98px) {
@@ -362,7 +362,7 @@
 .form-group .error-message {
   bottom: -1.3736263736vw;
   color: #FB6262;
-  font-family: 'Inter Display', 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: clamp(9px, 0.73vw, 11px);
   letter-spacing: 0.01em;
   line-height: 150%;
@@ -440,7 +440,7 @@
 .form-group .form-checkbox label .form-checkbox__text {
   color: #000;
   flex: 1;
-  font-family: 'Inter Display', 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: clamp(11px, 0.88vw, 13px);
   font-weight: 400;
   line-height: 1.6;

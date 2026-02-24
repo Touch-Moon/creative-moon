@@ -134,17 +134,15 @@ export const styleManual: ManualSection[] = [
   /* ── 03 FONTS ─────────────────────────────────── */
   {
     number: '03',
-    title: 'Inter Display',
+    title: 'Figtree',
     subtitle: 'Fonts',
     description:
-      'Primary typeface — variable font supporting weights 100–900 with italic variants. ' +
-      'Optimized for display sizes. Primary weights: Light (300) and Regular (400).',
+      'Primary typeface — variable font supporting weights 300–900 with italic variants. ' +
+      'A geometric sans-serif optimized for UI and display sizes. Primary weights: Light (300) and Regular (400).',
     groups: [
       {
         label: 'Weights',
         items: [
-          { spec: '100 · Thin' },
-          { spec: '200 · ExtraLight' },
           { spec: '300 · Light',     note: 'Primary' },
           { spec: '400 · Regular',   note: 'Primary' },
           { spec: '500 · Medium' },
@@ -158,7 +156,7 @@ export const styleManual: ManualSection[] = [
       {
         label: 'Family',
         items: [
-          { token: '--font-inter-display', spec: "'Inter Display', 'Inter', sans-serif" },
+          { token: '--font-inter-display', spec: "'Figtree', sans-serif" },
         ],
       },
     ],
