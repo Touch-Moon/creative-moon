@@ -1,5 +1,43 @@
 # CLAUDE.md — Creative Moon Portfolio
 
+## Progress Tracker (세션 간 작업 현황)
+
+> 세션이 바뀌어도 이 섹션을 읽어 현재 상태를 파악한다.
+> 작업 완료/시작 시 Claude가 직접 업데이트한다.
+
+### 현재 브랜치
+`feature/scss-value-compile`
+
+### 완료된 작업 ✅
+- [x] Hero 섹션 (light 테마)
+- [x] HomeIntro 섹션
+- [x] HomeSkills 섹션
+  - [x] 개별 아이템 스크롤 트리거 (SkillItem 분리)
+  - [x] opacity 0.5 → 1 애니메이션 (once: true, 50% 트리거)
+  - [x] 라인 애니메이션 (scaleX, 각 아이템 하단)
+- [x] HomeMarquee 섹션 (dark 테마)
+- [x] HomeWorks 섹션
+  - [x] 라인 애니메이션 3단계 순차 (h-top → vertical → h-bottom)
+  - [x] 이미지 경로 연결 (/images/work-01~05.jpg)
+  - [x] card-img position: relative + overflow: hidden
+- [x] HomeStories 섹션
+- [x] Footer
+- [x] ThemeBackground (viewport 기반 dark/light 전환)
+- [x] CSS 변수 (--foreground, --foreground-muted, --foreground-dim)
+- [x] ArrowButton 공통 컴포넌트
+
+### 진행 중 🔄
+- [ ] 없음
+
+### 다음 예정 작업 📋
+- [ ] 각 섹션 반응형 (Tablet / Mobile)
+- [ ] HomeWorks 카드 hover 인터랙션 상세화
+- [ ] 개별 Work 상세 페이지 (slug 기반 라우팅)
+- [ ] Sanity CMS 연동 (works, stories 데이터)
+- [ ] 배포 (Vercel)
+
+---
+
 ## Git Workflow (자동 커밋 + Push 안내 규칙)
 
 - **수정 완료 → 새 작업 시작 전에 반드시 커밋**
