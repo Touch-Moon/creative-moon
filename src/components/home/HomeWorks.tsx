@@ -37,73 +37,58 @@ const works = [
   { id: '05', title: 'Mobile App Interface.', slug: 'mobile-app', src: '/images/work-05.jpg' },
 ];
 
-// ── Wave Image — feTurbulence SVG filter ─────────────────────────────────────
+// ── Wave Image — plastic.design 수치 기반 (cX:1.8 / cY:0.2 / amplitude:0.32) ──
+// idle: 항상 잔잔하게 살아있음 / hover: amplitude 증폭
 function WaveImage({ src, alt, sizes }: { src: string; alt: string; sizes: string }) {
   const rawId = useId();
   const filterId = 'wf' + rawId.replace(/:/g, '');
   const turbRef = useRef<SVGFETurbulenceElement>(null);
+  const dispRef = useRef<SVGFEDisplacementMapElement>(null);
   const rafRef = useRef<number>(0);
   const isHoveringRef = useRef(false);
+  const tRef = useRef(0); // 전역 타임 (idle 연속성 유지)
 
-  const handleMouseEnter = () => {
-    isHoveringRef.current = true;
-    cancelAnimationFrame(rafRef.current);
-    let t = 0;
-    const animate = () => {
-      t++;
-      // sin 커브로 0 → 피크 → 0 (약 1초)
-      const freq = Math.sin((t / 70) * Math.PI) * 0.038;
-      if (turbRef.current) {
-        turbRef.current.setAttribute(
-          'baseFrequency',
-          `${Math.max(0, freq).toFixed(4)} ${Math.max(0, freq * 0.55).toFixed(4)}`
-        );
-      }
-      if (t < 70) {
-        rafRef.current = requestAnimationFrame(animate);
-      } else if (isHoveringRef.current) {
-        // 호버 유지 중: 잔잔한 지속 웨이브
-        let s = 0;
-        const idle = () => {
-          s++;
-          const f = 0.008 + Math.sin(s * 0.04) * 0.006;
-          if (turbRef.current) {
-            turbRef.current.setAttribute(
-              'baseFrequency',
-              `${f.toFixed(4)} ${(f * 0.55).toFixed(4)}`
-            );
-          }
-          if (isHoveringRef.current) rafRef.current = requestAnimationFrame(idle);
-        };
-        rafRef.current = requestAnimationFrame(idle);
-      }
+  // plastic.design 수치: cX=1.8, cY=0.2 → X freq이 Y의 9배
+  // idle amplitude ≈ 0.006 (feTurbulence baseFreq), hover ≈ 0.014
+  // scale: idle 3 / hover 7 (subtle)
+  const IDLE_FREQ_X  = 0.006;
+  const IDLE_FREQ_Y  = 0.0007; // cX:cY = 1.8:0.2 비율
+  const HOVER_FREQ_X = 0.014;
+  const HOVER_FREQ_Y = 0.0016;
+  const IDLE_SCALE   = 3;
+  const HOVER_SCALE  = 7;
+
+  useEffect(() => {
+    // 컴포넌트 마운트 시 idle 웨이브 시작
+    const loop = () => {
+      tRef.current++;
+      const t = tRef.current;
+      const targetFreqX = isHoveringRef.current ? HOVER_FREQ_X : IDLE_FREQ_X;
+      const targetFreqY = isHoveringRef.current ? HOVER_FREQ_Y : IDLE_FREQ_Y;
+      const targetScale = isHoveringRef.current ? HOVER_SCALE  : IDLE_SCALE;
+
+      // 현재 값 부드럽게 lerp
+      const curStr = turbRef.current?.getAttribute('baseFrequency') || '0 0';
+      const [cx, cy] = curStr.split(' ').map(Number);
+      const curScale = parseFloat(dispRef.current?.getAttribute('scale') || '3');
+
+      const lerpFactor = 0.035;
+      const nx = cx + (targetFreqX + Math.sin(t * 0.018) * targetFreqX * 0.4 - cx) * lerpFactor;
+      const ny = cy + (targetFreqY + Math.sin(t * 0.012) * targetFreqY * 0.3 - cy) * lerpFactor;
+      const ns = curScale + (targetScale - curScale) * 0.04;
+
+      turbRef.current?.setAttribute('baseFrequency', `${nx.toFixed(5)} ${ny.toFixed(5)}`);
+      dispRef.current?.setAttribute('scale', ns.toFixed(2));
+
+      rafRef.current = requestAnimationFrame(loop);
     };
-    rafRef.current = requestAnimationFrame(animate);
-  };
+    rafRef.current = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(rafRef.current);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handleMouseLeave = () => {
-    isHoveringRef.current = false;
-    cancelAnimationFrame(rafRef.current);
-    // 서서히 0으로
-    let frame = 0;
-    const curFreqStr = turbRef.current?.getAttribute('baseFrequency') || '0 0';
-    const curFreq = parseFloat(curFreqStr.split(' ')[0]) || 0;
-    const fadeOut = () => {
-      frame++;
-      const freq = curFreq * (1 - frame / 20);
-      if (turbRef.current) {
-        turbRef.current.setAttribute(
-          'baseFrequency',
-          `${Math.max(0, freq).toFixed(4)} ${Math.max(0, freq * 0.55).toFixed(4)}`
-        );
-      }
-      if (frame < 20) rafRef.current = requestAnimationFrame(fadeOut);
-    };
-    rafRef.current = requestAnimationFrame(fadeOut);
-  };
-
-  // cleanup
-  useEffect(() => () => cancelAnimationFrame(rafRef.current), []);
+  const handleMouseEnter = () => { isHoveringRef.current = true; };
+  const handleMouseLeave = () => { isHoveringRef.current = false; };
 
   return (
     <div
@@ -128,9 +113,10 @@ function WaveImage({ src, alt, sizes }: { src: string; alt: string; sizes: strin
               seed="2"
             />
             <feDisplacementMap
+              ref={dispRef}
               in="SourceGraphic"
               in2="noise"
-              scale="22"
+              scale="3"
               xChannelSelector="R"
               yChannelSelector="G"
             />
