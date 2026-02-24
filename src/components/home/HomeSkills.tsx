@@ -125,6 +125,7 @@ export default function HomeSkills() {
 
   return (
     <section ref={sectionRef} className="home-skills" data-theme="light">
+      <div className="wrap">
       {/* ── 좌측 sticky 라벨 ── */}
       <div className="home-skills__label-wrap">
         <motion.div
@@ -148,6 +149,7 @@ export default function HomeSkills() {
             setItemRef={el => { itemRefs.current[i] = el; }}
           />
         ))}
+      </div>
       </div>
     </section>
   );

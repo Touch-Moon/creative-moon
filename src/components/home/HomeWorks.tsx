@@ -1,6 +1,6 @@
 'use client';
-import { useRef, useState, useCallback, useId, useEffect } from 'react';
-import { motion, useInView, type Variants } from 'framer-motion';
+import { useRef, useState, useCallback, useEffect } from 'react';
+import { motion, type Variants } from 'framer-motion';
 import type { BezierDefinition } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -38,75 +38,127 @@ const works = [
   { id: '05', title: 'Mobile App Interface.', slug: 'mobile-app', src: '/images/work-05.jpg' },
 ];
 
-// ── Wave Image — plastic.design 수치 기반 (cX:1.8 / cY:0.2 / amplitude:0.32) ──
-// idle: 항상 잔잔하게 살아있음 / hover: amplitude 증폭
+// ── Canvas 기반 수건-탁 파동 ──────────────────────────────────────────────────
+// Canvas drawImage 2px 단위 → 픽셀 레벨 부드러움 (div 스트립의 경계선 문제 해결)
+const WAVE_AMP = 20;   // Y 최대 변위 (디스플레이 px)
+const WAVE_SIGMA_PCT = 0.5; // Gaussian 폭 (캔버스 폭 대비 비율)
+const WAVE_CYCLES = 0.5;  // Gaussian 범위 내 사인 사이클 수
+const PULSE_SPEED = 0.032;
+
 function WaveImage({ src, alt, sizes }: { src: string; alt: string; sizes: string }) {
-  const rawId = useId();
-  const filterId = 'wf' + rawId.replace(/:/g, '');
-  const turbRef = useRef<SVGFETurbulenceElement>(null);
-  const dispRef = useRef<SVGFEDisplacementMapElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
   const rafRef = useRef<number>(0);
-  const isHoveringRef = useRef(false);
-  const tRef = useRef(0); // 전역 타임 (idle 연속성 유지)
+  const pulseRef = useRef({ progress: 0, active: false });
+  const hoverDelayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // fractalNoise = 부드러운 사인파형 (turbulence는 너무 거친 노이즈)
-  // plastic.design cX:cY = 1.8:0.2 비율 유지
-  // idle: 거의 안 보임 / hover: 명확한 물결 효과
-  const IDLE_FREQ_X  = 0.004;
-  const IDLE_FREQ_Y  = 0.0005;
-  const HOVER_FREQ_X = 0.022;
-  const HOVER_FREQ_Y = 0.0025;
-  const IDLE_SCALE   = 1;
-  const HOVER_SCALE  = 24;
+  // ── 캔버스 사이즈 설정 ────────────────────────────
+  const sizeCanvas = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
+  }, []);
 
+  // ── 프레임 드로우 ─────────────────────────────────
+  const drawFrame = useCallback((p: number) => {
+    const canvas = canvasRef.current;
+    const img = imgRef.current;
+    if (!canvas || !img || canvas.width === 0) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // object-fit: cover 계산
+    const ir = img.naturalWidth / img.naturalHeight;
+    const cr = W / H;
+    let sx, sy, sw, sh: number;
+    if (ir > cr) { sh = img.naturalHeight; sw = sh * cr; sx = (img.naturalWidth - sw) / 2; sy = 0; }
+    else { sw = img.naturalWidth; sh = sw / cr; sx = 0; sy = (img.naturalHeight - sh) / 2; }
+
+    // p=0 이면 왜곡 없이 원본 드로우
+    if (p === 0) { ctx.drawImage(img, sx, sy, sw, sh, 0, 0, W, H); return; }
+
+    const sigma = W * WAVE_SIGMA_PCT;
+    const sigmaSq = sigma * sigma;
+    const waveCenter = W + sigma * 1.5 - p * (W + sigma * 3); // 오른쪽 밖 → 왼쪽 밖
+    const freq = (Math.PI * 2 * WAVE_CYCLES) / (sigma * 2);
+    const dpr = window.devicePixelRatio || 1;
+    const ampPx = WAVE_AMP * dpr;
+    const colW = Math.max(1, Math.round(dpr)); // 레티나: 2px, 일반: 1px
+
+    for (let x = 0; x < W; x += colW) {
+      const d = x - waveCenter;
+      const gauss = Math.exp(-(d * d) / sigmaSq);
+      const dy = ampPx * Math.sin(d * freq) * gauss;
+      const srcX = sx + (x / W) * sw;
+      const srcW = Math.max((colW / W) * sw, 0.5);
+      ctx.drawImage(img, srcX, sy, srcW, sh, x, dy, colW, H);
+    }
+  }, []);
+
+  // ── 이미지 로드 ───────────────────────────────────
   useEffect(() => {
+    const img = new window.Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => { imgRef.current = img; sizeCanvas(); drawFrame(0); };
+    img.src = src;
+  }, [src, sizeCanvas, drawFrame]);
+
+  // ── rAF (애니메이션 중에만 실행) ──────────────────
+  const stopRaf = useCallback(() => {
+    cancelAnimationFrame(rafRef.current); rafRef.current = 0;
+  }, []);
+
+  const startRaf = useCallback(() => {
+    if (rafRef.current) return;
     const loop = () => {
-      tRef.current++;
-      const t = tRef.current;
-      const hovering = isHoveringRef.current;
-      const targetFreqX = hovering ? HOVER_FREQ_X : IDLE_FREQ_X;
-      const targetFreqY = hovering ? HOVER_FREQ_Y : IDLE_FREQ_Y;
-      const targetScale = hovering ? HOVER_SCALE  : IDLE_SCALE;
-
-      const curStr = turbRef.current?.getAttribute('baseFrequency') || '0 0';
-      const [cx, cy] = curStr.split(' ').map(Number);
-      const curScale = parseFloat(dispRef.current?.getAttribute('scale') || '1');
-
-      // hover 진입 시 빠르게, 퇴장 시 느리게 복귀
-      const lerpF = hovering ? 0.07 : 0.025;
-      const nx = cx + (targetFreqX + Math.sin(t * 0.02) * targetFreqX * 0.35 - cx) * lerpF;
-      const ny = cy + (targetFreqY + Math.sin(t * 0.013) * targetFreqY * 0.25 - cy) * lerpF;
-      const ns = curScale + (targetScale - curScale) * (hovering ? 0.07 : 0.03);
-
-      turbRef.current?.setAttribute('baseFrequency', `${nx.toFixed(5)} ${ny.toFixed(5)}`);
-      dispRef.current?.setAttribute('scale', ns.toFixed(2));
-
+      const pulse = pulseRef.current;
+      if (pulse.active) {
+        pulse.progress += PULSE_SPEED;
+        if (pulse.progress >= 1) {
+          pulse.progress = 0; pulse.active = false;
+          drawFrame(0); stopRaf(); return;
+        }
+      }
+      drawFrame(pulse.progress);
       rafRef.current = requestAnimationFrame(loop);
     };
     rafRef.current = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(rafRef.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [drawFrame, stopRaf]);
 
-  // ── DRAG 커스텀 커서 ────────────────────────────
+  // ── DRAG 커스텀 커서 ──────────────────────────────
   const dragCursorRef = useRef<HTMLDivElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
 
   const handleMouseEnter = () => {
-    isHoveringRef.current = true;
     dragCursorRef.current?.classList.add('is-visible');
+    sizeCanvas();
+    drawFrame(0); // sizeCanvas()가 캔버스를 지우므로 즉시 재드로우
+    if (wrapRef.current) wrapRef.current.style.transform = 'scale(1.1)';
+    hoverDelayRef.current = setTimeout(() => {
+      pulseRef.current = { progress: 0, active: true };
+      startRaf();
+    }, 400);
   };
 
   const handleMouseLeave = () => {
-    isHoveringRef.current = false;
+    pulseRef.current = { progress: 0, active: false };
+    if (hoverDelayRef.current) clearTimeout(hoverDelayRef.current);
+    stopRaf(); drawFrame(0);
+    if (wrapRef.current) wrapRef.current.style.transform = 'scale(1)';
     dragCursorRef.current?.classList.remove('is-visible');
   };
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!dragCursorRef.current) return;
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    dragCursorRef.current.style.transform = `translate(${x}px, ${y}px)`;
+    dragCursorRef.current.style.transform =
+      `translate(${e.clientX - rect.left}px, ${e.clientY - rect.top}px)`;
   }, []);
 
   return (
@@ -116,53 +168,15 @@ function WaveImage({ src, alt, sizes }: { src: string; alt: string; sizes: strin
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
     >
-      {/* 필터 정의 — 0×0 SVG로 DOM에만 존재 */}
-      <svg
-        style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}
-        aria-hidden="true"
-        focusable="false"
-      >
-        <defs>
-          <filter id={filterId} x="-5%" y="-5%" width="110%" height="110%">
-            <feTurbulence
-              ref={turbRef}
-              type="fractalNoise"
-              baseFrequency="0 0"
-              numOctaves="3"
-              result="noise"
-              seed="2"
-            />
-            <feDisplacementMap
-              ref={dispRef}
-              in="SourceGraphic"
-              in2="noise"
-              scale="3"
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-          </filter>
-        </defs>
-      </svg>
-
-      {/* 필터 적용 래퍼 */}
-      <div className="home-works__card-img-inner" style={{ filter: `url(#${filterId})` }}>
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          style={{ objectFit: 'cover' }}
-          sizes={sizes}
-          draggable={false}
-        />
+      <div ref={wrapRef} className="home-works__card-img-inner">
+        <canvas ref={canvasRef} className="home-works__card-img-canvas" />
       </div>
 
-      {/* DRAG 커스텀 커서 배지 — 마우스 따라다님 */}
       <div ref={dragCursorRef} className="home-works__drag-cursor" aria-hidden="true">
         <span className="home-works__drag-cursor-inner">
-          {/* 좌우 화살표 아이콘 */}
-          <svg width="18" height="10" viewBox="0 0 18 10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <svg width="18" height="10" viewBox="0 0 18 10" fill="none" aria-hidden="true">
             <path d="M1 5H17M1 5L4.5 1.5M1 5L4.5 8.5M17 5L13.5 1.5M17 5L13.5 8.5"
-              stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           DRAG
         </span>
@@ -183,8 +197,25 @@ export default function HomeWorks() {
   // 드래그 상태 — hasDragged: 3px 이상 움직임 발생 시 true → 클릭 방지
   const dragRef = useRef({ active: false, startX: 0, scrollLeft: 0, hasDragged: false });
 
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-8%' });
+  const sectionRef = useRef<HTMLElement>(null);
+  const [revealed, setRevealed] = useState(false);
+
+  // ── 섹션 뷰포트 진입 감지 (라인 애니메이션 트리거) ──
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setRevealed(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.08 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   // ── 버튼으로 카드 이동 ───────────────────────────────
   const scrollTo = (idx: number) => {
@@ -237,9 +268,12 @@ export default function HomeWorks() {
     const x = e.pageX - trackRef.current.offsetLeft;
     const moved = Math.abs(x - dragRef.current.startX);
 
-    // 3px 이상 이동 시 드래그 의도 확정
-    if (!dragRef.current.hasDragged && moved > 3) {
+    // 1px 이상 이동 시 드래그 의도 확정
+    if (!dragRef.current.hasDragged && moved > 1) {
       dragRef.current.hasDragged = true;
+      // 드래그 중 scroll-snap과 smooth 비활성화 (snap이 드래그를 방해하지 않도록)
+      trackRef.current.style.scrollSnapType = 'none';
+      trackRef.current.style.scrollBehavior = 'auto';
       trackRef.current.style.cursor = 'grabbing';
       trackRef.current.style.userSelect = 'none';
     }
@@ -252,11 +286,64 @@ export default function HomeWorks() {
   };
 
   const onDragEnd = () => {
-    dragRef.current.active = false;
-    if (trackRef.current) {
-      trackRef.current.style.cursor = '';
-      trackRef.current.style.userSelect = '';
+    if (!trackRef.current) { dragRef.current.active = false; return; }
+
+    const track = trackRef.current;
+
+    if (dragRef.current.hasDragged) {
+      // 드래그 거리 계산 (양수 = 왼쪽으로 드래그 = 다음 카드)
+      const dragDelta = dragRef.current.scrollLeft - track.scrollLeft;
+      const paddingLeft = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+      const cards = Array.from(track.children) as HTMLElement[];
+
+      // 드래그 방향에 따라 다음/이전 카드 결정
+      // 작은 움직임(50px 이상)으로도 카드 전환
+      let targetIdx = current;
+      if (dragDelta < -50) {
+        // 오른쪽으로 드래그 → 다음 카드
+        targetIdx = Math.min(current + 1, works.length - 1);
+      } else if (dragDelta > 50) {
+        // 왼쪽으로 드래그 → 이전 카드
+        targetIdx = Math.max(current - 1, 0);
+      } else {
+        // 50px 미만이면 가장 가까운 카드로 스냅
+        let closestIdx = 0;
+        let minDist = Infinity;
+        cards.forEach((card, i) => {
+          const snapPos = card.offsetLeft - paddingLeft;
+          const dist = Math.abs(snapPos - track.scrollLeft);
+          if (dist < minDist) { minDist = dist; closestIdx = i; }
+        });
+        targetIdx = closestIdx;
+      }
+
+      // snap 없이 직접 smooth scroll
+      const targetCard = cards[targetIdx] as HTMLElement;
+      if (targetCard) {
+        track.style.scrollBehavior = 'smooth';
+        track.scrollTo({ left: targetCard.offsetLeft - paddingLeft, behavior: 'smooth' });
+      }
+
+      // smooth scroll 완료 후 snap 복원
+      isScrollingRef.current = true;
+      setCurrent(targetIdx);
+      clearTimeout(scrollTimerRef.current);
+      scrollTimerRef.current = setTimeout(() => {
+        if (trackRef.current) {
+          trackRef.current.style.scrollSnapType = '';
+          trackRef.current.style.scrollBehavior = '';
+        }
+        isScrollingRef.current = false;
+      }, 500);
+    } else {
+      // 드래그 안 했으면 바로 복원
+      track.style.scrollSnapType = '';
+      track.style.scrollBehavior = '';
     }
+
+    track.style.cursor = '';
+    track.style.userSelect = '';
+    dragRef.current.active = false;
   };
 
   // cleanup timer
@@ -266,21 +353,12 @@ export default function HomeWorks() {
     <section ref={sectionRef} className="home-works" data-theme="dark">
 
       {/* ① 수평 TOP */}
-      <motion.span
-        className="home-works__line-h home-works__line-h--top"
-        initial={{ scaleX: 0 }}
-        animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-        transition={{ duration: 0.67, ease: EASE_OUT, delay: 0 }}
-      />
+      <span className={`home-works__line-h home-works__line-h--top${revealed ? ' is-revealed' : ''}`} />
 
       {/* ② 수직 */}
-      <motion.span
-        className="home-works__line-v"
-        initial={{ scaleY: 0 }}
-        animate={isInView ? { scaleY: 1 } : { scaleY: 0 }}
-        transition={{ duration: 0.67, ease: EASE_OUT, delay: 0.67 }}
-      />
+      <span className={`home-works__line-v${revealed ? ' is-revealed' : ''}`} />
 
+      <div className="wrap">
       <div className="home-works__inner">
 
         {/* ── 사이드바 ── */}
@@ -292,7 +370,7 @@ export default function HomeWorks() {
                   custom={i}
                   variants={titleLineVariants}
                   initial="hidden"
-                  animate={isInView ? 'visible' : 'hidden'}
+                  animate={revealed ? 'visible' : 'hidden'}
                 >
                   {line}
                 </motion.span>
@@ -303,7 +381,7 @@ export default function HomeWorks() {
           <motion.div
             className="home-works__nav"
             initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
+            animate={revealed ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.4 }}
           >
             {/* Counter — plastic.design 방식: overflow:hidden + translateY */}
@@ -361,7 +439,7 @@ export default function HomeWorks() {
               custom={i}
               variants={cardVariants}
               initial="hidden"
-              animate={isInView ? 'visible' : 'hidden'}
+              animate={revealed ? 'visible' : 'hidden'}
               draggable={false}
               onClick={(e) => {
                 if (dragRef.current.hasDragged) e.preventDefault();
@@ -378,14 +456,10 @@ export default function HomeWorks() {
         </div>
 
       </div>
+      </div>
 
       {/* ③ 수평 BOTTOM */}
-      <motion.span
-        className="home-works__line-h home-works__line-h--bottom"
-        initial={{ scaleX: 0 }}
-        animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-        transition={{ duration: 0.67, ease: EASE_OUT, delay: 1.34 }}
-      />
+      <span className={`home-works__line-h home-works__line-h--bottom${revealed ? ' is-revealed' : ''}`} />
 
     </section>
   );

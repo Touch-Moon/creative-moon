@@ -4,7 +4,7 @@
 
 .home-intro {
   background-color: transparent;
-  padding: 0 fvw(80) fvw(160);
+  padding: 0 $space-12 fvw(160);
 
   // ── 이미지 2개 ─────────────────────────────
   &__images {
@@ -26,7 +26,7 @@
 
     &--right {
       height: fvw(440);
-      margin-top: fvw(80);  // 아래 오프셋
+      margin-top: fvw(80); // 아래 오프셋
     }
 
     img {
@@ -43,8 +43,8 @@
     max-width: fvw(900);
 
     p {
-      font-size: $fs-body-1;   // 32px
-      font-weight: $fw-light;
+      font-size: $fs-body-1; // 32px
+      font-weight: $fw-regular;
       line-height: 1.4;
       letter-spacing: -0.01em;
       color: $m-black;
@@ -54,7 +54,7 @@
 
   // ── Tablet ──────────────────────────────────
   @media (max-width: 1023.98px) {
-    padding: 0 5vw 100px;
+    padding: 0 $space-8 100px;
 
     &__images {
       gap: 10px;
@@ -62,16 +62,25 @@
     }
 
     &__img {
-      &--left  { height: 46vw; margin-top: -30px; }
-      &--right { height: 36vw; margin-top: 50px; }
+      &--left {
+        height: 46vw;
+        margin-top: -30px;
+      }
+
+      &--right {
+        height: 36vw;
+        margin-top: 50px;
+      }
     }
 
-    &__text p { font-size: clamp(20px, 2.6vw, 32px); }
+    &__text p {
+      font-size: clamp(20px, 2.6vw, 32px);
+    }
   }
 
   // ── Mobile ───────────────────────────────────
   @media (max-width: 575.98px) {
-    padding: 0 6vw 80px;
+    padding: 0 $space-4 80px;
 
     &__images {
       grid-template-columns: 1fr;
@@ -79,10 +88,19 @@
     }
 
     &__img {
-      &--left  { height: 70vw; margin-top: 0; }
-      &--right { height: 55vw; margin-top: 0; }
+      &--left {
+        height: 70vw;
+        margin-top: 0;
+      }
+
+      &--right {
+        height: 55vw;
+        margin-top: 0;
+      }
     }
 
-    &__text p { font-size: clamp(17px, 4.5vw, 22px); }
+    &__text p {
+      font-size: clamp(17px, 4.5vw, 22px);
+    }
   }
 }
