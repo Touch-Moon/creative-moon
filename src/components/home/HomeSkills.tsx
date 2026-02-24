@@ -35,9 +35,9 @@ const skills = [
 ];
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 32 },
+  hidden:  { opacity: 0, y: 32 },
   visible: (i: number) => ({
-    opacity: 1,
+    opacity: 0.25,
     y: 0,
     transition: { duration: 1.0, ease: EASE_OUT, delay: i * 0.08 },
   }),
@@ -53,10 +53,16 @@ const labelVariants: Variants = {
 
 export default function HomeSkills() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [revealedItems, setRevealedItems] = useState<Set<number>>(new Set());
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const sectionRef = useRef(null);
   const sectionInView = useInView(sectionRef, { once: true, margin: '-8%' });
+
+  // 한 번 active된 항목은 영구 revealed 처리
+  useEffect(() => {
+    setRevealedItems(prev => new Set([...prev, activeIndex]));
+  }, [activeIndex]);
 
   // 스크롤 위치에 따른 active 항목 업데이트
   useEffect(() => {
@@ -98,7 +104,7 @@ export default function HomeSkills() {
             custom={i}
             variants={itemVariants}
             initial="hidden"
-            animate={sectionInView ? 'visible' : 'hidden'}
+            animate={sectionInView ? (revealedItems.has(i) ? { opacity: 1, y: 0 } : 'visible') : 'hidden'}
             className={`home-skills__item ${i === activeIndex ? 'is-active' : ''}`}
           >
             <div className="home-skills__item-inner">
