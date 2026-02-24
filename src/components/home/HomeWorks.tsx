@@ -17,12 +17,13 @@ const titleLineVariants: Variants = {
   }),
 };
 
+// 상단 고정, height:0 → full 마스크 reveal
+// border 이벤트 완료(2.01s) + 1s 후 첫 카드, 이후 순차 0.18s 간격
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 56 },
+  hidden: { clipPath: 'inset(0 0 100% 0)' },
   visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 1.2, ease: EASE_OUT, delay: 0.3 + i * 0.12 },
+    clipPath: 'inset(0 0 0% 0)',
+    transition: { duration: 1.1, ease: EASE_OUT, delay: 3.01 + i * 0.18 },
   }),
 };
 
