@@ -1,12 +1,19 @@
 # CLAUDE.md — Creative Moon Portfolio
 
-## Git Workflow (자동 커밋 규칙)
+## Git Workflow (자동 커밋 + Push 안내 규칙)
 
 - **수정 완료 → 새 작업 시작 전에 반드시 커밋**
 - 커밋 타이밍: 하나의 기능/수정이 끝난 직후, 다음 태스크로 넘어가기 전
 - 커밋 메시지 형식: `feat|fix|refactor|style: 한 줄 요약 (영문)`
 - `Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>` 항상 포함
-- push는 자동으로 하지 않음 — 사용자가 직접 터미널에서 `git push` 실행
+- **새 작업 시작 전, 아래 형식으로 Push 안내 후 대기:**
+
+```
+📦 Push 먼저 해주세요
+git push origin <현재 브랜치명>
+완료되면 말씀해 주시면 바로 시작하겠습니다.
+```
+
 - Remote: `https://github.com/Touch-Moon/creative-moon.git`
 
 ---
