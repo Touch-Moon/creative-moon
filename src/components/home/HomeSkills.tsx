@@ -37,7 +37,7 @@ const skills = [
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 32 },
   visible: (i: number) => ({
-    opacity: 0.25,
+    opacity: 1,
     y: 0,
     transition: { duration: 1.0, ease: EASE_OUT, delay: i * 0.08 },
   }),
@@ -98,7 +98,7 @@ export default function HomeSkills() {
             custom={i}
             variants={itemVariants}
             initial="hidden"
-            animate={sectionInView ? (i === activeIndex ? { opacity: 1, y: 0 } : 'visible') : 'hidden'}
+            animate={sectionInView ? 'visible' : 'hidden'}
             className={`home-skills__item ${i === activeIndex ? 'is-active' : ''}`}
           >
             <div className="home-skills__item-inner">
