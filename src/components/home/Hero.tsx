@@ -1,4 +1,5 @@
 'use client';
+import { useState, useEffect } from "react";
 import { motion, type Variants } from "framer-motion";
 import type { BezierDefinition } from "framer-motion";
 import { useFontsLoaded } from "@/context/FontContext";
@@ -10,6 +11,14 @@ const EASE_INOUT: BezierDefinition = [0.76, 0, 0.24, 1];
 export default function Hero() {
   const fontsLoaded = useFontsLoaded();
   const lines = ["Transform ideas", "into fluid digital", "solutions."];
+
+  // 매 마운트마다 false → true 변화를 만들어 페이지 전환 후에도 애니메이션 재실행
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+  useEffect(() => {
+    if (fontsLoaded) {
+      setShouldAnimate(true);
+    }
+  }, [fontsLoaded]);
 
   /* ── clip-path on .home-hero__module (parent mask) ── */
   const clipVariants: Variants = {
@@ -54,9 +63,10 @@ export default function Hero() {
     },
   };
 
-  /* fontsLoaded가 true일 때만 애니메이션 트리거 */
-  const animState = fontsLoaded ? "visible" : "hidden";
-  const sectionAnimState = fontsLoaded ? "animate" : "initial";
+  /* shouldAnimate가 true일 때만 애니메이션 트리거
+     (페이지 전환 후에도 false → true 변화가 생겨 재실행됨) */
+  const animState = shouldAnimate ? "visible" : "hidden";
+  const sectionAnimState = shouldAnimate ? "animate" : "initial";
 
   return (
     <motion.section

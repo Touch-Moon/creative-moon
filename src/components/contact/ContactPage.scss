@@ -1,0 +1,408 @@
+@use '../../styles/primitives/type' as *;
+@use '../../styles/primitives/colors' as *;
+
+// ── Contact Page ───────────────────────────────
+.contact-page {
+  background: $m-black;
+  color: $m-white;
+  min-height: 100vh;
+}
+
+// ── Contact Section ────────────────────────────
+.contact-section {
+  padding-top: fvw(364);
+
+  .wrapper {
+    max-width: fvw(1320);
+    margin: 0 auto;
+    padding: 0 fvw(30);
+  }
+
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  // 좌측 정보
+  &__left {
+    flex: 0 0 auto;
+    width: 41.667%;
+  }
+
+  // 우측 폼
+  &__right {
+    flex: 0 0 auto;
+    width: 50%;
+    margin-left: auto;
+  }
+}
+
+// ── Contact Block (Drop us a line / Visit us) ──
+.contact-block {
+  margin-bottom: fvw(48);
+
+  &__title {
+    font-size: $fs-body-caps;
+    letter-spacing: $ls-wide;
+    text-transform: uppercase;
+    color: rgba($m-white, 0.5);
+    margin-bottom: fvw(12);
+  }
+
+  &__text {
+    font-size: $fs-h6;
+    line-height: $lh-h6;
+    color: $m-white;
+
+    a {
+      color: $m-white;
+      text-decoration: none;
+      transition: opacity 0.3s ease;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+}
+
+// ── Contact Title ──────────────────────────────
+.contact-title {
+  font-size: $fs-h2;
+  line-height: $lh-h2;
+  font-weight: $fw-regular;
+  color: $m-white;
+  margin-bottom: fvw(56);
+  letter-spacing: $ls-tight;
+
+  .line {
+    display: block;
+    overflow: hidden;
+  }
+
+  .line-child {
+    display: block;
+  }
+}
+
+// ── Contact Description ────────────────────────
+.contact-description {
+  font-size: $fs-body-2;
+  line-height: $lh-body-2;
+  color: rgba($m-white, 0.7);
+  max-width: fvw(666);
+}
+
+// ── Contact Form ───────────────────────────────
+.contact-form {
+  margin-top: fvw(60);
+
+  &__sent {
+    padding: fvw(60) 0;
+
+    .headline-4 {
+      color: $m-white;
+    }
+  }
+
+  // Submit row — reCAPTCHA text (left) + Send button (right)
+  .form-group--submit {
+    align-items: center;
+    display: flex;
+    gap: fvw(32);
+    margin-top: fvw(56); // checkbox → submit row 간격
+
+    // reCAPTCHA disclaimer text
+    .submit-recaptcha {
+      color: rgba($m-white, 0.35);
+      flex: 1;
+      font-family: 'Figtree', sans-serif;
+      font-size: 0.7638888889vw; // ~11px at 1440px
+      line-height: 1.6;
+
+      a {
+        color: rgba($m-white, 0.35);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        transition: color 0.2s ease;
+
+        &:hover {
+          color: rgba($m-white, 0.6);
+        }
+      }
+    }
+
+    // Send button — 65% of submit row (matches plastic.design proportions)
+    .button--xl {
+      flex: 0 0 65%;
+    }
+  }
+
+  // textarea → privacy checkbox 간격
+  .form-group:has(.form-checkbox) {
+    margin-top: fvw(40);
+  }
+}
+
+// ══════════════════════════════════════════════════
+// Dark theme overrides for style-guide form system
+// _form.scss는 기본 light 테마 → 여기서 dark 오버라이드
+// ══════════════════════════════════════════════════
+.contact-page {
+  // 밑줄 색상 오버라이드
+  .form-group .form-control::before,
+  .form-group .form-control::after {
+    background: $m-white;
+  }
+
+  .form-group .form-control::before {
+    opacity: 0.15;
+  }
+
+  // error 상태: 밑줄 opacity 100%
+  .form-group.is-error .form-control::before,
+  .form-group.is-error .form-control::after {
+    background: #FB6262;
+    opacity: 1;
+  }
+
+  // placeholder 색상
+  .form-group .form-placeholder {
+    color: rgba($m-white, 0.5);
+  }
+
+  // input / textarea 색상
+  .form-group .form-input,
+  .form-group .form-textarea {
+    color: $m-white;
+  }
+
+  // autofill 오버라이드 (dark)
+  .form-group .form-input:-webkit-autofill,
+  .form-group .form-input:-webkit-autofill:active,
+  .form-group .form-input:-webkit-autofill:focus,
+  .form-group .form-input:-webkit-autofill:hover,
+  .form-group .form-textarea:-webkit-autofill,
+  .form-group .form-textarea:-webkit-autofill:active,
+  .form-group .form-textarea:-webkit-autofill:focus,
+  .form-group .form-textarea:-webkit-autofill:hover {
+    -webkit-text-fill-color: $m-white;
+    background: $m-black !important;
+    -webkit-box-shadow: inset 0 0 0 1000px $m-black;
+  }
+
+  // checkbox 색상 오버라이드
+  .form-group .form-checkbox label .form-checkbox__check {
+    border-color: rgba($m-white, 0.5);
+    color: $m-white;
+  }
+
+  .form-group .form-checkbox label .form-checkbox__text {
+    color: rgba($m-white, 0.7);
+
+    a {
+      color: rgba($m-white, 0.7);
+      text-underline-offset: 2px;
+
+      &:hover {
+        color: $m-white;
+      }
+    }
+  }
+
+  // error 색상은 동일 (#FB6262) — _form.scss에서 이미 처리됨
+  // checkbox 에러 메시지 위치 (checkbox는 form-control이 없어 별도 지정)
+  .form-group:has(.form-checkbox) .error-message {
+    bottom: auto;
+    margin-top: fvw(8);
+    position: relative;
+    right: auto;
+    text-align: left;
+    padding-left: 1.8315018315vw; // checkbox__text padding-left와 동일
+  }
+
+  // button--secondary dark bg 위에서 border 보정
+  .button--secondary {
+    border-color: $m-white;
+  }
+}
+
+// ── Contact Social ─────────────────────────────
+.contact-social {
+  padding-top: fvw(160);
+  padding-bottom: fvw(145);
+
+  .wrapper {
+    max-width: fvw(1320);
+    margin: 0 auto;
+    padding: 0 fvw(30);
+  }
+
+  &__title {
+    font-size: $fs-body-caps;
+    letter-spacing: $ls-wide;
+    text-transform: uppercase;
+    color: rgba($m-white, 0.5);
+    margin-bottom: fvw(24);
+  }
+
+  &__list {
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      margin-bottom: fvw(4);
+    }
+
+    a {
+      font-size: $fs-h3;
+      line-height: $lh-h3;
+      font-weight: $fw-regular;
+      color: $m-white;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: $ls-tight;
+      transition: opacity 0.3s ease;
+      display: inline-block;
+    }
+
+    // hover: 다른 링크들은 opacity 낮춤
+    ul:hover a:not(:hover) {
+      opacity: 0.3;
+    }
+  }
+}
+
+// ── Tablet (max 1023px) ─────────────────────────
+@media (max-width: 1023px) {
+  .contact-section {
+    &__left {
+      width: 41.667%;
+    }
+
+    &__right {
+      width: 50%;
+    }
+  }
+
+  .contact-form .form-group--submit {
+    gap: 2.604vw;
+    margin-top: 3.906vw;
+
+    .submit-recaptcha {
+      font-size: 1.302vw;
+    }
+  }
+}
+
+// ── Tablet small (max 768px) ────────────────────
+@media (max-width: 768px) {
+  .contact-social {
+    padding-top: 23.438vw;
+  }
+}
+
+// ── Mobile (max 575px) ──────────────────────────
+@media (max-width: 575px) {
+  .contact-section {
+    padding-top: 95.897vw;
+
+    .wrapper {
+      padding: 0 5.128vw;
+    }
+
+    &__row {
+      flex-direction: column;
+    }
+
+    &__left {
+      width: 100%;
+      order: 2;
+      margin-top: 41.026vw;
+    }
+
+    &__right {
+      width: 100%;
+      order: 1;
+      text-align: left;
+    }
+  }
+
+  .contact-title {
+    display: inline-block;
+    width: 89.744vw;
+    margin-bottom: 10.256vw;
+    font-size: 12.308vw;
+    line-height: 98%;
+  }
+
+  .contact-description {
+    width: 100%;
+    font-size: 4.615vw;
+    line-height: 140%;
+  }
+
+  .contact-form {
+    margin-top: 8.205vw;
+
+    // 모바일: submit row를 세로 스택으로 (reCAPTCHA 위 / 버튼 아래 full-width)
+    .form-group--submit {
+      flex-direction: column;
+      align-items: stretch;
+      margin-top: 10.256vw;
+      gap: 5.128vw;
+
+      .submit-recaptcha {
+        font-size: 3.077vw;
+        text-align: center;
+      }
+
+      .button--xl {
+        flex: unset;
+        width: 100%;
+      }
+    }
+
+    .form-group:has(.form-checkbox) {
+      margin-top: 6.154vw;
+
+      .error-message {
+        padding-left: 0;
+      }
+    }
+  }
+
+  .contact-block {
+    margin-bottom: 14.359vw;
+
+    &__title {
+      margin-bottom: 4.103vw;
+    }
+
+    &__text {
+      font-size: 5.128vw;
+    }
+  }
+
+  .contact-social {
+    padding-top: 34.872vw;
+    padding-bottom: 34.872vw;
+    text-align: right;
+
+    .wrapper {
+      padding: 0 5.128vw;
+    }
+
+    &__title {
+      margin-bottom: 5.128vw;
+    }
+
+    &__list a {
+      font-size: 10.256vw;
+      line-height: 130%;
+    }
+  }
+}

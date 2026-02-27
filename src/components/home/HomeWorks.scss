@@ -176,6 +176,7 @@
     padding: fvw(48) fvw(40);
     gap: fvw(24);
     cursor: grab;
+    will-change: transform; // 바운스 translateX 성능 최적화
 
     &:active {
       cursor: grabbing;
@@ -195,12 +196,19 @@
     text-decoration: none;
     color: inherit;
     display: block;
+    // ── 카드 사이즈 variants ──
+    // 높이 fvw(520) 고정, aspect ratio로 폭 결정
+    // large   ~1.27:1  wide ~1.5:1  tall ~0.8:1  compact ~1:1
+    &--large   { flex-basis: calc(fvw(520) * 1.27); }
+    &--wide    { flex-basis: calc(fvw(520) * 1.5);  }
+    &--tall    { flex-basis: calc(fvw(520) * 0.8);  }
+    &--compact { flex-basis: calc(fvw(520) * 1);    }
   }
 
   &__card-img {
     position: relative;
     width: 100%;
-    height: fvw(520);
+    height: fvw(520); // fallback
     overflow: hidden;
     background: color-mix(in srgb, var(--foreground) 5%, transparent);
     border-radius: 0;
@@ -256,12 +264,15 @@
     scale: 1;
   }
 
-  // scale 래퍼
+  // scale + parallax 래퍼
   &__card-img-inner {
     position: absolute;
-    inset: 0;
+    // parallax 패닝 여유: 좌우 5%씩 확장
+    inset: 0 -5%;
+    width: 110%;
     overflow: hidden;
     transform-origin: center;
+    will-change: transform;
     transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
   }
 

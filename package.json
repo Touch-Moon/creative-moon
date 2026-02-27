@@ -18,6 +18,8 @@
     "@portabletext/react": "^6.0.2",
     "@sanity/image-url": "^2.0.3",
     "@sanity/vision": "^5.8.0",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.36.2",
     "axios": "^1.13.4",
     "framer-motion": "^12.31.0",
     "lenis": "^1.3.17",
@@ -25,6 +27,8 @@
     "next-sanity": "^12.0.14",
     "react": "^19.1",
     "react-dom": "^19.1",
+    "react-google-recaptcha-v3": "^1.11.0",
+    "resend": "^6.9.2",
     "sanity": "^5.8.0",
     "sass": "^1.97.3",
     "styled-components": "^6.1.18"

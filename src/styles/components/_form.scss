@@ -41,7 +41,7 @@
   transition: transform 0.2s ease-in-out;
 }
 
-/* Floating placeholder */
+/* Floating placeholder — centred via transform so no manual top calc needed */
 .form-group .form-placeholder {
   color: #6d6d6d;
   font-family: 'Figtree', sans-serif;
@@ -50,36 +50,27 @@
   left: 0;
   pointer-events: none;
   position: absolute;
-  top: 1.6941vw; /* (4.5788 - 1.1905) / 2 — vertically centred */
-  transition: opacity 0.2s ease-in-out, top 0.2s ease-in-out, font-size 0.2s ease-in-out;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: opacity 0.2s ease-in-out, top 0.2s ease-in-out, font-size 0.2s ease-in-out, transform 0.2s ease-in-out;
   width: 100%;
 }
 
 @media (max-width: 1439.98px) {
   .form-group .form-placeholder {
     font-size: 1.2820512821vw;
-    top: 1.6484vw; /* (4.5788 - 1.2821) / 2 */
-  }
-}
-
-@media (max-width: 1023.98px) {
-  .form-group .form-placeholder {
-    font-size: 1.4194139194vw;
-    top: 1.5797vw; /* (4.5788 - 1.4194) / 2 */
   }
 }
 
 @media (max-width: 1023.98px) {
   .form-group .form-placeholder {
     font-size: 1.8229166667vw;
-    top: 2.9948vw; /* (7.8125 - 1.8229) / 2 */
   }
 }
 
 @media (max-width: 575.98px) {
   .form-group .form-placeholder {
     font-size: 4.1025641026vw;
-    top: 7.4359vw; /* (18.9744 - 4.1026) / 2 */
   }
 }
 
@@ -181,20 +172,23 @@
   }
 }
 
-/* Textarea — sizing */
+/* Textarea — sizing (matches .is-input heights) */
 .form-group.is-textarea .form-control {
+  height: 4.5787545788vw;
   min-height: 4.5787545788vw;
-  transition: padding 0.2s ease-in-out;
+  transition: height 0.2s ease-in-out;
 }
 
 @media (max-width: 1023.98px) {
   .form-group.is-textarea .form-control {
+    height: 7.8125vw;
     min-height: 7.8125vw;
   }
 }
 
 @media (max-width: 575.98px) {
   .form-group.is-textarea .form-control {
+    height: 18.9743589744vw;
     min-height: 18.9743589744vw;
   }
 }
@@ -226,6 +220,7 @@
   font-size: clamp(9px, 0.73vw, 11px);
   opacity: 0.45;
   top: 0.7326007326vw;
+  transform: translateY(0);
 }
 
 @media (max-width: 1023.98px) {
@@ -260,6 +255,7 @@
 
 .form-group.is-focused.is-textarea .form-control,
 .form-group.has-content.is-textarea .form-control {
+  height: auto;
   min-height: 5.9523809524vw;
 }
 
@@ -320,6 +316,7 @@
   font-size: clamp(9px, 0.73vw, 11px);
   opacity: 0.45;
   top: 0.7326007326vw;
+  transform: translateY(0);
 }
 
 @media (max-width: 1023.98px) {

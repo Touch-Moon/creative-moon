@@ -1,0 +1,726 @@
+// ================================================
+// ABOUT PAGE — Full layout matching plastic.design structure
+// Sections: Hero → Full Image → Image+Text → 2Col Images →
+//           Text Left → Text Right → Awards → Clients → Compliance
+// ================================================
+
+@use '@/styles/primitives/colors' as *;
+@use '@/styles/primitives/type' as *;
+@use '@/styles/primitives/space' as *;
+
+// ── Shared wrapper ────────────────────────────────────────────
+.about {
+  overflow: hidden;
+}
+
+.about .wrapper {
+  padding-left: $gutter-desktop;
+  padding-right: $gutter-desktop;
+
+  @media (max-width: 1023.98px) {
+    padding-left: $gutter-tablet;
+    padding-right: $gutter-tablet;
+  }
+
+  @media (max-width: 575.98px) {
+    padding-left: $gutter-mobile;
+    padding-right: $gutter-mobile;
+  }
+}
+
+// ================================================
+// 1. HERO TITLE
+// ================================================
+.about-title {
+  padding-top: fvw(200);
+  padding-bottom: fvw(80);
+
+  @media (max-width: 1023.98px) {
+    padding-top: 140px;
+    padding-bottom: 60px;
+  }
+
+  @media (max-width: 575.98px) {
+    padding-top: 120px;
+    padding-bottom: 40px;
+  }
+
+  &__content {
+    font-size: $fs-h2;          // 88px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-h2;        // 98%
+    letter-spacing: $ls-tight;  // -0.01em
+    color: var(--foreground);
+    margin: 0;
+
+    @media (max-width: 1023.98px) {
+      font-size: 48px;
+      line-height: 1.05;
+    }
+
+    @media (max-width: 575.98px) {
+      font-size: 32px;
+      line-height: 1.08;
+    }
+  }
+
+  // Line-by-line clip reveal
+  .line {
+    display: block;
+    overflow: hidden;
+  }
+
+  .line-inner {
+    display: block;
+  }
+}
+
+// ================================================
+// 2. FULL-WIDTH IMAGE + TEXT
+// ================================================
+.about-full-image {
+  padding-bottom: fvw(80);
+
+  @media (max-width: 1023.98px) {
+    padding-bottom: 60px;
+  }
+
+  @media (max-width: 575.98px) {
+    padding-bottom: 40px;
+  }
+
+  &__image {
+    position: relative;
+    width: 100%;
+    height: fvw(560);
+    overflow: hidden;
+    margin-bottom: fvw(60);
+
+    img {
+      transition: transform 0.8s ease;
+    }
+
+    &:hover img {
+      transform: scale(1.03);
+    }
+
+    @media (max-width: 1023.98px) {
+      height: 50vw;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 575.98px) {
+      height: 65vw;
+      margin-bottom: 32px;
+    }
+  }
+
+  &__text {
+    max-width: fvw(900);
+    font-size: $fs-body-2;       // 26px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-body-2;     // 140%
+    color: var(--foreground);
+
+    p { margin: 0; }
+
+    @media (max-width: 1023.98px) {
+      max-width: 80%;
+      font-size: 22px;
+    }
+
+    @media (max-width: 575.98px) {
+      max-width: 100%;
+      font-size: 18px;
+    }
+  }
+}
+
+// ================================================
+// 3. IMAGE LEFT + TEXT RIGHT
+// ================================================
+.about-image-text {
+  padding-top: fvw(80);
+  padding-bottom: fvw(80);
+
+  @media (max-width: 1023.98px) {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  @media (max-width: 575.98px) {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .about-image-text__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: fvw(40);
+    align-items: end;
+
+    @media (max-width: 1023.98px) {
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 575.98px) {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+
+  &__image {
+    position: relative;
+    width: 100%;
+    height: fvw(600);
+    overflow: hidden;
+
+    img {
+      transition: transform 0.8s ease;
+    }
+
+    &:hover img {
+      transform: scale(1.03);
+    }
+
+    @media (max-width: 1023.98px) {
+      height: 46vw;
+    }
+
+    @media (max-width: 575.98px) {
+      height: 70vw;
+    }
+  }
+
+  &__content {
+    padding-bottom: fvw(20);
+
+    @media (max-width: 575.98px) {
+      padding-bottom: 0;
+    }
+  }
+
+  &__heading {
+    font-size: $fs-h3;          // 74px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-h3;        // 98%
+    letter-spacing: $ls-tight;
+    color: var(--foreground);
+    margin: 0 0 fvw(32) 0;
+
+    @media (max-width: 1023.98px) {
+      font-size: 36px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 575.98px) {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__desc {
+    font-size: $fs-body-3;      // 22px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-body-3;    // 130%
+    letter-spacing: $ls-base;
+    color: var(--foreground);
+    margin: 0;
+
+    a {
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+
+    @media (max-width: 1023.98px) {
+      font-size: 18px;
+    }
+
+    @media (max-width: 575.98px) {
+      font-size: 16px;
+    }
+  }
+}
+
+// ================================================
+// 4. TWO-COLUMN IMAGES
+// ================================================
+.about-image-2col {
+  padding-bottom: fvw(40);
+
+  @media (max-width: 1023.98px) {
+    padding-bottom: 24px;
+  }
+
+  @media (max-width: 575.98px) {
+    padding-bottom: 16px;
+  }
+
+  &__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: fvw(16);
+
+    @media (max-width: 1023.98px) {
+      gap: 10px;
+    }
+
+    @media (max-width: 575.98px) {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+  }
+
+  &__image {
+    position: relative;
+    width: 100%;
+    height: fvw(480);
+    overflow: hidden;
+
+    img {
+      transition: transform 0.8s ease;
+    }
+
+    &:hover img {
+      transform: scale(1.03);
+    }
+
+    @media (max-width: 1023.98px) {
+      height: 40vw;
+    }
+
+    @media (max-width: 575.98px) {
+      height: 65vw;
+    }
+  }
+}
+
+// ================================================
+// 5. TEXT LEFT — "It's all about the people"
+// ================================================
+.about-text-left {
+  padding-top: fvw(80);
+  padding-bottom: fvw(80);
+
+  @media (max-width: 1023.98px) {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  @media (max-width: 575.98px) {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  &__heading {
+    font-size: $fs-h2;          // 88px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-h2;
+    letter-spacing: $ls-tight;
+    color: var(--foreground);
+    margin: 0 0 fvw(60) 0;
+    text-align: center;
+
+    @media (max-width: 1023.98px) {
+      font-size: 48px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 575.98px) {
+      font-size: 32px;
+      margin-bottom: 28px;
+    }
+  }
+
+  &__content {
+    max-width: fvw(600);
+    font-size: $fs-body-3;      // 22px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-body-3;    // 130%
+    letter-spacing: $ls-base;
+    color: var(--foreground);
+
+    p { margin: 0; }
+
+    a {
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+
+    @media (max-width: 1023.98px) {
+      max-width: 500px;
+      font-size: 18px;
+    }
+
+    @media (max-width: 575.98px) {
+      max-width: 100%;
+      font-size: 16px;
+    }
+  }
+}
+
+// ================================================
+// 6. TEXT RIGHT — "If you're gonna do it..."
+// ================================================
+.about-text-right {
+  padding-top: fvw(40);
+  padding-bottom: fvw(120);
+
+  @media (max-width: 1023.98px) {
+    padding-top: 20px;
+    padding-bottom: 80px;
+  }
+
+  @media (max-width: 575.98px) {
+    padding-top: 16px;
+    padding-bottom: 60px;
+  }
+
+  &__inner {
+    display: flex;
+    justify-content: flex-end;
+
+    @media (max-width: 575.98px) {
+      justify-content: flex-start;
+    }
+  }
+
+  &__content {
+    max-width: fvw(680);
+
+    @media (max-width: 1023.98px) {
+      max-width: 520px;
+    }
+
+    @media (max-width: 575.98px) {
+      max-width: 100%;
+    }
+  }
+
+  &__heading {
+    font-size: $fs-h3;          // 74px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-h3;
+    letter-spacing: $ls-tight;
+    color: var(--foreground);
+    margin: 0 0 fvw(32) 0;
+
+    @media (max-width: 1023.98px) {
+      font-size: 36px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 575.98px) {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__desc {
+    font-size: $fs-body-3;      // 22px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-body-3;
+    letter-spacing: $ls-base;
+    color: var(--foreground);
+    margin: 0;
+
+    @media (max-width: 1023.98px) {
+      font-size: 18px;
+    }
+
+    @media (max-width: 575.98px) {
+      font-size: 16px;
+    }
+  }
+}
+
+// ================================================
+// 7. AWARDS
+// ================================================
+.about-awards {
+  padding-top: fvw(120);
+  padding-bottom: fvw(120);
+
+  @media (max-width: 1023.98px) {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  @media (max-width: 575.98px) {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  &__inner {
+    display: grid;
+    grid-template-columns: fvw(340) 1fr;
+    gap: fvw(40);
+
+    @media (max-width: 1023.98px) {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+
+  &__heading {
+    font-size: $fs-h2;          // 88px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-h2;
+    letter-spacing: $ls-tight;
+    text-transform: uppercase;
+    color: var(--foreground);
+    margin: 0;
+    position: sticky;
+    top: fvw(120);
+    align-self: start;
+
+    @media (max-width: 1023.98px) {
+      font-size: 48px;
+      position: static;
+    }
+
+    @media (max-width: 575.98px) {
+      font-size: 32px;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__item {
+    display: grid;
+    grid-template-columns: fvw(320) 1fr auto;
+    gap: 0 fvw(40);
+    padding: fvw(20) 0;
+    border-top: 1px solid var(--foreground-dim);
+    align-items: baseline;
+
+    &:last-child {
+      border-bottom: 1px solid var(--foreground-dim);
+    }
+
+    @media (max-width: 1023.98px) {
+      grid-template-columns: 160px 1fr auto;
+      gap: 0 20px;
+      padding: 16px 0;
+    }
+
+    @media (max-width: 575.98px) {
+      grid-template-columns: 1fr auto;
+      gap: 4px 12px;
+      padding: 14px 0;
+    }
+  }
+
+  &__award-org {
+    font-size: $fs-body-4;      // 18px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-body-4;
+    color: var(--foreground);
+
+    @media (max-width: 1023.98px) {
+      font-size: 14px;
+    }
+
+    @media (max-width: 575.98px) {
+      font-size: 13px;
+      grid-column: 1 / -1;
+    }
+  }
+
+  &__award-name {
+    font-size: $fs-body-4;      // 18px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-body-4;
+    color: var(--foreground-muted);
+
+    @media (max-width: 1023.98px) {
+      font-size: 14px;
+    }
+
+    @media (max-width: 575.98px) {
+      font-size: 13px;
+    }
+  }
+
+  &__award-year {
+    font-size: $fs-body-4;      // 18px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-body-4;
+    color: var(--foreground-muted);
+    text-align: right;
+
+    @media (max-width: 1023.98px) {
+      font-size: 14px;
+    }
+
+    @media (max-width: 575.98px) {
+      font-size: 13px;
+    }
+  }
+}
+
+// ================================================
+// 8. CLIENTS — Large names
+// ================================================
+.about-clients {
+  padding-top: fvw(120);
+  padding-bottom: fvw(120);
+  overflow: hidden;
+
+  @media (max-width: 1023.98px) {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  @media (max-width: 575.98px) {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  &__label {
+    font-size: $fs-body-caps;   // 12px @ 1440
+    font-weight: $fw-regular;
+    letter-spacing: $ls-wide;
+    text-transform: uppercase;
+    color: var(--foreground-muted);
+    margin-bottom: fvw(60);
+
+    @media (max-width: 1023.98px) {
+      font-size: 12px;
+      margin-bottom: 40px;
+    }
+  }
+
+  &__names {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 fvw(40);
+
+    @media (max-width: 1023.98px) {
+      gap: 0 24px;
+    }
+
+    @media (max-width: 575.98px) {
+      gap: 0 16px;
+    }
+  }
+
+  &__name {
+    font-size: $fs-h1;          // 140px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-h1;        // 96%
+    letter-spacing: $ls-tight;
+    text-transform: uppercase;
+    color: var(--foreground);
+
+    @media (max-width: 1023.98px) {
+      font-size: 64px;
+    }
+
+    @media (max-width: 575.98px) {
+      font-size: 40px;
+    }
+  }
+}
+
+// ================================================
+// 9. COMPLIANCE — 3-column cards
+// ================================================
+.about-compliance {
+  padding-top: fvw(80);
+  padding-bottom: fvw(120);
+
+  @media (max-width: 1023.98px) {
+    padding-top: 60px;
+    padding-bottom: 80px;
+  }
+
+  @media (max-width: 575.98px) {
+    padding-top: 40px;
+    padding-bottom: 60px;
+  }
+
+  &__title {
+    font-size: $fs-h5;          // 26px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-h5;
+    color: var(--foreground);
+    margin: 0 0 fvw(60) 0;
+
+    @media (max-width: 1023.98px) {
+      font-size: 20px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 575.98px) {
+      font-size: 18px;
+      margin-bottom: 32px;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: fvw(40);
+
+    @media (max-width: 1023.98px) {
+      gap: 24px;
+    }
+
+    @media (max-width: 575.98px) {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+
+  &__card-number {
+    font-size: $fs-body-4;      // 18px @ 1440
+    font-weight: $fw-regular;
+    color: var(--foreground-muted);
+    margin-bottom: fvw(16);
+
+    @media (max-width: 1023.98px) {
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+  }
+
+  &__card-heading {
+    font-size: $fs-h5;          // 26px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-h5;
+    color: var(--foreground);
+    margin: 0 0 fvw(20) 0;
+
+    @media (max-width: 1023.98px) {
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 575.98px) {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+  }
+
+  &__card-desc {
+    font-size: $fs-body-5;      // 14px @ 1440
+    font-weight: $fw-regular;
+    line-height: $lh-body-5;    // 150%
+    letter-spacing: $ls-base;
+    color: var(--foreground-muted);
+    margin: 0;
+
+    @media (max-width: 1023.98px) {
+      font-size: 14px;
+    }
+
+    @media (max-width: 575.98px) {
+      font-size: 14px;
+    }
+  }
+}

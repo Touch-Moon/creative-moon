@@ -10,12 +10,12 @@ export default function StyleGuidePage() {
   const [bps, setBps] = useState({ mobile: 575, tablet: 768, laptop: 1024, laptopL: 1280, desktop: 1440 });
 
   function getBreakpoint(w: number): { label: string; px: string } {
-    if (w <= bps.mobile)  return { label: 'Mobile',    px: `${bps.mobile}px` };
-    if (w <= bps.tablet)  return { label: 'Tablet',    px: `${bps.tablet}px` };
-    if (w <= bps.laptop)  return { label: 'Laptop',    px: `${bps.laptop}px` };
-    if (w <= bps.laptopL) return { label: 'Laptop L',  px: `${bps.laptopL}px` };
-    if (w <= bps.desktop) return { label: 'Desktop',   px: `${bps.desktop}px` };
-    return                       { label: 'Desktop XL', px: `${bps.desktop}px+` };
+    if (w <= bps.mobile) return { label: 'Mobile', px: `${bps.mobile}px` };
+    if (w <= bps.tablet) return { label: 'Tablet', px: `${bps.tablet}px` };
+    if (w <= bps.laptop) return { label: 'Laptop', px: `${bps.laptop}px` };
+    if (w <= bps.laptopL) return { label: 'Laptop L', px: `${bps.laptopL}px` };
+    if (w <= bps.desktop) return { label: 'Desktop', px: `${bps.desktop}px` };
+    return { label: 'Desktop XL', px: `${bps.desktop}px+` };
   }
 
   useEffect(() => {
@@ -29,9 +29,9 @@ export default function StyleGuidePage() {
     const cs = getComputedStyle(root);
     const n = (v: string) => Number(cs.getPropertyValue(v).trim()) || 0;
     setBps({
-      mobile:  n('--cm-bp-mobile'),
-      tablet:  n('--cm-bp-tablet'),
-      laptop:  n('--cm-bp-laptop'),
+      mobile: n('--cm-bp-mobile'),
+      tablet: n('--cm-bp-tablet'),
+      laptop: n('--cm-bp-laptop'),
       laptopL: n('--cm-bp-laptop-l'),
       desktop: n('--cm-bp-desktop'),
     });
@@ -71,7 +71,7 @@ export default function StyleGuidePage() {
       if (el.value?.trim()) group.classList.add('has-content');
 
       const onFocus = () => group.classList.add('is-focused');
-      const onBlur  = () => {
+      const onBlur = () => {
         group.classList.remove('is-focused');
         group.classList.toggle('has-content', Boolean(el.value?.trim()));
       };
@@ -80,7 +80,7 @@ export default function StyleGuidePage() {
       };
 
       el.addEventListener('focus', onFocus);
-      el.addEventListener('blur',  onBlur);
+      el.addEventListener('blur', onBlur);
       el.addEventListener('input', onInput);
 
       // Auto-grow textarea — expand height instead of scrolling
@@ -104,7 +104,7 @@ export default function StyleGuidePage() {
     return () => {
       handlers.forEach(({ el, onFocus, onBlur, onInput, onResize }) => {
         el.removeEventListener('focus', onFocus);
-        el.removeEventListener('blur',  onBlur);
+        el.removeEventListener('blur', onBlur);
         el.removeEventListener('input', onInput);
         if (onResize) el.removeEventListener('input', onResize);
       });
@@ -122,12 +122,12 @@ export default function StyleGuidePage() {
       >
         {theme === 'dark' ? (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="cm-theme-icon">
-            <circle cx="12" cy="12" r="5"/>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            <circle cx="12" cy="12" r="5" />
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
           </svg>
         ) : (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="cm-theme-icon">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
           </svg>
         )}
       </button>
@@ -136,7 +136,6 @@ export default function StyleGuidePage() {
           HEADER
           ============================== */}
       <header className="cm-header">
-        <div className="cm-logo">M</div>
         <h1 className="cm-header__title">Style guide</h1>
         <div className="cm-header__body">
           <p className="cm-header__desc">
@@ -171,13 +170,13 @@ export default function StyleGuidePage() {
           <div className="cm-badge">
             {vpWidth > 0 ? (({ label, px }) => `${label} · ${px}`)(getBreakpoint(vpWidth)) : ''}
           </div>
-          <Specimen className="headline-1"  vpWidth={vpWidth}>DISPLAY</Specimen>
-          <Specimen className="headline-2"  vpWidth={vpWidth}>The quick brown fox</Specimen>
-          <Specimen className="headline-3"  vpWidth={vpWidth}>The quick brown fox jumps</Specimen>
-          <Specimen className="headline-4"  vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog</Specimen>
+          <Specimen className="headline-1" vpWidth={vpWidth}>DISPLAY</Specimen>
+          <Specimen className="headline-2" vpWidth={vpWidth}>The quick brown fox</Specimen>
+          <Specimen className="headline-3" vpWidth={vpWidth}>The quick brown fox jumps</Specimen>
+          <Specimen className="headline-4" vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog</Specimen>
           <Specimen className="headline-4b" vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog</Specimen>
-          <Specimen className="headline-5"  vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog and keeps going</Specimen>
-          <Specimen className="headline-6"  vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog and keeps going to fill</Specimen>
+          <Specimen className="headline-5" vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog and keeps going</Specimen>
+          <Specimen className="headline-6" vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog and keeps going to fill</Specimen>
 
         </div>
       </section>
@@ -764,7 +763,7 @@ export default function StyleGuidePage() {
                     <input type="checkbox" />
                     <span className="form-checkbox__check">
                       <svg viewBox="0 0 11 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 4L4.5 7.5L10 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M1 4L4.5 7.5L10 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </span>
                     <span className="form-checkbox__text">I agree to the terms and conditions</span>
@@ -779,7 +778,7 @@ export default function StyleGuidePage() {
                     <input type="checkbox" defaultChecked />
                     <span className="form-checkbox__check">
                       <svg viewBox="0 0 11 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 4L4.5 7.5L10 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M1 4L4.5 7.5L10 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </span>
                     <span className="form-checkbox__text">I agree to the terms and conditions</span>
@@ -794,7 +793,7 @@ export default function StyleGuidePage() {
                     <input type="checkbox" />
                     <span className="form-checkbox__check">
                       <svg viewBox="0 0 11 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 4L4.5 7.5L10 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M1 4L4.5 7.5L10 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </span>
                     <span className="form-checkbox__text">I agree to the terms and conditions</span>

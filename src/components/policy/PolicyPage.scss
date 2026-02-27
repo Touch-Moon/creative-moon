@@ -1,0 +1,253 @@
+@use '../../styles/primitives/type' as *;
+@use '../../styles/primitives/colors' as *;
+@use '../../styles/primitives/space' as *;
+
+// ── Policy Page ─────────────────────────────────
+.policy-page {
+  background: $m-white;
+  color: $m-black;
+  min-height: 100vh;
+  padding-top: fvw(160);
+  padding-bottom: fvw(120);
+}
+
+.policy-page .wrapper {
+  max-width: fvw(1320);
+  margin: 0 auto;
+  padding: 0 fvw(30);
+}
+
+// ── Header ──────────────────────────────────────
+.policy-header {
+  margin-bottom: fvw(80);
+}
+
+.policy-header__label {
+  display: block;
+  font-size: $fs-body-caps;
+  line-height: $lh-body-caps;
+  font-weight: $fw-regular;
+  letter-spacing: $ls-wide;
+  text-transform: uppercase;
+  color: $m-grey-dark;
+  margin-bottom: fvw(24);
+}
+
+.policy-header__title {
+  font-size: $fs-h2;
+  line-height: $lh-h2;
+  font-weight: $fw-regular;
+  letter-spacing: $ls-tight;
+  color: $m-black;
+}
+
+.policy-header__updated {
+  display: block;
+  font-size: $fs-body-5;
+  line-height: $lh-body-5;
+  color: $m-grey-dark;
+  margin-top: fvw(16);
+}
+
+// ── Content Layout ──────────────────────────────
+.policy-content {
+  display: flex;
+  align-items: flex-start;
+  gap: fvw(80);
+}
+
+// ── TOC (Left Sidebar) ─────────────────────────
+.policy-toc {
+  flex: 0 0 auto;
+  width: fvw(280);
+  position: sticky;
+  top: fvw(120);
+}
+
+.policy-toc__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.policy-toc__item {
+  margin-bottom: fvw(12);
+}
+
+.policy-toc__link {
+  font-size: $fs-body-5;
+  line-height: $lh-body-5;
+  color: $m-grey-dark;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $m-black;
+  }
+}
+
+// ── Body (Right) ────────────────────────────────
+.policy-body {
+  flex: 1;
+  max-width: fvw(760);
+}
+
+// ── Section ─────────────────────────────────────
+.policy-section {
+  margin-bottom: fvw(64);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.policy-section__divider {
+  height: 1px;
+  background: $m-grey-medium;
+  margin-bottom: fvw(36);
+}
+
+.policy-section__number {
+  font-size: $fs-body-caps;
+  line-height: $lh-body-caps;
+  font-weight: $fw-regular;
+  letter-spacing: $ls-wide;
+  text-transform: uppercase;
+  color: $m-grey-dark;
+  margin-bottom: fvw(8);
+}
+
+.policy-section__title {
+  font-size: $fs-h5;
+  line-height: $lh-h5;
+  font-weight: $fw-regular;
+  letter-spacing: $ls-tight;
+  color: $m-black;
+  margin-bottom: fvw(20);
+}
+
+.policy-section__text {
+  font-size: $fs-body-4;
+  line-height: $lh-body-4;
+  font-weight: $fw-light;
+  color: rgba($m-black, 0.7);
+  margin-bottom: fvw(16);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.policy-section__list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 fvw(16) 0;
+
+  li {
+    font-size: $fs-body-4;
+    line-height: $lh-body-4;
+    font-weight: $fw-light;
+    color: rgba($m-black, 0.7);
+    padding-left: fvw(20);
+    position: relative;
+    margin-bottom: fvw(8);
+
+    &::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: $m-grey-dark;
+    }
+  }
+}
+
+// ── Back Link ───────────────────────────────────
+.policy-back {
+  display: inline-flex;
+  align-items: center;
+  gap: fvw(8);
+  font-size: $fs-body-5;
+  line-height: $lh-body-5;
+  color: $m-grey-dark;
+  text-decoration: none;
+  margin-top: fvw(64);
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $m-black;
+  }
+}
+
+// ── Tablet (max 1023px) ─────────────────────────
+@media (max-width: 1023px) {
+  .policy-toc {
+    display: none;
+  }
+
+  .policy-body {
+    max-width: 100%;
+  }
+}
+
+// ── Mobile (max 575px) ──────────────────────────
+@media (max-width: 575px) {
+  .policy-page {
+    padding-top: 46.154vw;
+    padding-bottom: 20.513vw;
+  }
+
+  .policy-page .wrapper {
+    padding: 0 5.128vw;
+  }
+
+  .policy-header {
+    margin-bottom: 12.308vw;
+  }
+
+  .policy-header__label {
+    font-size: 3.077vw;
+    margin-bottom: 4.103vw;
+  }
+
+  .policy-header__title {
+    font-size: 10.256vw;
+    line-height: 110%;
+  }
+
+  .policy-header__updated {
+    font-size: 3.59vw;
+    margin-top: 3.077vw;
+  }
+
+  .policy-content {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .policy-section {
+    margin-bottom: 10.256vw;
+  }
+
+  .policy-section__title {
+    font-size: 5.641vw;
+    margin-bottom: 3.077vw;
+  }
+
+  .policy-section__text,
+  .policy-section__list li {
+    font-size: 4.103vw;
+    line-height: 160%;
+  }
+
+  .policy-back {
+    font-size: 3.59vw;
+    margin-top: 10.256vw;
+  }
+}
+
+// ── Tablet (576px - 768px) ──────────────────────
+@media (min-width: 576px) and (max-width: 768px) {
+  .policy-header__title {
+    font-size: fvw(72);
+  }
+}

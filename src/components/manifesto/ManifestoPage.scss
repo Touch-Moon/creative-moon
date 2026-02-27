@@ -1,0 +1,338 @@
+@use '../../styles/primitives/type' as *;
+@use '../../styles/primitives/colors' as *;
+
+// ── Manifesto Page ─────────────────────────────
+.manifesto-page {
+  background: $m-black;
+  color: $m-white;
+  min-height: 100vh;
+}
+
+// ── Manifesto Section ──────────────────────────
+.manifesto-section {
+  padding-top: fvw(99);
+  padding-bottom: 0;
+
+  .wrapper {
+    max-width: fvw(1320);
+    margin: 0 auto;
+    padding: 0 fvw(30);
+  }
+
+  &__content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  // ── Sticky 좌측 텍스트 ──
+  &__sticky-col {
+    flex: 0 0 auto;
+    width: calc(33.333% - #{fvw(20)});
+    align-self: stretch;
+  }
+
+  &__sticky {
+    position: sticky;
+    top: fvw(120);
+    will-change: transform;
+  }
+
+  &__intro {
+    width: fvw(266);
+    color: rgba($m-white, 0.6);
+    font-size: $fs-body-3;
+    line-height: $lh-body-3;
+  }
+
+  &__intro-em {
+    margin-top: fvw(24);
+    font-style: italic;
+
+    em {
+      font-style: italic;
+    }
+  }
+
+  // ── 우측 아이템 목록 ──
+  &__items {
+    flex: 0 0 auto;
+    width: 58.333%;
+    will-change: opacity;
+  }
+}
+
+// ── Manifesto Item ─────────────────────────────
+.manifesto-item {
+  &__line {
+    background: rgba($m-white, 0.35);
+    height: 1px;
+    position: relative;
+  }
+
+  &__line-inner {
+    background: $m-white;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    transform-origin: left center;
+  }
+
+  &__content {
+    padding-top: fvw(36);
+    padding-bottom: fvw(278);
+  }
+
+  &:last-child &__content {
+    padding-bottom: fvw(100);
+  }
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: fvw(48);
+  }
+
+  &__title-text {
+    font-size: $fs-h2;
+    line-height: $lh-h2;
+    font-weight: $fw-regular;
+    color: $m-white;
+    letter-spacing: $ls-tight;
+  }
+
+  &__title-number {
+    font-size: $fs-h3;
+    line-height: $lh-h3;
+    font-weight: $fw-regular;
+    color: $m-white;
+    flex-shrink: 0;
+    padding-top: 0.15em;
+  }
+
+  &__svg {
+    display: block;
+    position: absolute;
+    color: $m-white;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  &__description {
+    font-size: $fs-body-3;
+    line-height: $lh-body-3;
+    color: rgba($m-white, 0.7);
+    width: calc(57.1429% - #{fvw(48)});
+  }
+}
+
+// ── SVG Draw Animation ──────────────────────────
+@keyframes draw_icon {
+  100% { stroke-dashoffset: 0; }
+}
+
+// ── Item 01 — underline waves ───────────────────
+.manifesto-item:first-child .manifesto-item__title .manifesto-item__svg {
+  top: 4.80769vw;
+  left: 12.4542vw;
+  width: 19.826vw;
+  height: 2.28938vw;
+
+  .line-1 { stroke-dasharray: 500, 500; stroke-dashoffset: 500; }
+  .line-2 { stroke-dasharray: 300, 300; stroke-dashoffset: 300; }
+}
+.manifesto-item:first-child.is-visible .manifesto-item__title .manifesto-item__svg {
+  .line-1 { animation: 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.1s 1 normal forwards running draw_icon; }
+  .line-2 { animation: 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.4s 1 normal forwards running draw_icon; }
+}
+
+// ── Item 02 — exclamation marks ─────────────────
+.manifesto-item:nth-child(2) .manifesto-item__title .manifesto-item__svg {
+  top: 0.961538vw;
+  left: 27.9762vw;
+  width: 5.49451vw;
+  height: 7.60073vw;
+
+  .exclamation-1,
+  .exclamation-2 { stroke-dasharray: 150, 150; stroke-dashoffset: 150; }
+  .point-1,
+  .point-2 { stroke-dasharray: 100, 100; stroke-dashoffset: 100; }
+}
+.manifesto-item:nth-child(2).is-visible .manifesto-item__title .manifesto-item__svg {
+  .exclamation-1 { animation: 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.1s 1 normal forwards running draw_icon; }
+  .exclamation-2 { animation: 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.4s 1 normal forwards running draw_icon; }
+  .point-1 { animation: 0.15s linear 0.6s 1 normal forwards running draw_icon; }
+  .point-2 { animation: 0.15s linear 0.75s 1 normal forwards running draw_icon; }
+}
+
+// ── Item 03 — diagonal lines ────────────────────
+.manifesto-item:nth-child(3) .manifesto-item__title .manifesto-item__svg {
+  top: 4.94505vw;
+  left: -1.28205vw;
+  width: 18.4524vw;
+  height: 9.24908vw;
+
+  .rec-1 { stroke-dasharray: 75, 75; stroke-dashoffset: 75; }
+  .rec-2 { stroke-dasharray: 210, 210; stroke-dashoffset: 210; }
+  .rec-3 { stroke-dasharray: 310, 310; stroke-dashoffset: 310; }
+}
+.manifesto-item:nth-child(3).is-visible .manifesto-item__title .manifesto-item__svg {
+  .rec-3 { animation: 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.1s 1 normal forwards running draw_icon; }
+  .rec-1 { animation: 0.1s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.3s 1 normal forwards running draw_icon; }
+  .rec-2 { animation: 0.1s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.5s 1 normal forwards running draw_icon; }
+}
+
+// ── Item 04 — circle ────────────────────────────
+.manifesto-item:nth-child(4) .manifesto-item__title .manifesto-item__svg {
+  top: -3.663vw;
+  left: 13.8278vw;
+  width: 23.2143vw;
+  height: 12.7289vw;
+
+  .circle { stroke-dasharray: 1400, 1400; stroke-dashoffset: 1400; }
+}
+.manifesto-item:nth-child(4).is-visible .manifesto-item__title .manifesto-item__svg {
+  .circle { animation: 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.1s 1 normal forwards running draw_icon; }
+}
+
+// ── Item 05 — curly arrow ───────────────────────
+.manifesto-item:nth-child(5) .manifesto-item__title .manifesto-item__svg {
+  top: 8.05861vw;
+  left: 22.1154vw;
+  width: 10.3022vw;
+  height: 8.15018vw;
+
+  .curly-line { stroke-dasharray: 600, 600; stroke-dashoffset: 600; }
+  .arrow-1,
+  .arrow-2 { stroke-dasharray: 50, 50; stroke-dashoffset: 50; }
+}
+.manifesto-item:nth-child(5).is-visible .manifesto-item__title .manifesto-item__svg {
+  .curly-line { animation: 0.4s linear 0.1s 1 normal forwards running draw_icon; }
+  .arrow-2    { animation: 0.2s linear 0.5s 1 normal forwards running draw_icon; }
+  .arrow-1    { animation: 0.2s linear 0.7s 1 normal forwards running draw_icon; }
+}
+
+// ── Item 06 — smiley face ───────────────────────
+.manifesto-item:nth-child(6) .manifesto-item__title .manifesto-item__svg {
+  top: -1.05311vw;
+  left: 23.2143vw;
+  width: 5.99817vw;
+  height: 6.18132vw;
+
+  .eye-1,
+  .eye-2 { stroke-dasharray: 70, 70; stroke-dashoffset: 70; }
+  .smile { stroke-dasharray: 200, 200; stroke-dashoffset: 200; }
+}
+.manifesto-item:nth-child(6).is-visible .manifesto-item__title .manifesto-item__svg {
+  .eye-1 { animation: 0.15s linear 0.1s  1 normal forwards running draw_icon; }
+  .eye-2 { animation: 0.15s linear 0.35s 1 normal forwards running draw_icon; }
+  .smile { animation: 0.3s  linear 0.55s 1 normal forwards running draw_icon; }
+}
+
+
+// ── Tablet (max 1023px) ─────────────────────────
+@media (max-width: 1023px) {
+  .manifesto-section {
+    &__intro {
+      width: 100%;
+    }
+  }
+}
+
+// ── Mobile (max 575px) ──────────────────────────
+@media (max-width: 575px) {
+  .manifesto-section {
+    padding-top: 92.3077vw;
+
+    .wrapper {
+      padding: 0 5.128vw;
+    }
+
+    &__content {
+      flex-direction: column;
+    }
+
+    &__sticky-col {
+      width: 100%;
+      text-align: right;
+    }
+
+    &__sticky {
+      position: relative;
+      top: auto;
+    }
+
+    &__intro {
+      display: inline-block;
+      width: 75.385vw;
+      font-size: 6.154vw;
+      line-height: 110%;
+      padding-bottom: 34.872vw;
+    }
+
+    &__items {
+      width: 100%;
+    }
+  }
+
+  .manifesto-item {
+    &__line {
+      display: none;
+    }
+
+    &__content {
+      padding-top: 0;
+      padding-bottom: 32.308vw;
+    }
+
+    &__title {
+      margin-bottom: 4.103vw;
+    }
+
+    &__title-text {
+      font-size: 12.308vw;
+      line-height: 110%;
+    }
+
+    &__title-number {
+      font-size: 8.205vw;
+      line-height: 112%;
+      padding-top: 0.2em;
+    }
+
+    &__svg {
+      display: none; // hide all SVGs on mobile by default
+    }
+
+    &__description {
+      width: 100%;
+      font-size: 4.615vw;
+      line-height: 140%;
+    }
+  }
+
+}
+
+// ── Tablet (576px - 768px) ──────────────────────
+@media (min-width: 576px) and (max-width: 768px) {
+  .manifesto-section {
+    padding-top: 10.417vw;
+
+    &__intro {
+      width: 100%;
+    }
+  }
+
+  .manifesto-item {
+    &__title-text {
+      font-size: fvw(72);
+    }
+
+    &__description {
+      width: 70%;
+    }
+  }
+}
