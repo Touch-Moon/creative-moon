@@ -1,8 +1,11 @@
 'use client';
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import './ThemeBackground.scss';
 
 export default function ThemeBackground() {
+  const pathname = usePathname();
+
   useEffect(() => {
     const darkBg  = document.getElementById('theme-bg-dark')!;
     const lightBg = document.getElementById('theme-bg-light')!;
@@ -18,8 +21,10 @@ export default function ThemeBackground() {
       }
     };
 
-    // 초기 테마 설정
-    setTheme('light'); // 초기: Hero = light
+    // 페이지 진입 시 첫 번째 섹션의 data-theme으로 초기화
+    // (다른 페이지에서 다크테마로 끝났을 때 잔류하는 문제 방지)
+    const firstSection = document.querySelector<HTMLElement>('[data-theme]');
+    setTheme(firstSection?.dataset.theme ?? 'light');
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -39,8 +44,9 @@ export default function ThemeBackground() {
     const sections = document.querySelectorAll<HTMLElement>('[data-theme]');
     sections.forEach(s => observer.observe(s));
 
+    // pathname이 바뀔 때마다 이전 observer를 끊고 새 섹션들을 다시 감지
     return () => observer.disconnect();
-  }, []);
+  }, [pathname]);
 
   return (
     <>

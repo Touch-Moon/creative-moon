@@ -33,9 +33,9 @@
 /* ---- Theme (Style Guide only) ---- */
 .cm-root {
   /* Breakpoints — unitless px values, read by JS via getComputedStyle */
-  --cm-bp-mobile:   575;
-  --cm-bp-tablet:   768;
-  --cm-bp-laptop:  1024;
+  --cm-bp-mobile: 575;
+  --cm-bp-tablet: 768;
+  --cm-bp-laptop: 1024;
   --cm-bp-laptop-l: 1280;
   --cm-bp-desktop: 1440;
 
@@ -117,7 +117,7 @@
 .cm-header {
   background: #000;
   color: #fff;
-  padding: 3vw 4.17vw 4.5vw;
+  padding: $space-24 $space-16 $space-20;
   transition: background-color 0.4s ease, color 0.4s ease;
 }
 
@@ -267,7 +267,7 @@
   font-weight: 400;
   color: var(--cm-fg);
   letter-spacing: 0.01em;
-  background-color:#e4e4e4;
+  background-color: #e4e4e4;
   margin: #{$space-2} 0 0 0;
   padding: #{$space-1} #{$space-2};
   border-radius: 4px;
@@ -416,7 +416,7 @@
   flex-wrap: wrap;
 }
 
-.cm-btn-row + .cm-btn-row {
+.cm-btn-row+.cm-btn-row {
   margin-top: 1.5vw;
 }
 

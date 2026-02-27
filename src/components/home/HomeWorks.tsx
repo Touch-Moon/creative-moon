@@ -29,13 +29,24 @@ const cardVariants: Variants = {
 
 const MotionLink = motion(Link);
 
+// 카드 사이즈 타입: 이미지 크기에 따라 다른 parallax 속도
+type CardSize = 'large' | 'wide' | 'tall' | 'compact';
+
+// parallax 속도 매핑 — 1.0 = 기본, <1 = 느리게, >1 = 빠르게
+const PARALLAX_SPEED: Record<CardSize, number> = {
+  large: 1.0,
+  wide: 0.92,
+  tall: 1.1,
+  compact: 1.18,
+};
+
 // 임시 데이터 — 나중에 Sanity로 교체
 const works = [
-  { id: '01', title: 'Hyundai Annual Convention.', slug: 'hyundai', src: '/images/work-01.jpg' },
-  { id: '02', title: 'Brand Identity System.', slug: 'brand-identity', src: '/images/work-02.jpg' },
-  { id: '03', title: 'Digital Experience Platform.', slug: 'digital-platform', src: '/images/work-03.jpg' },
-  { id: '04', title: 'E-Commerce Redesign.', slug: 'ecommerce', src: '/images/work-04.jpg' },
-  { id: '05', title: 'Mobile App Interface.', slug: 'mobile-app', src: '/images/work-05.jpg' },
+  { id: '01', title: 'Hyundai Annual Convention.', slug: 'hyundai', src: '/images/work-01.jpg', size: 'large' as CardSize },
+  { id: '02', title: 'Brand Identity System.', slug: 'brand-identity', src: '/images/work-02.jpg', size: 'compact' as CardSize },
+  { id: '03', title: 'Digital Experience Platform.', slug: 'digital-platform', src: '/images/work-03.jpg', size: 'wide' as CardSize },
+  { id: '04', title: 'E-Commerce Redesign.', slug: 'ecommerce', src: '/images/work-04.jpg', size: 'tall' as CardSize },
+  { id: '05', title: 'Mobile App Interface.', slug: 'mobile-app', src: '/images/work-05.jpg', size: 'large' as CardSize },
 ];
 
 // ── Canvas 기반 수건-탁 파동 ──────────────────────────────────────────────────
@@ -45,7 +56,7 @@ const WAVE_SIGMA_PCT = 0.5; // Gaussian 폭 (캔버스 폭 대비 비율)
 const WAVE_CYCLES = 0.5;  // Gaussian 범위 내 사인 사이클 수
 const PULSE_SPEED = 0.032;
 
-function WaveImage({ src, alt, sizes }: { src: string; alt: string; sizes: string }) {
+function WaveImage({ src, alt, sizes, parallaxRef }: { src: string; alt: string; sizes: string; parallaxRef?: React.Ref<HTMLDivElement> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
   const rafRef = useRef<number>(0);
@@ -139,7 +150,10 @@ function WaveImage({ src, alt, sizes }: { src: string; alt: string; sizes: strin
     dragCursorRef.current?.classList.add('is-visible');
     sizeCanvas();
     drawFrame(0); // sizeCanvas()가 캔버스를 지우므로 즉시 재드로우
-    if (wrapRef.current) wrapRef.current.style.transform = 'scale(1.1)';
+    if (wrapRef.current) {
+      wrapRef.current.dataset.hoverScale = '1.1';
+      wrapRef.current.style.transform = `translateX(${parseFloat(wrapRef.current.style.transform?.match(/translateX\(([^)]+)\)/)?.[1] || '0')}px) scale(1.1)`;
+    }
     hoverDelayRef.current = setTimeout(() => {
       pulseRef.current = { progress: 0, active: true };
       startRaf();
@@ -150,7 +164,10 @@ function WaveImage({ src, alt, sizes }: { src: string; alt: string; sizes: strin
     pulseRef.current = { progress: 0, active: false };
     if (hoverDelayRef.current) clearTimeout(hoverDelayRef.current);
     stopRaf(); drawFrame(0);
-    if (wrapRef.current) wrapRef.current.style.transform = 'scale(1)';
+    if (wrapRef.current) {
+      wrapRef.current.dataset.hoverScale = '1';
+      wrapRef.current.style.transform = `translateX(${parseFloat(wrapRef.current.style.transform?.match(/translateX\(([^)]+)\)/)?.[1] || '0')}px) scale(1)`;
+    }
     dragCursorRef.current?.classList.remove('is-visible');
   };
 
@@ -168,7 +185,11 @@ function WaveImage({ src, alt, sizes }: { src: string; alt: string; sizes: strin
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
     >
-      <div ref={wrapRef} className="home-works__card-img-inner">
+      <div ref={(el) => {
+        (wrapRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+        if (typeof parallaxRef === 'function') parallaxRef(el);
+        else if (parallaxRef && 'current' in parallaxRef) (parallaxRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+      }} className="home-works__card-img-inner">
         <canvas ref={canvasRef} className="home-works__card-img-canvas" />
       </div>
 
@@ -196,6 +217,13 @@ export default function HomeWorks() {
 
   // 드래그 상태 — hasDragged: 3px 이상 움직임 발생 시 true → 클릭 방지
   const dragRef = useRef({ active: false, startX: 0, scrollLeft: 0, hasDragged: false });
+
+  // ── 바운스(elastic overscroll) 상태 ──
+  const bounceRef = useRef({ overscroll: 0, animating: false });
+  const bounceRafRef = useRef<number>(0);
+
+  // ── parallax: 카드별 이미지 inner refs ──
+  const imgInnerRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const sectionRef = useRef<HTMLElement>(null);
   const [revealed, setRevealed] = useState(false);
@@ -235,8 +263,33 @@ export default function HomeWorks() {
     }, 1000);
   };
 
+  // ── parallax: 스크롤 위치 기반으로 각 이미지 inner에 translateX 적용 ──
+  // 이미지 inner는 카드보다 넓게(110%) 설정, translateX로 패닝 → 카드 레이아웃 깨지지 않음
+  const applyParallax = useCallback(() => {
+    if (!trackRef.current) return;
+    const scrollLeft = trackRef.current.scrollLeft;
+    const trackWidth = trackRef.current.clientWidth;
+
+    imgInnerRefs.current.forEach((inner, i) => {
+      if (!inner) return;
+      const speed = PARALLAX_SPEED[works[i].size];
+      // 카드 중심 기준으로 뷰포트 상대 위치 계산
+      const card = inner.closest('.home-works__card') as HTMLElement;
+      if (!card) return;
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2 - scrollLeft;
+      const viewCenter = trackWidth / 2;
+      const distFromCenter = cardCenter - viewCenter;
+      // 속도 차이 × 거리 → 미세 이동 (최대 ±3% 정도)
+      const offset = distFromCenter * (speed - 1) * 0.4;
+      // 기존 hover scale 보존: data attr로 현재 scale 확인
+      const currentScale = inner.dataset.hoverScale || '1';
+      inner.style.transform = `translateX(${offset}px) scale(${currentScale})`;
+    });
+  }, []);
+
   // ── 드래그 후 스크롤 위치 동기화 (버튼 네비 중 무시) ──
   const handleScroll = useCallback(() => {
+    applyParallax();
     if (isScrollingRef.current || !trackRef.current) return;
     const { scrollLeft } = trackRef.current;
     const paddingLeft = parseFloat(getComputedStyle(trackRef.current).paddingLeft) || 0;
@@ -250,11 +303,57 @@ export default function HomeWorks() {
       if (dist < minDist) { minDist = dist; closestIdx = i; }
     });
     setCurrent(Math.max(0, Math.min(closestIdx, works.length - 1)));
+  }, [applyParallax]);
+
+  // ── rubber-band 공식: 경계 밖 드래그를 점점 느리게 ──
+  const rubberBand = (overscroll: number, maxOverscroll = 140) => {
+    const sign = overscroll < 0 ? -1 : 1;
+    const abs = Math.abs(overscroll);
+    // 0.55 = iOS-like feel, 점점 감쇠
+    return sign * maxOverscroll * (1 - Math.exp(-abs / maxOverscroll * 0.55));
+  };
+
+  // ── 바운스 spring 애니메이션 (놓았을 때 원위치) ──
+  const animateBounceBack = useCallback(() => {
+    if (!trackRef.current) return;
+    const track = trackRef.current;
+    const bounce = bounceRef.current;
+
+    cancelAnimationFrame(bounceRafRef.current);
+    bounce.animating = true;
+
+    const STIFFNESS = 0.18; // 스프링 강도 (↑ = 빠른 복귀)
+    const DAMPING = 0.6;    // 감쇠 (↓ = 흔들림 감소)
+    let velocity = 0;
+
+    const tick = () => {
+      const force = -bounce.overscroll * STIFFNESS;
+      velocity = (velocity + force) * DAMPING;
+      bounce.overscroll += velocity;
+
+      // 수렴 체크
+      if (Math.abs(bounce.overscroll) < 0.5 && Math.abs(velocity) < 0.5) {
+        bounce.overscroll = 0;
+        bounce.animating = false;
+        track.style.transform = '';
+        return;
+      }
+
+      track.style.transform = `translateX(${bounce.overscroll}px)`;
+      bounceRafRef.current = requestAnimationFrame(tick);
+    };
+
+    bounceRafRef.current = requestAnimationFrame(tick);
   }, []);
 
   // ── 마우스 드래그 ────────────────────────────────────
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!trackRef.current) return;
+    // 바운스 애니메이션 중이면 즉시 중단
+    cancelAnimationFrame(bounceRafRef.current);
+    bounceRef.current = { overscroll: 0, animating: false };
+    trackRef.current.style.transform = '';
+
     dragRef.current = {
       active: true,
       startX: e.pageX - trackRef.current.offsetLeft,
@@ -265,23 +364,46 @@ export default function HomeWorks() {
 
   const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!dragRef.current.active || !trackRef.current) return;
-    const x = e.pageX - trackRef.current.offsetLeft;
+    const track = trackRef.current;
+    const x = e.pageX - track.offsetLeft;
     const moved = Math.abs(x - dragRef.current.startX);
 
     // 1px 이상 이동 시 드래그 의도 확정
     if (!dragRef.current.hasDragged && moved > 1) {
       dragRef.current.hasDragged = true;
       // 드래그 중 scroll-snap과 smooth 비활성화 (snap이 드래그를 방해하지 않도록)
-      trackRef.current.style.scrollSnapType = 'none';
-      trackRef.current.style.scrollBehavior = 'auto';
-      trackRef.current.style.cursor = 'grabbing';
-      trackRef.current.style.userSelect = 'none';
+      track.style.scrollSnapType = 'none';
+      track.style.scrollBehavior = 'auto';
+      track.style.cursor = 'grabbing';
+      track.style.userSelect = 'none';
     }
 
     if (dragRef.current.hasDragged) {
       e.preventDefault();
       const walk = (x - dragRef.current.startX) * 1.5;
-      trackRef.current.scrollLeft = dragRef.current.scrollLeft - walk;
+      const desiredScroll = dragRef.current.scrollLeft - walk;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+
+      // ── 경계 초과 시 rubber-band translateX ──
+      if (desiredScroll < 0) {
+        // 왼쪽 경계 초과 (첫 번째 카드 이전)
+        track.scrollLeft = 0;
+        const rawOverscroll = -desiredScroll; // 양수
+        bounceRef.current.overscroll = rubberBand(rawOverscroll);
+        track.style.transform = `translateX(${bounceRef.current.overscroll}px)`;
+      } else if (desiredScroll > maxScroll) {
+        // 오른쪽 경계 초과 (마지막 카드 이후)
+        track.scrollLeft = maxScroll;
+        const rawOverscroll = maxScroll - desiredScroll; // 음수
+        bounceRef.current.overscroll = rubberBand(rawOverscroll);
+        track.style.transform = `translateX(${bounceRef.current.overscroll}px)`;
+      } else {
+        // 정상 범위
+        bounceRef.current.overscroll = 0;
+        track.style.transform = '';
+        track.scrollLeft = desiredScroll;
+      }
+      applyParallax();
     }
   };
 
@@ -289,6 +411,11 @@ export default function HomeWorks() {
     if (!trackRef.current) { dragRef.current.active = false; return; }
 
     const track = trackRef.current;
+
+    // ── 바운스 중이면 spring으로 복귀 ──
+    if (bounceRef.current.overscroll !== 0) {
+      animateBounceBack();
+    }
 
     if (dragRef.current.hasDragged) {
       // 드래그 거리 계산 (양수 = 왼쪽으로 드래그 = 다음 카드)
@@ -346,8 +473,11 @@ export default function HomeWorks() {
     dragRef.current.active = false;
   };
 
-  // cleanup timer
-  useEffect(() => () => clearTimeout(scrollTimerRef.current), []);
+  // cleanup timer + bounce raf
+  useEffect(() => () => {
+    clearTimeout(scrollTimerRef.current);
+    cancelAnimationFrame(bounceRafRef.current);
+  }, []);
 
   return (
     <section ref={sectionRef} className="home-works" data-theme="dark">
@@ -435,7 +565,7 @@ export default function HomeWorks() {
             <MotionLink
               key={work.id}
               href={`/work/${work.slug}`}
-              className="home-works__card"
+              className={`home-works__card home-works__card--${work.size}`}
               custom={i}
               variants={cardVariants}
               initial="hidden"
@@ -449,6 +579,7 @@ export default function HomeWorks() {
                 src={work.src}
                 alt={work.title}
                 sizes="(max-width: 575px) 80vw, (max-width: 1023px) 65vw, 46vw"
+                parallaxRef={(el: HTMLDivElement | null) => { imgInnerRefs.current[i] = el; }}
               />
               <p className="home-works__card-title">{work.title}</p>
             </MotionLink>

@@ -12,8 +12,8 @@
   transition: opacity 0.6s ease-out;
   pointer-events: none;
 
-  &--dark  { background: #0a0a0a; }
-  &--light { background: #f5f4ef; }
+  &--dark  { background: #000; }
+  &--light { background: #fff; }
 
   &.is-visible { opacity: 1; }
 }

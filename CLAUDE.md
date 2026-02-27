@@ -442,3 +442,51 @@ Mobile:  "calc(40 / 576 * 100vw) · 400 · lh 96%"
 - **미디어:** `wp-content/uploads/` → Sanity Assets 또는 `/public`으로 이전
 - **라우팅:** WordPress permalink → Next.js App Router 경로로 매핑
 - **DB:** `app/sql/` 덤프 파일 → Sanity 스키마로 변환
+
+---
+
+## Contact Form API Setup (환경변수)
+
+**파일 위치:** `my-portfolio/.env.local`
+
+### ⚠️ 중요: Git에서 절대 제외
+- `.env.local` 은 **반드시** `.gitignore`에 포함되어야 함
+- 커밋/푸시 시 이 파일이 포함되지 않도록 자동 확인
+- 호스팅 배포 시: `.gitignore`가 제대로 설정되었으면, **호스팅 서비스 대시보드에서** 환경 변수를 따로 설정
+
+### 필수 환경 변수 (로컬 개발)
+```env
+# reCAPTCHA v3
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=your_site_key_here
+RECAPTCHA_SECRET_KEY=your_secret_key_here
+
+# Upstash Redis (Rate Limiting)
+UPSTASH_REDIS_REST_URL=https://your-redis.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your_token_here
+
+# Resend (Email Service)
+RESEND_API_KEY=re_your_api_key_here
+RESEND_FROM_EMAIL=onboarding@resend.dev (개발용 - 프로덕션에서는 검증된 도메인 사용)
+CONTACT_TO_EMAIL=hello@creativemoon.com
+```
+
+### API 키 얻는 방법
+1. **Google reCAPTCHA v3**: https://www.google.com/recaptcha/admin
+   - Site Key (NEXT_PUBLIC_* = 클라이언트 노출 가능)
+   - Secret Key (서버 환경변수만)
+
+2. **Upstash Redis**: https://console.upstash.com
+   - Redis 데이터베이스 생성 → REST API → URL + Token
+
+3. **Resend**: https://resend.com/api-keys
+   - API Key 생성
+
+### 배포 시 환경변수 설정
+| 호스팅 서비스 | 설정 위치 |
+|---|---|
+| **Vercel** | Settings → Environment Variables |
+| **Netlify** | Site settings → Build & deploy → Environment |
+| **AWS Amplify** | App settings → Environment variables |
+| **Railway** | Project → Variables |
+
+**주의:** Resend `RESEND_FROM_EMAIL`은 프로덕션에서 반드시 검증된 도메인으로 변경할 것

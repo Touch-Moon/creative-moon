@@ -8,7 +8,6 @@ import './Header.scss';
 /* ── Nav link data ─────────────────────────────── */
 const NAV_LINKS = [
   { label: 'Work',      href: '/work' },
-  { label: 'Services',  href: '/services' },
   { label: 'About',     href: '/about' },
   { label: 'Manifesto', href: '/manifesto' },
   { label: 'Contact',   href: '/contact' },
@@ -26,6 +25,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const pathname = usePathname();
@@ -36,8 +36,9 @@ export default function Header() {
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
 
   /* ── Scroll: show/hide fixed header ──────────── */
+  const isPastHeroRef = useRef(false);
+  const leaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
-    const threshold = 5;
     let ticking = false;
 
     const onScroll = () => {
@@ -46,20 +47,32 @@ export default function Header() {
 
       requestAnimationFrame(() => {
         const y = window.scrollY;
-        const headerH = headerRef.current?.offsetHeight ?? 60;
+        const heroThreshold = window.innerHeight * 0.8;
 
-        // Past the header → fixed mode
-        if (y > headerH) {
-          setIsFixed(true);
-          // Scroll up → show, scroll down → hide
-          if (y < lastScrollY.current - threshold) {
+        if (y > heroThreshold) {
+          // Hero 아래: 진입 중에 leave 타이머가 있으면 취소
+          if (leaveTimerRef.current) {
+            clearTimeout(leaveTimerRef.current);
+            leaveTimerRef.current = null;
+            setIsLeaving(false);
+          }
+          if (!isPastHeroRef.current) {
+            isPastHeroRef.current = true;
+            setIsFixed(true);
             setIsVisible(true);
-          } else if (y > lastScrollY.current + threshold) {
-            setIsVisible(false);
           }
         } else {
-          setIsFixed(false);
-          setIsVisible(false);
+          // Hero 위: 처음 돌아오는 순간 슬라이드-업 후 fixed 해제
+          if (isPastHeroRef.current) {
+            isPastHeroRef.current = false;
+            setIsLeaving(true);
+            leaveTimerRef.current = setTimeout(() => {
+              setIsFixed(false);
+              setIsVisible(false);
+              setIsLeaving(false);
+              leaveTimerRef.current = null;
+            }, 450); // nav-slide-up 0.4s + 여유
+          }
         }
 
         lastScrollY.current = y;
@@ -68,31 +81,55 @@ export default function Header() {
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (leaveTimerRef.current) clearTimeout(leaveTimerRef.current);
+    };
+  }, []);
+
+  /* ── Scroll lock helpers ──────────────────────── */
+  const savedScrollY = useRef(0);
+
+  const lockScroll = useCallback(() => {
+    savedScrollY.current = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${savedScrollY.current}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.overflow = 'hidden';
+  }, []);
+
+  const unlockScroll = useCallback(() => {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.overflow = '';
+    window.scrollTo(0, savedScrollY.current);
   }, []);
 
   /* ── Toggle menu ─────────────────────────────── */
   const toggleMenu = useCallback(() => {
     setMenuOpen((prev) => {
       const next = !prev;
-      // Lock/unlock body scroll
-      document.body.style.overflow = next ? 'hidden' : '';
+      if (next) lockScroll();
+      else unlockScroll();
       return next;
     });
-  }, []);
+  }, [lockScroll, unlockScroll]);
 
   /* ── Keyboard: Escape closes menu ────────────── */
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && menuOpen) {
         setMenuOpen(false);
-        document.body.style.overflow = '';
+        unlockScroll();
         toggleRef.current?.focus();
       }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [menuOpen]);
+  }, [menuOpen, unlockScroll]);
 
   /* ── Focus first link when menu opens ────────── */
   useEffect(() => {
@@ -104,7 +141,13 @@ export default function Header() {
   }, [menuOpen]);
 
   /* ── Route change: header fade sync ─────────── */
+  const isFirstMount = useRef(true);
   useEffect(() => {
+    // 첫 마운트(새로고침)시에는 실행하지 않음 → Nav 깜빡거림 방지
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return;
+    }
     // 페이지 전환 시 헤더가 같이 페이드 아웃/인
     setIsTransitioning(true);
     const timer = setTimeout(() => {
@@ -118,7 +161,7 @@ export default function Header() {
   /* ── Close menu on link click ────────────────── */
   const handleNavClick = () => {
     setMenuOpen(false);
-    document.body.style.overflow = '';
+    unlockScroll();
   };
 
   /* ── Header classes ──────────────────────────── */
@@ -127,6 +170,7 @@ export default function Header() {
     'mix-blend',
     isFixed ? 'is-fixed' : '',
     isVisible ? 'is-visible' : '',
+    isLeaving ? 'is-leaving' : '',
     isTransitioning ? 'is-page-transitioning' : '',
   ].filter(Boolean).join(' ');
 
@@ -137,10 +181,11 @@ export default function Header() {
         <div className="header__content">
           {/* Logo */}
           <Link href="/" className="header__logo" aria-label="Creative Moon">
-            <svg width="96" height="31" viewBox="0 0 96 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <text x="0" y="26" fontFamily="Figtree, sans-serif" fontSize="28" fontWeight="300" fill="currentColor">
-                CM
-              </text>
+            <svg viewBox="0 0 512 288" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M450.722 186.841C454.233 180.823 462.929 180.823 466.44 186.841L509.494 260.636C516.57 272.766 507.82 288 493.775 288H423.388C409.343 288 400.592 272.766 407.669 260.636L450.722 186.841Z" fill="currentColor"/>
+              <path d="M343.793 5.52236C348.005 -1.7774 358.53 -1.77743 362.742 5.52236L447.663 152.692C435.097 137.448 410.353 138.818 399.976 156.801L334.782 269.785C328.282 281.049 316.264 287.989 303.257 287.989H199.759C191.335 287.989 186.071 278.857 190.285 271.554L343.793 5.52236Z" fill="currentColor"/>
+              <path d="M154.992 5.47483C159.204 -1.82493 169.729 -1.82496 173.941 5.47483L258.862 152.644C246.296 137.4 221.552 138.77 211.175 156.754L145.981 269.737C139.481 281.002 127.463 287.942 114.456 287.942H10.958C2.5336 287.942 -2.73038 278.81 1.48379 271.506L154.992 5.47483Z" fill="currentColor"/>
+              <path d="M258.862 0.0477592C278.711 0.0478042 294.802 16.1368 294.802 35.9836C294.802 55.8303 278.711 71.9194 258.862 71.9194C239.013 71.9194 222.922 55.8303 222.922 35.9836C222.922 16.1368 239.013 0.0477592 258.862 0.0477592Z" fill="currentColor"/>
             </svg>
           </Link>
 
@@ -198,10 +243,11 @@ export default function Header() {
           {/* Left: Logo symbol + Social links */}
           <div className="nav__left">
             <div className="nav__logo" aria-hidden="true">
-              <svg width="120" height="160" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <text x="0" y="130" fontFamily="Figtree, sans-serif" fontSize="160" fontWeight="100" fill="currentColor">
-                  C
-                </text>
+              <svg viewBox="0 0 512 288" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M450.722 186.841C454.233 180.823 462.929 180.823 466.44 186.841L509.494 260.636C516.57 272.766 507.82 288 493.775 288H423.388C409.343 288 400.592 272.766 407.669 260.636L450.722 186.841Z" fill="currentColor"/>
+                <path d="M343.793 5.52236C348.005 -1.7774 358.53 -1.77743 362.742 5.52236L447.663 152.692C435.097 137.448 410.353 138.818 399.976 156.801L334.782 269.785C328.282 281.049 316.264 287.989 303.257 287.989H199.759C191.335 287.989 186.071 278.857 190.285 271.554L343.793 5.52236Z" fill="currentColor"/>
+                <path d="M154.992 5.47483C159.204 -1.82493 169.729 -1.82496 173.941 5.47483L258.862 152.644C246.296 137.4 221.552 138.77 211.175 156.754L145.981 269.737C139.481 281.002 127.463 287.942 114.456 287.942H10.958C2.5336 287.942 -2.73038 278.81 1.48379 271.506L154.992 5.47483Z" fill="currentColor"/>
+                <path d="M258.862 0.0477592C278.711 0.0478042 294.802 16.1368 294.802 35.9836C294.802 55.8303 278.711 71.9194 258.862 71.9194C239.013 71.9194 222.922 55.8303 222.922 35.9836C222.922 16.1368 239.013 0.0477592 258.862 0.0477592Z" fill="currentColor"/>
               </svg>
             </div>
 
