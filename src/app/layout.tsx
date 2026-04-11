@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "@/styles/base/_reset.scss";
 import "@/styles/tokens/_typography.scss";
@@ -15,35 +15,41 @@ import Footer from "@/components/common/Footer";
 import ThemeBackground from "@/components/common/ThemeBackground";
 import FontLoader from "@/components/common/FontLoader";
 import SmoothScroll from "@/components/common/SmoothScroll";
+import PageTransition from "@/components/common/PageTransition";
 
 export const metadata: Metadata = {
   title: "Creative Moon | Portfolio",
-  description: "Creative Moon의 새로운 포트폴리오 사이트",
+  description: "Creative Moon's new portfolio site",
 };
 
-export default function RootLayout({children,}: Readonly<{children: React.ReactNode;}>) {
+// iOS Safari 상태바 / 주소바 초기 색상 (JS에서 동적 업데이트됨)
+export const viewport: Viewport = {
+  themeColor: '#ffffff',
+};
+
+export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
-    // 1. html 태그에 속성 추가
+    // 1. Add attributes to the html tag
     <html lang="ko" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
       </head>
-      {/* 2. body 태그에도 속성 추가 */}
+      {/* 2. Add attributes to the body tag as well */}
       <body suppressHydrationWarning>
         <FontLoader>
           <SmoothScroll>
-            {/* ✅ 뷰포트 기반 배경 전환 레이어 */}
+            {/* ✅ Viewport-based background transition layer + iOS 상태바 색상 동기화 */}
             <ThemeBackground />
 
-            {/* ✅ 모든 페이지 위에 Header 노출 */}
+            {/* ✅ Header rendered above all pages */}
             <Header />
 
-            {/* ✅ 실제 페이지 내용들 */}
-            {children}
+            {/* ✅ Actual page content — PageTransition이 화이트 커튼 처리 */}
+            <PageTransition>{children}</PageTransition>
 
-            {/* ✅ 모든 페이지 아래에 Footer 노출 */}
+            {/* ✅ Footer rendered below all pages */}
             <Footer />
           </SmoothScroll>
         </FontLoader>

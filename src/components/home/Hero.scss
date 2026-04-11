@@ -27,7 +27,7 @@
   // BEM: Element (__ 사용)
   &__title {
     font-family: var(--font-inter-display), sans-serif;
-    font-size: clamp(40px, 7.5vw, 115px);
+    font-size: var(--fs-h1); // 140px @ 1440 → 64px @ 1024 → 40px @ 576
     font-weight: 300;
     text-transform: uppercase;
     line-height: 0.95;
@@ -38,6 +38,11 @@
     flex-direction: column;
     gap: 0.05em;
     -webkit-font-smoothing: antialiased;
+
+    // plastic.design: home hero title ≈ 46px @ 500 → ~34px @ 375 ≈ --fs-h3
+    @media (max-width: 575.98px) {
+      font-size: var(--fs-h3);
+    }
   }
 
   &__word {

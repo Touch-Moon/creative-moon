@@ -1,0 +1,377 @@
+@use '@/styles/primitives/colors' as *;
+@use '@/styles/primitives/type' as *;
+@use '@/styles/primitives/space' as *;
+
+$ease-out: cubic-bezier(0.19, 1, 0.22, 1);
+
+// ══════════════════════════════════════════════════════════════════════════════
+// WorksSlider — SELECTED WORKS 공통 슬라이더
+// HomeWorks 와 WorkRelated 가 공유하는 레이아웃 + 기능 CSS
+// ══════════════════════════════════════════════════════════════════════════════
+
+.works-slider {
+  position: relative; // line absolute 기준
+  overflow: visible; // 트랙이 section 우측 경계 밖으로 확장 허용
+
+  // ── 수평 라인 (TOP / BOTTOM) ──────────────────
+  &__line-h {
+    display: block;
+    height: 1px;
+    background: var(--foreground-dim);
+    transform-origin: left top;
+    transform: scaleX(0);
+    transition: transform 0.67s $ease-out;
+
+    // ① TOP: block — margin-left + 계산 width로 인셋
+    &--top {
+      margin-left: $space-12;
+      width: calc(100% - #{$space-12} * 2);
+
+      @media (max-width: 1023.98px) {
+        margin-left: $space-8;
+        width: calc(100% - #{$space-8} * 2);
+      }
+
+      @media (max-width: 575.98px) {
+        margin-left: $space-4;
+        width: calc(100% - #{$space-4} * 2);
+      }
+    }
+
+    &--top.is-revealed {
+      transform: scaleX(1);
+      transition-delay: 0s;
+    }
+
+    // ③ BOTTOM: absolute — left + 계산 width로 인셋
+    &--bottom {
+      position: absolute;
+      bottom: 0;
+      left: $space-12;
+      width: calc(100% - #{$space-12} * 2);
+      transform-origin: right top;
+
+      @media (max-width: 1023.98px) {
+        left: $space-8;
+        width: calc(100% - #{$space-8} * 2);
+      }
+
+      @media (max-width: 575.98px) {
+        left: $space-4;
+        width: calc(100% - #{$space-4} * 2);
+      }
+    }
+
+    &--bottom.is-revealed {
+      transform: scaleX(1);
+      transition-delay: 1.34s;
+    }
+  }
+
+  // ── 수직 라인 (사이드바 우측) ─────────────────
+  &__line-v {
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: fvw(376);
+    width: 1px;
+    height: calc(100% - 2px);
+    background: var(--foreground-dim);
+    transform-origin: left top;
+    transform: scaleY(0);
+    transition: transform 0.67s $ease-out;
+    // ② 수직: delay 0.67s (top 후)
+    transition-delay: 0.67s;
+
+    &.is-revealed {
+      transform: scaleY(1);
+    }
+
+    @media (max-width: 575.98px) {
+      display: none;
+    }
+  }
+
+  // ── Inner: flex row ────────────────────────────
+  &__inner {
+    display: flex;
+    align-items: stretch;
+  }
+
+  // ── 좌측 사이드바 ──────────────────────────────
+  &__sidebar {
+    flex: 0 0 fvw(328);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: $space-12 $space-8 $space-12 $space-12;
+  }
+
+  &__title {
+    font-size: var(--fs-h4);
+    font-weight: $fw-light;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: inherit;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  &__title-line {
+    overflow: hidden;
+    display: block;
+
+    span {
+      display: block;
+    }
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+  }
+
+  // ── Counter — overflow:hidden + translateY 슬라이드 ──
+  &__counter {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    font-size: var(--fs-body-5);
+    color: var(--foreground-muted);
+    letter-spacing: 0.04em;
+  }
+
+  &__counter-current {
+    height: 1em;
+    overflow: hidden;
+    text-align: right;
+    min-width: 1.6em; // "01"~"99" 폭 확보
+  }
+
+  &__counter-list {
+    display: block;
+    will-change: transform;
+    transition: transform 0.7s $ease-out;
+
+    span {
+      display: block;
+      height: 1em;
+      line-height: 1;
+    }
+  }
+
+  &__counter-sep,
+  &__counter-total {
+    display: block;
+    font-weight: $fw-light;
+  }
+
+  &__arrows {
+    display: flex;
+    gap: $space-2;
+  }
+
+  // ── 우측 카드 트랙 ────────────────────────────
+  &__track {
+    position: relative; // card.offsetLeft 기준점 고정
+    flex: none; // 명시적 width로 뷰포트까지 확장
+    // 1920px 초과 시 section auto-margin(=(100vw-1920px)/2)만큼 추가 확장
+    width: calc(100% - #{fvw(424)} + max(0px, (100vw - 1920px) / 2));
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 0; // padding-left 없음 — gap으로만 카드 간격 처리
+    scroll-behavior: smooth;
+    padding: $space-12 $space-10 $space-12 0; // left: 0 — 스크롤된 카드 peek 방지
+    gap: $space-6;
+    cursor: grab;
+    will-change: transform; // bounce translateX 성능 최적화
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  // ── 커스텀 DRAG 커서 (body portal) ────────────
+  &__cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1000;
+    width: 76px;
+    height: 76px;
+    transform: translate(-999px, -999px); // 초기 오프스크린
+
+    // 터치 기기에서는 마우스 커서 자체가 없으므로 숨김
+    @media (hover: none) {
+      display: none;
+    }
+  }
+
+  &__cursor-bg {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    // body portal이라 테마 CSS 변수가 body 기준으로 바뀜 → 고정 색상 사용
+    background: #0a0a0a;
+    transform: scale(0.5);
+    opacity: 0;
+    transition: transform 0.22s ease-in-out,
+      opacity 0.22s ease-in-out;
+  }
+
+  &__cursor-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 76px;
+    height: 76px;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.22s ease-in-out,
+      visibility 0.22s ease-in-out;
+  }
+
+  &__cursor.is-visible &__cursor-bg {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  &__cursor.is-visible &__cursor-label {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  // ── Tablet ────────────────────────────────────
+  // 데스크탑과 동일한 가로 레이아웃 유지 (sidebar 좌 / track 우)
+  // 간격·padding만 태블릿 gutter에 맞게 조정
+  @media (max-width: 1023.98px) {
+    &__sidebar {
+      padding: $space-12 $space-8;
+    }
+
+    &__track {
+      padding: $space-12 $space-8 $space-12 0;
+      gap: $space-5;
+    }
+  }
+
+  // ── Mobile ────────────────────────────────────
+  @media (max-width: 575.98px) {
+    &__inner {
+      flex-direction: column;
+    }
+
+    &__sidebar {
+      flex: none;
+      flex-direction: row;
+      align-items: center;
+      padding: var(--space-32) $gutter-mobile var(--space-1);
+    }
+
+    &__title {
+      font-size: var(--fs-body-4);
+      display: flex;
+      gap: $space-4;
+    }
+
+    &__nav {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    &__arrows {
+      display: none;
+    }
+
+    &__track {
+      width: 100%;
+      scroll-padding-left: $gutter-mobile;
+      padding: var(--space-16) 16px var(--space-32) $gutter-mobile;
+      gap: $gutter-mobile;
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ws — 카드 공통 (works-slider 카드 접두사)
+// ══════════════════════════════════════════════════════════════════════════════
+
+.ws {
+  &__card {
+    flex: 0 0 fvw(660);
+    scroll-snap-align: start;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    cursor: pointer;
+
+    // 카드 사이즈 variants — 높이 fvw(520) 기준, aspect ratio로 폭 결정
+    &--large {
+      flex-basis: calc(fvw(520) * 1.27);
+    }
+
+    &--wide {
+      flex-basis: calc(fvw(520) * 1.5);
+    }
+
+    &--tall {
+      flex-basis: calc(fvw(520) * 0.8);
+    }
+
+    &--compact {
+      flex-basis: calc(fvw(520) * 1);
+    }
+  }
+
+  &__card-img {
+    position: relative;
+    width: 100%;
+    height: fvw(520);
+    overflow: hidden;
+    background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  }
+
+  &__card-title {
+    font-size: var(--fs-body-4);
+    font-weight: $fw-light;
+    color: var(--foreground);
+    letter-spacing: 0.02em;
+    margin: var(--space-2) 0 0;
+  }
+
+  // ── Mobile ────────────────────────────────────
+  @media (max-width: 575.98px) {
+    &__card {
+      flex: 0 0 85vw;
+    }
+
+    &__card-img {
+      height: 55vw;
+    }
+
+    &__card-title {
+      font-size: var(--fs-body-3);
+      margin: var(--space-8) 0 0;
+    }
+  }
+}

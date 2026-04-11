@@ -1,4 +1,5 @@
 @use '../../styles/primitives/type' as *;
+@use '@/styles/primitives/space' as *;
 @use '../../styles/primitives/colors' as *;
 
 // ── Manifesto Page ─────────────────────────────
@@ -28,25 +29,25 @@
   // ── Sticky 좌측 텍스트 ──
   &__sticky-col {
     flex: 0 0 auto;
-    width: calc(33.333% - #{fvw(20)});
+    width: calc(33.333% - #{$space-5});
     align-self: stretch;
   }
 
   &__sticky {
     position: sticky;
-    top: fvw(120);
+    top: $section-space;
     will-change: transform;
   }
 
   &__intro {
     width: fvw(266);
     color: rgba($m-white, 0.6);
-    font-size: $fs-body-3;
+    font-size: var(--fs-body-3);
     line-height: $lh-body-3;
   }
 
   &__intro-em {
-    margin-top: fvw(24);
+    margin-top: $space-6;
     font-style: italic;
 
     em {
@@ -93,19 +94,20 @@
     display: flex;
     justify-content: space-between;
     position: relative;
-    margin-bottom: fvw(48);
+    margin-bottom: $space-12;
   }
 
   &__title-text {
-    font-size: $fs-h2;
+    font-size: var(--fs-h2);
     line-height: $lh-h2;
     font-weight: $fw-regular;
     color: $m-white;
     letter-spacing: $ls-tight;
+    margin: 0; // h2 브라우저 기본 margin(0.83em top/bottom) 리셋
   }
 
   &__title-number {
-    font-size: $fs-h3;
+    font-size: var(--fs-h3);
     line-height: $lh-h3;
     font-weight: $fw-regular;
     color: $m-white;
@@ -122,10 +124,10 @@
   }
 
   &__description {
-    font-size: $fs-body-3;
+    font-size: var(--fs-body-3);
     line-height: $lh-body-3;
     color: rgba($m-white, 0.7);
-    width: calc(57.1429% - #{fvw(48)});
+    width: calc(57.1429% - #{$space-12});
   }
 }
 
@@ -233,8 +235,8 @@
 }
 
 
-// ── Tablet (max 1023px) ─────────────────────────
-@media (max-width: 1023px) {
+// ── Tablet (max 1023.98px) ─────────────────────────
+@media (max-width: 1023.98px) {
   .manifesto-section {
     &__intro {
       width: 100%;
@@ -242,8 +244,8 @@
   }
 }
 
-// ── Mobile (max 575px) ──────────────────────────
-@media (max-width: 575px) {
+// ── Mobile (max 575.98px) ──────────────────────────
+@media (max-width: 575.98px) {
   .manifesto-section {
     padding-top: 92.3077vw;
 
@@ -268,7 +270,7 @@
     &__intro {
       display: inline-block;
       width: 75.385vw;
-      font-size: 6.154vw;
+      font-size: var(--fs-body-3);
       line-height: 110%;
       padding-bottom: 34.872vw;
     }
@@ -293,31 +295,78 @@
     }
 
     &__title-text {
-      font-size: 12.308vw;
-      line-height: 110%;
+      // plastic.design mobile headline-2 exact value
+      font-size: 12.3077vw;
+      line-height: 116%;
     }
 
     &__title-number {
-      font-size: 8.205vw;
+      // plastic.design mobile number exact value
+      font-size: 8.20513vw;
       line-height: 112%;
       padding-top: 0.2em;
     }
 
-    &__svg {
-      display: none; // hide all SVGs on mobile by default
-    }
-
     &__description {
-      width: 100%;
-      font-size: 4.615vw;
+      width: 74.359vw;
+      font-size: var(--fs-h5);
       line-height: 140%;
     }
   }
 
+  // ── Mobile SVG positions (plastic.design 기준) ──
+
+  // Item 01 — underline waves
+  .manifesto-item:first-child .manifesto-item__title .manifesto-item__svg {
+    top: 12.3077vw;
+    left: 21.5385vw;
+    width: 32.0513vw;
+    height: 3.84615vw;
+  }
+
+  // Item 02 — exclamation marks
+  .manifesto-item:nth-child(2) .manifesto-item__title .manifesto-item__svg {
+    top: 1.79487vw;
+    left: 59.4872vw;
+    width: 11.0256vw;
+    height: 15.3846vw;
+  }
+
+  // Item 03 — diagonal lines
+  .manifesto-item:nth-child(3) .manifesto-item__title .manifesto-item__svg {
+    top: 12.8205vw;
+    left: -2.5641vw;
+    width: 37.4359vw;
+    height: 22.0513vw;
+  }
+
+  // Item 04 — circle
+  .manifesto-item:nth-child(4) .manifesto-item__title .manifesto-item__svg {
+    top: -5.12821vw;
+    left: 28.2051vw;
+    width: 43.5897vw;
+    height: 25.1282vw;
+  }
+
+  // Item 05 — curly arrow
+  .manifesto-item:nth-child(5) .manifesto-item__title .manifesto-item__svg {
+    top: 16.6667vw;
+    left: 46.1538vw;
+    width: 16.6667vw;
+    height: 12.8205vw;
+  }
+
+  // Item 06 — smiley face
+  .manifesto-item:nth-child(6) .manifesto-item__title .manifesto-item__svg {
+    top: 2.5641vw;
+    left: 43.5897vw;
+    width: 11.5385vw;
+    height: 11.7949vw;
+  }
 }
 
-// ── Tablet (576px - 768px) ──────────────────────
-@media (min-width: 576px) and (max-width: 768px) {
+// ── Tablet (576px - 1023.98px) ──────────────────────
+@media (min-width: 576px) and (max-width: 1023.98px) {
   .manifesto-section {
     padding-top: 10.417vw;
 
@@ -328,7 +377,16 @@
 
   .manifesto-item {
     &__title-text {
-      font-size: fvw(72);
+      // plastic.design: no tablet override — desktop --fs-h2 scales via token
+      // --fs-h2 at 768px = 46px (matches plastic desktop scale at 768)
+      font-size: var(--fs-h2);
+      line-height: $lh-h2;
+    }
+
+    &__title-number {
+      // plastic.design: no tablet override — desktop --fs-h3 scales via token
+      // --fs-h3 at 768px = 39px (matches plastic desktop scale at 768)
+      font-size: var(--fs-h3);
     }
 
     &__description {

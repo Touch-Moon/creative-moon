@@ -42,6 +42,7 @@
       bottom: 0;
       left: $space-12;
       width: calc(100% - #{$space-12} * 2);
+      transform-origin: right top;
 
       @media (max-width: 1023.98px) {
         left: $space-8;
@@ -95,12 +96,12 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: fvw(48) fvw(40);
+    padding: $space-12 $space-10;
     // border-right은 __line-v 가 대체
   }
 
   &__title {
-    font-size: $fs-h4;
+    font-size: var(--fs-h4);
     font-weight: $fw-light;
     line-height: 0.95;
     letter-spacing: -0.03em;
@@ -121,15 +122,15 @@
   &__nav {
     display: flex;
     flex-direction: column;
-    gap: fvw(20);
+    gap: $space-5;
   }
 
   // ── Counter — plastic.design 방식: overflow:hidden + translateY ──
   &__counter {
     display: flex;
     align-items: center;
-    gap: fvw(4);
-    font-size: $fs-body-5;
+    gap: $space-1;
+    font-size: var(--fs-body-5);
     color: var(--foreground-muted);
     letter-spacing: 0.04em;
   }
@@ -161,7 +162,7 @@
 
   &__arrows {
     display: flex;
-    gap: fvw(8);
+    gap: $space-2;
   }
 
   // ── 우측 카드 트랙 ────────────────────────────
@@ -171,10 +172,10 @@
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scroll-padding-left: fvw(40); // snap 시 padding 반영
+    scroll-padding-left: $space-10; // snap 시 padding 반영
     scroll-behavior: smooth;
-    padding: fvw(48) fvw(40);
-    gap: fvw(24);
+    padding: $space-12 $space-10;
+    gap: $space-6;
     cursor: grab;
     will-change: transform; // 바운스 translateX 성능 최적화
 
@@ -196,6 +197,7 @@
     text-decoration: none;
     color: inherit;
     display: block;
+    cursor: pointer; // 트랙의 cursor:none 을 카드(링크) 위에서 포인터로 복원
     // ── 카드 사이즈 variants ──
     // 높이 fvw(520) 고정, aspect ratio로 폭 결정
     // large   ~1.27:1  wide ~1.5:1  tall ~0.8:1  compact ~1:1
@@ -212,56 +214,61 @@
     overflow: hidden;
     background: color-mix(in srgb, var(--foreground) 5%, transparent);
     border-radius: 0;
-    cursor: none; // 시스템 커서 숨김 → 커스텀 DRAG 배지로 대체
+    cursor: pointer;
   }
 
-  // ── DRAG 커스텀 커서 배지 ─────────────────────
-  &__drag-cursor {
-    position: absolute;
+  // ── 커스텀 커서 배지 (Work 페이지와 동일 스타일) ─
+  &__cursor {
+    position: fixed;
     top: 0;
     left: 0;
     pointer-events: none;
-    z-index: 10;
-    // JS로 translate(x, y) 주입 — 마우스 따라다님
+    z-index: 1000;
+    width: 76px;
+    height: 76px;
   }
 
-  &__drag-cursor-inner {
+  &__cursor-bg {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: #0a0a0a;
+    transform: scale(0.5);
+    opacity: 0;
+    transition: transform 0.2s ease-in-out 0.6s,
+                opacity 0.2s ease-in-out 0.6s;
+  }
+
+  &__cursor-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: fvw(5);
-    transform: translate(-50%, -50%);
-
-    // 완전한 원형
-    width: fvw(80);
-    height: fvw(80);
-    border-radius: 50%;
-
-    // 다크모드: 흰 배경 + 검은 텍스트 / 라이트모드: 검은 배경 + 흰 텍스트
-    background: var(--foreground);
+    width: 76px;
+    height: 76px;
     color: #fff;
-
-    body[data-theme="dark"] & {
-      color: #000;
-    }
-
-    font-size: fvw(10);
-    font-weight: $fw-light;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: normal;
     white-space: nowrap;
-
-    // 진입/퇴장 애니메이션
     opacity: 0;
-    scale: 0.7;
-    transition: opacity 0.3s ease,
-    scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out 0.6s,
+                visibility 0.2s ease-in-out 0.6s,
+                color 0.12s ease;
   }
 
-  &__drag-cursor.is-visible &__drag-cursor-inner {
+  &__cursor.is-visible &__cursor-bg {
+    transform: scale(1);
     opacity: 1;
-    scale: 1;
+  }
+
+  &__cursor.is-visible &__cursor-label {
+    opacity: 1;
+    visibility: visible;
   }
 
   // scale + parallax 래퍼
@@ -286,7 +293,7 @@
   }
 
   &__card-title {
-    font-size: $fs-body-5;
+    font-size: var(--fs-body-5);
     font-weight: $fw-light;
     color: var(--foreground);
     letter-spacing: 0.02em;
@@ -309,7 +316,7 @@
     }
 
     &__title {
-      font-size: clamp(32px, 5vw, 56px);
+      font-size: var(--fs-h4); // calc(24 / 1024 * 100vw)
     }
 
     &__nav {
@@ -322,8 +329,8 @@
     }
 
     &__track {
-      padding: 32px fvw(24) 32px $gutter-tablet;
-      gap: 20px;
+      padding: 32px $space-6 32px $gutter-tablet;
+      gap: $gutter-tablet;
     }
 
     &__card {
@@ -343,7 +350,7 @@
 
     &__track {
       padding: 24px 16px 24px $gutter-mobile;
-      gap: 16px;
+      gap: $gutter-mobile;
     }
 
     &__card {

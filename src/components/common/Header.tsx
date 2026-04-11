@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { useLenis } from './LenisContext';
 import './Header.scss';
 
 /* ── Nav link data ─────────────────────────────── */
@@ -25,8 +26,10 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const lenisRef = useLenis();
   const [isLeaving, setIsLeaving] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isSettled, setIsSettled] = useState(false);
 
   const pathname = usePathname();
   const lastScrollY = useRef(0);
@@ -34,12 +37,23 @@ export default function Header() {
   const navRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
+  const navToggleRef = useRef<HTMLDivElement>(null);
 
   /* ── Scroll: show/hide fixed header ──────────── */
   const isPastHeroRef = useRef(false);
   const leaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const thresholdRef = useRef<number | null>(null);
   useEffect(() => {
     let ticking = false;
+
+    // 페이지별 threshold 계산:
+    // .work-list__grid 가 있으면 그 offsetTop을 사용 (work 페이지)
+    // 없으면 fallback: innerHeight * 0.8 (홈 등 hero 페이지)
+    const getThreshold = () => {
+      const grid = document.querySelector<HTMLElement>('.work-list__grid');
+      if (grid) return grid.offsetTop;
+      return window.innerHeight * 0.8;
+    };
 
     const onScroll = () => {
       if (ticking) return;
@@ -47,7 +61,11 @@ export default function Header() {
 
       requestAnimationFrame(() => {
         const y = window.scrollY;
-        const heroThreshold = window.innerHeight * 0.8;
+        // threshold는 첫 스크롤 시 계산 후 캐싱 (레이아웃 쉬프트 방지)
+        if (thresholdRef.current === null) {
+          thresholdRef.current = getThreshold();
+        }
+        const heroThreshold = thresholdRef.current;
 
         if (y > heroThreshold) {
           // Hero 아래: 진입 중에 leave 타이머가 있으면 취소
@@ -87,49 +105,89 @@ export default function Header() {
     };
   }, []);
 
-  /* ── Scroll lock helpers ──────────────────────── */
-  const savedScrollY = useRef(0);
+  /* ── Scroll lock (useEffect) ─────────────────────
+     Lenis.stop()으로 스크롤 엔진 자체를 정지.
+     Lenis가 delta를 내부에 쌓는 것이 scroll debt의 근본 원인이었음.
+     키보드 스크롤은 Lenis가 처리하지 않으므로 별도 차단 유지.
+  ────────────────────────────────────────────────── */
+  useEffect(() => {
+    if (!menuOpen) return;
 
-  const lockScroll = useCallback(() => {
-    savedScrollY.current = window.scrollY;
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${savedScrollY.current}px`;
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.overflow = 'hidden';
-  }, []);
+    const lenis = lenisRef.current;
 
-  const unlockScroll = useCallback(() => {
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.left = '';
-    document.body.style.right = '';
-    document.body.style.overflow = '';
-    window.scrollTo(0, savedScrollY.current);
+    // Lenis 스크롤 엔진 정지 → delta 축적 원천 차단
+    lenis?.stop();
+
+    // 키보드 스크롤 차단 (Lenis가 처리하지 않는 영역)
+    const onKeyDown = (e: KeyboardEvent) => {
+      const scrollKeys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
+      const tag = (e.target as HTMLElement).tagName;
+      if (['INPUT', 'TEXTAREA', 'BUTTON', 'A'].includes(tag)) return;
+      if (scrollKeys.includes(e.key)) e.preventDefault();
+    };
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      // Lenis 스크롤 엔진 재개
+      lenis?.start();
+    };
+  }, [menuOpen, lenisRef]);
+
+  /* ── Settled: X 애니메이션 완료 후 hover 분기 활성화 ── */
+  const settledTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (menuOpen) {
+      // transform 0.2s 완료 + 유지 후 settled 활성화
+      settledTimerRef.current = setTimeout(() => setIsSettled(true), 625);
+    } else {
+      if (settledTimerRef.current) clearTimeout(settledTimerRef.current);
+      setIsSettled(false);
+    }
+    return () => {
+      if (settledTimerRef.current) clearTimeout(settledTimerRef.current);
+    };
+  }, [menuOpen]);
+
+  /* ── Sync toggle positions (header toggle ↔ nav overlay toggle) ──── */
+  const syncTogglePosition = useCallback(() => {
+    if (toggleRef.current && navToggleRef.current) {
+      const rect = toggleRef.current.getBoundingClientRect();
+      navToggleRef.current.style.top = `${rect.top}px`;
+      // clientWidth를 사용: position:fixed의 right는 스크롤바를 제외한 뷰포트 기준
+      navToggleRef.current.style.right = `${document.documentElement.clientWidth - rect.right}px`;
+    }
   }, []);
 
   /* ── Toggle menu ─────────────────────────────── */
   const toggleMenu = useCallback(() => {
-    setMenuOpen((prev) => {
-      const next = !prev;
-      if (next) lockScroll();
-      else unlockScroll();
-      return next;
-    });
-  }, [lockScroll, unlockScroll]);
+    // 헤더 토글의 현재 위치를 nav overlay 토글에 동기화 (top + right)
+    syncTogglePosition();
+    setMenuOpen(prev => !prev);
+  }, [syncTogglePosition]);
 
   /* ── Keyboard: Escape closes menu ────────────── */
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && menuOpen) {
         setMenuOpen(false);
-        unlockScroll();
         toggleRef.current?.focus();
       }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [menuOpen, unlockScroll]);
+  }, [menuOpen]);
+
+  /* ── Sync toggle positions when menu opens/closes, on resize, or header position changes ── */
+  useEffect(() => {
+    if (menuOpen) {
+      // Sync position immediately and on resize
+      syncTogglePosition();
+      const handleResize = () => syncTogglePosition();
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, [menuOpen, syncTogglePosition, isFixed]);
 
   /* ── Focus first link when menu opens ────────── */
   useEffect(() => {
@@ -142,26 +200,59 @@ export default function Header() {
 
   /* ── Route change: header fade sync ─────────── */
   const isFirstMount = useRef(true);
+  // nav 링크 클릭 여부 추적 — pathname 변경 시 메뉴 닫기 판단에 사용
+  const navClickedRef = useRef(false);
+  // 직전 pathname 추적 — 하위 → 상위 페이지 이동 시 스크롤 복원 여부 판단
+  const prevPathnameRef = useRef('');
   useEffect(() => {
     // 첫 마운트(새로고침)시에는 실행하지 않음 → Nav 깜빡거림 방지
     if (isFirstMount.current) {
       isFirstMount.current = false;
+      prevPathnameRef.current = pathname;
       return;
     }
+
+    const prevPath = prevPathnameRef.current;
+    prevPathnameRef.current = pathname;
+
+    // 페이지 전환 시 threshold 캐시 초기화 (새 페이지의 레이아웃 기준 재계산)
+    thresholdRef.current = null;
+
+    // nav 링크 클릭으로 이동한 경우:
+    // pathname이 바뀐 시점 = 새 페이지 렌더가 시작된 시점 → 이때 오버레이를 닫아야
+    // "컨텐츠 로드 후 메뉴 사라짐"이 자연스럽게 연출됨.
+    // (클릭 즉시 닫으면 페이지 공백이 노출되어 어색함)
+    if (navClickedRef.current) {
+      navClickedRef.current = false;
+      setMenuOpen(false);
+    }
+
+    // 하위 페이지 → 상위 목록 페이지 이동인지 판단
+    // 예: /stories/some-slug → /stories
+    //     /work/some-slug   → /work
+    // 이 경우 최상단 스크롤을 생략 — 사용자의 목록 스크롤 위치를 유지
+    const isReturningToParent = prevPath.startsWith(pathname + '/');
+
     // 페이지 전환 시 헤더가 같이 페이드 아웃/인
     setIsTransitioning(true);
     const timer = setTimeout(() => {
       setIsTransitioning(false);
-      window.scrollTo(0, 0);
+      if (!isReturningToParent) {
+        window.scrollTo(0, 0);
+      }
     }, 380); // plastic.design과 동일한 타이밍
 
     return () => clearTimeout(timer);
   }, [pathname]);
 
   /* ── Close menu on link click ────────────────── */
-  const handleNavClick = () => {
-    setMenuOpen(false);
-    unlockScroll();
+  // href가 현재 페이지와 같으면 즉시 닫고, 다른 페이지면 pathname 변경 시 닫음.
+  const handleNavClick = (href: string) => {
+    if (href === pathname) {
+      setMenuOpen(false);
+    } else {
+      navClickedRef.current = true;
+    }
   };
 
   /* ── Header classes ──────────────────────────── */
@@ -195,7 +286,7 @@ export default function Header() {
           {/* Right side */}
           <div className="header__right">
             {/* CTA button */}
-            <Link href="/contact" className="header__talk button">
+            <Link href="/contact" className="header__talk button button--xs">
               <div />
               <span>Let&apos;s talk</span>
             </Link>
@@ -203,7 +294,7 @@ export default function Header() {
             {/* Hamburger / X toggle */}
             <button
               ref={toggleRef}
-              className={`toggle${menuOpen ? ' is-opened' : ''}`}
+              className={`toggle${menuOpen ? ' is-opened' : ''}${isSettled ? ' is-settled' : ''}`}
               onClick={toggleMenu}
               aria-label={menuOpen ? '메뉴 닫기' : '메뉴 열기'}
               aria-expanded={menuOpen}
@@ -226,9 +317,9 @@ export default function Header() {
         aria-hidden={!menuOpen}
       >
         {/* Close toggle inside overlay (fixed position) */}
-        <div className="nav__toggle">
+        <div className="nav__toggle" ref={navToggleRef}>
           <button
-            className={`toggle${menuOpen ? ' is-opened' : ''}`}
+            className={`toggle${menuOpen ? ' is-opened' : ''}${isSettled ? ' is-settled' : ''}`}
             onClick={toggleMenu}
             aria-label="메뉴 닫기"
             type="button"
@@ -276,7 +367,7 @@ export default function Header() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      onClick={handleNavClick}
+                      onClick={() => handleNavClick(link.href)}
                       ref={i === 0 ? firstLinkRef : undefined}
                       className="use-nav-transition"
                     >
@@ -292,8 +383,8 @@ export default function Header() {
         {/* Bottom: Policy links + Email */}
         <div className="nav__policy">
           <ul>
-            <li><Link href="/privacy-policy" onClick={handleNavClick}>Privacy Policy</Link></li>
-            <li><Link href="/cookies-policy" onClick={handleNavClick}>Cookies Policy</Link></li>
+            <li><Link href="/privacy-policy" onClick={() => handleNavClick('/privacy-policy')}>Privacy Policy</Link></li>
+            <li><Link href="/cookies-policy" onClick={() => handleNavClick('/cookies-policy')}>Cookies Policy</Link></li>
           </ul>
         </div>
 

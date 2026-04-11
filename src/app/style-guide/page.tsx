@@ -1,21 +1,34 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Specimen from '@/components/style-guide/Specimen';
 
 export default function StyleGuidePage() {
   type Theme = 'light' | 'dark';
   const [theme, setTheme] = useState<Theme>('light');
   const [vpWidth, setVpWidth] = useState(0);
-  const [bps, setBps] = useState({ mobile: 575, tablet: 768, laptop: 1024, laptopL: 1280, desktop: 1440 });
+  const [bps, setBps] = useState({ mobile: 575, tablet: 1024, desktop: 1920 });
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   function getBreakpoint(w: number): { label: string; px: string } {
     if (w <= bps.mobile) return { label: 'Mobile', px: `${bps.mobile}px` };
     if (w <= bps.tablet) return { label: 'Tablet', px: `${bps.tablet}px` };
-    if (w <= bps.laptop) return { label: 'Laptop', px: `${bps.laptop}px` };
-    if (w <= bps.laptopL) return { label: 'Laptop L', px: `${bps.laptopL}px` };
     if (w <= bps.desktop) return { label: 'Desktop', px: `${bps.desktop}px` };
     return { label: 'Desktop XL', px: `${bps.desktop}px+` };
+  }
+
+  // Compute displayed value for a spacing token: min(Xvw, capPx)
+  function spaceVal(vwRatio: number, capPx: number, vp: number): string {
+    if (vp <= 0) {
+      const base = Math.round(vwRatio * 1440 / 100 * 100) / 100;
+      return `${vwRatio}vw · ${base}px`;
+    }
+    if (vp > 1920) return `${capPx}px · fixed`;
+    const computed = Math.min(vwRatio * vp / 100, capPx);
+    const rounded = Math.round(computed * 100) / 100;
+    return `${vwRatio}vw · ${rounded}px`;
   }
 
   useEffect(() => {
@@ -31,8 +44,6 @@ export default function StyleGuidePage() {
     setBps({
       mobile: n('--cm-bp-mobile'),
       tablet: n('--cm-bp-tablet'),
-      laptop: n('--cm-bp-laptop'),
-      laptopL: n('--cm-bp-laptop-l'),
       desktop: n('--cm-bp-desktop'),
     });
   }, []);
@@ -47,6 +58,20 @@ export default function StyleGuidePage() {
   useEffect(() => {
     window.localStorage.setItem('cm-theme', theme);
   }, [theme]);
+
+  // footer를 style-guide 테마와 동기화
+  useEffect(() => {
+    const footer = document.querySelector<HTMLElement>('.footer');
+    if (footer) footer.dataset.theme = theme;
+  }, [theme]);
+
+  // 페이지 언마운트 시 footer를 원래 dark로 복원
+  useEffect(() => {
+    return () => {
+      const footer = document.querySelector<HTMLElement>('.footer');
+      if (footer) footer.dataset.theme = 'dark';
+    };
+  }, []);
 
   useEffect(() => {
     type FormInput = HTMLInputElement | HTMLTextAreaElement;
@@ -111,26 +136,34 @@ export default function StyleGuidePage() {
     };
   }, []);
 
+  const toggleBtn = (
+    <button
+      type="button"
+      className="cm-theme-toggle"
+      data-theme={theme}
+      aria-pressed={theme === 'dark'}
+      aria-label="Toggle theme"
+      onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
+    >
+      {theme === 'dark' ? (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="cm-theme-icon">
+          <circle cx="12" cy="12" r="5" />
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="cm-theme-icon">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      )}
+    </button>
+  );
+
   return (
+    <>
+      {/* Portal: page-transition-container stacking context를 탈출하여 body에 직접 마운트 */}
+      {mounted && createPortal(toggleBtn, document.body)}
+
     <div className="cm-root" data-theme={theme}>
-      <button
-        type="button"
-        className="cm-theme-toggle"
-        aria-pressed={theme === 'dark'}
-        aria-label="Toggle theme"
-        onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}
-      >
-        {theme === 'dark' ? (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="cm-theme-icon">
-            <circle cx="12" cy="12" r="5" />
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-          </svg>
-        ) : (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="cm-theme-icon">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
-        )}
-      </button>
 
       {/* ==============================
           HEADER
@@ -145,7 +178,7 @@ export default function StyleGuidePage() {
             visual integrity and functional efficiency across all development stages, reflecting our
             commitment to professional and modern web design.
           </p>
-          <button className="button button--s button--dark" onClick={() => window.open('/style-guide/guide', '_blank')}>
+          <button className="button button--s button--dark" onClick={() => window.location.href = '/style-guide/menual'}>
             <div></div>
             <span>CSS Code Guide Menual</span>
           </button>
@@ -170,12 +203,12 @@ export default function StyleGuidePage() {
           <div className="cm-badge">
             {vpWidth > 0 ? (({ label, px }) => `${label} · ${px}`)(getBreakpoint(vpWidth)) : ''}
           </div>
-          <Specimen className="headline-1" vpWidth={vpWidth}>DISPLAY</Specimen>
-          <Specimen className="headline-2" vpWidth={vpWidth}>The quick brown fox</Specimen>
-          <Specimen className="headline-3" vpWidth={vpWidth}>The quick brown fox jumps</Specimen>
-          <Specimen className="headline-4" vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog</Specimen>
-          <Specimen className="headline-4b" vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog</Specimen>
-          <Specimen className="headline-5" vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog and keeps going</Specimen>
+          <Specimen className="headline-1 headline--uppercase" vpWidth={vpWidth}>Display</Specimen>
+          <Specimen className="headline-2 headline--uppercase" vpWidth={vpWidth}>The quick brown</Specimen>
+          <Specimen className="headline-3 headline--uppercase" vpWidth={vpWidth}>The quick brown fox</Specimen>
+          <Specimen className="headline-4 headline--uppercase" vpWidth={vpWidth}>The quick brown fox jumps over the lazy</Specimen>
+          <Specimen className="headline-4b headline--uppercase" vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog</Specimen>
+          <Specimen className="headline-5 headline--uppercase" vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog and keeps going</Specimen>
           <Specimen className="headline-6" vpWidth={vpWidth}>The quick brown fox jumps over the lazy dog and keeps going to fill</Specimen>
 
         </div>
@@ -328,7 +361,7 @@ export default function StyleGuidePage() {
             </div>
             <div className="cm-font-token-item">
               <span className="cm-font-token-item__name">--fs-h1</span>
-              <span className="cm-font-token-item__value">9.7070vw</span>
+              <span className="cm-font-token-item__value">6.6667vw</span>
             </div>
             <div className="cm-font-token-item">
               <span className="cm-font-token-item__name">--fs-h2</span>
@@ -467,7 +500,7 @@ export default function StyleGuidePage() {
             <div className="cm-space-item">
               <div className="cm-space-item__meta">
                 <span className="cm-space-item__name">--space-1</span>
-                <span className="cm-space-item__value">0.2778vw · 4px</span>
+                <span className="cm-space-item__value">{spaceVal(0.2778, 5.33, vpWidth)}</span>
               </div>
               <div className="cm-space-item__bar-wrap">
                 <div className="cm-space-item__bar" style={{ width: 'var(--space-1)' }}></div>
@@ -477,7 +510,7 @@ export default function StyleGuidePage() {
             <div className="cm-space-item">
               <div className="cm-space-item__meta">
                 <span className="cm-space-item__name">--space-2</span>
-                <span className="cm-space-item__value">0.5556vw · 8px</span>
+                <span className="cm-space-item__value">{spaceVal(0.5556, 10.67, vpWidth)}</span>
               </div>
               <div className="cm-space-item__bar-wrap">
                 <div className="cm-space-item__bar" style={{ width: 'var(--space-2)' }}></div>
@@ -487,7 +520,7 @@ export default function StyleGuidePage() {
             <div className="cm-space-item">
               <div className="cm-space-item__meta">
                 <span className="cm-space-item__name">--space-3</span>
-                <span className="cm-space-item__value">0.8333vw · 12px</span>
+                <span className="cm-space-item__value">{spaceVal(0.8333, 16, vpWidth)}</span>
               </div>
               <div className="cm-space-item__bar-wrap">
                 <div className="cm-space-item__bar" style={{ width: 'var(--space-3)' }}></div>
@@ -497,7 +530,7 @@ export default function StyleGuidePage() {
             <div className="cm-space-item">
               <div className="cm-space-item__meta">
                 <span className="cm-space-item__name">--space-4</span>
-                <span className="cm-space-item__value">1.1111vw · 16px</span>
+                <span className="cm-space-item__value">{spaceVal(1.1111, 21.33, vpWidth)}</span>
               </div>
               <div className="cm-space-item__bar-wrap">
                 <div className="cm-space-item__bar" style={{ width: 'var(--space-4)' }}></div>
@@ -507,7 +540,7 @@ export default function StyleGuidePage() {
             <div className="cm-space-item">
               <div className="cm-space-item__meta">
                 <span className="cm-space-item__name">--space-6</span>
-                <span className="cm-space-item__value">1.6667vw · 24px</span>
+                <span className="cm-space-item__value">{spaceVal(1.6667, 32, vpWidth)}</span>
               </div>
               <div className="cm-space-item__bar-wrap">
                 <div className="cm-space-item__bar" style={{ width: 'var(--space-6)' }}></div>
@@ -517,7 +550,7 @@ export default function StyleGuidePage() {
             <div className="cm-space-item">
               <div className="cm-space-item__meta">
                 <span className="cm-space-item__name">--space-8</span>
-                <span className="cm-space-item__value">2.2222vw · 32px</span>
+                <span className="cm-space-item__value">{spaceVal(2.2222, 42.67, vpWidth)}</span>
               </div>
               <div className="cm-space-item__bar-wrap">
                 <div className="cm-space-item__bar" style={{ width: 'var(--space-8)' }}></div>
@@ -527,7 +560,7 @@ export default function StyleGuidePage() {
             <div className="cm-space-item">
               <div className="cm-space-item__meta">
                 <span className="cm-space-item__name">--space-10</span>
-                <span className="cm-space-item__value">2.7778vw · 40px</span>
+                <span className="cm-space-item__value">{spaceVal(2.7778, 53.33, vpWidth)}</span>
               </div>
               <div className="cm-space-item__bar-wrap">
                 <div className="cm-space-item__bar" style={{ width: 'var(--space-10)' }}></div>
@@ -537,7 +570,7 @@ export default function StyleGuidePage() {
             <div className="cm-space-item">
               <div className="cm-space-item__meta">
                 <span className="cm-space-item__name">--space-12</span>
-                <span className="cm-space-item__value">3.3333vw · 48px</span>
+                <span className="cm-space-item__value">{spaceVal(3.3333, 64, vpWidth)}</span>
               </div>
               <div className="cm-space-item__bar-wrap">
                 <div className="cm-space-item__bar" style={{ width: 'var(--space-12)' }}></div>
@@ -547,7 +580,7 @@ export default function StyleGuidePage() {
             <div className="cm-space-item">
               <div className="cm-space-item__meta">
                 <span className="cm-space-item__name">--space-16</span>
-                <span className="cm-space-item__value">4.4444vw · 64px</span>
+                <span className="cm-space-item__value">{spaceVal(4.4444, 85.33, vpWidth)}</span>
               </div>
               <div className="cm-space-item__bar-wrap">
                 <div className="cm-space-item__bar" style={{ width: 'var(--space-16)' }}></div>
@@ -557,7 +590,7 @@ export default function StyleGuidePage() {
             <div className="cm-space-item">
               <div className="cm-space-item__meta">
                 <span className="cm-space-item__name">--space-20</span>
-                <span className="cm-space-item__value">5.5556vw · 80px</span>
+                <span className="cm-space-item__value">{spaceVal(5.5556, 106.67, vpWidth)}</span>
               </div>
               <div className="cm-space-item__bar-wrap">
                 <div className="cm-space-item__bar" style={{ width: 'var(--space-20)' }}></div>
@@ -567,7 +600,7 @@ export default function StyleGuidePage() {
             <div className="cm-space-item">
               <div className="cm-space-item__meta">
                 <span className="cm-space-item__name">--space-24</span>
-                <span className="cm-space-item__value">6.6667vw · 96px</span>
+                <span className="cm-space-item__value">{spaceVal(6.6667, 128, vpWidth)}</span>
               </div>
               <div className="cm-space-item__bar-wrap">
                 <div className="cm-space-item__bar" style={{ width: 'var(--space-24)' }}></div>
@@ -577,7 +610,7 @@ export default function StyleGuidePage() {
             <div className="cm-space-item">
               <div className="cm-space-item__meta">
                 <span className="cm-space-item__name">--space-32</span>
-                <span className="cm-space-item__value">8.8889vw · 128px</span>
+                <span className="cm-space-item__value">{spaceVal(8.8889, 170.67, vpWidth)}</span>
               </div>
               <div className="cm-space-item__bar-wrap">
                 <div className="cm-space-item__bar" style={{ width: 'var(--space-32)' }}></div>
@@ -587,7 +620,7 @@ export default function StyleGuidePage() {
             <div className="cm-space-item">
               <div className="cm-space-item__meta">
                 <span className="cm-space-item__name">--space-40</span>
-                <span className="cm-space-item__value">11.1111vw · 160px</span>
+                <span className="cm-space-item__value">{spaceVal(11.1111, 213.33, vpWidth)}</span>
               </div>
               <div className="cm-space-item__bar-wrap">
                 <div className="cm-space-item__bar" style={{ width: 'var(--space-40)' }}></div>
@@ -608,7 +641,7 @@ export default function StyleGuidePage() {
           <h2 className="cm-section__title">Components</h2>
           <p className="cm-section__desc">
             Pill-shaped buttons with an overflow fill animation on hover.
-            Available in 4 sizes (S / M / L / XL) and 2 style variants.
+            Available in 5 sizes (XS / S / M / L / XL) and 2 style variants.
             The fill animation uses{' '}
             <code style={{ fontFamily: 'monospace', fontSize: '0.9em' }}>mix-blend-mode: difference</code>
             {' '}for automatic text contrast inversion.
@@ -617,9 +650,12 @@ export default function StyleGuidePage() {
         <div className="cm-section__right">
 
           <div className="cm-btn-group">
-            <div className="cm-btn-label">Default — S / M / L / XL</div>
+            <div className="cm-btn-label">Default — XS / S / M / L / XL</div>
             <div className="cm-btn-dark">
               <div className="cm-btn-row">
+                <button className="button button--xs">
+                  <div></div><span>Extra Small</span>
+                </button>
                 <button className="button button--s">
                   <div></div><span>Small</span>
                 </button>
@@ -637,9 +673,12 @@ export default function StyleGuidePage() {
           </div>
 
           <div className="cm-btn-group">
-            <div className="cm-btn-label">Secondary variant — S / M / L / XL</div>
+            <div className="cm-btn-label">Secondary variant — XS / S / M / L / XL</div>
             <div className="cm-btn-dark">
               <div className="cm-btn-row">
+                <button className="button button--secondary button--xs">
+                  <div></div><span>Extra Small</span>
+                </button>
                 <button className="button button--secondary button--s">
                   <div></div><span>Small</span>
                 </button>
@@ -751,6 +790,29 @@ export default function StyleGuidePage() {
             </div>
           </div>
 
+          {/* Select */}
+          <div className="cm-form-sub">
+            <div className="cm-form-sub__label">Select</div>
+            <div className="form-group is-select has-content">
+              <div className="form-placeholder">Budget range</div>
+              <div className="form-select-wrap">
+                <select className="form-select" defaultValue="5k">
+                  <option value="">Select an option</option>
+                  <option value="5k">Under $5k</option>
+                  <option value="10k">$5k – $10k</option>
+                  <option value="20k">$10k – $20k</option>
+                  <option value="20k+">$20k+</option>
+                </select>
+                <span className="form-select-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+          {/* /Select */}
+
           {/* Checkbox */}
           <div className="cm-form-sub">
             <div className="cm-form-sub__label">Checkbox</div>
@@ -799,14 +861,392 @@ export default function StyleGuidePage() {
                     <span className="form-checkbox__text">I agree to the terms and conditions</span>
                   </label>
                 </div>
+                <div className="error-message">Please accept the Privacy Policy.</div>
               </div>
 
             </div>
           </div>
           {/* /Checkbox */}
 
+          {/* Radio */}
+          <div className="cm-form-sub">
+            <div className="cm-form-sub__label">Radio</div>
+            <div className="cm-form-checkboxes">
+
+              {/* Unchecked */}
+              <div className="form-group">
+                <div className="form-radio">
+                  <label>
+                    <input type="radio" name="sg-radio" />
+                    <span className="form-radio__dot" />
+                    <span className="form-radio__text">Option A</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Checked */}
+              <div className="form-group">
+                <div className="form-radio">
+                  <label>
+                    <input type="radio" name="sg-radio" defaultChecked />
+                    <span className="form-radio__dot" />
+                    <span className="form-radio__text">Option B (selected)</span>
+                  </label>
+                </div>
+              </div>
+
+
+
+            </div>
+          </div>
+          {/* /Radio */}
+
+          {/* Disabled */}
+          <div className="cm-form-sub">
+            <div className="cm-form-sub__label">Disabled</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+
+              {/* Input — disabled */}
+              <div className="form-group is-input is-disabled has-content">
+                <div className="form-control">
+                  <div className="form-placeholder">Full name</div>
+                  <input className="form-input" type="text" defaultValue="Jin-Chul Moon" disabled />
+                </div>
+              </div>
+
+              {/* Checkbox — disabled */}
+              <div className="form-group is-disabled" style={{ marginTop: '1.5vw' }}>
+                <div className="form-checkbox">
+                  <label>
+                    <input type="checkbox" defaultChecked disabled />
+                    <span className="form-checkbox__check">
+                      <svg viewBox="0 0 11 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 4L4.5 7.5L10 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                    <span className="form-checkbox__text">I agree to the terms and conditions</span>
+                  </label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          {/* /Disabled */}
+
+        </div>
+      </section>
+
+
+      {/* ==============================
+          08 — COLORS
+          ============================== */}
+      <section className="cm-section">
+        <div className="cm-section__left">
+          <div className="cm-section__meta">08 — Colors</div>
+          <h2 className="cm-section__title">Color Palette</h2>
+          <p className="cm-section__desc">
+            A minimal, high-contrast color system designed for clarity and elegance.
+            Base colors provide the primary surface and text, functional neutrals
+            handle borders and secondary content, and a signature accent delivers
+            visual energy. Theme-aware tokens adapt across light and dark modes.
+          </p>
+        </div>
+        <div className="cm-section__right">
+
+          {/* Base Colors */}
+          <div className="cm-color-group">
+            <div className="cm-color-group__label">Base Colors</div>
+            <div className="cm-color-grid">
+              <div className="cm-color-chip">
+                <div className="cm-color-chip__swatch" style={{ background: '#ffffff', border: '1px solid #e4e4e4' }} />
+                <div className="cm-color-chip__info">
+                  <span className="cm-color-chip__name">White</span>
+                  <span className="cm-color-chip__value">#FFFFFF</span>
+                </div>
+              </div>
+              <div className="cm-color-chip">
+                <div className="cm-color-chip__swatch" style={{ background: '#000000' }} />
+                <div className="cm-color-chip__info">
+                  <span className="cm-color-chip__name">Black</span>
+                  <span className="cm-color-chip__value">#000000</span>
+                </div>
+              </div>
+              <div className="cm-color-chip">
+                <div className="cm-color-chip__swatch" style={{ background: '#111111' }} />
+                <div className="cm-color-chip__info">
+                  <span className="cm-color-chip__name">Deep Grey</span>
+                  <span className="cm-color-chip__value">#111111</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Surface & Borders */}
+          <div className="cm-color-group">
+            <div className="cm-color-group__label">Surface &amp; Borders</div>
+            <div className="cm-color-grid">
+              <div className="cm-color-chip">
+                <div className="cm-color-chip__swatch" style={{ background: '#f5f5f5', border: '1px solid #e4e4e4' }} />
+                <div className="cm-color-chip__info">
+                  <span className="cm-color-chip__name">Light Grey</span>
+                  <span className="cm-color-chip__value">#F5F5F5</span>
+                </div>
+              </div>
+              <div className="cm-color-chip">
+                <div className="cm-color-chip__swatch" style={{ background: '#e2e2e2' }} />
+                <div className="cm-color-chip__info">
+                  <span className="cm-color-chip__name">Medium Grey</span>
+                  <span className="cm-color-chip__value">#E2E2E2</span>
+                </div>
+              </div>
+              <div className="cm-color-chip">
+                <div className="cm-color-chip__swatch" style={{ background: '#888888' }} />
+                <div className="cm-color-chip__info">
+                  <span className="cm-color-chip__name">Dark Grey</span>
+                  <span className="cm-color-chip__value">#888888</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Accent & Functional */}
+          <div className="cm-color-group">
+            <div className="cm-color-group__label">Accent &amp; Functional</div>
+            <div className="cm-color-grid">
+              <div className="cm-color-chip">
+                <div className="cm-color-chip__swatch" style={{ background: '#ff4d00' }} />
+                <div className="cm-color-chip__info">
+                  <span className="cm-color-chip__name">Accent</span>
+                  <span className="cm-color-chip__value">#FF4D00</span>
+                </div>
+              </div>
+              <div className="cm-color-chip">
+                <div className="cm-color-chip__swatch" style={{ background: '#FB6262' }} />
+                <div className="cm-color-chip__info">
+                  <span className="cm-color-chip__name">Error</span>
+                  <span className="cm-color-chip__value">#FB6262</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Theme Tokens */}
+          <div className="cm-color-group">
+            <div className="cm-color-group__label">Theme Tokens</div>
+            <div className="cm-color-tokens">
+              <div className="cm-color-token-row">
+                <div className="cm-color-token-row__swatches">
+                  <div className="cm-color-chip__swatch cm-color-chip__swatch--sm" style={{ background: '#000000' }} />
+                  <span className="cm-color-token-row__arrow">→</span>
+                  <div className="cm-color-chip__swatch cm-color-chip__swatch--sm" style={{ background: '#ffffff', border: '1px solid #e4e4e4' }} />
+                </div>
+                <div className="cm-color-token-row__info">
+                  <span className="cm-color-token-row__name">--foreground</span>
+                  <span className="cm-color-token-row__value">Light: #000 · Dark: #FFF</span>
+                </div>
+              </div>
+              <div className="cm-color-token-row">
+                <div className="cm-color-token-row__swatches">
+                  <div className="cm-color-chip__swatch cm-color-chip__swatch--sm" style={{ background: 'rgba(0,0,0,0.45)' }} />
+                  <span className="cm-color-token-row__arrow">→</span>
+                  <div className="cm-color-chip__swatch cm-color-chip__swatch--sm" style={{ background: 'rgba(255,255,255,0.45)', border: '1px solid #e4e4e4' }} />
+                </div>
+                <div className="cm-color-token-row__info">
+                  <span className="cm-color-token-row__name">--foreground-muted</span>
+                  <span className="cm-color-token-row__value">Light: rgba(0,0,0,0.45) · Dark: rgba(255,255,255,0.45)</span>
+                </div>
+              </div>
+              <div className="cm-color-token-row">
+                <div className="cm-color-token-row__swatches">
+                  <div className="cm-color-chip__swatch cm-color-chip__swatch--sm" style={{ background: 'rgba(0,0,0,0.2)' }} />
+                  <span className="cm-color-token-row__arrow">→</span>
+                  <div className="cm-color-chip__swatch cm-color-chip__swatch--sm" style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid #e4e4e4' }} />
+                </div>
+                <div className="cm-color-token-row__info">
+                  <span className="cm-color-token-row__name">--foreground-dim</span>
+                  <span className="cm-color-token-row__value">Light: rgba(0,0,0,0.2) · Dark: rgba(255,255,255,0.2)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      {/* ==============================
+          09 — GRID & LAYOUT
+          ============================== */}
+      <section className="cm-section">
+        <div className="cm-section__left">
+          <div className="cm-section__meta">09 — Grid &amp; Layout</div>
+          <h2 className="cm-section__title">Breakpoints &amp; Gutters</h2>
+          <p className="cm-section__desc">
+            A four-tier responsive breakpoint system governs layout shifts.
+            Fluid viewport-width spacing on desktop transitions to fixed pixel
+            values at smaller screens. Above 1920px sections stop growing
+            and center-align. Side gutters maintain consistent horizontal
+            rhythm across all breakpoints.
+          </p>
+        </div>
+        <div className="cm-section__right">
+
+          {/* Breakpoints */}
+          <div className="cm-layout-group">
+            <div className="cm-layout-group__label">Breakpoints</div>
+            <div className="cm-layout-list">
+              <div className="cm-layout-item">
+                <span className="cm-layout-item__name">Mobile</span>
+                <span className="cm-layout-item__value">≤ 575px</span>
+                <div className="cm-layout-item__bar-wrap">
+                  <div className="cm-layout-item__bar" style={{ width: '30%' }} />
+                </div>
+              </div>
+              <div className="cm-layout-item">
+                <span className="cm-layout-item__name">Tablet</span>
+                <span className="cm-layout-item__value">576 – 1024px</span>
+                <div className="cm-layout-item__bar-wrap">
+                  <div className="cm-layout-item__bar" style={{ width: '53%' }} />
+                </div>
+              </div>
+              <div className="cm-layout-item">
+                <span className="cm-layout-item__name">Desktop</span>
+                <span className="cm-layout-item__value">1025 – 1920px</span>
+                <div className="cm-layout-item__bar-wrap">
+                  <div className="cm-layout-item__bar" style={{ width: '85%' }} />
+                </div>
+              </div>
+              <div className="cm-layout-item">
+                <span className="cm-layout-item__name">Desktop XL</span>
+                <span className="cm-layout-item__value">1921px +</span>
+                <div className="cm-layout-item__bar-wrap">
+                  <div className="cm-layout-item__bar" style={{ width: '100%' }} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Gutters */}
+          <div className="cm-layout-group">
+            <div className="cm-layout-group__label">Side Gutters</div>
+            <div className="cm-layout-list">
+              <div className="cm-layout-item">
+                <span className="cm-layout-item__name">Desktop</span>
+                <span className="cm-layout-item__value">3.3333vw · 48px @ 1440</span>
+                <div className="cm-layout-item__bar-wrap">
+                  <div className="cm-layout-item__bar cm-layout-item__bar--gutter" style={{ width: '3.3333vw' }} />
+                </div>
+              </div>
+              <div className="cm-layout-item">
+                <span className="cm-layout-item__name">Tablet</span>
+                <span className="cm-layout-item__value">20px · Fixed</span>
+                <div className="cm-layout-item__bar-wrap">
+                  <div className="cm-layout-item__bar cm-layout-item__bar--gutter" style={{ width: '20px' }} />
+                </div>
+              </div>
+              <div className="cm-layout-item">
+                <span className="cm-layout-item__name">Mobile</span>
+                <span className="cm-layout-item__value">16px · Fixed</span>
+                <div className="cm-layout-item__bar-wrap">
+                  <div className="cm-layout-item__bar cm-layout-item__bar--gutter" style={{ width: '16px' }} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      {/* ==============================
+          10 — EFFECTS
+          ============================== */}
+      <section className="cm-section">
+        <div className="cm-section__left">
+          <div className="cm-section__meta">10 — Effects</div>
+          <h2 className="cm-section__title">Material &amp; Motion</h2>
+          <p className="cm-section__desc">
+            Glassmorphism effects, elevation shadows, and standardized easing
+            curves give the interface its dimensional depth and fluid motion.
+            All transition durations and curves are consistent across components.
+          </p>
+        </div>
+        <div className="cm-section__right">
+
+          {/* Glass Effects */}
+          <div className="cm-effects-group">
+            <div className="cm-effects-group__label">Glass &amp; Depth</div>
+            <div className="cm-effects-demos">
+              <div className="cm-effect-card cm-effect-card--glass">
+                <div className="cm-effect-card__label">Glassmorphism</div>
+                <div className="cm-effect-card__spec">
+                  background: rgba(255,255,255,0.7)<br />
+                  border: 1px solid rgba(255,255,255,0.3)<br />
+                  backdrop-filter: blur(20px)
+                </div>
+              </div>
+              <div className="cm-effect-card cm-effect-card--shadow">
+                <div className="cm-effect-card__label">Soft Shadow</div>
+                <div className="cm-effect-card__spec">
+                  box-shadow: 0 10px 30px rgba(0,0,0,0.05)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Transitions */}
+          <div className="cm-effects-group">
+            <div className="cm-effects-group__label">Easing &amp; Duration</div>
+            <div className="cm-transition-list">
+              <div className="cm-transition-item">
+                <span className="cm-transition-item__name">Theme transition</span>
+                <span className="cm-transition-item__value">0.4s ease</span>
+                <div className="cm-transition-item__demo cm-transition-item__demo--ease" />
+              </div>
+              <div className="cm-transition-item">
+                <span className="cm-transition-item__name">Body color</span>
+                <span className="cm-transition-item__value">0.6s ease-out</span>
+                <div className="cm-transition-item__demo cm-transition-item__demo--ease-out" />
+              </div>
+              <div className="cm-transition-item">
+                <span className="cm-transition-item__name">Button fill</span>
+                <span className="cm-transition-item__value">0.45s cubic-bezier(0.52, 0.24, 0.08, 1)</span>
+                <div className="cm-transition-item__demo cm-transition-item__demo--cubic" />
+              </div>
+            </div>
+          </div>
+
+          {/* Border Radius */}
+          <div className="cm-effects-group">
+            <div className="cm-effects-group__label">Border Radius</div>
+            <div className="cm-radius-demos">
+              <div className="cm-radius-item">
+                <div className="cm-radius-item__box" style={{ borderRadius: '0px' }} />
+                <span className="cm-radius-item__value">0px</span>
+              </div>
+              <div className="cm-radius-item">
+                <div className="cm-radius-item__box" style={{ borderRadius: '4px' }} />
+                <span className="cm-radius-item__value">4px</span>
+              </div>
+              <div className="cm-radius-item">
+                <div className="cm-radius-item__box" style={{ borderRadius: '6px' }} />
+                <span className="cm-radius-item__value">6px</span>
+              </div>
+              <div className="cm-radius-item">
+                <div className="cm-radius-item__box" style={{ borderRadius: '9999px' }} />
+                <span className="cm-radius-item__value">9999px · pill</span>
+              </div>
+              <div className="cm-radius-item">
+                <div className="cm-radius-item__box" style={{ borderRadius: '50%' }} />
+                <span className="cm-radius-item__value">50% · circle</span>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
     </div>
+    </>
   );
 }
+

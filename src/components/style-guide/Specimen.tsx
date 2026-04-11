@@ -29,9 +29,14 @@ export default function Specimen({ className, vpWidth, children }: Props) {
     const lhPx = parseFloat(cs.lineHeight);
     const lhStr = isNaN(lhPx) ? '' : Math.round((lhPx / pxSize) * 100) + '%';
 
-    // 활성 breakpoint 기준 viewport 결정
-    const activeVp = vpWidth <= 575 ? 576 : vpWidth <= 1023 ? 1024 : REF_VP;
-    const calcStr = `calc(${px} / ${activeVp} * 100vw)`;
+    // 활성 breakpoint 기준 viewport 결정 (375 mobile / 768 tablet / 1440 desktop)
+    const isDesktopXL = vpWidth > 1920;
+    const refVp = vpWidth <= 575 ? 375 : vpWidth <= 1023 ? 768 : REF_VP;
+    // 현재 렌더링된 px를 레퍼런스 뷰포트 기준으로 역산
+    const refPx = Math.round(pxSize * refVp / vpWidth);
+    const calcStr = isDesktopXL
+      ? `${px}px · fixed (1920px cap)`
+      : `calc(${refPx} / ${refVp} * 100vw)`;
     setSpec(`${className} / ${px}px · ${calcStr} / ls ${lsEm} / ${lhStr}`);
   }, [className, vpWidth]);
 

@@ -1,0 +1,375 @@
+@use '@/styles/primitives/colors' as *;
+@use '@/styles/primitives/type' as *;
+@use '@/styles/primitives/space' as *;
+
+// ── CSS 애니메이션 키프레임 ──────────────────────────────────────
+@keyframes reveal-clip {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0% 0);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ── Work List Section ────────────────────────────────────────────
+
+.work-list {
+  padding-bottom: fvw(170); // plastic: footer follows immediately, add bottom breathing
+
+  // ── 카테고리 필터 (대형 헤드라인 스타일) ──────────────────
+  &__filter {
+    padding: fvw(369) $gutter-desktop fvw(34); // plastic: pt ~25.6vw, pb ~2.4vw
+
+    &--animate {
+      animation: fade-up 0.8s ease both;
+    }
+  }
+
+  &__filter-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    align-items: baseline;
+  }
+
+  // li 항목 — 구분자 "—" 포함
+  &__filter-item {
+    display: flex;
+    align-items: baseline;
+
+    // 구분자: 마지막 항목 제외
+    &:not(:last-child)::after {
+      content: ' —';
+      font-size: fvw(50);
+      font-weight: $fw-light;
+      line-height: 1;
+      letter-spacing: $ls-tight;
+      color: var(--foreground-muted);
+      margin: 0 fvw(10);
+      white-space: pre;
+    }
+  }
+
+  // 필터 버튼 — 대형 헤드라인 (plastic.design 맞춤: fvw(50) ≈ 45px @ 767px)
+  &__filter-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: fvw(50);
+    font-weight: $fw-light;
+    line-height: 1;
+    letter-spacing: $ls-tight;
+    color: var(--foreground-muted);
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0;
+    transition: color 0.25s ease;
+    white-space: nowrap;
+
+    &:hover {
+      color: var(--foreground);
+    }
+
+    &.is-active {
+      color: var(--foreground);
+    }
+  }
+
+  // 카운트 숫자 (상단 작은 superscript)
+  &__filter-count {
+    font-size: var(--fs-body-caps);
+    line-height: 1;
+    vertical-align: super;
+    color: inherit;
+    margin-left: fvw(2);
+  }
+
+  // ── 그리드 ────────────────────────────────────────
+  // column-gap = gutter-desktop → 좌우 여백과 카드 사이 간격 일치
+  // align-items: start → 높이가 달라도 stretch 없이 각자 높이 유지
+  &__grid {
+    padding: 0 $gutter-desktop;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: $gutter-desktop;
+    row-gap: fvw(104);
+    align-items: start;
+  }
+
+  // ── Tablet ────────────────────────────────────────
+  @media (max-width: 1023.98px) {
+    padding-bottom: 12vw;
+
+    &__filter {
+      padding: 22vw $gutter-tablet 2.5vw; // plastic proportional
+      overflow-x: auto;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    &__filter-list {
+      flex-wrap: nowrap;
+    }
+
+    &__filter-item {
+      &:not(:last-child)::after {
+        font-size: calc(30 / 768 * 100vw); // plastic.design .work-nav a — 30px @ 768
+        margin: 0 $space-2;
+      }
+    }
+
+    &__filter-btn {
+      font-size: calc(30 / 768 * 100vw); // plastic.design .work-nav a — 30px @ 768
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    &__filter-count {
+      font-size: var(--fs-body-caps);
+    }
+
+    &__grid {
+      padding: 0 $gutter-tablet;
+      column-gap: $gutter-tablet;
+      row-gap: $section-title-space;
+    }
+  }
+
+  // ── Mobile ─────────────────────────────────────────
+  @media (max-width: 575.98px) {
+    padding-bottom: 10vw;
+
+    &__filter {
+      padding: 36vw $gutter-mobile 4vw; // plastic proportional
+    }
+
+    &__filter-item {
+      &:not(:last-child)::after {
+        font-size: calc(25 / 375 * 100vw); // plastic.design .work-nav a — 25px @ 375
+        margin: 0 6px;
+      }
+    }
+
+    &__filter-btn {
+      font-size: calc(25 / 375 * 100vw); // plastic.design .work-nav a — 25px @ 375
+      line-height: 1.1;
+    }
+
+    &__filter-count {
+      font-size: var(--fs-body-caps); // calc(12 / 576 * 100vw)
+    }
+
+    &__grid {
+      padding: 0 $gutter-mobile;
+      grid-template-columns: 1fr;
+      column-gap: 0;
+      row-gap: $space-12;
+    }
+  }
+}
+
+// ── Work List 나가기 트랜지션 ──────────────────────────────────────
+// 워크 카드 클릭 시:
+//   - 필터 + 비활성 카드 → opacity 0 (0.28s)
+//   - 활성 카드 [data-active] → opacity 1 유지 (이미지 "잔존" 효과)
+//   - 활성 카드의 텍스트는 같이 사라짐
+
+.work-list.is-exiting {
+  .work-list__filter {
+    animation: none; // animation-fill-mode:both 가 opacity:1 을 고정하므로 해제
+    opacity: 0;
+    transition: opacity 0.22s ease;
+  }
+
+  .work-item {
+    animation: none; // 동일 이유
+    opacity: 0;
+    transition: opacity 0.28s ease;
+
+    // 클릭된 카드만 남김
+    &[data-active] {
+      opacity: 1;
+      transition: none;
+
+      // 텍스트(캡션)는 같이 사라짐
+      .work-item__text {
+        opacity: 0;
+        transition: opacity 0.18s ease;
+      }
+    }
+  }
+}
+
+// ── Work Cursor (전역 fixed 커서 배지) ────────────────────────────
+
+.work-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1000;
+  width: 76px;
+  height: 76px;
+
+  // 배경 원 — static flow, scale(0.5)→scale(1) 로 등장
+  // translate 없음: 부모 top-left = 커서 위치 → 원 center = 커서 +38px 우하단
+  &__bg {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: var(--foreground);
+    transform: scale(0.5);
+    opacity: 0;
+    transition: transform 0.2s ease-in-out 0.3s,
+      opacity 0.2s ease-in-out 0.3s;
+  }
+
+  // 텍스트 레이블 — 부모 중앙(= 원 중앙)에 위치
+  &__label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 76px;
+    height: 76px;
+    color: var(--background);
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: normal;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out 0.3s,
+      visibility 0.2s ease-in-out 0.3s;
+  }
+
+  &.is-visible &__bg {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  &.is-visible &__label {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// ── Work Item ─────────────────────────────────────────────────────
+
+.work-item {
+  grid-column: span 1; // HALF: 1컬럼
+
+  // CSS @keyframes reveal (JS 없음)
+  // duration + ease를 커튼·__top 높이 애니메이션과 통일
+  &--animate {
+    animation: reveal-clip 1.0s cubic-bezier(0.76, 0, 0.24, 1) both;
+    animation-delay: var(--anim-delay, 0ms);
+  }
+
+  // FULL: 2컬럼 전체 너비
+  &--full {
+    grid-column: span 2;
+  }
+
+  &__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  // 이미지 컨테이너
+  &__image {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--foreground) 5%, transparent);
+
+    // 비율: --aspect-ratio CSS 변수로 동적 제어 (기본 120%)
+    &::before {
+      content: '';
+      display: block;
+      padding-top: var(--aspect-ratio, 120%);
+    }
+
+    .wave-image {
+      position: absolute;
+      inset: 0;
+      cursor: none;
+
+      // 내부 inner도 절대위치 채우기
+      &__inner {
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  // FULL 아이템: 기본 16:9, --aspect-ratio 변수로 override 가능
+  &--full &__image::before {
+    padding-top: var(--aspect-ratio, 56.25%);
+  }
+
+  // 텍스트 (이미지 하단) — 멀티라인 허용 (plastic.design 스타일)
+  &__text {
+    margin-top: $space-3;
+    font-size: var(--fs-h6);
+    font-weight: $fw-regular;
+    color: var(--foreground);
+    line-height: $lh-h6;
+    letter-spacing: 0;
+    white-space: normal;
+  }
+
+  // ── Tablet ───────────────────────────────────────
+  @media (max-width: 1023.98px) {
+    &__text {
+      margin-top: 10px;
+      font-size: var(--fs-h6); // plastic.design — 16px @ 768
+    }
+  }
+
+  // ── Mobile ─────────────────────────────────────────
+  @media (max-width: 575.98px) {
+    padding-bottom: $space-40;
+
+    &--full {
+      grid-column: span 1;
+    }
+
+    &--full &__image::before {
+      padding-top: 65%;
+    }
+
+    &__text {
+      margin-top: $space-8;
+      font-size: var(--fs-h6); // plastic.design — 20px @ 390
+    }
+  }
+}

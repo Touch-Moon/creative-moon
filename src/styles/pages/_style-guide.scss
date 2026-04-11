@@ -34,10 +34,8 @@
 .cm-root {
   /* Breakpoints — unitless px values, read by JS via getComputedStyle */
   --cm-bp-mobile: 575;
-  --cm-bp-tablet: 768;
-  --cm-bp-laptop: 1024;
-  --cm-bp-laptop-l: 1280;
-  --cm-bp-desktop: 1440;
+  --cm-bp-tablet: 1024;
+  --cm-bp-desktop: 1920;
 
   --cm-bg: #ffffff;
   --cm-fg: #000000;
@@ -62,10 +60,14 @@
 }
 
 .cm-theme-toggle {
+  /* cm-root 밖에서도 동작하도록 자체 CSS 변수 정의 (light default) */
+  --cm-fg: #000;
+  --cm-bg: #fff;
+
   position: fixed;
   right: clamp(16px, 1.67vw, 24px);
   bottom: clamp(16px, 1.67vw, 24px);
-  z-index: 1000;
+  z-index: 9999;
 
   /* Reset */
   border: none;
@@ -73,6 +75,7 @@
   cursor: pointer;
   font-family: inherit;
   -webkit-appearance: none;
+  appearance: none;
 
   /* Circle */
   width: clamp(36px, 2.78vw, 44px);
@@ -82,30 +85,36 @@
   background: transparent;
   color: var(--cm-fg);
 
-  /* Center icon */
+  /* Center icon — overflow:hidden 으로 ::before 마스크 */
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 
-  transition: color 0.2s ease;
+  transition: color 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* Hover fill — circle expands from center */
+/* cm-root 밖으로 이동 시 data-theme으로 직접 색상 제어 */
+.cm-theme-toggle[data-theme="dark"] {
+  --cm-fg: #fff;
+  --cm-bg: #000;
+}
+
+/* Eclipse — 왼쪽에서 오른쪽으로 슬라이드 */
 .cm-theme-toggle::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 50%;
   background: var(--cm-fg);
-  transform: scale(0);
-  transition: transform 0.3s cubic-bezier(0.52, 0.24, 0.08, 1);
+  transform: translateX(-100%);
+  transition: transform 0.45s cubic-bezier(0.52, 0.24, 0.08, 1);
   will-change: transform;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .cm-theme-toggle:hover::before {
-    transform: scale(1);
+    transform: translateX(0);
   }
 
   .cm-theme-toggle:hover {
@@ -117,7 +126,7 @@
 .cm-header {
   background: #000;
   color: #fff;
-  padding: $space-24 $space-16 $space-20;
+  padding: $space-40 $gutter-desktop $space-20;
   transition: background-color 0.4s ease, color 0.4s ease;
 }
 
@@ -157,8 +166,9 @@
   font-size: clamp(2.5rem, 6vw, 6.5rem);
   font-weight: 400;
   line-height: 0.95;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.015em;
   margin-bottom: 3.5vw;
+  text-transform: uppercase;
 }
 
 .cm-header__body {
@@ -171,7 +181,7 @@
   font-weight: 400;
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.65);
-  margin-bottom: 1.5vw;
+  margin-bottom: $space-16;
 }
 
 .cm-header__link {
@@ -184,19 +194,41 @@
   text-underline-offset: 3px;
 }
 
+/* ---- Desktop XL — max-width cap + center ---- */
+@media (min-width: 1921px) {
+
+  /* section: 1920px 컨테이너로 가운데 정렬 */
+  .cm-section {
+    max-width: 1920px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* header: 배경은 full-width, 내부 콘텐츠는 1920px 기준 가운데 */
+  .cm-header {
+    padding-left: calc((100vw - 1920px) / 2 + 64px);
+    padding-right: calc((100vw - 1920px) / 2 + 64px);
+  }
+}
+
 /* ---- Section Layout ---- */
 .cm-section {
   display: grid;
   grid-template-columns: 25vw 1fr;
   border-top: 1px solid var(--cm-border);
+  padding-left: $gutter-desktop;
+  padding-right: $gutter-desktop;
 }
 
 .cm-section__left {
-  padding: 3.5vw 2.8vw 3.5vw 4.17vw;
+  padding: $space-16 $space-20 $space-16 0;
+  position: sticky;
+  top: 0;
+  align-self: start;
 }
 
 .cm-section__right {
-  padding: 3.5vw 4.17vw;
+  padding: 3.5vw 0;
 }
 
 /* ---- Section Meta ---- */
@@ -472,13 +504,12 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  border-top: 1px solid var(--cm-soft-border);
 }
 
 .cm-space-item {
   display: flex;
   align-items: center;
-  gap: 2.5vw;
+  gap: 36px; // 2.5vw @ 1440px — 고정값으로 통일
   padding: 1.4vw 0;
   border-bottom: 1px solid var(--cm-soft-border);
 }
@@ -491,7 +522,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.3em;
-  min-width: 10vw;
+  min-width: 144px; // 10vw @ 1440px — 고정값으로 bar 시작점 통일
   flex-shrink: 0;
 }
 
@@ -515,18 +546,42 @@
 }
 
 .cm-space-item__bar {
-  height: 6px;
+  height: 32px;
   background: #FB6262;
-  border-radius: 9999px;
+  border-radius: 4px;
 }
 
 /* ---- Responsive ---- */
 @media (max-width: 1023.98px) {
   .cm-section {
     grid-template-columns: 1fr;
+    padding-left: $gutter-tablet;
+    padding-right: $gutter-tablet;
+  }
+
+  .cm-header {
+    padding-left: $gutter-tablet;
+    padding-right: $gutter-tablet;
+  }
+
+  /* 버튼 크기 고정 — button--s tablet 기본값(6.51vw = 66px)이 너무 커서 desktop과 맞춤 */
+  .cm-header__body .button--s span {
+    height: 32px;
+    font-size: 11px;
+    padding: 0 18px;
+  }
+
+  /* space-item: min-width 고정으로 bar 시작점 통일 */
+  .cm-space-item {
+    gap: 24px;
+  }
+
+  .cm-space-item__meta {
+    min-width: 110px;
   }
 
   .cm-section__left {
+    position: static;
     border-right: none;
     border-bottom: 1px solid var(--cm-border);
   }
@@ -563,6 +618,44 @@
 
   .cm-form-state:last-child {
     border-bottom: none;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .cm-header {
+    padding-left: $gutter-mobile;
+    padding-right: $gutter-mobile;
+    padding: calc($space-40 * 2) $gutter-mobile $space-40;
+  }
+
+  .cm-section {
+    padding-left: $gutter-mobile;
+    padding-right: $gutter-mobile;
+  }
+
+  /* 버튼 크기 고정 */
+  .cm-header__body .button--s span {
+    height: 32px;
+    font-size: 11px;
+    padding: 0 18px;
+  }
+
+  /* 모바일: 버튼 행 세로 정렬 */
+  .cm-btn-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1.2vw;
+  }
+
+  /* space-item: mobile도 고정값 */
+  .cm-space-item {
+    gap: 16px;
+  }
+
+  .cm-space-item__meta {
+    min-width: 90px;
   }
 }
 
@@ -666,6 +759,33 @@
   color: #fff;
 }
 
+/* ---- Dark mode — Radio overrides ---- */
+.cm-root[data-theme='dark'] .form-group .form-radio label .form-radio__dot {
+  border-color: #fff;
+}
+
+.cm-root[data-theme='dark'] .form-group .form-radio label .form-radio__dot::after {
+  background: #fff;
+}
+
+.cm-root[data-theme='dark'] .form-group .form-radio label .form-radio__text {
+  color: #fff;
+}
+
+/* ---- Dark mode — Select overrides ---- */
+.cm-root[data-theme='dark'] .form-group.is-select .form-select {
+  color: #fff;
+}
+
+.cm-root[data-theme='dark'] .form-group.is-select .form-select-wrap::before,
+.cm-root[data-theme='dark'] .form-group.is-select .form-select-wrap::after {
+  background: #fff;
+}
+
+.cm-root[data-theme='dark'] .form-group.is-select .form-select-arrow {
+  color: #fff;
+}
+
 /* ---- Utilities ---- */
 .mix-blend-difference {
   mix-blend-mode: difference;
@@ -679,4 +799,670 @@
   flex-shrink: 0;
   position: relative;
   z-index: 1;
+}
+
+
+/* ================================================
+   08 — COLORS
+   ================================================ */
+
+.cm-color-group {
+  padding: 2vw $space-12;
+  border-top: 1px solid var(--cm-soft-border);
+}
+
+.cm-color-group:first-child {
+  border-top: none;
+  border-radius: 6px 6px 0 0;
+}
+
+.cm-color-group:last-child {
+  border-radius: 0 0 6px 6px;
+}
+
+.cm-root[data-theme='dark'] .cm-color-group {
+  background-color: #fff;
+  /* 흰 배경 위에서 텍스트 및 border가 보이도록 --cm-fg / --cm-soft-border 로컬 오버라이드 */
+  --cm-fg: #000;
+  --cm-soft-border: rgba(0, 0, 0, 0.1);
+}
+
+.cm-color-group__label {
+  font-size: clamp(9px, 0.73vw, 11px);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cm-fg);
+  margin-bottom: 1.5vw;
+  opacity: 0.5;
+}
+
+.cm-color-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2vw;
+}
+
+.cm-color-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8vw;
+}
+
+.cm-color-chip__swatch {
+  width: 100%;
+  aspect-ratio: 16 / 2;
+  border-radius: 6px;
+  transition: transform 0.3s ease;
+}
+
+.cm-color-chip__swatch--sm {
+  width: clamp(20px, 1.67vw, 28px);
+  height: clamp(20px, 1.67vw, 28px);
+  aspect-ratio: 1;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cm-color-chip__swatch:hover {
+    transform: scale(1.02);
+  }
+}
+
+.cm-color-chip__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+}
+
+.cm-color-chip__name {
+  font-size: clamp(11px, 0.88vw, 13px);
+  font-weight: 400;
+  color: var(--cm-fg);
+}
+
+.cm-color-chip__value {
+  font-size: clamp(9px, 0.73vw, 11px);
+  font-weight: 400;
+  color: var(--cm-fg);
+  opacity: 0.5;
+  letter-spacing: 0.02em;
+  font-family: monospace;
+}
+
+/* Theme tokens */
+.cm-color-tokens {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.cm-color-token-row {
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+  padding: 1.2vw 0;
+  border-bottom: 1px solid var(--cm-soft-border);
+}
+
+.cm-color-token-row:last-child {
+  border-bottom: none;
+}
+
+.cm-color-token-row__swatches {
+  display: flex;
+  align-items: center;
+  gap: 0.6vw;
+  flex-shrink: 0;
+}
+
+.cm-color-token-row__arrow {
+  font-size: clamp(10px, 0.83vw, 14px);
+  color: var(--cm-fg);
+  opacity: 0.35;
+}
+
+.cm-color-token-row__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+}
+
+.cm-color-token-row__name {
+  font-size: clamp(11px, 0.88vw, 13px);
+  font-weight: 400;
+  color: var(--cm-fg);
+  font-family: monospace;
+}
+
+.cm-color-token-row__value {
+  font-size: clamp(9px, 0.73vw, 11px);
+  font-weight: 400;
+  color: var(--cm-fg);
+  opacity: 0.5;
+  letter-spacing: 0.02em;
+}
+
+
+/* ================================================
+   09 — GRID & LAYOUT
+   ================================================ */
+
+.cm-layout-group {
+  padding: 2vw 0;
+  border-top: 1px solid var(--cm-soft-border);
+}
+
+.cm-layout-group:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.cm-layout-group__label {
+  font-size: clamp(9px, 0.73vw, 11px);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cm-fg);
+  margin-bottom: 1.5vw;
+  opacity: 0.5;
+}
+
+.cm-layout-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--cm-soft-border);
+}
+
+.cm-layout-item {
+  display: grid;
+  grid-template-columns: 7vw 12vw 1fr;
+  align-items: center;
+  gap: 1.5vw;
+  padding: 1.2vw 0;
+  border-bottom: 1px solid var(--cm-soft-border);
+}
+
+.cm-layout-item:last-child {
+  border-bottom: none;
+}
+
+.cm-layout-item__name {
+  font-size: clamp(11px, 0.88vw, 13px);
+  font-weight: 400;
+  color: var(--cm-fg);
+}
+
+.cm-layout-item__value {
+  font-size: clamp(9px, 0.73vw, 11px);
+  font-weight: 400;
+  color: var(--cm-fg);
+  opacity: 0.6;
+  letter-spacing: 0.02em;
+}
+
+.cm-layout-item__bar-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.cm-layout-item__bar {
+  height: 28px;
+  background: var(--cm-fg);
+  border-radius: 4px;
+  opacity: 0.08;
+  transition: opacity 0.3s ease;
+}
+
+.cm-layout-item__bar--gutter {
+  background: #ff4d00;
+  opacity: 0.6;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cm-layout-item:hover .cm-layout-item__bar {
+    opacity: 0.15;
+  }
+}
+
+
+/* ================================================
+   10 — EFFECTS
+   ================================================ */
+
+.cm-effects-group {
+  padding: 2vw 0;
+  border-top: 1px solid var(--cm-soft-border);
+}
+
+.cm-effects-group:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.cm-effects-group__label {
+  font-size: clamp(9px, 0.73vw, 11px);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cm-fg);
+  margin-bottom: 1.5vw;
+  opacity: 0.5;
+}
+
+/* Glass & Shadow demos */
+.cm-effects-demos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5vw;
+}
+
+.cm-effect-card {
+  padding: 2.5vw;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 1vw;
+  min-height: 10vw;
+}
+
+.cm-effect-card--glass {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.cm-root[data-theme='dark'] .cm-effect-card--glass {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.cm-effect-card--shadow {
+  background: var(--cm-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--cm-soft-border);
+}
+
+.cm-root[data-theme='dark'] .cm-effect-card--shadow {
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.03);
+}
+
+.cm-effect-card__label {
+  font-size: clamp(11px, 0.88vw, 13px);
+  font-weight: 400;
+  color: var(--cm-fg);
+}
+
+.cm-effect-card__spec {
+  font-size: clamp(9px, 0.73vw, 11px);
+  font-weight: 400;
+  color: var(--cm-fg);
+  opacity: 0.5;
+  line-height: 1.8;
+  font-family: monospace;
+  letter-spacing: 0.02em;
+}
+
+/* Transitions list */
+.cm-transition-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--cm-soft-border);
+}
+
+.cm-transition-item {
+  display: grid;
+  grid-template-columns: 10vw 1fr auto;
+  align-items: center;
+  gap: 1.5vw;
+  padding: 1.4vw 0;
+  border-bottom: 1px solid var(--cm-soft-border);
+}
+
+.cm-transition-item:last-child {
+  border-bottom: none;
+}
+
+.cm-transition-item__name {
+  font-size: clamp(11px, 0.88vw, 13px);
+  font-weight: 400;
+  color: var(--cm-fg);
+}
+
+.cm-transition-item__value {
+  font-size: clamp(9px, 0.73vw, 11px);
+  font-weight: 400;
+  color: var(--cm-fg);
+  opacity: 0.6;
+  letter-spacing: 0.02em;
+  font-family: monospace;
+}
+
+.cm-transition-item__demo {
+  width: clamp(32px, 2.5vw, 40px);
+  height: clamp(32px, 2.5vw, 40px);
+  border-radius: 50%;
+  background: var(--cm-fg);
+  opacity: 0.12;
+  transform: scale(0.8);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cm-transition-item:hover .cm-transition-item__demo {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+
+  .cm-transition-item__demo--ease {
+    transition: all 0.4s ease;
+  }
+
+  .cm-transition-item__demo--ease-out {
+    transition: all 0.6s ease-out;
+  }
+
+  .cm-transition-item__demo--cubic {
+    transition: all 0.45s cubic-bezier(0.52, 0.24, 0.08, 1);
+  }
+}
+
+/* Border Radius demos */
+.cm-radius-demos {
+  display: flex;
+  align-items: flex-end;
+  gap: 2vw;
+  flex-wrap: wrap;
+}
+
+.cm-radius-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8vw;
+}
+
+.cm-radius-item__box {
+  width: clamp(48px, 4vw, 64px);
+  height: clamp(48px, 4vw, 64px);
+  border: 1.5px solid var(--cm-fg);
+  opacity: 0.25;
+  transition: opacity 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cm-radius-item:hover .cm-radius-item__box {
+    opacity: 0.5;
+  }
+}
+
+.cm-radius-item__value {
+  font-size: clamp(9px, 0.73vw, 11px);
+  font-weight: 400;
+  color: var(--cm-fg);
+  opacity: 0.6;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+
+/* ---- Responsive for new sections ---- */
+@media (max-width: 1023.98px) {
+  .cm-color-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cm-layout-item {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8vw;
+  }
+
+  .cm-layout-item__bar-wrap {
+    grid-column: 1 / -1;
+  }
+
+  .cm-effects-demos {
+    grid-template-columns: 1fr;
+  }
+
+  .cm-transition-item {
+    grid-template-columns: 1fr auto;
+    gap: 1vw;
+  }
+
+  .cm-transition-item__value {
+    grid-column: 1 / -1;
+    order: 3;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .cm-color-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cm-radius-demos {
+    gap: 4vw;
+  }
+}
+
+/* ── Desktop XL cap (1921px +) ─────────────────────────────
+   vw 값을 1920px 기준 고정 px로 동결 */
+@media (min-width: 1921px) {
+
+  /* Header */
+  .cm-logo {
+    margin-bottom: 28.8px;
+  }
+
+  .cm-header__title {
+    margin-bottom: 67.2px;
+  }
+
+  .cm-header__body {
+    margin-bottom: 48px;
+  }
+
+  .cm-header__desc {
+    margin-bottom: 28.8px;
+  }
+
+  /* Section layout */
+  .cm-section {
+    grid-template-columns: 480px 1fr;
+  }
+
+  .cm-section__left {
+    padding: 67.2px 53.76px 67.2px 0;
+  }
+
+  .cm-section__right {
+    padding: 67.2px 0;
+  }
+
+  .cm-section__meta {
+    margin-bottom: 38.4px;
+  }
+
+  .cm-section__title {
+    margin-bottom: 28.8px;
+  }
+
+  /* Specimens */
+  .cm-specimen {
+    gap: 15.36px;
+    padding: 53.76px 0;
+  }
+
+  /* Weights */
+  .cm-weight-item {
+    padding: 38.4px 0;
+  }
+
+  .cm-weight-item:nth-child(odd) {
+    padding-right: 57.6px;
+  }
+
+  .cm-weight-item:nth-child(even) {
+    padding-left: 57.6px;
+  }
+
+  .cm-weight-item__text {
+    margin-bottom: 15.36px;
+  }
+
+  /* Buttons section */
+  .cm-btn-group {
+    margin-bottom: 48px;
+  }
+
+  .cm-btn-label {
+    margin-bottom: 19.2px;
+  }
+
+  .cm-btn-dark {
+    padding: 48px 57.6px;
+  }
+
+  .cm-btn-row {
+    gap: 23.04px;
+  }
+
+  .cm-btn-row+.cm-btn-row {
+    margin-top: 28.8px;
+  }
+
+  /* Font tokens */
+  .cm-font-token-group {
+    margin-bottom: 57.6px;
+  }
+
+  .cm-font-token-group__label {
+    padding: 23.04px 0 11.52px;
+  }
+
+  .cm-font-token-item {
+    padding: 21.12px 0;
+  }
+
+  /* Spacing */
+  .cm-space-item {
+    gap: 48px;
+    padding: 26.88px 0;
+  }
+
+  .cm-space-item__meta {
+    min-width: 192px;
+  }
+
+  /* Forms */
+  .cm-form-state {
+    padding: 38.4px 0;
+  }
+
+  .cm-form-state:nth-child(odd) {
+    padding-right: 57.6px;
+  }
+
+  .cm-form-state:nth-child(even) {
+    padding-left: 57.6px;
+  }
+
+  .cm-form-state__label {
+    margin-bottom: 28.8px;
+  }
+
+  .cm-form-divider {
+    margin: 48px 0;
+  }
+
+  .cm-form-sub {
+    padding: 38.4px 0;
+  }
+
+  .cm-form-sub__label {
+    margin-bottom: 28.8px;
+  }
+
+  .cm-form-checkboxes {
+    gap: 28.8px;
+  }
+
+  /* 08 — Colors */
+  .cm-color-group {
+    padding: 38.4px 28.8px;
+  }
+
+  .cm-color-group__label {
+    margin-bottom: 28.8px;
+  }
+
+  .cm-color-grid {
+    gap: 23.04px;
+  }
+
+  .cm-color-chip {
+    gap: 15.36px;
+  }
+
+  .cm-color-token-row {
+    gap: 38.4px;
+    padding: 23.04px 0;
+  }
+
+  .cm-color-token-row__swatches {
+    gap: 11.52px;
+  }
+
+  /* 09 — Grid & Layout */
+  .cm-layout-group {
+    padding: 38.4px 0;
+  }
+
+  .cm-layout-group__label {
+    margin-bottom: 28.8px;
+  }
+
+  .cm-layout-item {
+    grid-template-columns: 134.4px 230.4px 1fr;
+    gap: 28.8px;
+    padding: 23.04px 0;
+  }
+
+  /* 10 — Effects */
+  .cm-effects-group {
+    padding: 38.4px 0;
+  }
+
+  .cm-effects-group__label {
+    margin-bottom: 28.8px;
+  }
+
+  .cm-effects-demos {
+    gap: 28.8px;
+  }
+
+  .cm-effect-card {
+    padding: 48px;
+    gap: 19.2px;
+    min-height: 192px;
+  }
+
+  .cm-transition-item {
+    grid-template-columns: 192px 1fr auto;
+    gap: 28.8px;
+    padding: 26.88px 0;
+  }
+
+  .cm-radius-demos {
+    gap: 38.4px;
+  }
+
+  .cm-radius-item {
+    gap: 15.36px;
+  }
 }

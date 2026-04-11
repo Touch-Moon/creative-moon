@@ -1,0 +1,451 @@
+@use '@/styles/primitives/colors' as *;
+@use '@/styles/primitives/type' as *;
+@use '@/styles/primitives/space' as *;
+
+// ── Story Single ──────────────────────────────────────────────────
+.story-single {
+  padding-top: fvw(274); // plastic: ~19vw
+}
+
+.story-single__end {
+  height: fvw(167); // plastic: modules pb ~11.6vw
+}
+
+// ── Module base ───────────────────────────────────────────────────
+.story-module {
+  width: 100%;
+}
+
+// ── Hero module ───────────────────────────────────────────────────
+.story-module--hero {
+  margin-top: $space-20;
+  padding-left: $gutter-desktop;
+  padding-right: $gutter-desktop;
+
+  .story-module__media-inner {
+    width: 100%;
+  }
+
+  .story-module__hero-video {
+    width: 100%;
+    height: fvw(850);
+    display: block;
+    object-fit: cover;
+  }
+
+  .story-module__hero-image-wrap {
+    position: relative;
+    width: 100%;
+    height: fvw(850);
+  }
+
+  .story-module__hero-image {
+    object-fit: cover;
+  }
+}
+
+// ── Title module ──────────────────────────────────────────────────
+.story-module--title {
+  padding: fvw(58) $gutter-desktop $space-5; // plastic: title pb ~4vw
+
+  .story-module__title-inner {
+    max-width: fvw(1100);
+  }
+
+  .story-module__category {
+    color: var(--foreground-muted);
+    margin-bottom: $space-4;
+    display: block;
+  }
+
+  .story-module__headline-wrap {
+    overflow: hidden;
+  }
+
+  .story-module__headline {
+    margin: 0;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+}
+
+// ── Media module ──────────────────────────────────────────────────
+.story-module--media {
+  margin-top: $space-20;
+  padding-left: $gutter-desktop;
+  padding-right: $gutter-desktop;
+
+  .story-module__media-inner {
+    width: 100%;
+  }
+
+  .story-module__video {
+    width: 100%;
+    height: fvw(760);
+    display: block;
+    object-fit: cover;
+  }
+
+  .story-module__image-wrap {
+    position: relative;
+    width: 100%;
+    height: fvw(760);
+  }
+
+  .story-module__image {
+    object-fit: cover;
+  }
+
+  // Narrow variant — add side gutter padding
+  &.story-module--narrow {
+    padding: 0 $gutter-desktop;
+
+    .story-module__video {
+      height: fvw(620);
+    }
+
+    .story-module__image-wrap {
+      height: fvw(620);
+    }
+  }
+}
+
+// ── Two-col image module ──────────────────────────────────────────
+.story-module--two-col-image {
+  margin-top: $space-20;
+  padding: 0 $gutter-desktop;
+
+  .story-module__two-col-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-2;
+  }
+
+  .story-module__two-col-item {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background: var(--foreground-subtle, #e8e8e8);
+  }
+
+  .story-module__two-col-img {
+    object-fit: cover;
+  }
+}
+
+// ── Text module — shared ──────────────────────────────────────────
+.story-module--text {
+  // Dynamic padding-top via CSS custom property (set from inline style).
+  // fvw equivalent: N * (100vw / 1440)
+  // Media queries override this with fixed values for smaller screens.
+  padding-top: var(--section-space);
+  padding-bottom: $space-10;
+
+  .story-module__section-heading {
+    margin: 0 0 $space-6;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+
+    &--inline {
+      margin-bottom: $space-5;
+    }
+  }
+
+  .story-module__wysiwyg {
+    display: flex;
+    flex-direction: column;
+    gap: $space-6;
+
+    p {
+      margin: 0;
+      line-height: 1.65;
+    }
+  }
+}
+
+// ── Text module — CENTERED layout ────────────────────────────────
+// Single column, centered horizontally.
+// --col-w controls width as a fraction of 12.
+.story-module--text-centered {
+  padding-left: $gutter-desktop;
+  padding-right: $gutter-desktop;
+
+  .story-module__centered-body {
+    // Width = colWidth/12 of the container, centered
+    width: calc(var(--col-w, 6) / 12 * 100%);
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left; // text always left-aligned regardless of container centering
+  }
+}
+
+// ── Text module — GRID layout (left / offset / heading-col) ──────
+.story-module--text-grid {
+  padding-left: $gutter-desktop;
+  padding-right: $gutter-desktop;
+
+  .story-module__cols {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 0 $space-8;
+    align-items: start;
+  }
+
+  .story-module__spacer {
+    // grid-column: span N is set via inline style
+  }
+
+  .story-module__heading-col {
+    // grid-column: span N is set via inline style
+    padding-top: $space-1; // slight optical alignment with body text
+  }
+
+  .story-module__body-col {
+    // grid-column: span N is set via inline style
+  }
+}
+
+// ── Links inside portable text ────────────────────────────────────
+.story-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+// ── Tablet ────────────────────────────────────────────────────────
+@media (max-width: 1023.98px) {
+  .story-single {
+    padding-top: 16vw;
+  }
+
+  .story-single__end {
+    height: 10vw;
+  }
+
+  // Hero
+  .story-module--hero {
+    margin-top: $section-title-space;
+    padding-left: $gutter-tablet;
+    padding-right: $gutter-tablet;
+
+    .story-module__hero-video,
+    .story-module__hero-image-wrap {
+      height: 60vw;
+    }
+  }
+
+  // Title
+  .story-module--title {
+    padding: 4vw $gutter-tablet 16px;
+
+    .story-module__category {
+      margin-bottom: $space-3;
+    }
+  }
+
+  // Media
+  .story-module--media {
+    margin-top: $section-title-space;
+    padding-left: $gutter-tablet;
+    padding-right: $gutter-tablet;
+
+    .story-module__video,
+    .story-module__image-wrap {
+      height: 52vw;
+    }
+
+    &.story-module--narrow {
+      padding: 0 $gutter-tablet;
+
+      .story-module__video,
+      .story-module__image-wrap {
+        height: 44vw;
+      }
+    }
+  }
+
+  // Two-col image
+  .story-module--two-col-image {
+    margin-top: $section-title-space;
+    padding: 0 $gutter-tablet;
+
+    .story-module__two-col-inner {
+      gap: 6px;
+    }
+  }
+
+  // Text — shared
+  .story-module--text {
+    // Override dynamic padding with a reasonable fixed range
+    padding-top: var(--section-space);
+    padding-bottom: $space-8;
+
+    .story-module__section-heading {
+      margin-bottom: $gutter-mobile;
+
+      &--inline {
+        margin-bottom: 14px;
+      }
+    }
+
+    .story-module__wysiwyg {
+      gap: 18px;
+
+      .body-text-4 {
+        font-size: calc(var(--font-size-4) * 0.8);
+      }
+    }
+  }
+
+  // Centered text
+  .story-module--text-centered {
+    padding-left: $gutter-tablet;
+    padding-right: $gutter-tablet;
+
+    .story-module__centered-body {
+      // Expand to full width on tablet
+      width: 100%;
+    }
+  }
+
+  // Grid text — collapse to single column
+  .story-module--text-grid {
+    padding-left: $gutter-tablet;
+    padding-right: $gutter-tablet;
+
+    .story-module__cols {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .story-module__spacer {
+      display: none; // hide empty offset spacers
+    }
+
+    .story-module__heading-col,
+    .story-module__body-col {
+      grid-column: 1 / -1 !important; // override inline span styles
+    }
+
+    .story-module__heading-col {
+      padding-top: 0;
+      margin-bottom: $gutter-mobile;
+    }
+  }
+}
+
+// ── Mobile ────────────────────────────────────────────────────────
+@media (max-width: 575.98px) {
+  .story-single {
+    padding-top: 28vw;
+  }
+
+  .story-single__end {
+    height: 8vw;
+  }
+
+  // Hero
+  .story-module--hero {
+    margin-top: $space-10;
+    padding-left: $gutter-mobile;
+    padding-right: $gutter-mobile;
+
+    .story-module__hero-video,
+    .story-module__hero-image-wrap {
+      height: 70vw;
+    }
+  }
+
+  // Title
+  .story-module--title {
+    padding: 4vw $gutter-mobile 4px;
+
+    .headline-2 {
+      font-size: var(--fs-h2);
+      line-height: 1.05;
+      padding-bottom: 8px;
+    }
+
+    .story-module__category {
+      font-size: 11px;
+      margin-bottom: $space-8;
+    }
+  }
+
+  // Media
+  .story-module--media {
+    margin-top: $space-10;
+    padding-left: $gutter-mobile;
+    padding-right: $gutter-mobile;
+
+    .story-module__video,
+    .story-module__image-wrap {
+      height: 64vw;
+    }
+
+    &.story-module--narrow {
+      padding: 0 $gutter-mobile;
+
+      .story-module__video,
+      .story-module__image-wrap {
+        height: 58vw;
+      }
+    }
+  }
+
+  // Two-col image
+  .story-module--two-col-image {
+    margin-top: $space-10;
+    padding: 0 $gutter-mobile;
+
+    // Stack vertically on small mobile
+    .story-module__two-col-inner {
+      grid-template-columns: 1fr;
+      gap: $space-1;
+    }
+
+    .story-module__two-col-item {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  // Text — shared
+  .story-module--text {
+    padding-top: $space-24;
+    padding-bottom: $space-32;
+
+    .story-module__section-heading {
+      margin-bottom: $space-8;
+      line-height: 1.5;
+    }
+
+    .story-module__wysiwyg {
+      gap: 14px;
+
+      .body-text-4 {
+        font-size: var(--body-text-3);
+      }
+    }
+  }
+
+  // Centered text
+  .story-module--text-centered {
+    padding-left: $gutter-mobile;
+    padding-right: $gutter-mobile;
+  }
+
+  // Grid text
+  .story-module--text-grid {
+    padding-left: $gutter-mobile;
+    padding-right: $gutter-mobile;
+
+    .story-module__heading-col {
+      margin-bottom: $space-3;
+    }
+  }
+}

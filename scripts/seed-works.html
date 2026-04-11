@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Sanity Work Seed</title>
+<style>
+  body { font-family: monospace; background: #0a0a0a; color: #e0e0e0; padding: 24px; line-height: 1.6; }
+  h1 { color: #fff; font-size: 18px; margin-bottom: 4px; }
+  .sub { color: #888; font-size: 13px; margin-bottom: 24px; }
+  button { background: #fff; color: #000; border: none; padding: 10px 24px; font-size: 14px; font-family: monospace; cursor: pointer; border-radius: 4px; margin-right: 8px; }
+  button:disabled { background: #444; color: #888; cursor: not-allowed; }
+  button.danger { background: #ff4444; color: #fff; }
+  #log { margin-top: 16px; background: #111; padding: 16px; border-radius: 6px; height: 500px; overflow-y: auto; font-size: 12px; }
+  .ok   { color: #4ade80; }
+  .err  { color: #f87171; }
+  .info { color: #60a5fa; }
+  .warn { color: #fbbf24; }
+  .skip { color: #a78bfa; }
+  progress { width: 100%; height: 8px; margin: 8px 0; border-radius: 4px; }
+</style>
+</head>
+<body>
+<h1>🌱 Sanity Work Seed</h1>
+<div class="sub">plastic.design 데이터 → Sanity 자동 입력 (이미지 포함)</div>
+
+<button id="btnRun">▶ 실행</button>
+<button id="btnClear" class="danger" style="display:none">🗑 기존 Work 전체 삭제 후 재실행</button>
+<progress id="prog" value="0" max="100" style="display:none"></progress>
+
+<div id="log"></div>
+
+<script>
+const PROJECT_ID = '9z8k2qza';
+const DATASET    = 'production';
+const API_TOKEN  = 'skgsLGGZbz9uPlEW3nl9mCuCdvNGQX4LLzIyWeICVjj7k5TdzM8ZaskAMxvrpixLyfl6OTSBwyxYITYNCkWWm5E41fBoT5dptHKEHCF11by7tDIsFYAfzGVEnEJBPFfYYa5PK3GQ2lGtCt9A8yAFii3j8QBuTIFknfXwPsbmaYZymmH64wwo';
+const BASE       = `https://${PROJECT_ID}.api.sanity.io/v2024-01-01`;
+
+const WORKS = [
+  { order:1,  slug:'hyundai',                            title:'Hyundai annual convention.',                     year:'2025', cardSize:'large',   subtitle:'Designing the visual concept and digital experience for the brand\'s annual convention.',       listDescription:'Designing the visual concept and digital experience for the brand\'s annual convention.',       services:['Strategic Design','Research','Branding','Consultancy'],                                              overview:'Every year, Hyundai Spain brings its team together for a convention that goes far beyond a simple gathering. It\'s a space to align strategies, reinforce company culture, and most importantly, inspire. The challenge wasn\'t just to create an attractive visual identity—we needed to craft an experience that connected attendees to the purpose of the event before, during, and after.',                                                                                                                                       externalUrl:'https://convencion-hyundai.plastic.design/', listThumb:'https://plastic.design/uploads/works/hyundai/hyundai_p.webp',                                              selThumb:'https://plastic.design/uploads/works/hyundai/hyundai_p.webp',                                             hero:'https://plastic.design/uploads/hyundai/hyundai-header.webp' },
+  { order:2,  slug:'hitachi-digital-brand-ecosystem',    title:'Hitachi digital brand ecosystem.',               year:'2024', cardSize:'compact', subtitle:'Digital brand system for the industrial giant.',                                               listDescription:'Digital brand system for the industrial giant.',                                               services:['Strategic Design','Branding','Product Design','Consultancy'],                                        overview:'We joined the rebranding project to design the company\'s digital branding system. A cross-cutting and flexible system was designed, whose fundamentals and rules were adapted to other company brands. The Digital Brand Foundations and the digital brand architecture were defined at the beginning of the project.',                                                                                                                                                                                                                  externalUrl:'',                                           listThumb:'https://plastic.design/uploads/works/hitachi-brand/hitachi-brand_s.svg',                                 selThumb:'https://plastic.design/uploads/works/hitachi-brand/hitachi-brand_s.svg',                                  hero:'https://plastic.design/uploads/hitachi-brand/hitachi-brand_header.jpg' },
+  { order:3,  slug:'lobelia',                            title:'Lobelia Website.',                               year:'2023', cardSize:'wide',    subtitle:'Rethinking the climate change data company website.',                                           listDescription:'Rethinking the climate change data company website.',                                          services:['Strategic Design','Product Design','Branding','Consultancy'],                                        overview:'At Plastic, we instantly click with companies that advocate and work towards the continuity and improvement of society and the planet. Our social commitment made us jump on board and design a website for Lobelia that highlighted the company\'s value and uniqueness.',                                                                                                                                                                                                                                                          externalUrl:'https://www.lobelia.earth/',                 listThumb:'https://plastic.design/uploads/works/lobelia/lobelia_l.jpg',                                             selThumb:'https://plastic.design/uploads/works/lobelia/lobelia_l.jpg',                                              hero:'https://plastic.design/uploads/lobelia/lobelia01_1441_1x-blur.jpg' },
+  { order:4,  slug:'iberia-cards',                       title:'Iberia Cards.',                                  year:'2023', cardSize:'compact', subtitle:'Enhancing the Iberia Cards app user experience.',                                              listDescription:'Enhancing the Iberia Cards app user experience.',                                              services:['Strategic Design','Branding','Consultancy','Design System'],                                         overview:'Iberia Cards is the issuer of credit cards linked to Iberia\'s loyalty program, Iberia Plus. They offer a comprehensive range of credit cards for all customer segments including families, small and medium-sized businesses, large corporations, and private institutions.',                                                                                                                                                                                                                                                     externalUrl:'',                                           listThumb:'https://plastic.design/uploads/works/iberia-cards/iberia-cards_s.webp',                                  selThumb:'https://plastic.design/uploads/works/iberia-cards/iberia-cards_s.webp',                                   hero:'https://plastic.design/uploads/iberia-cards/iberia-cards-header.webp' },
+  { order:5,  slug:'digital-twin-ocean',                 title:'Digital Twin Ocean.',                            year:'2023', cardSize:'tall',    subtitle:'Shaping bridges between scientific community and social institutions.',                          listDescription:'Shaping bridges between scientific community and social institutions.',                         services:['Strategic Design','Branding','Consultancy','Experience Design'],                                     overview:'From the very outset, the project commissioned by Lobelia and Mercator Ocean captivated us. We embarked on a fascinating challenge: bringing to life a web platform that would communicate an incredibly innovative project—the creation of a Digital Twin of the Ocean.',                                                                                                                                                                                                                                                        externalUrl:'',                                           listThumb:'https://plastic.design/uploads/works/digital-twin-ocean/digital-twin-ocean_p.webp',                       selThumb:'https://plastic.design/uploads/works/digital-twin-ocean/digital-twin-ocean_p.webp',                        hero:'https://plastic.design/uploads/digital-twin-ocean/digital-twin-ocean-header.webp' },
+  { order:6,  slug:'bbva',                               title:'BBVA.',                                          year:'2016', cardSize:'wide',    subtitle:'Helping the bank in its digital transformation process.',                                        listDescription:'Helping the bank in its digital transformation process.',                                      services:['Strategic Design','Product Design','Branding','Consultancy'],                                        overview:'As part of the digital transformation project, different products were developed for the bank, including the cross-cutting definition and evolution of the brand\'s digital ecosystem.',                                                                                                                                                                                                                                                                                                                                          externalUrl:'',                                           listThumb:'https://plastic.design/uploads/works/bbva/bbva_l.jpg',                                                   selThumb:'https://plastic.design/uploads/works/bbva/bbva_l.jpg',                                                    hero:'https://plastic.design/uploads/bbva/bbva_header.jpg' },
+  { order:7,  slug:'strabe',                             title:'Sträbe.',                                        year:'2022', cardSize:'tall',    subtitle:'Connecting professionals in retail industry.',                                                   listDescription:'Connecting professionals in retail industry.',                                                 services:['Strategic Design','Product Design','Branding','Consultancy'],                                        overview:'Sträbe is a platform aimed at professionals in the retail industry. Through Sträbe you can find and get in touch with other professionals, draw inspiration for different projects and build a community of specialists from which to nurture, develop synergies and expand your network of contacts.',                                                                                                                                                                                                                            externalUrl:'',                                           listThumb:'https://plastic.design/uploads/works/strabe/strabe_p.jpg',                                               selThumb:'https://plastic.design/uploads/works/strabe/strabe_p.jpg',                                                hero:'https://plastic.design/uploads/works/strabe/strabe_p.jpg' },
+  { order:8,  slug:'tech-innovation-effective-healthcare', title:'Healthcare projects story.',                   year:'2022', cardSize:'compact', subtitle:'Tech innovation for effective healthcare.',                                                      listDescription:'Tech innovation for effective healthcare.',                                                    services:['Strategic Design','Product Design','Technology'],                                                    overview:'A series of healthcare technology projects focused on improving patient outcomes and operational efficiency through thoughtful digital product design and strategic innovation.',                                                                                                                                                                                                                                                                                                                                                 externalUrl:'',                                           listThumb:'https://plastic.design/uploads/works/tech-innovation-effective-healthcare/tech-innovation-effective-healthcare_s.webp', selThumb:'https://plastic.design/uploads/works/tech-innovation-effective-healthcare/tech-innovation-effective-healthcare_s.webp', hero:'https://plastic.design/uploads/works/tech-innovation-effective-healthcare/tech-innovation-effective-healthcare_s.webp' },
+  { order:9,  slug:'hitachi-global-website',             title:'Hitachi Cooling & Heating.',                     year:'2018', cardSize:'wide',    subtitle:'Global website for local markets.',                                                              listDescription:'Global website for local markets.',                                                           services:['Strategic Design','Product Design','Branding','Consultancy'],                                        overview:'We\'ve been working closely with Hitachi - Johnson Controls Air Conditioning on a major rebrand and digital transformation project. We designed and rolled out their new global website—a complete toolkit for countries to adapt, publish and manage their own unique but on-brand Hitachi website.',                                                                                                                                                                                                                            externalUrl:'https://hitachiglobalweb.plastic.design/',   listThumb:'https://plastic.design/uploads/works/hitachi-web/hitachi-web_l.jpg',                                      selThumb:'https://plastic.design/uploads/works/hitachi-web/hitachi-web_l.jpg',                                      hero:'https://plastic.design/uploads/hitachi-website/hitachi-website_header.jpg' },
+  { order:10, slug:'massimo-dutti',                      title:'Massimo Dutti.',                                 year:'2019', cardSize:'compact', subtitle:'Redesigning the purchase experience.',                                                           listDescription:'Redesigning the purchase experience.',                                                        services:['Strategic Design','Product Design','Branding','Consultancy'],                                        overview:'The project aims to optimize the purchasing funnel and create a shopping experience in line with brand positioning: Excellence, detail and dedication to service. We established the phases and processes to ensure the achievement of the main objectives through data measurement and analysis.',                                                                                                                                                                                                                                 externalUrl:'',                                           listThumb:'https://plastic.design/uploads/works/massimo-dutti/massimo_dutti_s.jpg',                                 selThumb:'https://plastic.design/uploads/works/massimo-dutti/massimo_dutti_s.jpg',                                  hero:'https://plastic.design/uploads/massimo-dutti/massimo-dutti_header.jpg' },
+  { order:11, slug:'bsm',                                title:'Barcelona School of Management.',                year:'2021', cardSize:'tall',    subtitle:'Strategic design for the company\'s digital transformation.',                                    listDescription:'Strategic design for the company\'s digital transformation.',                                  services:['Strategic Design','Product Design','Branding','Consultancy'],                                        overview:'UPF-BSM is the management school at Pompeu Fabra University. In the midst of a process of digital transformation, the project\'s primary need was to adapt its new branding to the digital environment, aligning the School\'s level of excellence with its digital positioning primarily reflected in its corporate website.',                                                                                                                                                                                                   externalUrl:'',                                           listThumb:'https://plastic.design/uploads/works/bsm/bsm_p.jpg',                                                    selThumb:'https://plastic.design/uploads/works/bsm/bsm_p.jpg',                                                     hero:'https://plastic.design/uploads/bsm/bsm_header.jpg' },
+  { order:12, slug:'nimble-payments',                    title:'BBVA - Nimble Payments.',                        year:'2020', cardSize:'wide',    subtitle:'Innovative digital solutions for small business success.',                                        listDescription:'Innovative digital solutions for small business success.',                                     services:['Digital Product','Strategic Design','Research','Branding'],                                          overview:'Nimble Payments is a modern digital tool created by BBVA to help small and medium-sized online businesses. It\'s a one-stop-shop combining payment, management, and funding solutions. Our team worked on the service and product design of the platform.',                                                                                                                                                                                                                                                                      externalUrl:'',                                           listThumb:'https://plastic.design/uploads/works/nimble/nimble-payments_l.jpg',                                      selThumb:'https://plastic.design/uploads/works/nimble/nimble-payments_l.jpg',                                       hero:'https://plastic.design/uploads/nimble/nimble-payments-header.jpg' },
+  { order:13, slug:'desigual-digital-lookbook',          title:'Desigual Lookbook.',                             year:'2019', cardSize:'tall',    subtitle:'Desigual\'s iPad app for multi-brand retailers.',                                                listDescription:'Desigual\'s iPad app for multi-brand retailers.',                                              services:['UX Research','UX/UI Design','Interaction Design','Prototyping'],                                     overview:'B2B iPad application aimed at presenting new Desigual collections to its multi brand retail clients. The platform is manageable through a customized CMS and has different functional objectives: presenting new collections while giving access to product details, categories and purchase processing.',                                                                                                                                                                                                                         externalUrl:'',                                           listThumb:'https://plastic.design/uploads/works/desigual-look-book/desigual-look-book_p.webp',                      selThumb:'https://plastic.design/uploads/works/desigual-look-book/desigual-look-book_p.webp',                       hero:'https://plastic.design/uploads/desigual-look-book/desigual-look-book-header.webp' },
+  { order:14, slug:'iota',                               title:'IOTA Foundation.',                               year:'2018', cardSize:'compact', subtitle:'Branding and corporate website redesign.',                                                        listDescription:'Branding and corporate website redesign.',                                                    services:['Strategy','UX Research','UX/UI Design','Tone of Voice'],                                             overview:'IOTA is a blockless distributed ledger which overcomes the limitations of blockchain technology. We were asked to design a concept website for potential users and investors, to help them understand the proposition and differentiate IOTA from its competitors in the emerging blockchain and cryptocurrency world.',                                                                                                                                                                                                            externalUrl:'',                                           listThumb:'https://plastic.design/uploads/works/iota/iota_s.svg',                                                  selThumb:'https://plastic.design/uploads/works/iota/iota_s.svg',                                                   hero:'https://plastic.design/uploads/iota/iota_header.svg' },
+  { order:15, slug:'marangoni',                          title:'Marangoni.',                                     year:'2019', cardSize:'wide',    subtitle:'A divergent digital magazine for the prestigious international fashion school.',                  listDescription:'A divergent digital magazine for the prestigious international fashion school.',                services:['Digital Product','Strategic Design','Branding','Content Strategy'],                                  overview:'Tablet App to strengthen the client\'s positioning as a leader and influencer in the sector of Fashion & Design. The concept revolves around the creation of a digital magazine providing a space for artistic expression and inspiration, targeting influencers, fashionistas, and young designers.',                                                                                                                                                                                                                             externalUrl:'',                                           listThumb:'https://plastic.design/uploads/works/marangoni/marangoni_l.jpg',                                         selThumb:'https://plastic.design/uploads/works/marangoni/marangoni_l.jpg',                                          hero:'https://plastic.design/uploads/marangoni/marangoni_header.jpg' },
+  { order:16, slug:'a-fashion-ecommerce',                title:'Arvind.',                                        year:'2017', cardSize:'compact', subtitle:'A Fashion Omnichannel strategy and design.',                                                     listDescription:'A Fashion Omnichannel strategy and design.',                                                  services:['Digital Product','Strategic Design','Branding','Content Strategy'],                                  overview:'The client is a leading company in the retail business, regarded as a reference in the fields of fashion and lifestyle in India. The corporate goal was to raise online presence. Despite the initial request for an e-commerce, our proposal encompassed a full omnichannel strategy to achieve the goal.',                                                                                                                                                                                                                      externalUrl:'',                                           listThumb:'https://plastic.design/uploads/works/arvind/arvind_s.jpg',                                               selThumb:'https://plastic.design/uploads/works/arvind/arvind_s.jpg',                                                hero:'https://plastic.design/uploads/arvind/arvind_header.jpg' },
+];
+
+const log = document.getElementById('log');
+const prog = document.getElementById('prog');
+
+function print(msg, cls='') {
+  const d = document.createElement('div');
+  d.className = cls;
+  d.textContent = msg;
+  log.appendChild(d);
+  log.scrollTop = log.scrollHeight;
+}
+
+function headers(isMultipart=false) {
+  const h = { Authorization: `Bearer ${API_TOKEN}` };
+  if (!isMultipart) h['Content-Type'] = 'application/json';
+  return h;
+}
+
+async function sanityFetch(path, opts={}) {
+  const res = await fetch(`${BASE}${path}`, { headers: headers(), ...opts });
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(`${res.status} ${txt}`);
+  }
+  return res.json();
+}
+
+async function uploadImage(url, filename) {
+  print(`  📸 이미지: ${filename}`, 'info');
+  try {
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+    const res = await fetch(proxyUrl);
+    if (!res.ok) throw new Error(`fetch ${res.status}`);
+    const blob = await res.blob();
+    const ext = url.split('.').pop().split('?')[0].toLowerCase();
+    const mime = {webp:'image/webp',jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',svg:'image/svg+xml'}[ext] || 'image/jpeg';
+    const file = new File([blob], filename, { type: mime });
+    const fd = new FormData();
+    fd.append('file', file);
+    const upload = await fetch(`https://${PROJECT_ID}.api.sanity.io/v2024-01-01/assets/images/${DATASET}`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${API_TOKEN}` },
+      body: fd,
+    });
+    if (!upload.ok) throw new Error(`upload ${upload.status}`);
+    const j = await upload.json();
+    const ref = j.document._id;
+    print(`     ✅ ${ref}`, 'ok');
+    return { _type: 'image', asset: { _type: 'reference', _ref: ref } };
+  } catch(e) {
+    print(`     ⚠️ 실패: ${e.message}`, 'warn');
+    return null;
+  }
+}
+
+async function deleteAll() {
+  print('\n🗑  기존 Work 문서 삭제 중...', 'warn');
+  const data = await sanityFetch(`/data/query/${DATASET}?query=*[_type=="work"]._id`);
+  const ids = data.result || [];
+  if (ids.length === 0) { print('   삭제할 문서 없음', 'info'); return; }
+  const mutations = ids.map(id => ({ delete: { id } }));
+  await sanityFetch(`/data/mutate/${DATASET}`, {
+    method: 'POST',
+    body: JSON.stringify({ mutations }),
+  });
+  print(`   ✅ ${ids.length}개 삭제 완료`, 'ok');
+}
+
+async function run(clearFirst=false) {
+  document.getElementById('btnRun').disabled = true;
+  document.getElementById('btnClear').disabled = true;
+  prog.style.display = 'block';
+  log.innerHTML = '';
+
+  try {
+    print('🚀 Sanity Work Seed 시작', 'info');
+    print(`   Project: ${PROJECT_ID} / Dataset: ${DATASET}\n`, 'info');
+
+    if (clearFirst) await deleteAll();
+
+    // 기존 slug 목록
+    const existing = await sanityFetch(`/data/query/${DATASET}?query=*[_type=="work"].slug.current`);
+    const existingSlugs = existing.result || [];
+    print(`📋 기존 Work: ${existingSlugs.length}개\n`, 'info');
+
+    let created = 0, skipped = 0;
+
+    for (let i = 0; i < WORKS.length; i++) {
+      const w = WORKS[i];
+      prog.value = Math.round((i / WORKS.length) * 100);
+
+      if (existingSlugs.includes(w.slug)) {
+        print(`⏭️  스킵 (이미 존재): ${w.slug}`, 'skip');
+        skipped++;
+        continue;
+      }
+
+      print(`\n[${w.order}/16] ${w.title}`, 'info');
+
+      const thumbnail         = await uploadImage(w.listThumb,  `${w.slug}-thumbnail`);
+      const selectedThumbnail = await uploadImage(w.selThumb,   `${w.slug}-selected`);
+      const heroImg           = await uploadImage(w.hero,       `${w.slug}-hero`);
+
+      const doc = {
+        _type: 'work',
+        title: w.title,
+        slug: { _type: 'slug', current: w.slug },
+        year: w.year,
+        subtitle: w.subtitle,
+        overview: w.overview,
+        listDescription: w.listDescription,
+        services: w.services,
+        order: w.order,
+        cardSize: w.cardSize,
+        ...(w.externalUrl && { externalUrl: w.externalUrl }),
+        ...(thumbnail && { thumbnail }),
+        ...(selectedThumbnail && { selectedThumbnail }),
+        ...(heroImg && { heroMedia: { _type: 'object', type: 'image', image: heroImg } }),
+      };
+
+      try {
+        const mut = await sanityFetch(`/data/mutate/${DATASET}`, {
+          method: 'POST',
+          body: JSON.stringify({ mutations: [{ create: doc }] }),
+        });
+        print(`  ✅ 생성: ${mut.results?.[0]?.id || 'ok'}`, 'ok');
+        created++;
+      } catch(e) {
+        print(`  ❌ 생성 실패: ${e.message}`, 'err');
+      }
+    }
+
+    prog.value = 100;
+    print(`\n────────────────────────────`, 'info');
+    print(`✅ 완료: ${created}개 생성, ${skipped}개 스킵`, 'ok');
+    print(`   Sanity Studio: http://localhost:3333`, 'info');
+
+    document.getElementById('btnClear').style.display = 'inline-block';
+
+  } catch(e) {
+    print(`\n❌ 에러: ${e.message}`, 'err');
+  } finally {
+    document.getElementById('btnRun').disabled = false;
+    document.getElementById('btnClear').disabled = false;
+  }
+}
+
+document.getElementById('btnRun').onclick   = () => run(false);
+document.getElementById('btnClear').onclick = () => { if(confirm('기존 Work 문서를 전부 삭제하고 다시 넣겠습니까?')) run(true); };
+</script>
+</body>
+</html>

@@ -7,8 +7,8 @@
   background: $m-white;
   color: $m-black;
   min-height: 100vh;
-  padding-top: fvw(160);
-  padding-bottom: fvw(120);
+  padding-top: $space-40;
+  padding-bottom: $section-space;
 }
 
 .policy-page .wrapper {
@@ -19,22 +19,22 @@
 
 // ── Header ──────────────────────────────────────
 .policy-header {
-  margin-bottom: fvw(80);
+  margin-bottom: $space-20;
 }
 
 .policy-header__label {
   display: block;
-  font-size: $fs-body-caps;
+  font-size: var(--fs-body-caps);
   line-height: $lh-body-caps;
   font-weight: $fw-regular;
   letter-spacing: $ls-wide;
   text-transform: uppercase;
   color: $m-grey-dark;
-  margin-bottom: fvw(24);
+  margin-bottom: $space-6;
 }
 
 .policy-header__title {
-  font-size: $fs-h2;
+  font-size: var(--fs-h2);
   line-height: $lh-h2;
   font-weight: $fw-regular;
   letter-spacing: $ls-tight;
@@ -43,17 +43,17 @@
 
 .policy-header__updated {
   display: block;
-  font-size: $fs-body-5;
+  font-size: var(--fs-body-5);
   line-height: $lh-body-5;
   color: $m-grey-dark;
-  margin-top: fvw(16);
+  margin-top: $space-4;
 }
 
 // ── Content Layout ──────────────────────────────
 .policy-content {
   display: flex;
   align-items: flex-start;
-  gap: fvw(80);
+  gap: $space-20;
 }
 
 // ── TOC (Left Sidebar) ─────────────────────────
@@ -61,7 +61,7 @@
   flex: 0 0 auto;
   width: fvw(280);
   position: sticky;
-  top: fvw(120);
+  top: $section-space;
 }
 
 .policy-toc__list {
@@ -71,11 +71,11 @@
 }
 
 .policy-toc__item {
-  margin-bottom: fvw(12);
+  margin-bottom: $space-3;
 }
 
 .policy-toc__link {
-  font-size: $fs-body-5;
+  font-size: var(--fs-body-5);
   line-height: $lh-body-5;
   color: $m-grey-dark;
   text-decoration: none;
@@ -94,7 +94,7 @@
 
 // ── Section ─────────────────────────────────────
 .policy-section {
-  margin-bottom: fvw(64);
+  margin-bottom: $space-16;
 
   &:last-child {
     margin-bottom: 0;
@@ -108,30 +108,30 @@
 }
 
 .policy-section__number {
-  font-size: $fs-body-caps;
+  font-size: var(--fs-body-caps);
   line-height: $lh-body-caps;
   font-weight: $fw-regular;
   letter-spacing: $ls-wide;
   text-transform: uppercase;
   color: $m-grey-dark;
-  margin-bottom: fvw(8);
+  margin-bottom: $space-2;
 }
 
 .policy-section__title {
-  font-size: $fs-h5;
+  font-size: var(--fs-h5);
   line-height: $lh-h5;
   font-weight: $fw-regular;
   letter-spacing: $ls-tight;
   color: $m-black;
-  margin-bottom: fvw(20);
+  margin-bottom: $space-5;
 }
 
 .policy-section__text {
-  font-size: $fs-body-4;
+  font-size: var(--fs-body-4);
   line-height: $lh-body-4;
   font-weight: $fw-light;
   color: rgba($m-black, 0.7);
-  margin-bottom: fvw(16);
+  margin-bottom: $space-4;
 
   &:last-child {
     margin-bottom: 0;
@@ -141,16 +141,16 @@
 .policy-section__list {
   list-style: none;
   padding: 0;
-  margin: 0 0 fvw(16) 0;
+  margin: 0 0 $space-4 0;
 
   li {
-    font-size: $fs-body-4;
+    font-size: var(--fs-body-4);
     line-height: $lh-body-4;
     font-weight: $fw-light;
     color: rgba($m-black, 0.7);
-    padding-left: fvw(20);
+    padding-left: $space-5;
     position: relative;
-    margin-bottom: fvw(8);
+    margin-bottom: $space-2;
 
     &::before {
       content: '—';
@@ -165,12 +165,12 @@
 .policy-back {
   display: inline-flex;
   align-items: center;
-  gap: fvw(8);
-  font-size: $fs-body-5;
+  gap: $space-2;
+  font-size: var(--fs-body-5);
   line-height: $lh-body-5;
   color: $m-grey-dark;
   text-decoration: none;
-  margin-top: fvw(64);
+  margin-top: $space-16;
   transition: color 0.3s ease;
 
   &:hover {
@@ -178,8 +178,8 @@
   }
 }
 
-// ── Tablet (max 1023px) ─────────────────────────
-@media (max-width: 1023px) {
+// ── Tablet (max 767px) ─────────────────────────
+@media (max-width: 767px) {
   .policy-toc {
     display: none;
   }
@@ -189,8 +189,8 @@
   }
 }
 
-// ── Mobile (max 575px) ──────────────────────────
-@media (max-width: 575px) {
+// ── Mobile (max 374px) ──────────────────────────
+@media (max-width: 374px) {
   .policy-page {
     padding-top: 46.154vw;
     padding-bottom: 20.513vw;
@@ -205,17 +205,17 @@
   }
 
   .policy-header__label {
-    font-size: 3.077vw;
+    font-size: var(--fs-body-caps);
     margin-bottom: 4.103vw;
   }
 
   .policy-header__title {
-    font-size: 10.256vw;
+    font-size: var(--fs-h1);
     line-height: 110%;
   }
 
   .policy-header__updated {
-    font-size: 3.59vw;
+    font-size: var(--fs-body-5);
     margin-top: 3.077vw;
   }
 
@@ -229,18 +229,18 @@
   }
 
   .policy-section__title {
-    font-size: 5.641vw;
+    font-size: var(--fs-h4);
     margin-bottom: 3.077vw;
   }
 
   .policy-section__text,
   .policy-section__list li {
-    font-size: 4.103vw;
+    font-size: var(--fs-body-4);
     line-height: 160%;
   }
 
   .policy-back {
-    font-size: 3.59vw;
+    font-size: var(--fs-body-5);
     margin-top: 10.256vw;
   }
 }
@@ -248,6 +248,6 @@
 // ── Tablet (576px - 768px) ──────────────────────
 @media (min-width: 576px) and (max-width: 768px) {
   .policy-header__title {
-    font-size: fvw(72);
+    font-size: var(--fs-h3);
   }
 }

@@ -5,15 +5,11 @@ import './ArrowButton.scss';
 const EASE = 'cubic-bezier(0.19, 1, 0.22, 1)';
 const DUR  = '0.45s';
 
-const ArrowLeft = () => (
+// plastic.design 기준: line + chevron, 같은 SVG를 prev는 rotate(180deg) flip
+const Arrow = () => (
   <svg width="38" height="18" viewBox="0 0 38 18" fill="none" aria-hidden="true">
-    <path d="M36 9H2M2 9L8 3M2 9L8 15" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-const ArrowRight = () => (
-  <svg width="38" height="18" viewBox="0 0 38 18" fill="none" aria-hidden="true">
-    <path d="M2 9H36M36 9L30 3M36 9L30 15" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+    <line x1="0.75" y1="8.75" x2="36.5" y2="8.75" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M28.5 1L36.5 9L28.5 17" stroke="currentColor" strokeWidth="1.5" />
   </svg>
 );
 
@@ -60,7 +56,7 @@ export default function ArrowButton({
 
   return (
     <button
-      className={`arrow-btn ${className}`.trim()}
+      className={`arrow-btn arrow-btn--${direction} ${className}`.trim()}
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
@@ -69,7 +65,7 @@ export default function ArrowButton({
       onMouseLeave={handleMouseLeave}
     >
       <span ref={fillRef} className="arrow-btn__fill" aria-hidden="true" />
-      {direction === 'prev' ? <ArrowLeft /> : <ArrowRight />}
+      <Arrow />
     </button>
   );
 }

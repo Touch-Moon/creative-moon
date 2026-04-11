@@ -1,11 +1,21 @@
-import { caseStudy } from "./caseStudy";
-import { project } from "./project";
-import { post } from "./post";
-import { page } from "./page";
+import { work, mediaBlock, textBlock, spacerBlock } from "./work";
+import { story, storyMediaModule, storyTwoColImageModule, storyTextModule, storyHeroModule } from "./story";
+import { category } from "./category";
 
 export const schemaTypes = [
-  caseStudy,
-  project,
-  post,
-  page,
+  // Documents
+  work,
+  story,
+  category,
+
+  // Object types — Work modules (리팩토링: 3 모듈 체계)
+  mediaBlock,
+  textBlock,
+  spacerBlock,
+
+  // Object types — Story modules
+  storyMediaModule,
+  storyTwoColImageModule,
+  storyTextModule,
+  storyHeroModule,
 ];

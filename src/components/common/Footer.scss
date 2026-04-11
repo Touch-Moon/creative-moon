@@ -15,6 +15,7 @@
   @media (max-width: 575.98px) {
     padding-left: $gutter-mobile;
     padding-right: $gutter-mobile;
+    text-align: center;
   }
 }
 
@@ -25,62 +26,120 @@
   position: relative;
 }
 
+// body[data-theme] 상속에 의존하지 않고 footer 자체에서 CSS 변수 정의
+// — style-guide처럼 body theme와 footer theme가 분리된 경우에도 올바르게 동작
+.footer[data-theme="dark"] {
+  --foreground: #fff;
+  --foreground-muted: rgba(255, 255, 255, 0.45);
+  --foreground-dim: rgba(255, 255, 255, 0.2);
+  background-color: #000;
+}
+
+.footer[data-theme="light"] {
+  --foreground: #000;
+  --foreground-muted: rgba(0, 0, 0, 0.45);
+  --foreground-dim: rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+}
+
 // ── CTA 영역 ────────────────────────────────────
 .footer__cta-area {
-  padding-top: fvw(200);
-  padding-bottom: fvw(120);
+  padding-top: var(--section-space);
+  padding-bottom: var(--section-space);
   position: relative;
 
   @media (max-width: 1023.98px) {
-    padding-top: 120px;
-    padding-bottom: 80px;
+    padding-top: calc(var(--space-40) * 2);
+    padding-bottom: calc(var(--space-40) * 2);
   }
 
   @media (max-width: 575.98px) {
-    padding-top: 80px;
-    padding-bottom: 60px;
+    padding-top: calc(var(--space-40) * 4);
+    padding-bottom: calc(var(--space-40) * 4);
   }
 }
 
 .footer__cta {
   display: inline-flex;
   align-items: baseline;
-  gap: fvw(16);
+  gap: $space-4;
   text-decoration: none;
   color: var(--foreground);
-  transition: opacity 0.3s ease;
-
-  &:hover {
-    opacity: 0.7;
-  }
 }
 
 .footer__cta-text {
-  font-size: $fs-h1;           // 140px @ 1440
-  font-weight: $fw-light;
-  line-height: $lh-h1;         // 96%
-  letter-spacing: $ls-tight;   // -0.01em
+  font-size: calc(var(--fs-h1) * 2); // 140px @ 1440
+  font-weight: $fw-regular;
+  line-height: $lh-h1; // 96%
+  letter-spacing: $ls-tight; // -0.01em
 
   @media (max-width: 1023.98px) {
-    font-size: clamp(48px, 9vw, 120px);
+    font-size: calc(var(--fs-h1) * 2); // calc(64 / 1024 * 100vw)
   }
 
   @media (max-width: 575.98px) {
-    font-size: clamp(36px, 12vw, 64px);
+    font-size: calc(64 / 375 * 100vw);
+    white-space: nowrap;
   }
 }
 
 .footer__cta-arrow {
-  font-size: fvw(80);
-  line-height: 1;
+  display: flex;
+  align-items: center;
+
+  svg {
+    width: $space-20;
+    height: auto;
+    color: var(--foreground); // currentColor 상속 → 다크/라이트 자동 대응
+  }
 
   @media (max-width: 1023.98px) {
-    font-size: clamp(28px, 5vw, 64px);
+    svg {
+      width: clamp(28px, 5vw, 64px);
+    }
   }
 
   @media (max-width: 575.98px) {
-    font-size: clamp(20px, 7vw, 36px);
+    svg {
+      width: clamp(20px, 7vw, 36px);
+    }
   }
+}
+
+// ── Mix-blend 커서 서클 (body portal) ────────────
+// mix-blend-mode는 반드시 container에 — child에 걸면 z-index stacking context가
+// 블렌딩을 격리시켜 페이지 콘텐츠와 합성이 안 됨
+.footer__cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  width: 76px;
+  height: 76px;
+  // container에 mix-blend-mode: 흰 서클이 페이지 전체와 difference 합성
+  // 다크 bg(#000) → 흰 서클 그대로 / 라이트 bg(#fff) → 검정 서클로 자동 반전
+  mix-blend-mode: difference;
+
+  @media (hover: none) {
+    display: none;
+  }
+}
+
+.footer__cursor-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #ffffff;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.footer__cursor.is-visible .footer__cursor-bg {
+  transform: scale(1);
+  opacity: 1;
 }
 
 // ── 플로팅 볼 (장식) ────────────────────────────
@@ -93,6 +152,8 @@
   border-radius: 50%;
   background: var(--foreground);
   pointer-events: none;
+
+  display: none;
 
   @media (max-width: 1023.98px) {
     width: 60px;
@@ -111,27 +172,28 @@
 
 // ── 링크 영역 ───────────────────────────────────
 .footer__links {
-  padding-bottom: fvw(40);
+  padding-bottom: $space-10;
 
   @media (max-width: 1023.98px) {
-    padding-bottom: 32px;
+    padding-bottom: $space-8;
   }
 
   @media (max-width: 575.98px) {
-    padding-bottom: 24px;
+    padding-bottom: $space-6;
+    display: none;
   }
 }
 
 .footer__links-inner {
   display: flex;
-  gap: fvw(80);
+  gap: $space-20;
 
   @media (max-width: 1023.98px) {
-    gap: 48px;
+    gap: $space-12;
   }
 
   @media (max-width: 575.98px) {
-    gap: 32px;
+    gap: $space-8;
   }
 }
 
@@ -139,18 +201,19 @@
 .footer__legal {
   display: flex;
   flex-direction: column;
-  gap: fvw(10);
+  gap: 0;
 
   @media (max-width: 1023.98px) {
-    gap: 8px;
+    gap: $space-2;
   }
 
   a {
-    font-size: $fs-body-caps;   // 12px @ 1440
+    font-size: var(--fs-body-caps); // 12px @ 1440
     font-weight: $fw-light;
-    letter-spacing: $ls-wide;   // 0.04em
+    letter-spacing: $ls-wide; // 0.04em
+    line-height: 1.2;
     text-transform: uppercase;
-    color: var(--foreground-muted);
+    color: var(--foreground);
     text-decoration: none;
     transition: color 0.25s ease;
 
@@ -159,39 +222,75 @@
     }
 
     @media (max-width: 1023.98px) {
-      font-size: 12px;
+      font-size: var(--fs-body-caps); // calc(12 / 1024 * 100vw)
     }
 
     @media (max-width: 575.98px) {
-      font-size: 11px;
+      font-size: var(--fs-body-caps); // calc(12 / 576 * 100vw)
     }
+  }
+}
+
+// ── Contact 페이지: 카피라이트를 콘텐츠 그리드에 맞춤 ──
+//
+// contact-section .wrapper 의 left gutter = centering margin + padding-left
+//
+// [Desktop/Tablet ≥576px]
+//   max-width: min(91.6667vw, 1320px) / margin: 0 auto / padding: min(2.0833vw, 30px)
+//   → centering margin = (100vw - min(91.6667vw, 1320px)) / 2
+//   → total gutter     = calc((100vw - min(91.6667vw, 1320px)) / 2 + min(2.0833vw, 30px))
+//   예) 1440px: (1440-1320)/2 + 30 = 90px
+//       1280px: (1280-1173)/2 + 27 = 80px  (≈ 6.25vw)
+//        768px: (768-704)/2   + 16 = 48px  (≈ 6.25vw)
+//
+// [Mobile ≤575.98px]
+//   padding 이 $gutter-mobile(16px)으로 교체됨
+//   → centering margin = (100vw - 91.6667vw) / 2 = 4.1667vw
+//   → total gutter     = calc(4.1667vw + 16px)
+.footer--contact .footer__meta .wrapper {
+  @media (min-width: 576px) {
+    padding-left: calc((100vw - min(91.6667vw, 1320px)) / 2 + min(2.0833vw, 30px));
+  }
+
+  @media (max-width: 575.98px) {
+    padding-left: calc(4.1667vw + 16px);
+    text-align: left;
+  }
+}
+
+// footer__copy 에 직접 걸린 text-align: center 도 해제
+.footer--contact .footer__copy {
+  @media (max-width: 575.98px) {
+    text-align: left;
   }
 }
 
 // ── 카피라이트 ──────────────────────────────────
 .footer__meta {
-  padding-bottom: fvw(48);
+  padding-bottom: $space-16;
 
   @media (max-width: 1023.98px) {
-    padding-bottom: 32px;
+    padding-bottom: $space-32;
   }
 
   @media (max-width: 575.98px) {
-    padding-bottom: 24px;
+    padding-bottom: var(--space-40);
   }
 }
 
 .footer__copy {
-  font-size: $fs-body-caps;
+  font-size: var(--fs-body-caps);
   font-weight: $fw-light;
-  color: var(--foreground-dim);
+  color: var(--foreground);
   letter-spacing: $ls-wide;
 
   @media (max-width: 1023.98px) {
-    font-size: 12px;
+    font-size: var(--fs-body-caps); // calc(12 / 1024 * 100vw)
   }
 
   @media (max-width: 575.98px) {
-    font-size: 11px;
+    font-size: calc(var(--fs-body-3) * 0.8);
+    display: block;
+    text-align: center;
   }
 }
