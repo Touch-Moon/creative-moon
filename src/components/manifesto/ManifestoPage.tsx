@@ -12,7 +12,7 @@ const manifestoItems = [
     number: '01.',
     titleLine1: 'Put people',
     titleLine2: 'first.',
-    desc: 'It\'s our design philosophy, and the way we approach our work, our team and our clients.',
+    desc: 'Design-first thinking, applied to every project and every client relationship.',
     svg: (
       <svg viewBox="0 0 433 50" fill="none" className="manifesto-item__svg">
         <path className="line-1" d="M6 33C144.426 14.9078 283.988 21.4657 423 15" stroke="currentColor" strokeWidth="3" />
@@ -24,7 +24,7 @@ const manifestoItems = [
     number: '02.',
     titleLine1: 'Make great',
     titleLine2: 'work.',
-    desc: 'We\'re obsessive about quality. Our work has to be great, otherwise, why bother?',
+    desc: 'Quality is non-negotiable. If the work isn\'t great, it isn\'t done.',
     svg: (
       <svg viewBox="0 0 120 166" fill="none" className="manifesto-item__svg">
         <path className="exclamation-1" d="M91.9303 5C74.8182 43.7873 51.2733 81.9882 32.8125 118.91" stroke="currentColor" strokeWidth="3" />
@@ -51,7 +51,7 @@ const manifestoItems = [
     number: '04.',
     titleLine1: 'Think globally.',
     titleLine2: '',
-    desc: 'Our international clients and colleagues inspire us with new perspectives on work and life.',
+    desc: 'Different industries, markets, and contexts sharpen the approach. Staying curious keeps the work current.',
     svg: (
       <svg viewBox="0 0 507 278" fill="none" className="manifesto-item__svg">
         <path className="circle" d="M302.343 42.0972C75.9064 8.46663 1.06023 78.4822 16.5949 124.884C32.1295 171.286 108.104 220.67 238.64 240.976C369.176 261.281 462.564 222.716 485.814 188.897C509.064 155.078 455.706 69.029 223.04 49.5" stroke="currentColor" strokeWidth="3" />
@@ -75,7 +75,7 @@ const manifestoItems = [
     number: '06.',
     titleLine1: 'Do the',
     titleLine2: 'right thing.',
-    desc: 'For example, we pay our team fairly and on time. It\'s simple respect. We expect the same from our clients.',
+    desc: 'Clear communication, honest timelines, and fair terms. That\'s the standard for every project — and every client.',
     svg: (
       <svg viewBox="0 0 131 135" fill="none" className="manifesto-item__svg">
         <path className="eye-1" d="M31.0391 6.47266C31.793 27.3013 32.7754 48.1334 32.7754 68.9792" stroke="currentColor" strokeWidth="3" />
@@ -150,8 +150,8 @@ export default function ManifestoPage() {
               >
                 <div className="manifesto-section__intro body-text-3">
                   <p>
-                    Over the years we&apos;ve thought a lot about how we balance being good humans
-                    with doing good work and running a good business.
+                    At Creative Moon, great work and good values go hand in hand.
+                    This is the standard every project is held to.
                   </p>
                   <p className="manifesto-section__intro-em">
                     — <em>This is our Manifesto.</em>

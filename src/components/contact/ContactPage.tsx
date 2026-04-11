@@ -217,7 +217,7 @@ function ContactPageInner() {
               transition={{ duration: 1.0, ease: EASE_OUT, delay: 0.3 }}
             >
               <div className="contact-block">
-                <div className="contact-block__title body-text-caps">Drop us a line</div>
+                <div className="contact-block__title body-text-caps">Drop me a line</div>
                 <div className="contact-block__text headline-6">
                   <a href="mailto:hello@creativemoon.com">hello@creativemoon.com</a>
                 </div>
@@ -240,7 +240,7 @@ function ContactPageInner() {
                     animate={titleInView ? { y: 0 } : { y: '115%' }}
                     transition={{ duration: 1.2, ease: EASE_OUT, delay: 0 }}
                   >
-                    We&apos;d love to
+                    Let&apos;s talk about
                   </motion.div>
                 </div>
                 <div className="line">
@@ -250,7 +250,7 @@ function ContactPageInner() {
                     animate={titleInView ? { y: 0 } : { y: '115%' }}
                     transition={{ duration: 1.2, ease: EASE_OUT, delay: 0.1 }}
                   >
-                    hear from you.
+                    your next project.
                   </motion.div>
                 </div>
               </h1>
@@ -263,8 +263,9 @@ function ContactPageInner() {
                 animate={descInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                 transition={{ duration: 1.0, ease: EASE_OUT, delay: 0.2 }}
               >
-                Whether you want to tell us about a project, join our team, or just say hi,
-                write to us! We&apos;d love to hear from you.
+                Whether you have a clear brief or just an early idea, reach out.
+                Creative Moon works with agencies, brands, and growing teams on websites
+                that are well-designed, well-built, and built to last.
               </motion.p>
 
               {/* 폼 */}
@@ -278,7 +279,7 @@ function ContactPageInner() {
                 {sent ? (
                   <div className="contact-form__sent">
                     <p className="headline-4">
-                      Thanks. We&apos;ll get back to you as soon as we possibly can.
+                      Thanks. You&apos;ll hear back as soon as possible.
                     </p>
                   </div>
                 ) : (
@@ -335,7 +336,7 @@ function ContactPageInner() {
                     {/* Message (textarea) */}
                     <div className={`form-group is-textarea${fieldErrors.message ? ' is-error' : ''}`}>
                       <div className="form-control">
-                        <div className="form-placeholder">Tell us about your project</div>
+                        <div className="form-placeholder">Tell me about your project</div>
                         <textarea
                           className="form-textarea"
                           name="message"
@@ -425,7 +426,7 @@ function ContactPageInner() {
             animate={socialInView ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.8, ease: EASE_OUT }}
           >
-            Follow us
+            Follow along
           </motion.div>
           <div className="contact-social__list headline-3">
             <ul>

@@ -48,34 +48,34 @@ const imageReveal: Variants = {
   }),
 };
 
-// ── Award data ─────────────────────────────────────────────────
+// ── Tech stack data ────────────────────────────────────────────
 const awards = [
-  { org: 'Awwwards', name: 'Honorable Mention — Portfolio Redesign', year: '2025.' },
-  { org: 'CSS Design Awards', name: 'UI Design, UX Design — Portfolio Website', year: '2025.' },
-  { org: 'FWA', name: 'FWA of the Day — Portfolio Website', year: '2025.' },
-  { org: 'Awwwards', name: 'Site of the Day — Brand Project', year: '2024.' },
-  { org: 'CSS Design Awards', name: 'Website of the Day — E-commerce Platform', year: '2024.' },
-  { org: 'Muzli', name: 'Muzli Honor — Dashboard Design', year: '2024.' },
-  { org: 'Awwwards', name: 'Developer Award — Creative Moon Website', year: '2023.' },
-  { org: 'Behance', name: 'Interaction Featured — Mobile App Concept', year: '2023.' },
+  { org: 'React', name: 'Component Architecture & Modern Front-End', year: 'JS' },
+  { org: 'Next.js', name: 'Full-Stack Applications & Static Sites', year: 'JS' },
+  { org: 'TypeScript', name: 'Type-Safe Front-End Engineering', year: 'JS' },
+  { org: 'Shopify', name: 'Custom Theme Development & Optimization', year: 'E-COM' },
+  { org: 'WordPress', name: 'Custom Themes, Plugins & CMS Architecture', year: 'CMS' },
+  { org: 'Sanity / Supabase', name: 'Headless CMS & Backend Integration', year: 'Stack' },
+  { org: 'Figma', name: 'UI/UX Design & Prototyping Workflows', year: 'Design' },
+  { org: 'HTML / CSS / SCSS', name: 'Responsive Layouts & Design Systems', year: 'Core' },
 ];
 
-// ── Compliance data ────────────────────────────────────────────
+// ── Approach data ──────────────────────────────────────────────
 const compliance = [
   {
     number: '01.',
-    heading: 'Quality first approach.',
-    desc: 'Every project undergoes rigorous quality assurance to ensure that our deliverables meet the highest standards of design and development excellence.',
+    heading: 'Design before code.',
+    desc: 'Every project starts with layout, hierarchy, and user flow — before touching a line of code. Design decisions shape technical ones, not the other way around.',
   },
   {
     number: '02.',
-    heading: 'Transparent process.',
-    desc: 'Our commitment to clear communication drives us to maintain open, honest, and collaborative relationships with every client we work with.',
+    heading: 'Clear communication, always.',
+    desc: 'Transparent updates from kickoff to launch. What\'s being built, why, and how — no surprises at delivery. Documented CMS setups and clean handoffs are standard.',
   },
   {
     number: '03.',
-    heading: 'Continuous improvement.',
-    desc: 'We stay current with the latest technologies and design trends, constantly refining our processes to deliver cutting-edge digital solutions.',
+    heading: 'Performance by default.',
+    desc: 'Page speed, semantic markup, and accessibility are built in from the start, not added on. Every site is optimized for real-world performance, not just a dev preview.',
   },
 ];
 
@@ -115,9 +115,9 @@ export default function AboutPage() {
         <div className="wrapper">
           <h1 className="about-title__content">
             {[
-              'I create meaningful',
-              'digital experiences',
-              'that connect people.',
+              'Design-driven work.',
+              'Built with precision',
+              'and purpose.',
             ].map((line, i) => (
               <span key={i} className="line">
                 <motion.span
@@ -173,11 +173,12 @@ export default function AboutPage() {
             animate={fullImg.inView ? 'visible' : 'hidden'}
           >
             <p>
-              Creative Moon is a design-driven studio focused on delivering
-              high-quality digital products for forward-thinking brands.
-              A versatile blend of designer, strategist, and developer —
-              not too big, not too small, completely independent and
-              deeply passionate about craft.
+              Creative Moon is a web design and development studio based in
+              Canada. Grounded in agency experience and built around
+              modern tools, every project is delivered with the same commitment —
+              strong design, clean code, and a website that performs well after
+              launch. From Shopify builds to custom Next.js applications, the
+              focus is always on craft and execution.
             </p>
           </motion.div>
         </div>
@@ -213,15 +214,16 @@ export default function AboutPage() {
               animate={imgText.inView ? 'visible' : 'hidden'}
             >
               <h2 className="about-image-text__heading">
-                Best. User.<br />Experience. Ever.
+                Design that works,<br />from the first click.
               </h2>
               <p className="about-image-text__desc">
-                At least, that&apos;s what I aim for. My goal for every project
-                is the same: to elevate the connection between brands and their
-                audience through design. I specialise in{' '}
+                Every decision starts with the user — how they move through a page,
+                what draws attention, and where friction builds up. The goal for
+                every project is the same: a website that performs clearly, loads
+                fast, and guides visitors toward what matters. Work spans{' '}
                 <span style={{ textDecoration: 'underline', textUnderlineOffset: '0.2em' }}>
-                  Web Design, UI/UX, Front-end Development, Brand Identity
-                  and Creative Direction
+                  Web Design, UI/UX Design, Front-End Development,
+                  Shopify and WordPress builds
                 </span>.
               </p>
             </motion.div>
@@ -281,7 +283,7 @@ export default function AboutPage() {
             initial="hidden"
             animate={textLeft.inView ? 'visible' : 'hidden'}
           >
-            It&apos;s all about<br />the craft,<br />the craft.
+            Built with intent,<br />not just<br />instructions.
           </motion.h2>
 
           <motion.div
@@ -292,12 +294,12 @@ export default function AboutPage() {
             animate={textLeft.inView ? 'visible' : 'hidden'}
           >
             <p>
-              I put people first. Everything else flows from there.
-              There are the users, who are the heart of every design decision.
-              Then there are the clients, who trust me with their vision.
-              Both deserve the same dedication — meticulous attention to detail,
-              empathy-driven design, and solutions that truly work.{' '}
-              <Link href="/projects">See my work</Link>.
+              Good websites aren&apos;t assembled — they&apos;re considered. That means
+              understanding the project&apos;s purpose before writing a line of code,
+              choosing the right stack for the job, and building something the next
+              developer won&apos;t have to undo. Every build is treated as a long-term
+              investment in quality, not just a deliverable to ship.{' '}
+              <Link href="/work">See the work</Link>.
             </p>
           </motion.div>
         </div>
@@ -317,14 +319,14 @@ export default function AboutPage() {
               animate={textRight.inView ? 'visible' : 'hidden'}
             >
               <h2 className="about-text-right__heading">
-                If you&apos;re gonna do it,<br />do it right, right?
+                Clean code today.<br />Less trouble tomorrow.
               </h2>
               <p className="about-text-right__desc">
-                Clients choose me because I develop projects that focus on quality.
-                I don&apos;t act fast and think later, as often happens. I founded
-                Creative Moon because I like to see the bigger picture. I appreciate
-                what I do, and I like to work with clients and teams that share this
-                crucial yet simple philosophy: If you&apos;re going to do it, do it right!
+                Code written without care becomes someone else&apos;s problem. Fast load
+                times, structured markup, documented CMS setups — not just for launch,
+                but for everything that comes after. Whether it&apos;s a Shopify store,
+                a WordPress rebuild, or a custom Next.js project, the standard
+                doesn&apos;t change.
               </p>
             </motion.div>
           </div>
@@ -344,7 +346,7 @@ export default function AboutPage() {
               initial="hidden"
               animate={awardsSection.inView ? 'visible' : 'hidden'}
             >
-              I&apos;ve won<br />some awards.
+              The tools.<br />The stack.
             </motion.h2>
 
             <div className="about-awards__list">
@@ -373,7 +375,7 @@ export default function AboutPage() {
             initial="hidden"
             animate={complianceSection.inView ? 'visible' : 'hidden'}
           >
-            An important commitment to my clients.
+            How every project gets done.
           </motion.h2>
 
           <div className="about-compliance__grid">
