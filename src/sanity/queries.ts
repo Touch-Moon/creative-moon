@@ -85,7 +85,7 @@ export type MediaBlock = {
   skin3?: DeviceSkin;
   skinBg3?: DeviceBg;
   skinBgImage3?: { asset: { url: string } };
-  spacing?: "default" | "tight" | "none";
+  spacing?: "default" | "tight" | "none" | "no-gap";
 };
 
 export type TextBlock = {
