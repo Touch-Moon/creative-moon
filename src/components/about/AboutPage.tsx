@@ -82,7 +82,8 @@ const compliance = [
 // ── Reusable section hook ──────────────────────────────────────
 function useSection(margin = '-12%') {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const inView = useInView(ref, { once: true, margin: margin as any });
   return { ref, inView };
 }
 
