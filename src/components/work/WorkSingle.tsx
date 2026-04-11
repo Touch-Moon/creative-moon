@@ -5,7 +5,7 @@
  * 모듈 체계: mediaBlock / textBlock / spacerBlock (3-module system)
  */
 import { useState, useRef, useEffect } from 'react';
-import { motion, type Variants } from 'framer-motion';
+import { m, type Variants } from 'framer-motion';
 import type { BezierDefinition } from 'framer-motion';
 import Image from 'next/image';
 import type {
@@ -16,6 +16,7 @@ import type {
   SpacerBlock,
   SelectedWorkSanity,
 } from '@/sanity/queries';
+import { sanityImg } from '@/sanity/queries';
 import WorkRelated from './WorkRelated';
 import './WorkSingle.scss';
 
@@ -124,7 +125,7 @@ const DEVICE_CONFIG = {
     paddingTopBottom: 13.54,        // (680-413)/2 ÷ 986 × 100
   },
   tablet: {
-    src: '/images/devices/ipad.png',
+    src: '/images/devices/ipad.webp',
     frameRatio: '1308 / 931',       // PNG 실측
     screen: {
       left:         4.09,
@@ -135,7 +136,7 @@ const DEVICE_CONFIG = {
     },
   },
   mobile: {
-    src: '/images/devices/iphone.png',
+    src: '/images/devices/iphone.webp',
     frameRatio: '440 / 916',        // PNG 실측 (881×1834 @2x)
     screen: {
       left:         4.09,           // (881-808)/2 ÷ 881 → (440-404)/2 ÷ 440
@@ -217,13 +218,15 @@ function DeviceMockup({
 
 // ── 슬롯 렌더러 ──────────────────────────────────────────────────
 function MediaSlot({
-  videoUrl, imageField, fallback, w = 900,
+  videoUrl, imageField, fallback, w = 900, sizes,
   skin, skinBg, skinBgImageUrl,
 }: {
   videoUrl?: string;
   imageField?: { asset?: { url?: string } };
   fallback?: string;
   w?: number;
+  /** next/image sizes 문자열 — 레이아웃에 따라 ModuleMediaBlock이 주입 */
+  sizes?: string;
   skin?: DeviceSkin;
   skinBg?: DeviceBg;
   skinBgImageUrl?: string;
@@ -231,9 +234,13 @@ function MediaSlot({
   const media = videoUrl
     ? <ViewportVideo src={videoUrl} />
     : (() => {
-        const src = imageField?.asset?.url || fallback || ph(w, Math.round(w * 0.75));
+        // Sanity CDN 변환 적용 (auto=format → WebP/AVIF 자동 서빙, fit=max, width, quality)
+        const rawUrl = imageField?.asset?.url ?? null;
+        const src = sanityImg(rawUrl, w) ?? fallback ?? ph(w, Math.round(w * 0.75));
         return <Image src={src} alt="" width={w} height={Math.round(w * 0.75)}
-          unoptimized={isPlaceholder(src)} style={{ width: '100%', height: 'auto' }} />;
+          unoptimized={isPlaceholder(src)} quality={80}
+          sizes={sizes ?? '(max-width: 575px) 100vw, 90vw'}
+          style={{ width: '100%', height: 'auto' }} />;
       })();
 
   if (skin && skin !== 'none') {
@@ -259,13 +266,30 @@ function ModuleMediaBlock({ mod, delay = 0 }: { mod: MediaBlock; delay?: number 
     return (
       <div className={wrapCls} style={{ '--anim-delay': `${delay}ms` } as React.CSSProperties}>
         <MediaSlot videoUrl={mod.video1?.asset?.url} imageField={mod.image1} w={1440}
+          sizes="(max-width: 575px) 100vw, (max-width: 1023px) 100vw, 90vw"
           skin={mod.skin1} skinBg={mod.skinBg1} skinBgImageUrl={mod.skinBgImage1?.asset?.url} />
       </div>
     );
   }
 
-  // Multi-column
+  // Multi-column — sizes 설정
   const is3 = layout === '3col';
+  // narrow-wide / wide-narrow 는 col마다 비율이 다르므로 개별 지정
+  const sizesMain: string = is3
+    ? '(max-width: 575px) 100vw, 33vw'
+    : layout === '2col-narrow-wide'
+      ? '(max-width: 575px) 100vw, 35vw'   // narrow col
+      : layout === '2col-wide-narrow'
+        ? '(max-width: 575px) 100vw, 60vw'  // wide col
+        : '(max-width: 575px) 100vw, (max-width: 1023px) 50vw, 48vw'; // 2col 균등
+  const sizesSub: string = is3
+    ? '(max-width: 575px) 100vw, 33vw'
+    : layout === '2col-narrow-wide'
+      ? '(max-width: 575px) 100vw, 60vw'   // wide col
+      : layout === '2col-wide-narrow'
+        ? '(max-width: 575px) 100vw, 35vw' // narrow col
+        : '(max-width: 575px) 100vw, (max-width: 1023px) 50vw, 48vw';
+
   const layoutCls = is3 ? 'wm--3col' :
     layout === '2col-narrow-wide' ? 'wm--2col wm--2col-nw' :
     layout === '2col-wide-narrow' ? 'wm--2col wm--2col-wn' :
@@ -277,15 +301,18 @@ function ModuleMediaBlock({ mod, delay = 0 }: { mod: MediaBlock; delay?: number 
     <div className={wrapCls} style={{ '--anim-delay': `${delay}ms` } as React.CSSProperties}>
       <div className="wm__col">
         <MediaSlot videoUrl={mod.video1?.asset?.url} imageField={mod.image1}
+          sizes={sizesMain}
           skin={mod.skin1} skinBg={mod.skinBg1} skinBgImageUrl={mod.skinBgImage1?.asset?.url} />
       </div>
       <div className="wm__col">
         <MediaSlot videoUrl={mod.video2?.asset?.url} imageField={mod.image2} fallback={ph(900, 675, '2')}
+          sizes={sizesSub}
           skin={mod.skin2} skinBg={mod.skinBg2} skinBgImageUrl={mod.skinBgImage2?.asset?.url} />
       </div>
       {is3 && (
         <div className="wm__col">
           <MediaSlot videoUrl={mod.video3?.asset?.url} imageField={mod.image3} fallback={ph(900, 675, '3')}
+            sizes="(max-width: 575px) 100vw, 33vw"
             skin={mod.skin3} skinBg={mod.skinBg3} skinBgImageUrl={mod.skinBgImage3?.asset?.url} />
         </div>
       )}
@@ -356,8 +383,8 @@ type Props = { data?: WorkSingleData | null; selectedWorks?: SelectedWorkSanity[
 
 export default function WorkSingle({ data, selectedWorks }: Props) {
   const work = data || DUMMY_SINGLE;
-  const heroSrc = (work.heroMedia?.image as { asset?: { url?: string } })?.asset?.url
-    || ph(1440, 900, work.title);
+  const heroRawUrl = (work.heroMedia?.image as { asset?: { url?: string } })?.asset?.url ?? null;
+  const heroSrc = sanityImg(heroRawUrl, 1440, 85) ?? ph(1440, 900, work.title);
 
   const [heroDone, setHeroDone] = useState(false);
   const animState = heroDone ? 'visible' : 'hidden';
@@ -372,7 +399,7 @@ export default function WorkSingle({ data, selectedWorks }: Props) {
           <div className="work-single__title-mask">
             <h1 className="work-single__title headline-1">
               {titleWords.map((word, i) => (
-                <motion.span
+                <m.span
                   key={i}
                   className="work-single__title-word"
                   custom={i}
@@ -380,7 +407,7 @@ export default function WorkSingle({ data, selectedWorks }: Props) {
                   initial="hidden"
                   animate={animState}
                 >
-                  <motion.span
+                  <m.span
                     className="work-single__title-inner"
                     custom={i}
                     variants={slideVariants}
@@ -388,13 +415,13 @@ export default function WorkSingle({ data, selectedWorks }: Props) {
                     animate={animState}
                   >
                     {word}
-                  </motion.span>
-                </motion.span>
+                  </m.span>
+                </m.span>
               ))}
             </h1>
           </div>
           {work.year && (
-            <motion.span
+            <m.span
               className="work-single__year headline-3"
               custom={0.15}
               variants={fadeUpVariants}
@@ -402,11 +429,11 @@ export default function WorkSingle({ data, selectedWorks }: Props) {
               animate={animState}
             >
               ©{work.year}
-            </motion.span>
+            </m.span>
           )}
         </div>
         {work.subtitle && (
-          <motion.p
+          <m.p
             className="work-single__subtitle body-text-4"
             custom={0.25}
             variants={fadeUpVariants}
@@ -414,12 +441,12 @@ export default function WorkSingle({ data, selectedWorks }: Props) {
             animate={animState}
           >
             {work.subtitle}
-          </motion.p>
+          </m.p>
         )}
       </div>
 
       {/* ── .work__hero ── */}
-      <motion.div
+      <m.div
         className="work-single__hero"
         initial={{ y: '100vh' }}
         animate={{ y: '0vh' }}
@@ -433,10 +460,11 @@ export default function WorkSingle({ data, selectedWorks }: Props) {
           />
         ) : (
           <Image src={heroSrc} alt={work.title} width={1440} height={900} priority
-            unoptimized={isPlaceholder(heroSrc)}
+            unoptimized={isPlaceholder(heroSrc)} quality={85}
+            sizes="100vw"
             style={{ width: '100%', height: 'auto', display: 'block' }} />
         )}
-      </motion.div>
+      </m.div>
 
       {/* ── .work__text: 프로젝트 정보 ── */}
       <div className="work-single__text work-single__text--animate">

@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from "react";
-import { motion, type Variants } from "framer-motion";
+import { m, type Variants } from "framer-motion";
 import type { BezierDefinition } from "framer-motion";
 import { useFontsLoaded } from "@/context/FontContext";
 import "./Hero.scss";
@@ -10,7 +10,7 @@ const EASE_INOUT: BezierDefinition = [0.76, 0, 0.24, 1];
 
 export default function Hero() {
   const fontsLoaded = useFontsLoaded();
-  const lines = ["Transform ideas", "into fluid digital", "solutions."];
+  const lines = ["Transform ideas", "into fluid digital", "experiences."];
 
   // 매 마운트마다 false → true 변화를 만들어 페이지 전환 후에도 애니메이션 재실행
   const [shouldAnimate, setShouldAnimate] = useState(false);
@@ -69,7 +69,7 @@ export default function Hero() {
   const sectionAnimState = shouldAnimate ? "animate" : "initial";
 
   return (
-    <motion.section
+    <m.section
       className="home-hero"
       data-theme="light"
       variants={sectionVariants}
@@ -83,7 +83,7 @@ export default function Hero() {
               {line.split(" ").map((word, wordIndex) => {
                 const i = lineIndex * 1.5 + wordIndex;
                 return (
-                  <motion.div
+                  <m.div
                     key={wordIndex}
                     className="home-hero__module"
                     custom={i}
@@ -91,7 +91,7 @@ export default function Hero() {
                     initial="hidden"
                     animate={animState}
                   >
-                    <motion.div
+                    <m.div
                       className="home-hero__module-child"
                       custom={i}
                       variants={slideVariants}
@@ -99,14 +99,14 @@ export default function Hero() {
                       animate={animState}
                     >
                       {word}
-                    </motion.div>
-                  </motion.div>
+                    </m.div>
+                  </m.div>
                 );
               })}
             </div>
           ))}
         </h1>
       </div>
-    </motion.section>
+    </m.section>
   );
 }

@@ -3,8 +3,9 @@ import WorkList, { type WorkItem } from '@/components/work/WorkList';
 import { getWorksList, getThumbPortrait, getThumbLandscape } from '@/sanity/queries';
 
 export const metadata: Metadata = {
-  title: 'Work | Creative Moon',
+  title: 'Work',
   description: 'Selected works — strategy, branding, digital products, and experiences.',
+  alternates: { canonical: '/work' },
 };
 
 export const revalidate = 60; // ISR: 60초마다 재검증

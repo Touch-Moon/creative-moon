@@ -12,13 +12,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   try {
     const story = await getStoryBySlug(slug);
-    if (!story) return { title: 'Insights | Creative Moon' };
+    if (!story) return { title: 'Insights' };
+    const desc = story.excerpt?.slice(0, 160) || '';
+    const ogImg = story.thumbnailUrl || undefined;
     return {
-      title: `${story.title} | Creative Moon`,
-      description: story.excerpt?.slice(0, 160),
+      title: story.title,
+      description: desc,
+      openGraph: {
+        title: `${story.title} | Creative Moon`,
+        description: desc,
+        ...(ogImg && { images: [{ url: ogImg, width: 1200, height: 630, alt: story.title }] }),
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${story.title} | Creative Moon`,
+        description: desc,
+        ...(ogImg && { images: [ogImg] }),
+      },
+      alternates: {
+        canonical: `/stories/${slug}`,
+      },
     };
   } catch {
-    return { title: 'Insights | Creative Moon' };
+    return { title: 'Insights' };
   }
 }
 

@@ -26,8 +26,11 @@ function buildWorksList(serverWorks?: SelectedWorkSanity[]): SelectedWork[] {
       ? (getThumbLandscape(sw.thumbnailLandscape) ?? getThumbPortrait(sw.thumbnailPortrait, undefined))
       : getThumbPortrait(sw.thumbnailPortrait, sw.thumbnailLandscape);
     const rawSrc = sanityUrl ?? fallback.src;
+    // Canvas(WaveImage): same-origin /_next/image 프록시
+    // large/wide → w=1440 / tall/compact → w=720
+    const optimizedW = useLandscape ? 1440 : 720;
     const src = rawSrc.startsWith('https://cdn.sanity.io')
-      ? `/_next/image?url=${encodeURIComponent(rawSrc)}&w=1920&q=75`
+      ? `/_next/image?url=${encodeURIComponent(rawSrc)}&w=${optimizedW}&q=80`
       : rawSrc;
     return {
       id: String(i + 1).padStart(2, '0'),

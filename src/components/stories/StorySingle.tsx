@@ -1,10 +1,11 @@
 'use client';
 
 import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import type { BezierDefinition } from 'framer-motion';
 import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
+import type { PortableTextBlockComponent, PortableTextMarkComponentProps } from '@portabletext/react';
 import type {
   StorySingleData,
   StoryMediaModule,
@@ -17,16 +18,16 @@ import './StorySingle.scss';
 const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
 
 // ── Portable Text components ──────────────────────────────────────
+type LinkMark = { _type: 'link'; href: string; blank?: boolean };
+
 const ptComponents = {
   block: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    normal: ({ children }: any) => (
+    normal: (({ children }) => (
       <p className="body-text-4">{children}</p>
-    ),
+    )) as PortableTextBlockComponent,
   },
   marks: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    link: ({ children, value }: any) => (
+    link: ({ children, value }: PortableTextMarkComponentProps<LinkMark>) => (
       <a
         href={value?.href}
         target={value?.blank ? '_blank' : '_self'}
@@ -47,7 +48,7 @@ function HeroModuleBlock({ heroMedia }: { heroMedia: StoryHeroMedia }) {
   if (heroMedia.mediaType === 'video' && heroMedia.video?.asset?.url) {
     return (
       <div className="story-module story-module--hero" ref={ref}>
-        <motion.div
+        <m.div
           className="story-module__media-inner"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
@@ -59,9 +60,10 @@ function HeroModuleBlock({ heroMedia }: { heroMedia: StoryHeroMedia }) {
             muted
             loop
             playsInline
+            preload="metadata"
             className="story-module__hero-video"
           />
-        </motion.div>
+        </m.div>
       </div>
     );
   }
@@ -69,7 +71,7 @@ function HeroModuleBlock({ heroMedia }: { heroMedia: StoryHeroMedia }) {
   if (heroMedia.image?.asset?.url) {
     return (
       <div className="story-module story-module--hero" ref={ref}>
-        <motion.div
+        <m.div
           className="story-module__media-inner"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
@@ -82,9 +84,11 @@ function HeroModuleBlock({ heroMedia }: { heroMedia: StoryHeroMedia }) {
               fill
               className="story-module__hero-image"
               sizes="(max-width: 575px) 100vw, (max-width: 1023px) 100vw, 80vw"
+              quality={85}
+              priority
             />
           </div>
-        </motion.div>
+        </m.div>
       </div>
     );
   }
@@ -103,7 +107,7 @@ function MediaModuleBlock({ mod }: { mod: StoryMediaModule }) {
         className={`story-module story-module--media${mod.narrow ? ' story-module--narrow' : ''}`}
         ref={ref}
       >
-        <motion.div
+        <m.div
           className="story-module__media-inner"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
@@ -115,9 +119,10 @@ function MediaModuleBlock({ mod }: { mod: StoryMediaModule }) {
             muted
             loop
             playsInline
+            preload="metadata"
             className="story-module__video"
           />
-        </motion.div>
+        </m.div>
       </div>
     );
   }
@@ -128,7 +133,7 @@ function MediaModuleBlock({ mod }: { mod: StoryMediaModule }) {
         className={`story-module story-module--media${mod.narrow ? ' story-module--narrow' : ''}`}
         ref={ref}
       >
-        <motion.div
+        <m.div
           className="story-module__media-inner"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
@@ -141,9 +146,10 @@ function MediaModuleBlock({ mod }: { mod: StoryMediaModule }) {
               fill
               className="story-module__image"
               sizes="(max-width: 575px) 100vw, (max-width: 1023px) 100vw, 80vw"
+              quality={80}
             />
           </div>
-        </motion.div>
+        </m.div>
       </div>
     );
   }
@@ -160,7 +166,7 @@ function TwoColImageModuleBlock({ mod }: { mod: StoryTwoColImageModule }) {
     <div className="story-module story-module--two-col-image" ref={ref}>
       <div className="story-module__two-col-inner">
         {mod.leftImage?.asset?.url && (
-          <motion.div
+          <m.div
             className="story-module__two-col-item"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -172,11 +178,12 @@ function TwoColImageModuleBlock({ mod }: { mod: StoryTwoColImageModule }) {
               fill
               className="story-module__two-col-img"
               sizes="(max-width: 575px) 100vw, 50vw"
+              quality={80}
             />
-          </motion.div>
+          </m.div>
         )}
         {mod.rightImage?.asset?.url && (
-          <motion.div
+          <m.div
             className="story-module__two-col-item"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -188,8 +195,9 @@ function TwoColImageModuleBlock({ mod }: { mod: StoryTwoColImageModule }) {
               fill
               className="story-module__two-col-img"
               sizes="(max-width: 575px) 100vw, 50vw"
+              quality={80}
             />
-          </motion.div>
+          </m.div>
         )}
       </div>
     </div>
@@ -232,7 +240,7 @@ function TextModuleBlock({ mod }: { mod: StoryTextModule }) {
         style={{ '--story-pt': paddingTop } as React.CSSProperties}
         ref={ref}
       >
-        <motion.div
+        <m.div
           className="story-module__centered-body"
           style={{ '--col-w': colWidth } as React.CSSProperties}
           initial={{ opacity: 0, y: 30 }}
@@ -247,7 +255,7 @@ function TextModuleBlock({ mod }: { mod: StoryTextModule }) {
           <div className="story-module__wysiwyg">
             {mod.body && <PortableText value={mod.body} components={ptComponents} />}
           </div>
-        </motion.div>
+        </m.div>
       </div>
     );
   }
@@ -271,7 +279,7 @@ function TextModuleBlock({ mod }: { mod: StoryTextModule }) {
 
         {/* Separate heading column */}
         {headingInSeparateCol && mod.heading && (
-          <motion.div
+          <m.div
             className="story-module__heading-col"
             style={{ gridColumn: `span ${headingColWidth}` }}
             initial={{ opacity: 0, y: 30 }}
@@ -281,11 +289,11 @@ function TextModuleBlock({ mod }: { mod: StoryTextModule }) {
             <h2 className="headline-4 story-module__section-heading">
               {mod.heading}
             </h2>
-          </motion.div>
+          </m.div>
         )}
 
         {/* Body column */}
-        <motion.div
+        <m.div
           className="story-module__body-col"
           style={{ gridColumn: `span ${colWidth}` }}
           initial={{ opacity: 0, y: 30 }}
@@ -304,7 +312,7 @@ function TextModuleBlock({ mod }: { mod: StoryTextModule }) {
           <div className="story-module__wysiwyg">
             {mod.body && <PortableText value={mod.body} components={ptComponents} />}
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </div>
   );
@@ -319,24 +327,24 @@ function TitleBlock({ title, category }: { title: string; category?: string }) {
     <div className="story-module story-module--title" ref={ref}>
       <div className="story-module__title-inner">
         {category && (
-          <motion.h3
+          <m.h3
             className="body-text-4 story-module__category"
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.9, ease: EASE_OUT }}
           >
             {category}.
-          </motion.h3>
+          </m.h3>
         )}
         <div className="story-module__headline-wrap">
-          <motion.h1
+          <m.h1
             className="headline-2 story-module__headline"
             initial={{ y: '110%' }}
             animate={inView ? { y: 0 } : {}}
             transition={{ duration: 1.4, ease: EASE_OUT, delay: 0.1 }}
           >
             {title}
-          </motion.h1>
+          </m.h1>
         </div>
       </div>
     </div>

@@ -47,12 +47,17 @@
 - [x] Sanity GROQ 쿼리 (`src/sanity/queries.ts`)
   - WORKS_LIST_QUERY, WORK_BY_SLUG_QUERY, CATEGORIES_QUERY, urlFor()
 
+### 완료된 작업 ✅ (2026-04-11 추가)
+- [x] 배포 (Vercel) — main 브랜치 연동 완료
+- [x] 이미지 최적화 — next.config.ts formats(avif/webp)+TTL, 전 컴포넌트 quality/sizes props 추가
+- [x] 비디오 최적화 — HomeIntro poster+preload="none", StorySingle preload="metadata" 추가
+- [x] OPTIMIZATION_PLAN.md 생성 — 전체 최적화 로드맵 (이미지→비디오→성능→SEO→코드→UX)
+
 ### 다음 예정 작업 📋
 - [ ] 각 섹션 반응형 추가 세밀화 (Tablet / Mobile)
 - [ ] HomeWorks 카드 → Sanity work 데이터 연동
 - [ ] More Work 슬라이더 (Single 페이지 하단)
 - [ ] Sanity에 실제 work 데이터 입력
-- [ ] 배포 (Vercel)
 
 ---
 

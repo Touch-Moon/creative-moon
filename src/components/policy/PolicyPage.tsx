@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import type { BezierDefinition } from 'framer-motion';
 import Link from 'next/link';
 import './PolicyPage.scss';
@@ -29,7 +29,7 @@ function Section({ section, index }: { section: PolicySection; index: number }) 
   const inView = useInView(ref, { once: true, margin: '0px 0px -10% 0px' });
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       id={section.id}
       className="policy-section"
@@ -50,7 +50,7 @@ function Section({ section, index }: { section: PolicySection; index: number }) 
           ))}
         </ul>
       )}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -63,7 +63,7 @@ export default function PolicyPage({ label, title, updatedDate, sections }: Poli
     <div className="policy-page">
       <div className="wrapper">
         {/* ── Header ── */}
-        <motion.div
+        <m.div
           ref={headerRef}
           className="policy-header"
           initial={{ opacity: 0, y: 40 }}
@@ -73,7 +73,7 @@ export default function PolicyPage({ label, title, updatedDate, sections }: Poli
           <span className="policy-header__label">{label}</span>
           <h1 className="policy-header__title">{title}</h1>
           <span className="policy-header__updated">Last updated: {updatedDate}</span>
-        </motion.div>
+        </m.div>
 
         {/* ── Content ── */}
         <div className="policy-content">

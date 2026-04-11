@@ -1,6 +1,6 @@
 'use client';
 import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import type { BezierDefinition } from 'framer-motion';
 import './HomeIntro.scss';
 
@@ -17,7 +17,7 @@ export default function HomeIntro() {
     <section className="home-intro" data-theme="light">
       <div className="wrap">
       {/* ── Video placeholder — plastic.design home-intro-video 영역 매칭 ── */}
-      <motion.div
+      <m.div
         ref={videoRef}
         className="home-intro-video"
         initial={{ opacity: 0, y: 60 }}
@@ -32,6 +32,8 @@ export default function HomeIntro() {
             muted
             loop
             playsInline
+            preload="none"
+            poster="/images/intro-video-placeholder.webp"
             style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
           />
           {/* 2. 블랙 마스크 */}
@@ -43,10 +45,10 @@ export default function HomeIntro() {
             style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '37.5vw', height: 'auto' }}
           />
         </div>
-      </motion.div>
+      </m.div>
 
       {/* ── 소개 텍스트 ── */}
-      <motion.div
+      <m.div
         ref={textRef}
         className="home-intro__text"
         initial={{ opacity: 0, y: 40 }}
@@ -54,12 +56,13 @@ export default function HomeIntro() {
         transition={{ duration: 1.2, ease: EASE_OUT }}
       >
         <p>
-          I&apos;m a web designer and full-stack developer with 15+ years of experience,
-          crafting intuitive, scalable, and responsive digital experiences. My expertise
-          spans UI/UX, front-end aesthetics, and back-end functionality — ensuring every
-          project is both visually compelling and technically sound.
+          A Designer and Developer based in Canada. Focused on
+          crafting responsive, interaction-driven websites where every detail of the user
+          experience is considered, from how a page feels to how it responds. Every project
+          is approached with the same standard: intentional design, clean code, and a
+          finished product that holds&nbsp;up.
         </p>
-      </motion.div>
+      </m.div>
       </div>
     </section>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import type { BezierDefinition } from 'framer-motion';
 import './ManifestoPage.scss';
 
@@ -12,7 +12,7 @@ const manifestoItems = [
     number: '01.',
     titleLine1: 'Put people',
     titleLine2: 'first.',
-    desc: 'Design-first thinking, applied to every project and every client relationship.',
+    desc: 'Every interface begins with the people who use it — how they feel, what they need, and where the experience can do more.',
     svg: (
       <svg viewBox="0 0 433 50" fill="none" className="manifesto-item__svg">
         <path className="line-1" d="M6 33C144.426 14.9078 283.988 21.4657 423 15" stroke="currentColor" strokeWidth="3" />
@@ -38,7 +38,7 @@ const manifestoItems = [
     number: '03.',
     titleLine1: 'See the',
     titleLine2: 'bigger picture.',
-    desc: 'Understanding where you\'re coming from helps us to go in the right direction together.',
+    desc: 'Understanding where you\'re coming from helps me move in the right direction — together.',
     svg: (
       <svg viewBox="0 0 403 202" fill="none" className="manifesto-item__svg">
         <path className="rec-3" d="M180.016 19.4492C249.726 13.0944 319.19 10.546 389.06 7.36567C392.099 7.22733 393.568 7.30206 394.05 10.7042C396.871 30.5975 396.639 50.7982 399.578 70.728" stroke="currentColor" strokeWidth="3" />
@@ -95,7 +95,7 @@ function ManifestoItem({ item, index }: { item: typeof manifestoItems[0]; index:
     <div ref={ref} className={`manifesto-item${inView ? ' is-visible' : ''}`}>
       {/* 라인 */}
       <div className="manifesto-item__line">
-        <motion.div
+        <m.div
           className="manifesto-item__line-inner"
           initial={{ scaleX: 0 }}
           animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
@@ -104,7 +104,7 @@ function ManifestoItem({ item, index }: { item: typeof manifestoItems[0]; index:
       </div>
 
       {/* 콘텐츠 */}
-      <motion.div
+      <m.div
         className="manifesto-item__content"
         initial={{ opacity: 0, y: 60 }}
         animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
@@ -121,7 +121,7 @@ function ManifestoItem({ item, index }: { item: typeof manifestoItems[0]; index:
         <p className="manifesto-item__description body-text-3">
           {item.desc}
         </p>
-      </motion.div>
+      </m.div>
     </div>
   );
 }
@@ -142,7 +142,7 @@ export default function ManifestoPage() {
           <div className="manifesto-section__content">
             {/* 좌측 sticky 텍스트 */}
             <div className="manifesto-section__sticky-col" ref={stickyRef}>
-              <motion.div
+              <m.div
                 className="manifesto-section__sticky"
                 initial={{ opacity: 0 }}
                 animate={stickyInView ? { opacity: 1 } : { opacity: 0 }}
@@ -150,18 +150,18 @@ export default function ManifestoPage() {
               >
                 <div className="manifesto-section__intro body-text-3">
                   <p>
-                    At Creative Moon, great work and good values go hand in hand.
+                    Great work and good values go hand in hand.
                     This is the standard every project is held to.
                   </p>
                   <p className="manifesto-section__intro-em">
-                    — <em>This is our Manifesto.</em>
+                    — <em>This is my Manifesto.</em>
                   </p>
                 </div>
-              </motion.div>
+              </m.div>
             </div>
 
             {/* 우측 아이템 목록 */}
-            <motion.div
+            <m.div
               className="manifesto-section__items"
               ref={itemsRef}
               initial={{ opacity: 0 }}
@@ -171,7 +171,7 @@ export default function ManifestoPage() {
               {manifestoItems.map((item, i) => (
                 <ManifestoItem key={item.number} item={item} index={i} />
               ))}
-            </motion.div>
+            </m.div>
           </div>
         </div>
       </section>

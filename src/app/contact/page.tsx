@@ -1,8 +1,10 @@
+import type { Metadata } from 'next';
 import ContactPage from '@/components/contact/ContactPage';
 
-export const metadata = {
-  title: 'Contact | Creative Moon',
-  description: 'Get in touch with Creative Moon — we\'d love to hear about your project.',
+export const metadata: Metadata = {
+  title: 'Contact',
+  description: "Get in touch with Creative Moon — let's talk about your project.",
+  alternates: { canonical: '/contact' },
 };
 
 export default function Contact() {

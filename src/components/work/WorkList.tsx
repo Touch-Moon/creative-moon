@@ -97,8 +97,11 @@ function WorkCard({ work, layout, animDelay, onImageEnter, onImageLeave }: {
   const rawSrc = layout === 'full'
     ? (work.thumbnailLandscapeUrl || `https://placehold.co/1792x1008/1a1a1a/555555?text=${encodeURIComponent(work.title)}`)
     : (work.thumbnailPortraitUrl || `https://placehold.co/864x1037/1a1a1a/555555?text=${encodeURIComponent(work.title)}`);
+  // Canvas(WaveImage): same-origin /_next/image 프록시 → Sanity CDN 서버사이드 fetch (CORS 없음)
+  // half(portrait) → w=960 / full(landscape) → w=1920
+  const optimizedW = layout === 'full' ? 1920 : 960;
   const src = rawSrc.startsWith('https://cdn.sanity.io')
-    ? `/_next/image?url=${encodeURIComponent(rawSrc)}&w=1920&q=75`
+    ? `/_next/image?url=${encodeURIComponent(rawSrc)}&w=${optimizedW}&q=80`
     : rawSrc;
 
   // full: Landscape 16:9 고정 (56.25%)
@@ -191,12 +194,13 @@ export default function WorkList({ initialWorks }: Props) {
       </div>
 
       {/* ── 카테고리 필터 ── */}
-      <nav className="work-list__filter work-list__filter--animate">
+      <nav className="work-list__filter work-list__filter--animate" aria-label="Work category filter">
         <ul className="work-list__filter-list">
           <li className="work-list__filter-item">
             <button
               className={`work-list__filter-btn${activeCategory === 'all' ? ' is-active' : ''}`}
               onClick={() => setActiveCategory('all')}
+              aria-current={activeCategory === 'all' ? 'true' : undefined}
             >
               All.<span className="work-list__filter-count">({works.length})</span>
             </button>
@@ -206,6 +210,7 @@ export default function WorkList({ initialWorks }: Props) {
               <button
                 className={`work-list__filter-btn${activeCategory === cat ? ' is-active' : ''}`}
                 onClick={() => setActiveCategory(cat)}
+                aria-current={activeCategory === cat ? 'true' : undefined}
               >
                 {cat}.<span className="work-list__filter-count">({count})</span>
               </button>
