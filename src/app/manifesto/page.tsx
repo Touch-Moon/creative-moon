@@ -1,8 +1,10 @@
+import type { Metadata } from 'next';
 import ManifestoPage from '@/components/manifesto/ManifestoPage';
 
-export const metadata = {
-  title: 'Manifesto | Creative Moon',
-  description: 'Our values and principles — what drives us to create meaningful digital experiences.',
+export const metadata: Metadata = {
+  title: 'Manifesto',
+  description: 'Values and principles — what drives the work and shapes every digital experience at Creative Moon.',
+  alternates: { canonical: '/manifesto' },
 };
 
 export default function Manifesto() {

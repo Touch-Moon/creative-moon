@@ -1,13 +1,64 @@
 import { client } from "./client";
-import imageUrlBuilder from "@sanity/image-url";
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SanityImageSource = any;
+import { createImageUrlBuilder } from "@sanity/image-url";
+import type { PortableTextBlock } from "@portabletext/react";
+
+// SanityImageSource: Parameters 헬퍼로 builder.image() 인자 타입 추출
+type SanityImageSource = Parameters<ReturnType<typeof createImageUrlBuilder>['image']>[0];
 
 // ── Image URL builder ────────────────────────────────────────────
-const builder = imageUrlBuilder(client);
+const builder = createImageUrlBuilder(client);
 
 export function urlFor(source: SanityImageSource) {
   return builder.image(source);
+}
+
+/**
+ * Sanity CDN 이미지 URL에 변환 파라미터 추가
+ * - auto=format  → 브라우저 지원에 따라 WebP/AVIF 자동 서빙
+ * - fit=max      → 원본보다 크게 확대 안 함
+ * - w, q         → 레이아웃별 너비 + 품질
+ *
+ * next/image 를 거치는 이미지에도 적용하면 Sanity CDN에서 1차 변환,
+ * Next.js에서 2차 캐시 → 이중 최적화.
+ * WaveImage(canvas)처럼 next/image 를 안 거치는 경우엔 필수.
+ */
+export function sanityImg(url: string | null | undefined, width: number, quality = 80): string | null {
+  if (!url || !url.includes('cdn.sanity.io')) return url ?? null;
+  const u = new URL(url);
+  u.searchParams.set('auto', 'format');
+  u.searchParams.set('fit', 'max');
+  u.searchParams.set('w', String(width));
+  u.searchParams.set('q', String(quality));
+  return u.toString();
+}
+
+/**
+ * Canvas(WaveImage)용 Sanity CDN URL 변환.
+ * /_next/image 프록시를 거치지 않고 Sanity CDN에서 직접 변환.
+ * 기존 파라미터를 모두 제거하고 새로 설정함.
+ * @param crop true → fit=crop + crop=center + h=w*(9/16) (16:9 가로형)
+ */
+export function buildCanvasSrc(
+  url: string | null | undefined,
+  width: number,
+  quality = 80,
+  crop = false,
+): string | null {
+  if (!url || !url.includes('cdn.sanity.io')) return url ?? null;
+  const u = new URL(url);
+  // 기존 파라미터 전부 제거 후 재설정 (중복/충돌 방지)
+  Array.from(u.searchParams.keys()).forEach(k => u.searchParams.delete(k));
+  u.searchParams.set('auto', 'format');
+  u.searchParams.set('w', String(width));
+  u.searchParams.set('q', String(quality));
+  if (crop) {
+    u.searchParams.set('fit', 'crop');
+    u.searchParams.set('crop', 'center');
+    u.searchParams.set('h', String(Math.round(width * 9 / 16)));
+  } else {
+    u.searchParams.set('fit', 'max');
+  }
+  return u.toString();
 }
 
 // ── Type definitions ──────────────────────────────────────────────
@@ -43,20 +94,24 @@ export type SelectedWorkSanity = {
 // Portrait: 자연 비율 그대로 서빙 (height 강제 X → 업로드 이미지 비율 보존)
 // Portrait 미등록 시 Landscape에서 자연 비율로 폴백
 // 사용처: Work 페이지 50% 세로형, 홈 Selected Works
+// w=1440 → 720px 컬럼 기준 2x retina 대응 (기존 1762 → 절감)
 export function getThumbPortrait(
   thumbnailPortrait?: SanityImageSource,
   thumbnailLandscape?: SanityImageSource,
 ): string | null {
   const src = thumbnailPortrait ?? thumbnailLandscape;
   if (!src) return null;
-  return urlFor(src).width(1762).auto('format').url();
+  // quality/format 제거 — /_next/image가 2차 변환 담당 (중복 파라미터 → 400 방지)
+  return urlFor(src).width(1440).url();
 }
 
-// Landscape: 16:9 비율 고정 (3584×2016)
+// Landscape: 16:9 비율 고정
 // 사용처: Work 페이지 100% 가로형
+// w=1920 → 기존 3584에서 대폭 축소 (1920px이 최대 디스플레이 기준)
 export function getThumbLandscape(thumbnailLandscape?: SanityImageSource): string | null {
   if (!thumbnailLandscape) return null;
-  return urlFor(thumbnailLandscape).width(3584).height(2016).fit('crop').crop('center').auto('format').url();
+  // quality/format 제거 — /_next/image가 2차 변환 담당 (중복 파라미터 → 400 방지)
+  return urlFor(thumbnailLandscape).width(1920).height(1080).fit('crop').crop('center').url();
 }
 
 
@@ -244,8 +299,7 @@ export type StoryTextModule = {
   heading?: string;
   headingInSeparateCol?: boolean;
   headingColWidth?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  body?: any[];
+  body?: PortableTextBlock[];
 };
 
 export type StoryHeroMedia = {

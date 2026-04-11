@@ -30,9 +30,11 @@ function buildWorksList(serverWorks?: SelectedWorkSanity[]): SelectedWork[] {
       : getThumbPortrait(sw.thumbnailPortrait, sw.thumbnailLandscape);
     const rawSrc = sanityUrl ?? fallback.src;
 
-    // Proxy Sanity CDN through Next.js image optimization (avoids direct CDN CORS/503)
+    // Canvas(WaveImage): same-origin /_next/image 프록시 → Sanity CDN 서버사이드 fetch
+    // large/wide(가로형) → w=1440, tall/compact(세로형) → w=720
+    const optimizedW = useLandscape ? 1440 : 720;
     const src = rawSrc.startsWith('https://cdn.sanity.io')
-      ? `/_next/image?url=${encodeURIComponent(rawSrc)}&w=1920&q=75`
+      ? `/_next/image?url=${encodeURIComponent(rawSrc)}&w=${optimizedW}&q=80`
       : rawSrc;
     return {
       id: String(i + 1).padStart(2, '0'),

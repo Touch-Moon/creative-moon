@@ -1,3 +1,13 @@
+import type { Metadata } from 'next';
+import JsonLd from '@/components/common/JsonLd';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://creative-moon.com';
+
+export const metadata: Metadata = {
+  title: { absolute: 'Creative Moon | Design-Driven Digital Studio' },
+  alternates: { canonical: SITE_URL },
+};
+
 import Hero from '@/components/home/Hero';
 import HomeIntro from '@/components/home/HomeIntro';
 import HomeSkills from '@/components/home/HomeSkills';
@@ -24,8 +34,32 @@ export default async function Home() {
     storiesData = [];
   }
 
+  const orgSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${SITE_URL}/#organization`,
+        name: 'Creative Moon',
+        url: SITE_URL,
+        logo: { '@type': 'ImageObject', url: `${SITE_URL}/icon.svg` },
+        email: 'hello@creativemoon.com',
+        description: 'Design-driven studio crafting interactive digital experiences — strategy, branding, and digital products.',
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: 'Creative Moon',
+        publisher: { '@id': `${SITE_URL}/#organization` },
+        inLanguage: 'ko-KR',
+      },
+    ],
+  };
+
   return (
     <main>
+      <JsonLd data={orgSchema} />
       {/* 1. Hero */}
       <Hero />
 

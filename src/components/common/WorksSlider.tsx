@@ -6,7 +6,7 @@
  */
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, type Variants } from 'framer-motion';
+import { m, type Variants } from 'framer-motion';
 import type { BezierDefinition } from 'framer-motion';
 import Link from 'next/link';
 import ArrowButton from '@/components/common/ArrowButton';
@@ -35,7 +35,7 @@ const cardVariants: Variants = {
   }),
 };
 
-const MotionLink = motion(Link);
+const MotionLink = m.create(Link);
 
 // ── Parallax 속도 ──────────────────────────────────────────────────────────────
 
@@ -356,19 +356,19 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
           <h2 className="works-slider__title">
             {['SELECTED', 'WORKS'].map((line, i) => (
               <div key={i} className="works-slider__title-line">
-                <motion.span
+                <m.span
                   custom={i}
                   variants={titleVariants}
                   initial="hidden"
                   animate={revealed ? 'visible' : 'hidden'}
                 >
                   {line}
-                </motion.span>
+                </m.span>
               </div>
             ))}
           </h2>
 
-          <motion.div
+          <m.div
             className="works-slider__nav"
             initial={{ opacity: 0 }}
             animate={revealed ? { opacity: 1 } : { opacity: 0 }}
@@ -409,7 +409,7 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
                 ariaLabel="Next work"
               />
             </div>
-          </motion.div>
+          </m.div>
         </div>
 
         {/* ── 카드 트랙 ── */}

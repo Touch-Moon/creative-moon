@@ -1,7 +1,7 @@
 'use client';
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, useInView, type Variants } from 'framer-motion';
+import { m, useInView, type Variants } from 'framer-motion';
 import type { BezierDefinition } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -28,7 +28,7 @@ const cardVariants: Variants = {
   }),
 };
 
-const MotionLink = motion(Link);
+const MotionLink = m.create(Link);
 
 // 더미 데이터 (Sanity 미연결 시 사용)
 const DUMMY_STORIES: StoryListItem[] = [
@@ -128,8 +128,7 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
         isScrollingRef.current = false;
       }, 500);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [stories.length]);
 
   // ── 버튼 네비 ────────────────────────────────────────
   const scroll = (dir: 'prev' | 'next') => {
@@ -319,16 +318,16 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
       <div className="wrap">
       <div className="home-stories__header">
         <div className="home-stories__title-wrap">
-          <motion.h2
+          <m.h2
             className="home-stories__title"
             variants={titleVariants}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
           >
             INSIGHT.
-          </motion.h2>
+          </m.h2>
         </div>
-        <motion.div
+        <m.div
           className="home-stories__arrows"
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
@@ -336,7 +335,16 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
         >
           <ArrowButton direction="prev" onClick={() => scroll('prev')} disabled={current === 0} ariaLabel="Previous story" />
           <ArrowButton direction="next" onClick={() => scroll('next')} disabled={current === stories.length - 1} ariaLabel="Next story" />
-        </motion.div>
+        </m.div>
+      </div>
+
+      {/* 스크린 리더: 현재 슬라이드 위치 안내 */}
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {`Story ${current + 1} of ${stories.length}: ${stories[current]?.title}`}
       </div>
 
       <div
@@ -348,6 +356,8 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
         onMouseUp={onDragEnd}
         onMouseEnter={handleTrackMouseEnter}
         onMouseLeave={handleTrackMouseLeave}
+        role="region"
+        aria-label="Stories slider"
       >
         {stories.map((item, i) => (
           <MotionLink
@@ -369,6 +379,7 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
                   draggable={false}
                   style={{ objectFit: 'cover', pointerEvents: 'none', userSelect: 'none' }}
                   sizes="(max-width: 575px) 80vw, (max-width: 1023px) 65vw, 29vw"
+                  quality={80}
                 />
               ) : (
                 <div style={{ width: '100%', height: '100%', background: '#1a1a1a' }} />

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import type { BezierDefinition } from 'framer-motion';
 import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import './ContactPage.scss';
@@ -209,7 +209,7 @@ function ContactPageInner() {
           <div className="contact-section__row">
 
             {/* 좌측 정보 */}
-            <motion.div
+            <m.div
               className="contact-section__left"
               ref={leftRef}
               initial={{ opacity: 0, y: 40 }}
@@ -226,7 +226,7 @@ function ContactPageInner() {
                 <div className="contact-block__title body-text-caps">I am here</div>
                 <div className="contact-block__text headline-6">Winnipeg, Canada</div>
               </div>
-            </motion.div>
+            </m.div>
 
             {/* 우측 폼 영역 */}
             <div className="contact-section__right">
@@ -234,29 +234,29 @@ function ContactPageInner() {
               {/* 타이틀 — 라인 마스크 애니메이션 */}
               <h1 className="contact-title headline-2 split" ref={titleRef}>
                 <div className="line">
-                  <motion.div
+                  <m.div
                     className="line-child"
                     initial={{ y: '115%' }}
                     animate={titleInView ? { y: 0 } : { y: '115%' }}
                     transition={{ duration: 1.2, ease: EASE_OUT, delay: 0 }}
                   >
                     Let&apos;s talk about
-                  </motion.div>
+                  </m.div>
                 </div>
                 <div className="line">
-                  <motion.div
+                  <m.div
                     className="line-child"
                     initial={{ y: '115%' }}
                     animate={titleInView ? { y: 0 } : { y: '115%' }}
                     transition={{ duration: 1.2, ease: EASE_OUT, delay: 0.1 }}
                   >
                     your next project.
-                  </motion.div>
+                  </m.div>
                 </div>
               </h1>
 
               {/* 설명 텍스트 */}
-              <motion.p
+              <m.p
                 className="contact-description body-text-2"
                 ref={descRef}
                 initial={{ opacity: 0, y: 30 }}
@@ -264,12 +264,12 @@ function ContactPageInner() {
                 transition={{ duration: 1.0, ease: EASE_OUT, delay: 0.2 }}
               >
                 Whether you have a clear brief or just an early idea, reach out.
-                Creative Moon works with agencies, brands, and growing teams on websites
-                that are well-designed, well-built, and built to last.
-              </motion.p>
+                I work with brands and businesses on websites that are well-designed,
+                well-built, and built to last.
+              </m.p>
 
               {/* 폼 */}
-              <motion.div
+              <m.div
                 className="contact-form"
                 ref={formRef}
                 initial={{ opacity: 0, y: 40 }}
@@ -411,7 +411,7 @@ function ContactPageInner() {
 
                   </form>
                 )}
-              </motion.div>
+              </m.div>
             </div>
           </div>
         </div>
@@ -420,18 +420,18 @@ function ContactPageInner() {
       {/* ── Social 섹션 ── */}
       <section className="contact-social" ref={socialRef}>
         <div className="wrapper">
-          <motion.div
+          <m.div
             className="contact-social__title body-text-caps"
             initial={{ opacity: 0 }}
             animate={socialInView ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.8, ease: EASE_OUT }}
           >
             Follow along
-          </motion.div>
+          </m.div>
           <div className="contact-social__list headline-3">
             <ul>
               {socialLinks.map((link, i) => (
-                <motion.li
+                <m.li
                   key={link.name}
                   initial={{ opacity: 0, y: 40 }}
                   animate={socialInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
@@ -440,7 +440,7 @@ function ContactPageInner() {
                   <a href={link.href} target="_blank" rel="noopener noreferrer">
                     {link.name}
                   </a>
-                </motion.li>
+                </m.li>
               ))}
             </ul>
           </div>

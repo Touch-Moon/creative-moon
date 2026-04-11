@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 import type { BezierDefinition } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -73,7 +73,7 @@ function StoryCard({ story, index }: { story: StoryListItem; index: number }) {
   const inView = useInView(ref, { once: true, margin: '-8%' });
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       className="story-card"
       initial={{ opacity: 0, y: 50 }}
@@ -90,6 +90,7 @@ function StoryCard({ story, index }: { story: StoryListItem; index: number }) {
               fill
               className="story-card__img"
               sizes="(max-width: 575px) 100vw, (max-width: 1023px) 50vw, 40vw"
+              quality={80}
             />
           ) : (
             <div className="story-card__placeholder" />
@@ -122,7 +123,7 @@ function StoryCard({ story, index }: { story: StoryListItem; index: number }) {
 
         </div>
       </Link>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -140,16 +141,16 @@ export default function StoriesList({ stories: initialStories }: { stories: Stor
       <div className="stories-list__header" ref={headerRef}>
         <div className="stories-list__header-inner">
           <div className="stories-list__title-wrap">
-            <motion.h1
+            <m.h1
               className="stories-list__title"
               initial={{ y: '110%' }}
               animate={headerInView ? { y: 0 } : {}}
               transition={{ duration: 1.4, ease: EASE_OUT }}
             >
               INSIGHTS.
-            </motion.h1>
+            </m.h1>
           </div>
-          <motion.p
+          <m.p
             className="stories-list__subtitle body-text-4"
             initial={{ opacity: 0, y: 20 }}
             animate={headerInView ? { opacity: 1, y: 0 } : {}}
@@ -157,12 +158,12 @@ export default function StoriesList({ stories: initialStories }: { stories: Stor
           >
             Thoughts, reflections, and ideas on design,<br />
             technology, and the world we work in.
-          </motion.p>
+          </m.p>
         </div>
       </div>
 
       {/* Divider */}
-      <motion.div
+      <m.div
         className="stories-list__divider"
         initial={{ scaleX: 0 }}
         animate={headerInView ? { scaleX: 1 } : {}}

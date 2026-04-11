@@ -10,17 +10,17 @@ import './HomeMarquee.scss';
 type ClientRow = string[];
 
 const ROWS: ClientRow[] = [
-  ['Think.', 'Design.', 'Build.'],    // design process — 6·7·6
-  ['Human.', 'Focus.', 'Flow.'],      // design values  — 6·6·5
+  ['Design.', 'Build.', 'Refine.'],   // craft mindset — 7·6·7
+  ['Feel.', 'Flow.', 'Respond.'],     // UX/interaction — 5·5·8
   ['Typography.', 'Motion.'],         // craft areas    — 11·7
   ['Interaction.', 'Intent.'],        // last row       — 12·7
 ];
 
 // Mobile: 2 items per row
 const ROWS_MOBILE: ClientRow[] = [
-  ['Think.', 'Design.'],
-  ['Build.', 'Human.'],
-  ['Focus.', 'Flow.'],
+  ['Design.', 'Build.'],
+  ['Refine.', 'Feel.'],
+  ['Flow.', 'Respond.'],
   ['Typography.', 'Motion.'],
   ['Interaction.', 'Intent.'],
 ];

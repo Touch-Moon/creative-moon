@@ -11,7 +11,11 @@
       "Bash(npm run build:*)",
       "Bash(git stash:*)",
       "Bash(npx tsc:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(git push:*)",
+      "Bash(gh run:*)",
+      "Bash(vercel ls:*)",
+      "Bash(vercel project:*)"
     ]
   }
 }

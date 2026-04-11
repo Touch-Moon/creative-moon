@@ -1,6 +1,6 @@
 'use client';
 import { useRef, useState, useEffect } from 'react';
-import { motion, useInView, type Variants } from 'framer-motion';
+import { m, useInView, type Variants } from 'framer-motion';
 import type { BezierDefinition } from 'framer-motion';
 import './HomeSkills.scss';
 
@@ -9,28 +9,28 @@ const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
 const skills = [
   {
     number: '01',
-    title: 'Web Design & Development.',
-    desc: 'Building responsive, performant websites and applications with a focus on clean architecture and seamless user experience. From concept to deployment.',
+    title: 'Design & Development.',
+    desc: 'Building responsive, interactive websites from concept to deployment. Focused on layout, typography, m, and clean code — shaping how users see, feel, and move through every page.',
   },
   {
     number: '02',
-    title: 'UI/UX Design.',
-    desc: 'Crafting intuitive interfaces that balance aesthetics with functionality. Every interaction is intentional, every detail considered to create meaningful digital experiences.',
+    title: 'Commerce & Shopify.',
+    desc: 'Custom theme builds, performance optimization, and seamless integrations for Shopify stores. Focused on conversion, speed, and an experience that keeps customers coming back.',
   },
   {
     number: '03',
-    title: 'Brand Identity.',
-    desc: 'Creating cohesive visual identities that communicate brand values clearly. Logo design, typography systems, color palettes, and guidelines that stand the test of time.',
+    title: 'Content Systems.',
+    desc: 'Structuring content systems with WordPress, Sanity, and headless CMS setups. Delivering scalable, intuitive solutions that are straightforward to manage after launch.',
   },
   {
     number: '04',
-    title: 'Creative Direction.',
-    desc: 'Guiding projects from initial vision to final execution. Bridging the gap between design and technology to deliver results that exceed expectations.',
+    title: 'Interface & Interaction.',
+    desc: 'Designing interfaces where every interaction is intentional — from micro-animations to user flow. Wireframes to polished, accessible experiences with clarity at every touchpoint.',
   },
   {
     number: '05',
-    title: 'Digital Strategy.',
-    desc: 'Combining data insights with creative thinking to build digital strategies that drive growth, engage audiences, and create measurable impact for your business.',
+    title: 'Engineering & Performance.',
+    desc: 'Building modern front-end applications with React and Next.js — from component architecture to production builds. The foundation for interactive, high-performance work.',
   },
 ];
 
@@ -64,7 +64,7 @@ function SkillItem({ item, index, isRevealed, setItemRef }: SkillItemProps) {
   const inView = useInView(ref, { once: true, margin: '0px 0px -50% 0px' });
 
   return (
-    <motion.div
+    <m.div
       ref={(el: HTMLDivElement | null) => {
         (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
         setItemRef(el);
@@ -82,14 +82,14 @@ function SkillItem({ item, index, isRevealed, setItemRef }: SkillItemProps) {
 
       {/* ── 라인 애니메이션 (plastic.design home-service__line 방식) ── */}
       <div className="home-skills__rule">
-        <motion.span
+        <m.span
           className="home-skills__rule-inner"
           initial={{ scaleX: 0 }}
           animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
           transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.15 }}
         />
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -128,14 +128,14 @@ export default function HomeSkills() {
       <div className="wrap">
       {/* ── 좌측 sticky 라벨 ── */}
       <div className="home-skills__label-wrap">
-        <motion.div
+        <m.div
           className="home-skills__label"
           variants={labelVariants}
           initial="hidden"
           animate={sectionInView ? 'visible' : 'hidden'}
         >
           SKILLS
-        </motion.div>
+        </m.div>
       </div>
 
       {/* ── 우측 번호 목록 — 각 항목 개별 진입 감지 ── */}
