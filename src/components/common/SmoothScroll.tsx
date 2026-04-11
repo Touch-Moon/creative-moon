@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import Lenis from 'lenis'
+import LenisContext from './LenisContext'
 
 /**
  * SmoothScroll
@@ -10,6 +11,7 @@ import Lenis from 'lenis'
  * - 트랙패드, 터치, 키보드 스크롤 모두 지원
  * - ResizeObserver로 브라우저 리사이즈 대응
  * - cleanup 시 인스턴스를 완전히 파괴하여 메모리 누수 방지
+ * - LenisContext로 인스턴스를 하위 컴포넌트에 공유
  */
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null)
@@ -38,5 +40,9 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     }
   }, [])
 
-  return <>{children}</>
+  return (
+    <LenisContext.Provider value={lenisRef}>
+      {children}
+    </LenisContext.Provider>
+  )
 }

@@ -1,8 +1,1 @@
-@import 'tailwindcss';
-
-/* ------------------------------------------------
-   THEME
-   ------------------------------------------------ */
-@theme {
-  --font-sans: var(--font-inter-display);
-}
+/* globals.css — Tailwind removed (unused). SCSS handles all styles. */

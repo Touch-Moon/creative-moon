@@ -55,24 +55,30 @@
   line-height: #{$lh-h6};
 }
 
-// ── Tablet (1024px) ──────────────────────────────────────────
+// ── Tablet (≤1024px) — plastic.design 768px base ────────────
 @media (max-width: 1023.98px) {
-  .headline-1  { font-size: 64px; }
-  .headline-2  { font-size: 32px; }
-  .headline-3  { font-size: 28px; }
-  .headline-4  { font-size: 24px; }
-  .headline-4b { font-size: 22px; }
-  .headline-5  { font-size: 20px; }
-  .headline-6  { font-size: 16px; }
+  .headline-1  { font-size: calc(75 / 768 * 100vw); }
+  .headline-2  { font-size: calc(46 / 768 * 100vw); }
+  .headline-3  { font-size: calc(39 / 768 * 100vw); }
+  .headline-4  { font-size: calc(23 / 768 * 100vw); }
+  .headline-4b { font-size: calc(18 / 768 * 100vw); }
+  .headline-5  { font-size: calc(22 / 768 * 100vw); }
+  .headline-6  { font-size: calc(16 / 768 * 100vw); }
 }
 
-// ── Mobile (640px) ───────────────────────────────────────────
+// ── Mobile (≤576px) — plastic.design @ 375px base ───────────
 @media (max-width: 575.98px) {
-  .headline-1  { font-size: 40px; }
-  .headline-2  { font-size: 32px; }
-  .headline-3  { font-size: 26px; }
-  .headline-4  { font-size: 22px; }
-  .headline-4b { font-size: 20px; }
-  .headline-5  { font-size: 18px; }
-  .headline-6  { font-size: 14px; }
+  .headline-1  { font-size: calc(54 / 375 * 100vw); }
+  .headline-2  { font-size: calc(46 / 375 * 100vw); }
+  .headline-3  { font-size: calc(34 / 375 * 100vw); }
+  .headline-4  { font-size: calc(30 / 375 * 100vw); }
+  .headline-4b { font-size: calc(30 / 375 * 100vw); }
+  .headline-5  { font-size: calc(24 / 375 * 100vw); }
+  .headline-6  { font-size: calc(18 / 375 * 100vw); }
+}
+
+// ── Modifier ─────────────────────────────────────────────────
+/* Usage: <h1 class="headline-1 headline--uppercase"> */
+.headline--uppercase {
+  text-transform: uppercase;
 }

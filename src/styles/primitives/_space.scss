@@ -1,25 +1,32 @@
 // ================================================
 // PRIMITIVES — Spacing
 // Base unit: 1.1111vw ≈ 16px @ 1440px
-// Scale: 4 / 8 / 12 / 16 / 24 / 32 / 40 / 48 / 64 / 80 / 96 / 128 / 160px
+// Scale: 4 / 8 / 12 / 16 / 20 / 24 / 32 / 40 / 48 / 64 / 80 / 96 / 128 / 160px
+// Cap: values freeze at 1920px viewport (× 1.3333 from 1440 base)
 // ================================================
 
-$space-1:  0.2778vw;  //   4px
-$space-2:  0.5556vw;  //   8px
-$space-3:  0.8333vw;  //  12px
-$space-4:  1.1111vw;  //  16px
-$space-6:  1.6667vw;  //  24px
-$space-8:  2.2222vw;  //  32px
-$space-10: 2.7778vw;  //  40px
-$space-12: 3.3333vw;  //  48px
-$space-16: 4.4444vw;  //  64px
-$space-20: 5.5556vw;  //  80px
-$space-24: 6.6667vw;  //  96px
-$space-32: 8.8889vw;  // 128px
-$space-40: 11.1111vw; // 160px
+$space-1:  min(0.2778vw, 5.33px);    //   4px @ 1440 →   5.33px @ 1920
+$space-2:  min(0.5556vw, 10.67px);   //   8px @ 1440 →  10.67px @ 1920
+$space-3:  min(0.8333vw, 16px);      //  12px @ 1440 →  16px    @ 1920
+$space-4:  min(1.1111vw, 21.33px);   //  16px @ 1440 →  21.33px @ 1920
+$space-5:  min(1.3889vw, 26.67px);   //  20px @ 1440 →  26.67px @ 1920
+$space-6:  min(1.6667vw, 32px);      //  24px @ 1440 →  32px    @ 1920
+$space-8:  min(2.2222vw, 42.67px);   //  32px @ 1440 →  42.67px @ 1920
+$space-10: min(2.7778vw, 53.33px);   //  40px @ 1440 →  53.33px @ 1920
+$space-12: min(3.3333vw, 64px);      //  48px @ 1440 →  64px    @ 1920
+$space-16: min(4.4444vw, 85.33px);   //  64px @ 1440 →  85.33px @ 1920
+$space-20: min(5.5556vw, 106.67px);  //  80px @ 1440 → 106.67px @ 1920
+$space-24: min(6.6667vw, 128px);     //  96px @ 1440 → 128px    @ 1920
+$space-32: min(8.8889vw, 170.67px);  // 128px @ 1440 → 170.67px @ 1920
+$space-40: min(11.1111vw, 213.33px); // 160px @ 1440 → 213.33px @ 1920
 
 // ── Section side gutters (고정값) ──────────────
 // 브라우저 좌우 여백 — 각 breakpoint에서 고정 px
-$gutter-desktop: $space-12;   // 3.3333vw ≈ 48px @ 1440
+$gutter-desktop: $space-12;   // 3.3333vw ≈ 48px @ 1440 → max 64px @ 1920
 $gutter-tablet:  20px;        // 고정
 $gutter-mobile:  16px;        // 고정
+
+// ── Section-level semantic spacing ─────────────
+// 섹션 공통 상하 패딩 / 타이틀 하단 간격
+$section-space:       min(8.3333vw, 160px);   // 120px @ 1440 → 160px @ 1920
+$section-title-space: min(4.1667vw, 80px);    //  60px @ 1440 →  80px @ 1920

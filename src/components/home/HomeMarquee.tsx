@@ -1,39 +1,81 @@
 'use client';
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import type { BezierDefinition } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
 import './HomeMarquee.scss';
 
-const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
+// 4 rows — UX/UI 디자인 & 개발 철학 키워드
+// 글자 수 비율을 plastic.design .clients 와 맞춰 그리드 유지:
+// rows 1–2: 3 items  (6–7 chars each — space-between)
+// row  3:   2 items  (11 + 7 chars  — space-between)
+// row  4:   2 items  (12 + 7 chars  — flex-start + margin-left)
+type ClientRow = string[];
 
-const clients = [
-  'Hyundai', 'Samsung', 'LG', 'Kakao', 'Naver',
-  'SK Telecom', 'Lotte', 'Kia', 'Amorepacific', 'CJ',
+const ROWS: ClientRow[] = [
+  ['Think.', 'Design.', 'Build.'],    // design process — 6·7·6
+  ['Human.', 'Focus.', 'Flow.'],      // design values  — 6·6·5
+  ['Typography.', 'Motion.'],         // craft areas    — 11·7
+  ['Interaction.', 'Intent.'],        // last row       — 12·7
+];
+
+// Mobile: 2 items per row
+const ROWS_MOBILE: ClientRow[] = [
+  ['Think.', 'Design.'],
+  ['Build.', 'Human.'],
+  ['Focus.', 'Flow.'],
+  ['Typography.', 'Motion.'],
+  ['Interaction.', 'Intent.'],
 ];
 
 export default function HomeMarquee() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-10%' });
-  const items = [...clients, ...clients];
+  const ref = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    // IntersectionObserver — same mechanism as plastic.design
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const renderRows = (rows: ClientRow[], modifier: string) => (
+    <div className={`home-marquee__lists home-marquee__lists--${modifier}`}>
+      {rows.map((row, rowIdx) => {
+        const isLast = rowIdx === rows.length - 1;
+        return (
+          <div
+            key={rowIdx}
+            className={`home-marquee__list${isLast ? ' home-marquee__list--last' : ''}`}
+          >
+            {row.map((name, i) => (
+              <div key={i}>{name}</div>
+            ))}
+          </div>
+        );
+      })}
+    </div>
+  );
 
   return (
-    <motion.section
+    <section
       ref={ref}
-      className="home-marquee"
-      data-theme="dark"
-      initial={{ opacity: 0 }}
-      animate={isInView ? { opacity: 1 } : {}}
-      transition={{ duration: 1.0, ease: EASE_OUT }}
+      className={`home-marquee mix-blend${isVisible ? ' is-visible' : ''}`}
     >
-      <div className="home-marquee__track">
-        <div className="home-marquee__inner">
-          {items.map((name, i) => (
-            <span key={i} className="home-marquee__item">
-              {name}<span className="home-marquee__dot">.</span>
-            </span>
-          ))}
-        </div>
+      <div className="home-marquee__wrapper">
+        <p className="home-marquee__label">Philosophy</p>
+        {renderRows(ROWS, 'desktop')}
+        {renderRows(ROWS_MOBILE, 'mobile')}
       </div>
-    </motion.section>
+    </section>
   );
 }

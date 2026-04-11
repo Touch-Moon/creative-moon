@@ -4,27 +4,45 @@ import HomeSkills from '@/components/home/HomeSkills';
 import HomeMarquee from '@/components/home/HomeMarquee';
 import HomeWorks from '@/components/home/HomeWorks';
 import HomeStories from '@/components/home/HomeStories';
+import { getSelectedWorks, getStoriesCarousel } from '@/sanity/queries';
+import type { StoryListItem } from '@/sanity/queries';
 
-export default function Home() {
+export const revalidate = 60;
+
+export default async function Home() {
+  let selectedWorks;
+  let storiesData: StoryListItem[] = [];
+
+  try {
+    [selectedWorks, storiesData] = await Promise.all([
+      getSelectedWorks(),
+      getStoriesCarousel(),
+    ]);
+  } catch {
+    // Sanity 미연결 → 각 컴포넌트 내부 fallback 사용
+    selectedWorks = undefined;
+    storiesData = [];
+  }
+
   return (
     <main>
-      {/* 1. Hero — 완성 */}
+      {/* 1. Hero */}
       <Hero />
 
-      {/* 2. Intro — 이미지 2개 + 소개 텍스트 */}
+      {/* 2. Intro — two images + intro text */}
       <HomeIntro />
 
-      {/* 3. Skills — sticky 라벨 + 번호 목록 */}
+      {/* 3. Skills — sticky label + numbered list */}
       <HomeSkills />
 
-      {/* 4. Marquee — 클라이언트 흐르는 텍스트 */}
+      {/* 4. Marquee — scrolling text (client-side) */}
       <HomeMarquee />
 
-      {/* 5. Selected Works — 캐러셀 */}
-      <HomeWorks />
+      {/* 5. Selected Works — carousel */}
+      <HomeWorks serverWorks={selectedWorks} />
 
-      {/* 6. Insight — 블로그 카드 캐러셀 */}
-      <HomeStories />
+      {/* 6. Insight — blog card carousel */}
+      <HomeStories initialStories={storiesData} />
     </main>
   );
 }

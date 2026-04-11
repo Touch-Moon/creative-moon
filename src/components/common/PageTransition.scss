@@ -1,5 +1,26 @@
-.page-transition-container {
-  /* 최소 높이로 빈 화면 깜빡임 방지 */
-  min-height: 100vh;
-  will-change: opacity;
+// ── PageTransition ───────────────────────────────────────────────────
+//
+// 흰 커튼 오버레이 없음 — 각 페이지의 CSS 애니메이션 사용
+//
+// EXIT (work list → single): WorkList.scss의 .is-exiting 규칙이 처리
+// EXIT (그 외 페이지): html.is-page-exiting 규칙
+// ENTER: 각 페이지 컴포넌트의 @keyframes가 자연 실행
+
+// ── 일반 페이지 나가기 (work list 제외) ──────────────────────────────
+html.is-page-exiting {
+  main,
+  .header,
+  .footer {
+    opacity: 0;
+    transition: opacity 0.28s cubic-bezier(0.45, 0, 0.55, 1);
+  }
+}
+
+// ── work list → single: 헤더/푸터 fade (아이템은 스크롤로 처리) ──────
+html.is-work-exiting {
+  .header,
+  .footer {
+    opacity: 0;
+    transition: opacity 0.22s cubic-bezier(0.45, 0, 0.55, 1);
+  }
 }

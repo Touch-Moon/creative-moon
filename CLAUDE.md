@@ -29,11 +29,29 @@
 ### 진행 중 🔄
 - [ ] 없음
 
+### 완료된 작업 ✅ (2026-02-28 추가)
+- [x] /work List 페이지 (`src/app/work/page.tsx` + `WorkList.tsx` + `WorkList.scss`)
+  - HALF/HALF/FULL 그리드 패턴 (index % 3)
+  - 카테고리 필터 (클라이언트 사이드)
+  - clipPath reveal 로드 애니메이션 (HomeWorks cardVariants 방식)
+  - Canvas Wave 마우스오버 효과 (WaveImage 공통 컴포넌트)
+  - Sanity 연동 + placehold.co 더미 fallback
+- [x] /work/[slug] Single 페이지 (`src/app/work/[slug]/page.tsx` + `WorkSingle.tsx` + `WorkSingle.scss`)
+  - Hero 텍스트/이미지/비디오
+  - 프로젝트 정보 (What we do / Overview / Visit website)
+  - 5종 Content Module 렌더러 (mediaModule, twoColImageModule, bgImageModule, textModule, fullBleedModule)
+- [x] WaveImage 공통 컴포넌트 추출 (`src/components/common/WaveImage.tsx` + `WaveImage.scss`)
+- [x] Sanity 스키마 (`schemaTypes/work.ts`, `schemaTypes/category.ts`)
+  - my-portfolio + my-portfolio-sanity 양쪽 동기화
+  - 기존 caseStudy, project, post, page 스키마 제거
+- [x] Sanity GROQ 쿼리 (`src/sanity/queries.ts`)
+  - WORKS_LIST_QUERY, WORK_BY_SLUG_QUERY, CATEGORIES_QUERY, urlFor()
+
 ### 다음 예정 작업 📋
-- [ ] 각 섹션 반응형 (Tablet / Mobile)
-- [ ] HomeWorks 카드 hover 인터랙션 상세화
-- [ ] 개별 Work 상세 페이지 (slug 기반 라우팅)
-- [ ] Sanity CMS 연동 (works, stories 데이터)
+- [ ] 각 섹션 반응형 추가 세밀화 (Tablet / Mobile)
+- [ ] HomeWorks 카드 → Sanity work 데이터 연동
+- [ ] More Work 슬라이더 (Single 페이지 하단)
+- [ ] Sanity에 실제 work 데이터 입력
 - [ ] 배포 (Vercel)
 
 ---
@@ -490,3 +508,97 @@ CONTACT_TO_EMAIL=hello@creativemoon.com
 | **Railway** | Project → Variables |
 
 **주의:** Resend `RESEND_FROM_EMAIL`은 프로덕션에서 반드시 검증된 도메인으로 변경할 것
+
+---
+
+## 배포 전략 (2026-03-02 확정)
+
+### 최종 결정 구조
+```
+Next.js 앱      →  Vercel (무료 Hobby 플랜)
+콘텐츠 DB       →  Sanity 클라우드 (무료, 별도 배포 불필요)
+Sanity Studio   →  sanity deploy (무료)
+도메인          →  Cloudflare로 이전 (원가 갱신, 무료 이메일 포워딩 포함)
+이메일 발송     →  Resend 무료 플랜 (하루 100건)
+이메일 수신     →  Gmail (무제한)
+```
+
+### Hostinger 관련
+- **Premium Web Hosting**: 만료 후 갱신 안 함 (Node.js 미지원 공유호스팅이라 Next.js 불가)
+- **도메인 `creative-moon.com`**: External domains로 별도 관리 중 → 호스팅 해지해도 도메인 유지됨
+- **이메일**: 호스팅 해지 시 같이 없어짐 → Cloudflare Email Routing으로 대체
+
+### Cloudflare 이전 이유
+- 도메인 원가 갱신 (마진 0%)
+- 무료 이메일 포워딩 (`hello@creative-moon.com` → Gmail)
+- 무료 DNS, DDoS 방어
+- Vercel 연결이 편함
+
+### Vercel 배포 순서 (사이트 완성 후)
+```
+1. GitHub에 코드 push
+2. vercel.com → GitHub 로그인 → 레포 선택
+3. 환경변수 입력 (SANITY_PROJECT_ID, SANITY_DATASET, SANITY_API_TOKEN, RESEND_API_KEY 등)
+4. Deploy 클릭
+5. Vercel에서 custom domain 추가 → Cloudflare DNS A레코드 변경
+```
+
+### 이메일 주소
+```
+보내는 사람: hello@creative-moon.com  (Resend 도메인 연결)
+받는 사람:   Moon님 Gmail             (Cloudflare Email Routing 포워딩)
+```
+
+### 왜 Sanity는 DB 배포가 필요 없는가
+- Sanity 데이터는 Sanity 클라우드에 항상 존재
+- Next.js 앱은 API로 가져다 쓰는 구조
+- WordPress처럼 MySQL 덤프/업로드 작업 없음
+
+---
+
+## Contact Page API 연동 (배포 직전에 작업)
+
+> ⚠️ 사이트 완성 후 배포 직전에 설정할 것. 지금은 건드리지 않음.
+
+### 최종 결정 스택
+```
+스팸 차단   →  Cloudflare Turnstile (무료, 무제한) + Honeypot 방식 병행
+이메일 발송 →  Resend (무료, 하루 100건)
+Rate Limit  →  Upstash Redis (무료)
+```
+
+### reCAPTCHA 대신 Cloudflare Turnstile을 쓰는 이유
+- 완전 무료 (제한 없음)
+- 사용자가 아무것도 안 해도 됨 (체크박스, 이미지 선택 없음)
+- Google에 데이터 안 넘어감 (개인정보 보호)
+- 어차피 Cloudflare로 도메인 이전하므로 연동이 자연스러움
+
+### Honeypot 방식 (코드만으로 봇 1차 차단)
+```tsx
+// 폼에 숨겨진 필드 추가 (사람 눈에 안 보임, 봇은 채움)
+<input name="honeypot" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+
+// API Route에서 체크
+if (body.honeypot) return res.status(400).json({ error: 'Bot detected' })
+```
+
+### 환경변수 (배포 직전 설정)
+```env
+# Cloudflare Turnstile
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=your_site_key
+TURNSTILE_SECRET_KEY=your_secret_key
+
+# Resend
+RESEND_API_KEY=re_your_api_key
+RESEND_FROM_EMAIL=hello@creative-moon.com
+CONTACT_TO_EMAIL=Moon님_Gmail주소
+
+# Upstash Redis (Rate Limiting)
+UPSTASH_REDIS_REST_URL=https://your-redis.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your_token
+```
+
+### API 키 발급 위치
+- Cloudflare Turnstile: Cloudflare 대시보드 → Turnstile
+- Resend: resend.com/api-keys
+- Upstash Redis: console.upstash.com

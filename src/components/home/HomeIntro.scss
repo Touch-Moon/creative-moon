@@ -4,37 +4,30 @@
 
 .home-intro {
   background-color: transparent;
-  padding: 0 $gutter-desktop fvw(160);
+  padding: 0 $gutter-desktop fvw(330); // plastic: ~23vw padding-bottom
 
-  // ── 이미지 2개 ─────────────────────────────
-  &__images {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: fvw(16);
-    margin-bottom: fvw(80);
-    align-items: start;
+  // ── Video area — plastic.design home-intro-video 매칭 ──
+  // Desktop: 16:9, 좌우 gutter ~3.3vw (container-fluid와 동일)
+  // Tablet:  16:9, 좌우 gutter ~3.3vw
+  // Mobile:  full-bleed (edge-to-edge), negative margin으로 확장
+
+  .home-intro-video {
+    margin-bottom: fvw(36); // plastic: ~2.5vw gap between video and text
   }
 
-  &__img {
+  .home-intro-video__video {
     position: relative;
+    width: 100%;
+    padding-bottom: 56%; // 16:9 aspect ratio
     overflow: hidden;
 
-    &--left {
-      height: fvw(580);
-      margin-top: fvw(-60); // 위로 올려서 오프셋
-    }
-
-    &--right {
-      height: fvw(440);
-      margin-top: fvw(80); // 아래 오프셋
-    }
-
     img {
-      transition: transform 0.8s ease;
-    }
-
-    &:hover img {
-      transform: scale(1.03);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 
@@ -43,9 +36,9 @@
     max-width: fvw(900);
 
     p {
-      font-size: $fs-body-1; // 32px
+      font-size: var(--fs-body-1); // 32px
       font-weight: $fw-light;
-      line-height: 1.4;
+      line-height: 1.2;
       letter-spacing: -0.01em;
       color: $m-black;
       margin: 0;
@@ -54,53 +47,46 @@
 
   // ── Tablet ──────────────────────────────────
   @media (max-width: 1023.98px) {
-    padding: 0 $gutter-tablet 100px;
+    padding: 0 $gutter-tablet 20vw; // plastic: ~23vw, slightly reduced for tablet
 
-    &__images {
-      gap: 10px;
-      margin-bottom: 60px;
+    .home-intro-video {
+      margin-bottom: 3vw; // plastic: ~2.5vw
     }
 
-    &__img {
-      &--left {
-        height: 46vw;
-        margin-top: -30px;
-      }
-
-      &--right {
-        height: 36vw;
-        margin-top: 50px;
-      }
+    .home-intro-video__video {
+      padding-bottom: 56%; // 16:9 유지
     }
 
-    &__text p {
-      font-size: clamp(20px, 2.6vw, 32px);
+    &__text {
+      max-width: none;
+
+      p {
+        font-size: var(--fs-body-1);
+      }
     }
   }
 
   // ── Mobile ───────────────────────────────────
   @media (max-width: 575.98px) {
-    padding: 0 $gutter-mobile 80px;
+    padding: 0 $gutter-mobile 18vw; // proportional bottom spacing
 
-    &__images {
-      grid-template-columns: 1fr;
-      gap: 12px;
+    .home-intro-video {
+      // Full-bleed: 부모 gutter를 상쇄하는 negative margin
+      margin-left: -$gutter-mobile;
+      margin-right: -$gutter-mobile;
+      margin-bottom: 5vw; // video → text gap
     }
 
-    &__img {
-      &--left {
-        height: 70vw;
-        margin-top: 0;
-      }
-
-      &--right {
-        height: 55vw;
-        margin-top: 0;
-      }
+    .home-intro-video__video {
+      padding-bottom: 75%; // 4:3 aspect ratio
     }
 
-    &__text p {
-      font-size: clamp(17px, 4.5vw, 22px);
+    &__text {
+      max-width: none;
+
+      p {
+        font-size: var(--fs-body-1);
+      }
     }
   }
 }

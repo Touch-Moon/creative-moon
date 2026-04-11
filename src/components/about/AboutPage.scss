@@ -32,34 +32,34 @@
 // 1. HERO TITLE
 // ================================================
 .about-title {
-  padding-top: fvw(200);
-  padding-bottom: fvw(80);
+  padding-top: fvw(330); // plastic: ~23vw
+  padding-bottom: fvw(36); // plastic: ~2.6vw
 
   @media (max-width: 1023.98px) {
-    padding-top: 140px;
-    padding-bottom: 60px;
+    padding-top: 20vw;
+    padding-bottom: 2.5vw;
   }
 
   @media (max-width: 575.98px) {
-    padding-top: 120px;
-    padding-bottom: 40px;
+    padding-top: 36vw;
+    padding-bottom: 3vw;
   }
 
   &__content {
-    font-size: $fs-h2;          // 88px @ 1440
+    font-size: var(--fs-h2); // 88px @ 1440
     font-weight: $fw-regular;
-    line-height: $lh-h2;        // 98%
-    letter-spacing: $ls-tight;  // -0.01em
+    line-height: $lh-h1;
+    letter-spacing: $ls-tight; // -0.01em
     color: var(--foreground);
     margin: 0;
 
     @media (max-width: 1023.98px) {
-      font-size: 48px;
+      // plastic.design: no tablet override — desktop --fs-h2 scales via token
       line-height: 1.05;
     }
 
     @media (max-width: 575.98px) {
-      font-size: 32px;
+      font-size: var(--fs-h3); // plastic.design .about-title__content — 36px @ 390
       line-height: 1.08;
     }
   }
@@ -72,6 +72,7 @@
 
   .line-inner {
     display: block;
+    padding-bottom: $space-2;
   }
 }
 
@@ -79,14 +80,14 @@
 // 2. FULL-WIDTH IMAGE + TEXT
 // ================================================
 .about-full-image {
-  padding-bottom: fvw(80);
+  padding-bottom: fvw(230); // plastic: ~16vw
 
   @media (max-width: 1023.98px) {
-    padding-bottom: 60px;
+    padding-bottom: 14vw;
   }
 
   @media (max-width: 575.98px) {
-    padding-bottom: 40px;
+    padding-bottom: 10vw;
   }
 
   &__image {
@@ -94,44 +95,39 @@
     width: 100%;
     height: fvw(560);
     overflow: hidden;
-    margin-bottom: fvw(60);
+    margin-bottom: $section-title-space;
 
-    img {
-      transition: transform 0.8s ease;
-    }
-
-    &:hover img {
-      transform: scale(1.03);
-    }
 
     @media (max-width: 1023.98px) {
       height: 50vw;
-      margin-bottom: 40px;
+      margin-bottom: $space-10;
     }
 
     @media (max-width: 575.98px) {
       height: 65vw;
-      margin-bottom: 32px;
+      margin-bottom: $space-8;
     }
   }
 
   &__text {
     max-width: fvw(900);
-    font-size: $fs-body-2;       // 26px @ 1440
+    font-size: var(--fs-body-2); // 26px @ 1440
     font-weight: $fw-regular;
-    line-height: $lh-body-2;     // 140%
+    line-height: $lh-body-2; // 140%
     color: var(--foreground);
 
-    p { margin: 0; }
+    p {
+      margin: 0;
+    }
 
     @media (max-width: 1023.98px) {
       max-width: 80%;
-      font-size: 22px;
+      font-size: var(--fs-h4b);
     }
 
     @media (max-width: 575.98px) {
       max-width: 100%;
-      font-size: 18px;
+      font-size: var(--fs-body-3);
     }
   }
 }
@@ -140,33 +136,33 @@
 // 3. IMAGE LEFT + TEXT RIGHT
 // ================================================
 .about-image-text {
-  padding-top: fvw(80);
-  padding-bottom: fvw(80);
+  padding-top: 0;
+  padding-bottom: fvw(230);
 
   @media (max-width: 1023.98px) {
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding-top: 0;
+    padding-bottom: 14vw;
   }
 
   @media (max-width: 575.98px) {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding-top: 0;
+    padding-bottom: 10vw;
   }
 
   .about-image-text__inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: fvw(40);
+    gap: $space-10;
     align-items: end;
 
     @media (max-width: 1023.98px) {
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      gap: $gutter-tablet;
     }
 
     @media (max-width: 575.98px) {
       grid-template-columns: 1fr;
-      gap: 32px;
+      gap: $space-8;
     }
   }
 
@@ -176,13 +172,6 @@
     height: fvw(600);
     overflow: hidden;
 
-    img {
-      transition: transform 0.8s ease;
-    }
-
-    &:hover img {
-      transform: scale(1.03);
-    }
 
     @media (max-width: 1023.98px) {
       height: 46vw;
@@ -194,7 +183,7 @@
   }
 
   &__content {
-    padding-bottom: fvw(20);
+    padding-bottom: $space-5;
 
     @media (max-width: 575.98px) {
       padding-bottom: 0;
@@ -202,28 +191,28 @@
   }
 
   &__heading {
-    font-size: $fs-h3;          // 74px @ 1440
+    font-size: var(--fs-h3); // 74px @ 1440
     font-weight: $fw-regular;
-    line-height: $lh-h3;        // 98%
+    line-height: $lh-h3; // 98%
     letter-spacing: $ls-tight;
     color: var(--foreground);
-    margin: 0 0 fvw(32) 0;
+    margin: 0 0 $space-8 0;
 
     @media (max-width: 1023.98px) {
-      font-size: 36px;
-      margin-bottom: 24px;
+      font-size: var(--fs-h2);
+      margin-bottom: $space-6;
     }
 
     @media (max-width: 575.98px) {
-      font-size: 28px;
+      font-size: var(--fs-h4); // plastic proportional — reduce from h2
       margin-bottom: 20px;
     }
   }
 
   &__desc {
-    font-size: $fs-body-3;      // 22px @ 1440
+    font-size: var(--fs-body-3); // 22px @ 1440
     font-weight: $fw-regular;
-    line-height: $lh-body-3;    // 130%
+    line-height: $lh-body-3; // 130%
     letter-spacing: $ls-base;
     color: var(--foreground);
     margin: 0;
@@ -234,11 +223,11 @@
     }
 
     @media (max-width: 1023.98px) {
-      font-size: 18px;
+      font-size: var(--fs-h5);
     }
 
     @media (max-width: 575.98px) {
-      font-size: 16px;
+      font-size: var(--fs-body-3);
     }
   }
 }
@@ -247,28 +236,28 @@
 // 4. TWO-COLUMN IMAGES
 // ================================================
 .about-image-2col {
-  padding-bottom: fvw(40);
+  padding-bottom: fvw(230);
 
   @media (max-width: 1023.98px) {
-    padding-bottom: 24px;
+    padding-bottom: 14vw;
   }
 
   @media (max-width: 575.98px) {
-    padding-bottom: 16px;
+    padding-bottom: 10vw;
   }
 
   &__inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: fvw(16);
+    gap: $space-10;
 
     @media (max-width: 1023.98px) {
-      gap: 10px;
+      gap: $gutter-tablet;
     }
 
     @media (max-width: 575.98px) {
       grid-template-columns: 1fr;
-      gap: 12px;
+      gap: $space-3;
     }
   }
 
@@ -278,13 +267,6 @@
     height: fvw(480);
     overflow: hidden;
 
-    img {
-      transition: transform 0.8s ease;
-    }
-
-    &:hover img {
-      transform: scale(1.03);
-    }
 
     @media (max-width: 1023.98px) {
       height: 40vw;
@@ -300,48 +282,50 @@
 // 5. TEXT LEFT — "It's all about the people"
 // ================================================
 .about-text-left {
-  padding-top: fvw(80);
-  padding-bottom: fvw(80);
+  padding-top: 0;
+  padding-bottom: fvw(230);
 
   @media (max-width: 1023.98px) {
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding-top: 0;
+    padding-bottom: 14vw;
   }
 
   @media (max-width: 575.98px) {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding-top: 4vw;
+    padding-bottom: 10vw;
   }
 
   &__heading {
-    font-size: $fs-h2;          // 88px @ 1440
+    font-size: var(--fs-h2); // 88px @ 1440
     font-weight: $fw-regular;
     line-height: $lh-h2;
     letter-spacing: $ls-tight;
     color: var(--foreground);
-    margin: 0 0 fvw(60) 0;
+    margin: 0 0 $section-title-space 0;
     text-align: center;
 
     @media (max-width: 1023.98px) {
-      font-size: 48px;
-      margin-bottom: 40px;
+      font-size: var(--fs-h2);
+      margin-bottom: $space-10;
     }
 
     @media (max-width: 575.98px) {
-      font-size: 32px;
+      font-size: var(--fs-h3); // plastic proportional — reduce from h1
       margin-bottom: 28px;
     }
   }
 
   &__content {
     max-width: fvw(600);
-    font-size: $fs-body-3;      // 22px @ 1440
+    font-size: var(--fs-body-3); // 22px @ 1440
     font-weight: $fw-regular;
-    line-height: $lh-body-3;    // 130%
+    line-height: $lh-body-3; // 130%
     letter-spacing: $ls-base;
     color: var(--foreground);
 
-    p { margin: 0; }
+    p {
+      margin: 0;
+    }
 
     a {
       text-decoration: underline;
@@ -350,12 +334,12 @@
 
     @media (max-width: 1023.98px) {
       max-width: 500px;
-      font-size: 18px;
+      font-size: var(--fs-h5);
     }
 
     @media (max-width: 575.98px) {
       max-width: 100%;
-      font-size: 16px;
+      font-size: var(--fs-body-3);
     }
   }
 }
@@ -364,17 +348,17 @@
 // 6. TEXT RIGHT — "If you're gonna do it..."
 // ================================================
 .about-text-right {
-  padding-top: fvw(40);
-  padding-bottom: fvw(120);
+  padding-top: 0;
+  padding-bottom: fvw(230);
 
   @media (max-width: 1023.98px) {
-    padding-top: 20px;
-    padding-bottom: 80px;
+    padding-top: 0;
+    padding-bottom: 14vw;
   }
 
   @media (max-width: 575.98px) {
-    padding-top: 16px;
-    padding-bottom: 60px;
+    padding-top: 6vw;
+    padding-bottom: 10vw;
   }
 
   &__inner {
@@ -399,26 +383,27 @@
   }
 
   &__heading {
-    font-size: $fs-h3;          // 74px @ 1440
+    font-size: var(--fs-h3); // 74px @ 1440
     font-weight: $fw-regular;
     line-height: $lh-h3;
     letter-spacing: $ls-tight;
     color: var(--foreground);
-    margin: 0 0 fvw(32) 0;
+    margin: 0 0 $space-8 0;
 
     @media (max-width: 1023.98px) {
-      font-size: 36px;
-      margin-bottom: 24px;
+      font-size: var(--fs-h2);
+      margin-bottom: $space-6;
     }
 
     @media (max-width: 575.98px) {
-      font-size: 28px;
+      font-size: var(--fs-h4); // plastic proportional — reduce from h2
+      line-height: $lh-h5;
       margin-bottom: 20px;
     }
   }
 
   &__desc {
-    font-size: $fs-body-3;      // 22px @ 1440
+    font-size: var(--fs-body-3); // 22px @ 1440
     font-weight: $fw-regular;
     line-height: $lh-body-3;
     letter-spacing: $ls-base;
@@ -426,11 +411,11 @@
     margin: 0;
 
     @media (max-width: 1023.98px) {
-      font-size: 18px;
+      font-size: var(--fs-h5);
     }
 
     @media (max-width: 575.98px) {
-      font-size: 16px;
+      font-size: var(--fs-body-3);
     }
   }
 }
@@ -439,32 +424,32 @@
 // 7. AWARDS
 // ================================================
 .about-awards {
-  padding-top: fvw(120);
-  padding-bottom: fvw(120);
+  padding-top: fvw(214); // plastic: ~14.9vw
+  padding-bottom: fvw(214); // plastic: ~14.9vw
 
   @media (max-width: 1023.98px) {
-    padding-top: 80px;
-    padding-bottom: 80px;
+    padding-top: 12vw;
+    padding-bottom: 12vw;
   }
 
   @media (max-width: 575.98px) {
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding-top: 10vw;
+    padding-bottom: 10vw;
   }
 
   &__inner {
     display: grid;
     grid-template-columns: fvw(340) 1fr;
-    gap: fvw(40);
+    gap: $space-10;
 
     @media (max-width: 1023.98px) {
       grid-template-columns: 1fr;
-      gap: 40px;
+      gap: $space-10;
     }
   }
 
   &__heading {
-    font-size: $fs-h2;          // 88px @ 1440
+    font-size: var(--fs-h4); // 88px @ 1440
     font-weight: $fw-regular;
     line-height: $lh-h2;
     letter-spacing: $ls-tight;
@@ -472,16 +457,16 @@
     color: var(--foreground);
     margin: 0;
     position: sticky;
-    top: fvw(120);
+    top: $section-space;
     align-self: start;
 
     @media (max-width: 1023.98px) {
-      font-size: 48px;
+      font-size: var(--fs-h2);
       position: static;
     }
 
     @media (max-width: 575.98px) {
-      font-size: 32px;
+      font-size: var(--fs-h4); // plastic proportional — reduce from h2
     }
   }
 
@@ -493,8 +478,8 @@
   &__item {
     display: grid;
     grid-template-columns: fvw(320) 1fr auto;
-    gap: 0 fvw(40);
-    padding: fvw(20) 0;
+    gap: 0 $space-10;
+    padding: $space-5 0;
     border-top: 1px solid var(--foreground-dim);
     align-items: baseline;
 
@@ -504,61 +489,62 @@
 
     @media (max-width: 1023.98px) {
       grid-template-columns: 160px 1fr auto;
-      gap: 0 20px;
-      padding: 16px 0;
+      gap: 0 $gutter-tablet;
+      padding: $gutter-mobile 0;
     }
 
     @media (max-width: 575.98px) {
       grid-template-columns: 1fr auto;
-      gap: 4px 12px;
+      gap: $space-1 $space-2;
       padding: 14px 0;
     }
   }
 
   &__award-org {
-    font-size: $fs-body-4;      // 18px @ 1440
+    font-size: var(--fs-body-4); // 18px @ 1440
     font-weight: $fw-regular;
     line-height: $lh-body-4;
     color: var(--foreground);
 
     @media (max-width: 1023.98px) {
-      font-size: 14px;
+      font-size: var(--fs-body-3);
     }
 
     @media (max-width: 575.98px) {
-      font-size: 13px;
+      font-size: var(--fs-body-3);
       grid-column: 1 / -1;
     }
   }
 
   &__award-name {
-    font-size: $fs-body-4;      // 18px @ 1440
+    font-size: var(--fs-body-4); // 18px @ 1440
     font-weight: $fw-regular;
     line-height: $lh-body-4;
-    color: var(--foreground-muted);
+    color: var(--foreground);
 
     @media (max-width: 1023.98px) {
-      font-size: 14px;
+      font-size: var(--fs-body-3);
     }
 
     @media (max-width: 575.98px) {
-      font-size: 13px;
+      font-size: var(--fs-body-3);
+      padding-right: $space-20;
     }
   }
 
   &__award-year {
-    font-size: $fs-body-4;      // 18px @ 1440
+    font-size: var(--fs-body-4); // 18px @ 1440
     font-weight: $fw-regular;
     line-height: $lh-body-4;
-    color: var(--foreground-muted);
+    color: var(--foreground);
     text-align: right;
 
     @media (max-width: 1023.98px) {
-      font-size: 14px;
+      font-size: var(--fs-body-3);
     }
 
     @media (max-width: 575.98px) {
-      font-size: 13px;
+      font-size: var(--fs-body-3);
     }
   }
 }
@@ -567,62 +553,62 @@
 // 8. CLIENTS — Large names
 // ================================================
 .about-clients {
-  padding-top: fvw(120);
-  padding-bottom: fvw(120);
+  padding-top: fvw(48); // plastic: ~3.5vw
+  padding-bottom: fvw(270); // plastic: ~19vw
   overflow: hidden;
 
   @media (max-width: 1023.98px) {
-    padding-top: 80px;
-    padding-bottom: 80px;
+    padding-top: 3vw;
+    padding-bottom: 16vw;
   }
 
   @media (max-width: 575.98px) {
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding-top: 4vw;
+    padding-bottom: 14vw;
   }
 
   &__label {
-    font-size: $fs-body-caps;   // 12px @ 1440
+    font-size: var(--fs-body-caps); // 12px @ 1440
     font-weight: $fw-regular;
     letter-spacing: $ls-wide;
     text-transform: uppercase;
     color: var(--foreground-muted);
-    margin-bottom: fvw(60);
+    margin-bottom: $section-title-space;
 
     @media (max-width: 1023.98px) {
-      font-size: 12px;
-      margin-bottom: 40px;
+      font-size: var(--fs-body-caps);
+      margin-bottom: $space-10;
     }
   }
 
   &__names {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 fvw(40);
+    gap: 0 $space-10;
 
     @media (max-width: 1023.98px) {
-      gap: 0 24px;
+      gap: 0 $space-6;
     }
 
     @media (max-width: 575.98px) {
-      gap: 0 16px;
+      gap: 0 $gutter-mobile;
     }
   }
 
   &__name {
-    font-size: $fs-h1;          // 140px @ 1440
+    font-size: var(--fs-h1); // 140px @ 1440
     font-weight: $fw-regular;
-    line-height: $lh-h1;        // 96%
+    line-height: $lh-h1; // 96%
     letter-spacing: $ls-tight;
     text-transform: uppercase;
     color: var(--foreground);
 
     @media (max-width: 1023.98px) {
-      font-size: 64px;
+      font-size: var(--fs-h1);
     }
 
     @media (max-width: 575.98px) {
-      font-size: 40px;
+      font-size: var(--fs-h4); // plastic.design .clients__list — 32px @ 390
     }
   }
 }
@@ -631,96 +617,96 @@
 // 9. COMPLIANCE — 3-column cards
 // ================================================
 .about-compliance {
-  padding-top: fvw(80);
-  padding-bottom: fvw(120);
+  padding-top: 0; // plastic: flows from clients
+  padding-bottom: fvw(178); // plastic: about wrapper pb ~12.4vw
 
   @media (max-width: 1023.98px) {
-    padding-top: 60px;
-    padding-bottom: 80px;
+    padding-top: 0;
+    padding-bottom: 10vw;
   }
 
   @media (max-width: 575.98px) {
-    padding-top: 40px;
-    padding-bottom: 60px;
+    padding-top: 0;
+    padding-bottom: 8vw;
   }
 
   &__title {
-    font-size: $fs-h5;          // 26px @ 1440
+    font-size: var(--fs-h5); // 26px @ 1440
     font-weight: $fw-regular;
     line-height: $lh-h5;
     color: var(--foreground);
-    margin: 0 0 fvw(60) 0;
+    margin: 0 0 $section-title-space 0;
 
     @media (max-width: 1023.98px) {
-      font-size: 20px;
-      margin-bottom: 40px;
+      font-size: var(--fs-h2);
+      margin-bottom: $space-10;
     }
 
     @media (max-width: 575.98px) {
-      font-size: 18px;
-      margin-bottom: 32px;
+      font-size: var(--fs-h5); // plastic proportional — reduce from h2
+      margin-bottom: $space-24;
     }
   }
 
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: fvw(40);
+    gap: $space-10;
 
     @media (max-width: 1023.98px) {
-      gap: 24px;
+      gap: $space-6;
     }
 
     @media (max-width: 575.98px) {
       grid-template-columns: 1fr;
-      gap: 40px;
+      gap: $space-24;
     }
   }
 
   &__card-number {
-    font-size: $fs-body-4;      // 18px @ 1440
+    font-size: var(--fs-body-4); // 18px @ 1440
     font-weight: $fw-regular;
     color: var(--foreground-muted);
-    margin-bottom: fvw(16);
+    margin-bottom: $space-4;
 
     @media (max-width: 1023.98px) {
-      font-size: 14px;
-      margin-bottom: 12px;
+      font-size: var(--fs-body-2);
+      margin-bottom: $space-3;
     }
   }
 
   &__card-heading {
-    font-size: $fs-h5;          // 26px @ 1440
+    font-size: var(--fs-h5); // 26px @ 1440
     font-weight: $fw-regular;
     line-height: $lh-h5;
     color: var(--foreground);
-    margin: 0 0 fvw(20) 0;
+    margin: 0 0 $space-5 0;
 
     @media (max-width: 1023.98px) {
-      font-size: 20px;
-      margin-bottom: 16px;
+      font-size: var(--fs-h4);
+      margin-bottom: $gutter-mobile;
     }
 
     @media (max-width: 575.98px) {
-      font-size: 18px;
-      margin-bottom: 12px;
+      font-size: var(--fs-h5); // plastic.design .compliance__item__title — 24px @ 390
+      margin-bottom: $space-3;
     }
   }
 
   &__card-desc {
-    font-size: $fs-body-5;      // 14px @ 1440
+    font-size: var(--fs-body-5); // 14px @ 1440
     font-weight: $fw-regular;
-    line-height: $lh-body-5;    // 150%
+    line-height: $lh-body-5; // 150%
     letter-spacing: $ls-base;
     color: var(--foreground-muted);
     margin: 0;
 
     @media (max-width: 1023.98px) {
-      font-size: 14px;
+      font-size: var(--fs-body-4);
     }
 
     @media (max-width: 575.98px) {
-      font-size: 14px;
+      font-size: var(--fs-body-3);
     }
   }
 }

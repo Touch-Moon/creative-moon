@@ -20,9 +20,9 @@
   .wrap {
     display: grid;
     border-top: 1px solid var(--foreground-dim);
-    grid-template-columns: fvw(240) 1fr;
-    padding-top: fvw(80);
-    padding-bottom: fvw(160);
+    grid-template-columns: 4fr 8fr;
+    padding-top: $space-20;
+    padding-bottom: fvw(340); // plastic: home-services pb ~24vw
   }
 
   // ── 좌측 sticky 라벨 ─────────────────────────
@@ -31,14 +31,14 @@
   }
 
   &__label {
-    font-size: $fs-h4; // 12px
+    font-size: var(--fs-h4); // 12px
     font-weight: $fw-regular;
     letter-spacing: -0.01em;
     text-transform: uppercase;
     color: var(--foreground);
-    padding-top: fvw(20);
+    padding-top: $space-5;
     position: sticky;
-    top: fvw(20);
+    top: $space-5;
     align-self: start;
     height: fit-content;
   }
@@ -47,6 +47,7 @@
   &__list {
     display: flex;
     flex-direction: column;
+
   }
 
   &__item {
@@ -61,21 +62,21 @@
 
   &__item-inner {
     display: grid;
-    grid-template-columns: fvw(80) 1fr 1fr;
-    gap: 0 fvw(40);
-    padding: fvw(48) 0;
+    grid-template-columns: $space-10 1fr 1fr;
+    gap: 0 $space-4;
+    padding: $space-12 0 $space-24;
     align-items: start;
   }
 
   &__number {
-    font-size: $fs-body-5; // 14px
+    font-size: var(--fs-h5); // 14px
     font-weight: $fw-regular;
     color: var(--foreground-muted);
-    padding-top: 0.3em;
+    line-height: 1.2;
   }
 
   &__title {
-    font-size: $fs-h5; // 26px
+    font-size: var(--fs-h5); // 26px
     font-weight: $fw-regular;
     line-height: 1.2;
     letter-spacing: -0.02em;
@@ -84,9 +85,9 @@
   }
 
   &__desc {
-    font-size: $fs-body-4; // 18px
+    font-size: var(--fs-body-4); // 18px
     font-weight: $fw-light;
-    line-height: 1.55;
+    line-height: 1.4;
     color: var(--foreground);
     margin: 0;
   }
@@ -117,8 +118,8 @@
 
     .wrap {
       grid-template-columns: 1fr;
-      padding-top: 60px;
-      padding-bottom: 100px;
+      padding-top: $section-title-space;
+      padding-bottom: 20vw; // plastic: ~24vw, adjusted for tablet
     }
 
     &__label-wrap {
@@ -127,8 +128,8 @@
 
     &__label {
       position: static;
-      margin-bottom: 40px;
-      font-size: 11px;
+      margin-bottom: $space-10;
+      font-size: var(--fs-body-3); // plastic.design .service__top span — 16px @ 768
     }
 
     &__number {
@@ -144,11 +145,11 @@
     &__desc {
       grid-column: auto;
       margin-top: 0;
-      font-size: clamp(15px, 2vw, 18px);
+      font-size: var(--fs-body-4); // calc(16 / 1024 * 100vw)
     }
 
     &__title {
-      font-size: clamp(18px, 2.2vw, 26px);
+      font-size: var(--fs-body-3); // plastic.design .service__content .service__list — 16px @ 768
     }
   }
 
@@ -158,21 +159,25 @@
   @media (max-width: 575.98px) {
     .wrap {
       padding-top: 50px;
-      padding-bottom: 80px;
+      padding-bottom: 16vw; // proportional bottom spacing
+    }
+
+    &__label-wrap {
+      display: none;
     }
 
     &__item-inner {
       grid-template-columns: 1fr;
-      padding: 28px 0;
+      padding: var(--space-24) 0 var(--space-40);
     }
 
     &__title {
-      font-size: clamp(17px, 4.5vw, 22px);
+      font-size: var(--fs-body-3); // plastic.design .service__content .service__list — 20px @ 390
       margin-bottom: $gutter-mobile;
     }
 
     &__desc {
-      font-size: 14px;
+      font-size: var(--fs-body-3); // calc(14 / 576 * 100vw)
     }
   }
 }

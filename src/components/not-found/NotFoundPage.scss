@@ -1,0 +1,177 @@
+@use '../../styles/primitives/type' as *;
+@use '../../styles/primitives/colors' as *;
+@use '@/styles/primitives/space' as *;
+
+// ── Hide footer on 404 page ────────────────────────
+body[data-page='not-found'] footer,
+body[data-page='not-found'] .footer {
+  display: none !important;
+}
+
+// ── Keyframes ─────────────────────────────────────
+
+// Trail is driven by requestAnimationFrame in NotFoundPage.tsx — no CSS keyframe needed
+
+// Headline line reveal: clip upward
+@keyframes revealUp {
+  from {
+    clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Fade in for subtitle and button
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Wrapper: full-page, flex center ───────────────
+.error404__wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: $m-black;
+  color: $m-white;
+  text-align: center;
+  padding: $section-space fvw(30);
+  overflow: hidden;
+}
+
+// ── Orbital SVG (absolute, bottom half) ──────────
+.error404__orbital {
+  position: absolute;
+  width: fvw(980);
+  height: auto;
+  left: 50%;
+  top: 54%;
+  transform: translateX(-50%);
+  pointer-events: none;
+
+  svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+}
+
+// Trail: dasharray/dashoffset are set and updated by requestAnimationFrame in NotFoundPage.tsx
+.orbital-trail {
+  stroke-dasharray: 0;
+  stroke-dashoffset: 0;
+}
+
+// ── Content block: centered ───────────────────────
+.error404__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// ── "404" subtitle ────────────────────────────────
+.error404__subtitle {
+  font-weight: $fw-light;
+  color: $m-white;
+  margin-bottom: fvw(52);
+  letter-spacing: $ls-base;
+  opacity: 0;
+}
+
+.is-mounted .error404__subtitle {
+  animation: fadeIn 0.6s ease forwards;
+  animation-delay: 0.1s;
+}
+
+// ── "LOST IN SPACE" headline ──────────────────────
+.error404__title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: fvw(52);
+  gap: 0;
+}
+
+// Each title line clips upward
+.error404__title-line {
+  display: block;
+  overflow: hidden;
+
+  .headline-1 {
+    display: block;
+    opacity: 0;
+    clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+    transform: translateY(24px);
+  }
+}
+
+.is-mounted .error404__title-line:nth-child(1) .headline-1 {
+  animation: revealUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: 0.25s;
+}
+
+.is-mounted .error404__title-line:nth-child(2) .headline-1 {
+  animation: revealUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: 0.4s;
+}
+
+// ── Button container ──────────────────────────────
+.error404__button {
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+}
+
+.is-mounted .error404__button {
+  animation: fadeIn 0.6s ease forwards;
+  animation-delay: 0.6s;
+}
+
+// ── Tablet (≤ 1024px) ─────────────────────────────
+@media (max-width: 1023.98px) {
+  .error404__wrapper {
+    padding: $space-20 $gutter-tablet;
+  }
+
+  .error404__subtitle {
+    margin-bottom: $space-10;
+  }
+
+  .error404__title {
+    margin-bottom: $space-10;
+  }
+
+  .error404__orbital {
+    width: 90vw;
+    top: 56%;
+  }
+}
+
+// ── Mobile (≤ 374px) ──────────────────────────────
+@media (max-width: 575.98px) {
+  .error404__wrapper {
+    padding: $space-20 $gutter-mobile;
+  }
+
+  .error404__subtitle {
+    margin-bottom: 28px;
+  }
+
+  .error404__title {
+    margin-bottom: $space-8;
+  }
+
+  .error404__orbital {
+    width: 140vw;
+    top: 58%;
+  }
+}

@@ -3,7 +3,7 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { Resend } from 'resend';
 
-// ── Rate limiter: IP당 1시간에 최대 3회 ─────────────────
+// ── Rate limiter: max 3 requests per IP per hour ─────────────────
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(3, '1 h'),
@@ -12,7 +12,7 @@ const ratelimit = new Ratelimit({
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// ── HTML 이스케이프 (XSS 방지) ──────────────────────────
+// ── HTML escape (XSS prevention) ──────────────────────────
 function escapeHtml(str: string): string {
   return str
     .replace(/&/g, '&amp;')
@@ -25,14 +25,14 @@ function escapeHtml(str: string): string {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, company, message, token, honeypot } = body;
+    const { name, email, message, token, honeypot } = body;
 
-    // ── 1. Honeypot ─ 봇이 숨김 필드를 채우면 조용히 차단 ──
+    // ── 1. Honeypot — silently block bots that fill the hidden field ──
     if (honeypot) {
       return NextResponse.json({ success: true });
     }
 
-    // ── 2. 기본 유효성 검사 ─────────────────────────────
+    // ── 2. Basic validation ─────────────────────────────
     if (!name?.trim() || !email?.trim() || !message?.trim()) {
       return NextResponse.json(
         { error: 'Please fill in all required fields.' },
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 이메일 형식 확인
+    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email.trim())) {
       return NextResponse.json(
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ── 3. Rate Limiting ─ IP당 1시간 3회 제한 ───────────
+    // ── 3. Rate Limiting — max 3 requests per IP per hour ───────────
     const ip =
       request.headers.get('x-forwarded-for')?.split(',')[0].trim() ??
       request.headers.get('x-real-ip') ??
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ── 4. reCAPTCHA v3 검증 ────────────────────────────
+    // ── 4. reCAPTCHA v3 verification ────────────────────────────
     if (!token) {
       return NextResponse.json(
         { error: 'Verification token missing.' },
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
     );
     const recaptchaData = await recaptchaRes.json();
 
-    // score: 0.0(봇) ~ 1.0(사람), 0.5 미만은 차단
+    // score: 0.0 (bot) ~ 1.0 (human); block if below 0.5
     if (!recaptchaData.success || recaptchaData.score < 0.5) {
       return NextResponse.json(
         { error: 'Verification failed. Please try again.' },
@@ -85,18 +85,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ── 5. Resend로 이메일 발송 ──────────────────────────
+    // ── 5. Send email via Resend ──────────────────────────
     const fromEmail = process.env.RESEND_FROM_EMAIL ?? 'onboarding@resend.dev';
-    const toEmail   = process.env.CONTACT_TO_EMAIL  ?? 'hello@creativemoon.com';
+    const toEmail = process.env.CONTACT_TO_EMAIL ?? 'hello@creativemoon.com';
 
-    const safeName    = escapeHtml(name.trim());
-    const safeEmail   = escapeHtml(email.trim());
-    const safeCompany = company?.trim() ? escapeHtml(company.trim()) : null;
+    const safeName = escapeHtml(name.trim());
+    const safeEmail = escapeHtml(email.trim());
     const safeMessage = escapeHtml(message.trim()).replace(/\n/g, '<br>');
 
     await resend.emails.send({
-      from:    `Creative Moon <${fromEmail}>`,
-      to:      [toEmail],
+      from: `Creative Moon <${fromEmail}>`,
+      to: [toEmail],
       replyTo: email.trim(),
       subject: `New message from ${safeName}`,
       html: `
@@ -117,13 +116,6 @@ export async function POST(request: NextRequest) {
                 <a href="mailto:${safeEmail}" style="color: #000;">${safeEmail}</a>
               </td>
             </tr>
-            ${safeCompany ? `
-            <tr>
-              <td style="padding: 10px 0; color: #888; vertical-align: top;">
-                <strong>Company</strong>
-              </td>
-              <td style="padding: 10px 0;">${safeCompany}</td>
-            </tr>` : ''}
             <tr>
               <td style="padding: 10px 0; color: #888; vertical-align: top;">
                 <strong>Message</strong>

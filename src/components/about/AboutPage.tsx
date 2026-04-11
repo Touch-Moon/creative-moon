@@ -5,6 +5,7 @@ import { motion, useInView, type Variants } from 'framer-motion';
 import type { BezierDefinition } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import HomeMarquee from '@/components/home/HomeMarquee';
 import './AboutPage.scss';
 
 // ── Easing curves ──────────────────────────────────────────────
@@ -59,13 +60,6 @@ const awards = [
   { org: 'Behance', name: 'Interaction Featured — Mobile App Concept', year: '2023.' },
 ];
 
-// ── Client names ───────────────────────────────────────────────
-const clients = [
-  'Samsung.', 'Naver.', 'Kakao.',
-  'LG.', 'Hyundai.', 'SK.',
-  'Coupang.', 'Toss.', 'Line.',
-];
-
 // ── Compliance data ────────────────────────────────────────────
 const compliance = [
   {
@@ -109,7 +103,6 @@ export default function AboutPage() {
   const textLeft = useSection('-10%');
   const textRight = useSection('-10%');
   const awardsSection = useSection('-5%');
-  const clientsSection = useSection('-10%');
   const complianceSection = useSection('-10%');
 
   return (
@@ -162,7 +155,7 @@ export default function AboutPage() {
             animate={fullImg.inView ? 'visible' : 'hidden'}
           >
             <Image
-              src="/images/about/about-hero.jpg"
+              src="/images/about/about-hero-v2.jpg"
               alt="Creative Moon — workspace"
               fill
               style={{ objectFit: 'cover' }}
@@ -203,7 +196,7 @@ export default function AboutPage() {
               animate={imgText.inView ? 'visible' : 'hidden'}
             >
               <Image
-                src="/images/about/about-office.jpg"
+                src="/images/about/about-office-v2.jpg"
                 alt="Creative Moon — office"
                 fill
                 style={{ objectFit: 'cover' }}
@@ -225,10 +218,10 @@ export default function AboutPage() {
                 At least, that&apos;s what I aim for. My goal for every project
                 is the same: to elevate the connection between brands and their
                 audience through design. I specialise in{' '}
-                <Link href="/projects">
+                <span style={{ textDecoration: 'underline', textUnderlineOffset: '0.2em' }}>
                   Web Design, UI/UX, Front-end Development, Brand Identity
                   and Creative Direction
-                </Link>.
+                </span>.
               </p>
             </motion.div>
           </div>
@@ -249,7 +242,7 @@ export default function AboutPage() {
               animate={twoCols.inView ? 'visible' : 'hidden'}
             >
               <Image
-                src="/images/about/about-detail-01.jpg"
+                src="/images/about/about-detail-01-v5.jpg"
                 alt="Creative Moon — design process"
                 fill
                 style={{ objectFit: 'cover' }}
@@ -264,7 +257,7 @@ export default function AboutPage() {
               animate={twoCols.inView ? 'visible' : 'hidden'}
             >
               <Image
-                src="/images/about/about-detail-02.jpg"
+                src="/images/about/about-detail-02-v2.jpg"
                 alt="Creative Moon — development"
                 fill
                 style={{ objectFit: 'cover' }}
@@ -363,35 +356,9 @@ export default function AboutPage() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────
-          8. CLIENTS
+          8. PHILOSOPHY (홈페이지와 공유)
       ───────────────────────────────────────────────────────── */}
-      <section className="about-clients" data-theme="dark" ref={clientsSection.ref}>
-        <div className="wrapper">
-          <motion.h3
-            className="about-clients__label"
-            variants={fadeUp}
-            custom={0}
-            initial="hidden"
-            animate={clientsSection.inView ? 'visible' : 'hidden'}
-          >
-            Clients
-          </motion.h3>
-          <div className="about-clients__names">
-            {clients.map((name, i) => (
-              <motion.span
-                key={i}
-                className="about-clients__name"
-                variants={fadeUp}
-                custom={i * 0.06}
-                initial="hidden"
-                animate={clientsSection.inView ? 'visible' : 'hidden'}
-              >
-                {name}
-              </motion.span>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HomeMarquee />
 
       {/* ─────────────────────────────────────────────────────────
           9. COMPLIANCE

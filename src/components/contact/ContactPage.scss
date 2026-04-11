@@ -1,5 +1,7 @@
 @use '../../styles/primitives/type' as *;
+@use '@/styles/primitives/space' as *;
 @use '../../styles/primitives/colors' as *;
+@use '../../styles/tokens/typography' as *;
 
 // ── Contact Page ───────────────────────────────
 .contact-page {
@@ -10,7 +12,7 @@
 
 // ── Contact Section ────────────────────────────
 .contact-section {
-  padding-top: fvw(364);
+  padding-top: fvw(350); // plastic: ~24.3vw
 
   .wrapper {
     max-width: fvw(1320);
@@ -39,18 +41,18 @@
 
 // ── Contact Block (Drop us a line / Visit us) ──
 .contact-block {
-  margin-bottom: fvw(48);
+  margin-bottom: $space-12;
 
   &__title {
-    font-size: $fs-body-caps;
+    font-size: var(--fs-body-caps);
     letter-spacing: $ls-wide;
     text-transform: uppercase;
     color: rgba($m-white, 0.5);
-    margin-bottom: fvw(12);
+    margin-bottom: $space-3;
   }
 
   &__text {
-    font-size: $fs-h6;
+    font-size: var(--fs-h6);
     line-height: $lh-h6;
     color: $m-white;
 
@@ -68,7 +70,7 @@
 
 // ── Contact Title ──────────────────────────────
 .contact-title {
-  font-size: $fs-h2;
+  font-size: var(--fs-h2);
   line-height: $lh-h2;
   font-weight: $fw-regular;
   color: $m-white;
@@ -87,7 +89,7 @@
 
 // ── Contact Description ────────────────────────
 .contact-description {
-  font-size: $fs-body-2;
+  font-size: var(--fs-body-2);
   line-height: $lh-body-2;
   color: rgba($m-white, 0.7);
   max-width: fvw(666);
@@ -95,10 +97,10 @@
 
 // ── Contact Form ───────────────────────────────
 .contact-form {
-  margin-top: fvw(60);
+  margin-top: $section-title-space;
 
   &__sent {
-    padding: fvw(60) 0;
+    padding: $section-title-space 0;
 
     .headline-4 {
       color: $m-white;
@@ -109,19 +111,21 @@
   .form-group--submit {
     align-items: center;
     display: flex;
-    gap: fvw(32);
+    justify-content: space-between;
+    gap: $space-8;
     margin-top: fvw(56); // checkbox → submit row 간격
 
     // reCAPTCHA disclaimer text
     .submit-recaptcha {
-      color: rgba($m-white, 0.35);
-      flex: 1;
+      width: 100%;
+      max-width: fvw(250);
+      color: rgba($m-white, 1);
       font-family: 'Figtree', sans-serif;
-      font-size: 0.7638888889vw; // ~11px at 1440px
+      font-size: var(--fs-body-5);
       line-height: 1.6;
 
       a {
-        color: rgba($m-white, 0.35);
+        color: rgba($m-white, 1);
         text-decoration: underline;
         text-underline-offset: 2px;
         transition: color 0.2s ease;
@@ -132,15 +136,16 @@
       }
     }
 
-    // Send button — 65% of submit row (matches plastic.design proportions)
+    // Send button — same flex weight as recaptcha area
     .button--xl {
-      flex: 0 0 65%;
+      max-width: fvw(240);
+      width: 100%;
     }
   }
 
   // textarea → privacy checkbox 간격
   .form-group:has(.form-checkbox) {
-    margin-top: fvw(40);
+    margin-top: $space-10;
   }
 }
 
@@ -149,6 +154,7 @@
 // _form.scss는 기본 light 테마 → 여기서 dark 오버라이드
 // ══════════════════════════════════════════════════
 .contact-page {
+
   // 밑줄 색상 오버라이드
   .form-group .form-control::before,
   .form-group .form-control::after {
@@ -168,7 +174,7 @@
 
   // placeholder 색상
   .form-group .form-placeholder {
-    color: rgba($m-white, 0.5);
+    color: rgba($m-white, 1);
   }
 
   // input / textarea 색상
@@ -198,10 +204,11 @@
   }
 
   .form-group .form-checkbox label .form-checkbox__text {
-    color: rgba($m-white, 0.7);
+    color: rgba($m-white, 1);
+    font-size: var(--fs-body-5);
 
     a {
-      color: rgba($m-white, 0.7);
+      color: rgba($m-white, 1);
       text-underline-offset: 2px;
 
       &:hover {
@@ -214,7 +221,7 @@
   // checkbox 에러 메시지 위치 (checkbox는 form-control이 없어 별도 지정)
   .form-group:has(.form-checkbox) .error-message {
     bottom: auto;
-    margin-top: fvw(8);
+    margin-top: $space-2;
     position: relative;
     right: auto;
     text-align: left;
@@ -229,8 +236,8 @@
 
 // ── Contact Social ─────────────────────────────
 .contact-social {
-  padding-top: fvw(160);
-  padding-bottom: fvw(145);
+  padding-top: fvw(153); // plastic: ~10.6vw
+  padding-bottom: fvw(139); // plastic: ~9.7vw
 
   .wrapper {
     max-width: fvw(1320);
@@ -239,11 +246,11 @@
   }
 
   &__title {
-    font-size: $fs-body-caps;
+    font-size: var(--fs-body-caps);
     letter-spacing: $ls-wide;
     text-transform: uppercase;
     color: rgba($m-white, 0.5);
-    margin-bottom: fvw(24);
+    margin-bottom: $space-6;
   }
 
   &__list {
@@ -254,11 +261,11 @@
     }
 
     li {
-      margin-bottom: fvw(4);
+      margin-bottom: $space-1;
     }
 
     a {
-      font-size: $fs-h3;
+      font-size: var(--fs-h3);
       line-height: $lh-h3;
       font-weight: $fw-regular;
       color: $m-white;
@@ -276,42 +283,71 @@
   }
 }
 
-// ── Tablet (max 1023px) ─────────────────────────
-@media (max-width: 1023px) {
-  .contact-section {
-    &__left {
-      width: 41.667%;
-    }
+// ── Tablet (max-width: 1023.98px) ──────────────────────
+@media (max-width: 1023.98px) {
+  .contact-form .form-group--submit {
+    gap: var(--space-16); // ~20px @ 1024
+    margin-top: 2.930vw; // ~30px @ 1024
 
-    &__right {
-      width: 50%;
+    .submit-recaptcha {
+      font-size: var(--fs-body-5);
     }
   }
 
   .contact-form .form-group--submit {
-    gap: 2.604vw;
-    margin-top: 3.906vw;
+    flex-direction: column;
+    max-width: 100%;
 
     .submit-recaptcha {
-      font-size: 1.302vw;
+      max-width: 100%;
+    }
+
+    .button--xl {
+      max-width: 100%;
     }
   }
-}
 
-// ── Tablet small (max 768px) ────────────────────
-@media (max-width: 768px) {
-  .contact-social {
-    padding-top: 23.438vw;
+  .contact-form {
+    .button--xl {
+      flex: unset;
+      width: 100%;
+      max-width: 100%;
+
+      span {
+        height: 7vw;
+        font-size: var(--fs-h3);
+      }
+    }
   }
+
+  .contact-social {
+    padding-top: 10vw; // plastic proportional
+    padding-bottom: 9vw;
+  }
+
+  .contact-block__title {
+    &.body-text-caps {
+      font-size: var(--fs-body-caps); // plastic.design: body-caps at tablet
+    }
+  }
+
+  .contact-block__text {
+
+    &.headline-6,
+    &.headline-6 a {
+      font-size: var(--fs-h6); // plastic.design: headline-6 at tablet
+    }
+  }
+
 }
 
-// ── Mobile (max 575px) ──────────────────────────
-@media (max-width: 575px) {
+// ── Mobile (max-width: 575.98px) ───────────────────────
+@media (max-width: 575.98px) {
   .contact-section {
-    padding-top: 95.897vw;
+    padding-top: 64.931vw; // ~374px @ 576
 
     .wrapper {
-      padding: 0 5.128vw;
+      padding: 0 $gutter-mobile; // 16px
     }
 
     &__row {
@@ -321,53 +357,81 @@
     &__left {
       width: 100%;
       order: 2;
-      margin-top: 41.026vw;
+      margin-top: 27.778vw; // ~160px @ 576
     }
 
     &__right {
       width: 100%;
       order: 1;
       text-align: left;
+
+      .contact-description {
+        font-size: var(--fs-body-2); // plastic: 30.8px@500 → 23@375 ≈ --fs-body-2 (22/375 = 29.3@500)
+        max-width: 100%;
+      }
     }
+  }
+
+  // Form font sizes — plastic uses ~25.6px@500 for inputs ≈ --fs-body-3
+  .contact-page .form-group .form-placeholder {
+    font-size: var(--fs-body-3);
+  }
+
+  .contact-page .form-group .form-input,
+  .contact-page .form-group .form-textarea {
+    font-size: var(--fs-body-3);
+  }
+
+  .contact-page .form-group .form-checkbox label .form-checkbox__text {
+    font-size: var(--fs-body-4); // plastic: body-text-5 ≈ 20.5px@500 → nearest --fs-body-4 (16@375 = 21.3@500)
   }
 
   .contact-title {
     display: inline-block;
-    width: 89.744vw;
-    margin-bottom: 10.256vw;
-    font-size: 12.308vw;
-    line-height: 98%;
+    width: 89.744vw; // ~90% of viewport
+    margin-bottom: 6.944vw; // ~40px @ 576
+    font-size: var(--fs-h2); // plastic: 61.5px@500 → 46@375 ≈ --fs-h2 (46/375)
+    line-height: 116%; // plastic: 71.4/61.5 ≈ 116%
+    text-transform: uppercase; // plastic uses uppercase on mobile
   }
 
   .contact-description {
     width: 100%;
-    font-size: 4.615vw;
+    font-size: var(--fs-body-2); // plastic: 30.8px@500 → 23@375 ≈ --fs-body-2 (22/375 = 29.3@500)
     line-height: 140%;
+    font-weight: 300; // plastic: fontWeight 300
   }
 
   .contact-form {
-    margin-top: 8.205vw;
+    margin-top: 5.556vw; // ~32px @ 576
 
     // 모바일: submit row를 세로 스택으로 (reCAPTCHA 위 / 버튼 아래 full-width)
     .form-group--submit {
       flex-direction: column;
       align-items: stretch;
-      margin-top: 10.256vw;
-      gap: 5.128vw;
+      margin-top: 6.944vw; // ~40px @ 576
+      gap: var(--space-32); // ~20px @ 576
 
       .submit-recaptcha {
-        font-size: 3.077vw;
-        text-align: center;
+        font-size: var(--fs-body-5); // plastic: recaptcha ≈ --fs-body-5
+        text-align: left;
+        max-width: 100%;
       }
 
       .button--xl {
         flex: unset;
         width: 100%;
+        max-width: 100%;
+
+        span {
+          height: 15vw;
+          font-size: var(--fs-body-3); // plastic: submit btn ≈ 25.6px@500 → nearest --fs-body-3 (20@375 = 26.7@500)
+        }
       }
     }
 
     .form-group:has(.form-checkbox) {
-      margin-top: 6.154vw;
+      margin-top: 4.167vw; // ~24px @ 576
 
       .error-message {
         padding-left: 0;
@@ -376,33 +440,40 @@
   }
 
   .contact-block {
-    margin-bottom: 14.359vw;
+    margin-bottom: 9.722vw; // ~56px @ 576
 
     &__title {
-      margin-bottom: 4.103vw;
+      margin-bottom: 2.778vw; // ~16px @ 576
     }
 
     &__text {
-      font-size: 5.128vw;
+      font-size: var(--fs-body-4); // plastic: body-text-4 ≈ 20.5px@500 → nearest --fs-body-4 (16@375 = 21.3@500)
     }
   }
 
   .contact-social {
-    padding-top: 34.872vw;
-    padding-bottom: 34.872vw;
+    padding-top: 12vw; // plastic proportional
+    padding-bottom: 10vw; // plastic proportional
     text-align: right;
 
     .wrapper {
-      padding: 0 5.128vw;
+      padding: 0 $gutter-mobile; // 16px
     }
 
     &__title {
-      margin-bottom: 5.128vw;
+      margin-bottom: 3.472vw; // ~20px @ 576
     }
 
     &__list a {
-      font-size: 10.256vw;
+      font-size: var(--fs-h3); // plastic proportional — reduce from h1
       line-height: 130%;
     }
   }
+}
+
+/* ── reCAPTCHA v3 badge 숨김 ──
+   폼 하단 "protected by reCAPTCHA" 문구가 있으므로 Google 정책 충족
+   ──────────────────────────────── */
+.grecaptcha-badge {
+  visibility: hidden !important;
 }

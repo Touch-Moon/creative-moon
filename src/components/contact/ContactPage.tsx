@@ -9,10 +9,10 @@ import './ContactPage.scss';
 const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
 
 const socialLinks = [
-  { name: 'Behance',   href: 'https://behance.net/creativemoon' },
+  { name: 'Behance', href: 'https://behance.net/creativemoon' },
   { name: 'Instagram', href: 'https://instagram.com/creative_moon' },
-  { name: 'LinkedIn',  href: 'https://linkedin.com/in/creativemoon' },
-  { name: 'GitHub',    href: 'https://github.com/creativemoon' },
+  { name: 'LinkedIn', href: 'https://linkedin.com/in/creativemoon' },
+  { name: 'GitHub', href: 'https://github.com/creativemoon' },
 ];
 
 // ── Style-guide form 상태 관리 훅 ────────────────────────
@@ -45,7 +45,7 @@ function useFormFieldStates(containerRef: React.RefObject<HTMLElement | null>) {
       if (el.value?.trim()) group.classList.add('has-content');
 
       const onFocus = () => group.classList.add('is-focused');
-      const onBlur  = () => {
+      const onBlur = () => {
         group.classList.remove('is-focused');
         group.classList.toggle('has-content', Boolean(el.value?.trim()));
       };
@@ -54,7 +54,7 @@ function useFormFieldStates(containerRef: React.RefObject<HTMLElement | null>) {
       };
 
       el.addEventListener('focus', onFocus);
-      el.addEventListener('blur',  onBlur);
+      el.addEventListener('blur', onBlur);
       el.addEventListener('input', onInput);
 
       // Textarea 자동 높이 조절
@@ -78,7 +78,7 @@ function useFormFieldStates(containerRef: React.RefObject<HTMLElement | null>) {
     return () => {
       handlers.forEach(({ el, onFocus, onBlur, onInput, onResize }) => {
         el.removeEventListener('focus', onFocus);
-        el.removeEventListener('blur',  onBlur);
+        el.removeEventListener('blur', onBlur);
         el.removeEventListener('input', onInput);
         if (onResize) el.removeEventListener('input', onResize);
       });
@@ -91,28 +91,27 @@ function ContactPageInner() {
   const { executeRecaptcha } = useGoogleReCaptcha();
 
   const [formState, setFormState] = useState({
-    name:     '',
-    email:    '',
-    company:  '',
-    message:  '',
-    privacy:  false,
+    name: '',
+    email: '',
+    message: '',
+    privacy: false,
     honeypot: '', // 봇 트랩 — 실제 사용자는 보이지 않음
   });
   const [sending, setSending] = useState(false);
-  const [sent,    setSent]    = useState(false);
-  const [error,   setError]   = useState<string | null>(null);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
-  const titleRef  = useRef<HTMLHeadingElement>(null);
-  const descRef   = useRef<HTMLParagraphElement>(null);
-  const formRef   = useRef<HTMLDivElement>(null);
-  const leftRef   = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const descRef = useRef<HTMLParagraphElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
+  const leftRef = useRef<HTMLDivElement>(null);
   const socialRef = useRef<HTMLDivElement>(null);
 
-  const titleInView  = useInView(titleRef,  { once: true, margin: '0px 0px -10% 0px' });
-  const descInView   = useInView(descRef,   { once: true, margin: '0px 0px -10% 0px' });
-  const formInView   = useInView(formRef,   { once: true, margin: '0px 0px -10% 0px' });
-  const leftInView   = useInView(leftRef,   { once: true, margin: '0px 0px -10% 0px' });
+  const titleInView = useInView(titleRef, { once: true, margin: '0px 0px -10% 0px' });
+  const descInView = useInView(descRef, { once: true, margin: '0px 0px -10% 0px' });
+  const formInView = useInView(formRef, { once: true, margin: '0px 0px -10% 0px' });
+  const leftInView = useInView(leftRef, { once: true, margin: '0px 0px -10% 0px' });
   const socialInView = useInView(socialRef, { once: true, margin: '0px 0px -10% 0px' });
 
   useFormFieldStates(formRef);
@@ -177,13 +176,12 @@ function ContactPageInner() {
       const token = await executeRecaptcha('contact_form');
 
       const res = await fetch('/api/contact', {
-        method:  'POST',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name:     formState.name,
-          email:    formState.email,
-          company:  formState.company,
-          message:  formState.message,
+          name: formState.name,
+          email: formState.email,
+          message: formState.message,
           token,
           honeypot: formState.honeypot,
         }),
@@ -225,8 +223,8 @@ function ContactPageInner() {
                 </div>
               </div>
               <div className="contact-block">
-                <div className="contact-block__title body-text-caps">Visit us</div>
-                <div className="contact-block__text headline-6">Seoul, South Korea</div>
+                <div className="contact-block__title body-text-caps">I am here</div>
+                <div className="contact-block__text headline-6">Winnipeg, Canada</div>
               </div>
             </motion.div>
 
@@ -334,20 +332,6 @@ function ContactPageInner() {
                       )}
                     </div>
 
-                    {/* Company */}
-                    <div className="form-group is-input">
-                      <div className="form-control">
-                        <div className="form-placeholder">Company</div>
-                        <input
-                          className="form-input"
-                          type="text"
-                          name="company"
-                          value={formState.company}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </div>
-
                     {/* Message (textarea) */}
                     <div className={`form-group is-textarea${fieldErrors.message ? ' is-error' : ''}`}>
                       <div className="form-control">
@@ -416,7 +400,7 @@ function ContactPageInner() {
                       </p>
                       <button
                         type="submit"
-                        className="button button--xl button--secondary"
+                        className="button button--xl"
                         disabled={sending || !executeRecaptcha}
                       >
                         <div></div>

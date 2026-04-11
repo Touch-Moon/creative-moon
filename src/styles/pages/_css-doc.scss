@@ -1,14 +1,14 @@
 /* ================================================
    PAGES — CSS Doc
    Style Manual Reference Document
-   Styles for /style-guide/guide
+   Styles for /style-guide/menual
    ================================================ */
 
 /* ── Document root ───────────────────────────────── */
 .cd-doc {
   max-width: 760px;
   margin: 0 auto;
-  padding: 4rem 2rem 6rem;
+  padding: var(--space-32) var(--space-8) var(--space-24); /* top: 128px · sides: 32px · bottom: 96px @ 1440 */
   font-family: monospace;
 }
 
@@ -167,6 +167,10 @@
 
 /* ── Responsive — tablet & mobile ───────────────── */
 @media (max-width: 1023.98px) {
+  .cd-doc {
+    padding-top: 140px; // 헤더 + 로고 높이 × 2 이상 간격
+  }
+
   .cd-item {
     flex-direction: column;
     gap: 0.1rem;
@@ -174,6 +178,12 @@
 
   .cd-item__spec {
     text-align: left;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .cd-doc {
+    padding-top: 130px; // 헤더 + 로고 높이 × 2 이상 간격
   }
 }
 

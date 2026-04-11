@@ -1,64 +1,115 @@
 @use '@/styles/primitives/colors' as *;
 @use '@/styles/primitives/type' as *;
 
+// ─────────────────────────────────────────────────────────────
+// HomeMarquee — rebuilt to match plastic.design .clients
+//
+// Key mechanism:
+//   .mix-blend            → mix-blend-mode: difference (global util)
+//   .home-marquee__lists  → width: 70%  (compressed)
+//   .is-visible → width   → width: 100% (expanded, 2s ease-out)
+//   IntersectionObserver adds .is-visible on scroll-in
+// ─────────────────────────────────────────────────────────────
+
+// ── Global utility (matches plastic.design's .mix-blend) ─────
+.mix-blend {
+  mix-blend-mode: difference;
+}
+
 .home-marquee {
-  background-color: transparent;
-  padding: fvw(80) 0;
-  overflow: hidden;
+  overflow: hidden; // 대형 폰트·margin-left 조합이 vw를 초과해 레이아웃 파괴하는 것 방지
+  color: $m-white; // white → inverts via mix-blend-mode
+  padding-top: var(--section-space); // ≈ 3.47985vw @ 1440
+  padding-bottom: var(--section-space); // ≈ 18.96vw @ 1440  (tall bottom space)
 
-  &__track {
-    width: 100%;
-    overflow: hidden;
+  // ── Wrapper (side padding) ──────────────────────────────────
+  &__wrapper {
+    padding-left: fvw(47); // ≈ 3.2967vw
+    padding-right: fvw(47);
   }
 
-  &__inner {
-    display: flex;
-    gap: 0;
-    white-space: nowrap;
-    animation: marquee-scroll 28s linear infinite;
-
-    &:hover {
-      animation-play-state: paused;
-    }
-  }
-
-  &__item {
-    font-size: fvw(88);   // h2 사이즈
-    font-weight: $fw-light;
-    color: inherit;
-    letter-spacing: -0.03em;
-    line-height: 1;
-    padding-right: fvw(60);
+  // ── "CLIENTS" label ────────────────────────────────────────
+  &__label {
+    font-size: var(--fs-body-caps); // responsive token
+    font-weight: $fw-light; // 300
+    letter-spacing: 0.04em;
+    line-height: 100%;
     text-transform: uppercase;
-    flex-shrink: 0;
+    margin-bottom: fvw(26); // ≈ 1.8315vw
   }
 
-  &__dot {
-    color: $m-accent;  // 오렌지 포인트
-  }
+  // ── Lists container (width animates 70 → 100%) ─────────────
+  &__lists {
+    width: 70%;
+    transition: width 2s cubic-bezier(0.22, 1, 0.36, 1); // plastic.design exact
 
-  @keyframes marquee-scroll {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  // ── Tablet ──────────────────────────────────
-  @media (max-width: 1023.98px) {
-    padding: 60px 0;
-
-    &__item {
-      font-size: clamp(40px, 8vw, 88px);
-      padding-right: 40px;
+    &--mobile {
+      display: none;
     }
   }
 
-  // ── Mobile ───────────────────────────────────
-  @media (max-width: 575.98px) {
-    padding: 40px 0;
+  // ── Single row ─────────────────────────────────────────────
+  &__list {
+    display: flex;
+    justify-content: space-between;
+    font-size: fvw(88); // 6.04vw @ 1440 ≈ 87px
+    font-weight: $fw-light; // 300
+    letter-spacing: -0.01em;
+    line-height: 100%;
+    text-transform: uppercase;
+    max-width: 1440px;
 
-    &__item {
-      font-size: clamp(32px, 10vw, 56px);
-      padding-right: 28px;
+    // Last row: flex-start + offset last item (like CONTROLS / HITACHI.)
+    &--last {
+      justify-content: flex-start;
+
+      >div {
+        will-change: transform;
+
+        &:last-child {
+          margin-left: fvw(216); // ≈ 14.9725vw @ 1440
+        }
+      }
+    }
+  }
+
+  // ── Scroll trigger: .is-visible expands the lists ──────────
+  &.is-visible {
+    .home-marquee__lists {
+      width: 100%;
+    }
+  }
+
+  // ── Tablet (1024px and below) ───────────────────────────────
+  @media (max-width: 1023.98px) {
+    padding-bottom: 18vw;
+
+    &__list {
+      // plastic.design: no tablet override — desktop fvw(88) scales naturally
+
+      &--last>div:last-child {
+        margin-left: 13vw;
+      }
+    }
+  }
+
+  // ── Mobile (576px and below) ────────────────────────────────
+  @media (max-width: 575.98px) {
+
+    &__lists--desktop {
+      display: none;
+    }
+
+    &__lists--mobile {
+      display: block;
+    }
+
+    &__list {
+      font-size: var(--fs-h4); // plastic.design .clients__list — 32px @ 390
+
+      &--last>div:last-child {
+        margin-left: 8vw;
+      }
     }
   }
 }
