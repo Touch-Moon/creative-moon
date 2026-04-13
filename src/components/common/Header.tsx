@@ -23,7 +23,7 @@ const SOCIAL_LINKS = [
 ];
 
 /* ── Nav reveal variants (Hero 애니메이션과 동일) ── */
-const EASE_OUT = [0.19, 1, 0.22, 1];
+const EASE_OUT = [0.19, 1, 0.22, 1] as const;
 
 const navClipVariants: Variants = {
   hidden: {
