@@ -4,11 +4,17 @@ import { Redis } from '@upstash/redis';
 import { Resend } from 'resend';
 
 // ── Rate limiter: max 3 requests per IP per hour ─────────────────
-const ratelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(3, '1 h'),
-  analytics: false,
-});
+// Redis 연결 실패 시 rate limit을 건너뜀 (개발 환경 대비)
+let ratelimit: Ratelimit | null = null;
+try {
+  ratelimit = new Ratelimit({
+    redis: Redis.fromEnv(),
+    limiter: Ratelimit.slidingWindow(3, '1 h'),
+    analytics: false,
+  });
+} catch {
+  console.warn('[Contact API] Redis init failed — rate limiting disabled');
+}
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -50,39 +56,51 @@ export async function POST(request: NextRequest) {
     }
 
     // ── 3. Rate Limiting — max 3 requests per IP per hour ───────────
-    const ip =
-      request.headers.get('x-forwarded-for')?.split(',')[0].trim() ??
-      request.headers.get('x-real-ip') ??
-      '127.0.0.1';
+    if (ratelimit) {
+      try {
+        const ip =
+          request.headers.get('x-forwarded-for')?.split(',')[0].trim() ??
+          request.headers.get('x-real-ip') ??
+          '127.0.0.1';
 
-    const { success: rateLimitOk } = await ratelimit.limit(ip);
-    if (!rateLimitOk) {
-      return NextResponse.json(
-        { error: 'Too many requests. Please try again in an hour.' },
-        { status: 429 }
-      );
+        const { success: rateLimitOk } = await ratelimit.limit(ip);
+        if (!rateLimitOk) {
+          return NextResponse.json(
+            { error: 'Too many requests. Please try again in an hour.' },
+            { status: 429 }
+          );
+        }
+      } catch {
+        console.warn('[Contact API] Rate limit check failed — skipping');
+      }
     }
 
     // ── 4. reCAPTCHA v3 verification ────────────────────────────
-    if (!token) {
-      return NextResponse.json(
-        { error: 'Verification token missing.' },
-        { status: 400 }
-      );
-    }
+    const isDev = process.env.NODE_ENV === 'development';
+    let recaptchaScore: number | null = null;
 
-    const recaptchaRes = await fetch(
-      `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
-      { method: 'POST' }
-    );
-    const recaptchaData = await recaptchaRes.json();
+    if (!isDev) {
+      if (!token) {
+        return NextResponse.json(
+          { error: 'Verification token missing.' },
+          { status: 400 }
+        );
+      }
 
-    // score: 0.0 (bot) ~ 1.0 (human); block if below 0.5
-    if (!recaptchaData.success || recaptchaData.score < 0.5) {
-      return NextResponse.json(
-        { error: 'Verification failed. Please try again.' },
-        { status: 400 }
+      const recaptchaRes = await fetch(
+        `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
+        { method: 'POST' }
       );
+      const recaptchaData = await recaptchaRes.json();
+
+      // score: 0.0 (bot) ~ 1.0 (human); block if below 0.5
+      if (!recaptchaData.success || recaptchaData.score < 0.5) {
+        return NextResponse.json(
+          { error: 'Verification failed. Please try again.' },
+          { status: 400 }
+        );
+      }
+      recaptchaScore = recaptchaData.score;
     }
 
     // ── 5. Send email via Resend ──────────────────────────
@@ -127,7 +145,7 @@ export async function POST(request: NextRequest) {
                 <strong>reCAPTCHA</strong>
               </td>
               <td style="padding: 10px 0; color: #666;">
-                Score: ${recaptchaData.score} / 1.0
+                ${isDev ? 'Dev mode (bypassed)' : `Score: ${recaptchaScore} / 1.0`}
               </td>
             </tr>
           </table>

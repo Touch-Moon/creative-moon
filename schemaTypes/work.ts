@@ -352,6 +352,13 @@ export const work = defineType({
           options: { list: ["image", "video"] },
           initialValue: "image",
         }),
+        defineField({
+          name: "fullBleed",
+          title: "Full Bleed (no side gutter)",
+          type: "boolean",
+          initialValue: true,
+          description: "ON → 좌우 여백 없이 꽉 차게 · OFF → 다른 섹션과 동일한 gutter 적용",
+        }),
         defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true }, description: "권장 2880px wide (1440 @2x) · 비율 자유" }),
         defineField({ name: "video", title: "Video File", type: "file", options: { accept: "video/*" }, description: "권장 1920×1080 (FHD) · 8~15MB 이하" }),
       ],

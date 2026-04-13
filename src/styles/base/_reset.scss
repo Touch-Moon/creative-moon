@@ -19,6 +19,7 @@ html {
 
 body {
   margin: 0;
+  overflow-x: hidden; // 모바일 가로스크롤 방지 (html 단독으로는 일부 브라우저에서 body overflow가 전달되지 않음)
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-inter-display), sans-serif;

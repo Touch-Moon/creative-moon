@@ -69,10 +69,10 @@ export default function Footer() {
           {showLinks && (
             <div className="footer__links-inner">
               <div className="footer__social">
-                <a href="https://behance.net/creativemoon" target="_blank" rel="noopener noreferrer">Behance</a>
-                <a href="https://instagram.com/creative_moon" target="_blank" rel="noopener noreferrer">Instagram</a>
-                <a href="https://linkedin.com/in/creativemoon" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                <a href="https://github.com/creativemoon" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://www.behance.net/crtvmoon" target="_blank" rel="noopener noreferrer">Behance</a>
+                <a href="https://www.instagram.com/creative_____moon/" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="https://www.linkedin.com/in/creative-moon/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://github.com/Touch-Moon" target="_blank" rel="noopener noreferrer">GitHub</a>
               </div>
               <div className="footer__legal">
                 <Link href="/privacy-policy">Privacy Policy</Link>

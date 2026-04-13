@@ -31,8 +31,9 @@ function buildWorksList(serverWorks?: SelectedWorkSanity[]): SelectedWork[] {
     const rawSrc = sanityUrl ?? fallback.src;
 
     // Canvas(WaveImage): same-origin /_next/image 프록시 → Sanity CDN 서버사이드 fetch
-    // large/wide(가로형) → w=1440, tall/compact(세로형) → w=720
-    const optimizedW = useLandscape ? 1440 : 720;
+    // w는 next.config.ts deviceSizes 내 값만 허용 (외 값은 400 에러)
+    // large/wide(가로형) → w=1920, tall/compact(세로형) → w=960
+    const optimizedW = useLandscape ? 1920 : 960;
     const src = rawSrc.startsWith('https://cdn.sanity.io')
       ? `/_next/image?url=${encodeURIComponent(rawSrc)}&w=${optimizedW}&q=80`
       : rawSrc;

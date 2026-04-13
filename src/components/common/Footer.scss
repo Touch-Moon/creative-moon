@@ -248,13 +248,14 @@
 //   → centering margin = (100vw - 91.6667vw) / 2 = 4.1667vw
 //   → total gutter     = calc(4.1667vw + 16px)
 .footer--contact .footer__meta .wrapper {
-  @media (min-width: 576px) {
-    padding-left: calc((100vw - min(91.6667vw, 1320px)) / 2 + min(2.0833vw, 30px));
-  }
 
   @media (max-width: 575.98px) {
-    padding-left: calc(4.1667vw + 16px);
+    padding-left: 4.1667vw;
     text-align: left;
+
+    .footer__copy {
+      text-align: center;
+    }
   }
 }
 

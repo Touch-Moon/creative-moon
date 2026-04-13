@@ -15,7 +15,7 @@ import Footer from "@/components/common/Footer";
 import ThemeBackground from "@/components/common/ThemeBackground";
 import FontLoader from "@/components/common/FontLoader";
 import SmoothScroll from "@/components/common/SmoothScroll";
-import PageTransition from "@/components/common/PageTransition";
+
 import MotionProvider from "@/components/common/MotionProvider";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://creative-moon.com';
@@ -91,7 +91,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
 
             {/* ✅ Actual page content — PageTransition이 화이트 커튼 처리 */}
             <main id="main-content">
-              <PageTransition>{children}</PageTransition>
+              {children}
             </main>
 
             {/* ✅ Footer rendered below all pages */}

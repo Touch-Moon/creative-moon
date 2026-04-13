@@ -447,7 +447,7 @@ export default function WorkSingle({ data, selectedWorks }: Props) {
 
       {/* ── .work__hero ── */}
       <m.div
-        className="work-single__hero"
+        className={`work-single__hero${work.heroMedia?.fullBleed === false ? ' work-single__hero--guttered' : ''}`}
         initial={{ y: '100vh' }}
         animate={{ y: '0vh' }}
         transition={{ duration: 1.0, ease: EASE_INOUT }}

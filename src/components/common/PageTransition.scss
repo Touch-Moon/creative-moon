@@ -1,12 +1,27 @@
 // ── PageTransition ───────────────────────────────────────────────────
 //
-// 흰 커튼 오버레이 없음 — 각 페이지의 CSS 애니메이션 사용
+// EXIT (썸네일 클릭 — WorksSlider / WorkList / StoriesList):
+//   html.is-thumb-exiting → main + header + footer fadeout
+//   body 직속 fixed canvas 클론이 썸네일을 커버 → fadeout 영향 없음
 //
-// EXIT (work list → single): WorkList.scss의 .is-exiting 규칙이 처리
-// EXIT (그 외 페이지): html.is-page-exiting 규칙
-// ENTER: 각 페이지 컴포넌트의 @keyframes가 자연 실행
+// EXIT (일반 페이지):
+//   html.is-page-exiting → main + header + footer fadeout
+//
+// ENTER:
+//   main#main-content 에 JS가 인라인으로 transform: translateY(100svh) 적용,
+//   커튼 50% 지점에서 translateY(0) 트랜지션 시작
 
-// ── 일반 페이지 나가기 (work list 제외) ──────────────────────────────
+// ── 썸네일 트랜지션 Exit ──────────────────────────────────────────────
+html.is-thumb-exiting {
+  main,
+  .header,
+  .footer {
+    opacity: 0;
+    transition: opacity 0.32s cubic-bezier(0.45, 0, 0.55, 1);
+  }
+}
+
+// ── 일반 페이지 Exit ─────────────────────────────────────────────────
 html.is-page-exiting {
   main,
   .header,
@@ -16,7 +31,7 @@ html.is-page-exiting {
   }
 }
 
-// ── work list → single: 헤더/푸터 fade (아이템은 스크롤로 처리) ──────
+// ── work list → single (레거시 호환) ─────────────────────────────────
 html.is-work-exiting {
   .header,
   .footer {

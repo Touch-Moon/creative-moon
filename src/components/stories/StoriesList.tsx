@@ -72,10 +72,18 @@ function StoryCard({ story, index }: { story: StoryListItem; index: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-8%' });
 
+  // Canvas(PageTransition clone): CORS 안전 URL — Sanity CDN → /_next/image 프록시
+  const heroSrc = story.thumbnailUrl
+    ? story.thumbnailUrl.startsWith('https://cdn.sanity.io')
+      ? `/_next/image?url=${encodeURIComponent(story.thumbnailUrl)}&w=960&q=80`
+      : story.thumbnailUrl
+    : '';
+
   return (
     <m.div
       ref={ref}
       className="story-card"
+      data-hero-src={heroSrc}
       initial={{ opacity: 0, y: 50 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 1.1, ease: EASE_OUT, delay: (index % 2) * 0.1 }}

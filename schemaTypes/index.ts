@@ -1,5 +1,5 @@
 import { work, mediaBlock, textBlock, spacerBlock } from "./work";
-import { story, storyMediaModule, storyTwoColImageModule, storyTextModule, storyHeroModule } from "./story";
+import { story, storyMediaBlock, storyTextBlock, storySpacerBlock, storyHeroModule } from "./story";
 import { category } from "./category";
 
 export const schemaTypes = [
@@ -13,9 +13,9 @@ export const schemaTypes = [
   textBlock,
   spacerBlock,
 
-  // Object types — Story modules
-  storyMediaModule,
-  storyTwoColImageModule,
-  storyTextModule,
+  // Object types — Story / Insight modules
+  storyMediaBlock,
+  storyTextBlock,
+  storySpacerBlock,
   storyHeroModule,
 ];

@@ -12,35 +12,29 @@
 }
 
 // ── Module base ───────────────────────────────────────────────────
-.story-module {
+.story-module {}
+
+// ── Hero section (Work와 동일: slide-up from bottom, 16:9 이미지) ──
+.story-single__hero {
   width: 100%;
-}
+  overflow: hidden;
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  will-change: transform;
+  margin-top: $space-8;
 
-// ── Hero module ───────────────────────────────────────────────────
-.story-module--hero {
-  margin-top: $space-20;
-  padding-left: $gutter-desktop;
-  padding-right: $gutter-desktop;
-
-  .story-module__media-inner {
-    width: 100%;
-  }
-
-  .story-module__hero-video {
-    width: 100%;
-    height: fvw(850);
+  img,
+  video {
     display: block;
-    object-fit: cover;
-  }
-
-  .story-module__hero-image-wrap {
-    position: relative;
     width: 100%;
-    height: fvw(850);
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
   }
 
-  .story-module__hero-image {
-    object-fit: cover;
+  // Guttered variant — 다른 섹션과 동일한 좌우 여백
+  &--guttered {
+    padding-left: $gutter-desktop;
+    padding-right: $gutter-desktop;
+    background: transparent;
   }
 }
 
@@ -110,7 +104,7 @@
   }
 }
 
-// ── Two-col image module ──────────────────────────────────────────
+// ── Two-col image module (legacy — kept for backwards compatibility) ──
 .story-module--two-col-image {
   margin-top: $space-20;
   padding: 0 $gutter-desktop;
@@ -130,6 +124,108 @@
 
   .story-module__two-col-img {
     object-fit: cover;
+  }
+}
+
+// ── Media Block layout variants (new 3-module system) ─────────────
+// Shared: 2/3-col inner grid + image wrap behavior
+.story-module--media.story-media--2col,
+.story-module--media.story-media--3col {
+  .story-module__two-col-inner {
+    display: grid;
+    gap: $space-2;
+  }
+
+  .story-module__two-col-item {
+    position: relative;
+    overflow: hidden;
+    background: var(--foreground-subtle, #e8e8e8);
+
+    .story-module__image-wrap,
+    .story-module__video {
+      height: fvw(560);
+      aspect-ratio: auto;
+    }
+  }
+}
+
+// 2-col equal
+.story-module--media.story-media--2col {
+  .story-module__two-col-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+// 2-col narrow:wide (1:2)
+.story-module--media.story-media--2col-nw {
+  .story-module__two-col-inner {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+// 2-col wide:narrow (2:1)
+.story-module--media.story-media--2col-wn {
+  .story-module__two-col-inner {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+// 3-col equal
+.story-module--media.story-media--3col {
+  .story-module__two-col-inner {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .story-module__two-col-item {
+
+    .story-module__image-wrap,
+    .story-module__video {
+      height: fvw(420);
+    }
+  }
+}
+
+// Full bleed (remove side padding)
+.story-module--media.story-media--bleed {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+// Spacing modifiers
+.story-module--media.story-media--sp-tight .story-module__two-col-inner {
+  gap: $space-1;
+}
+
+.story-module--media.story-media--sp-none .story-module__two-col-inner {
+  gap: 0;
+}
+
+.story-module--media.story-media--sp-no-gap .story-module__two-col-inner {
+  gap: 0;
+}
+
+// ── Spacer Block ──────────────────────────────────────────────────
+.story-module--spacer-small {
+  height: fvw(60);
+}
+
+.story-module--spacer-medium {
+  height: fvw(120);
+}
+
+.story-module--spacer-large {
+  height: fvw(200);
+}
+
+// ── Text Block — dark theme ───────────────────────────────────────
+.story-module--text.story-module--dark {
+  background: #000;
+  color: #fff;
+
+  .story-module__section-heading,
+  .story-module__wysiwyg p,
+  .story-module__wysiwyg {
+    color: #fff;
   }
 }
 

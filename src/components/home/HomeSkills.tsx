@@ -43,10 +43,22 @@ const itemVariants: Variants = {
   },
 };
 
-const labelVariants: Variants = {
+const labelClipVariants: Variants = {
+  hidden: { clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)' },
+  visible: {
+    clipPath: [
+      'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
+      'polygon(0% 0%, 100% 0%, 100% 15%, 0% 100%)',
+      'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+    ],
+    transition: { duration: 1.8, ease: EASE_OUT, times: [0, 0.4, 1] },
+  },
+};
+
+const labelSlideVariants: Variants = {
   hidden: { y: '110%' },
   visible: {
-    y: 0,
+    y: '0%',
     transition: { duration: 1.2, ease: EASE_OUT },
   },
 };
@@ -127,16 +139,19 @@ export default function HomeSkills() {
     <section ref={sectionRef} className="home-skills" data-theme="light">
       <div className="wrap">
       {/* ── 좌측 sticky 라벨 ── */}
-      <div className="home-skills__label-wrap">
+      <m.div
+        className="home-skills__label-wrap"
+        variants={labelClipVariants}
+        initial="hidden"
+        animate={sectionInView ? 'visible' : 'hidden'}
+      >
         <m.div
           className="home-skills__label"
-          variants={labelVariants}
-          initial="hidden"
-          animate={sectionInView ? 'visible' : 'hidden'}
+          variants={labelSlideVariants}
         >
           SKILLS
         </m.div>
-      </div>
+      </m.div>
 
       {/* ── 우측 번호 목록 — 각 항목 개별 진입 감지 ── */}
       <div className="home-skills__list">

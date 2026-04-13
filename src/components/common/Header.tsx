@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
+import { m, type Variants } from 'framer-motion';
 import Link from 'next/link';
 import { useLenis } from './LenisContext';
 import './Header.scss';
@@ -15,15 +16,58 @@ const NAV_LINKS = [
 ];
 
 const SOCIAL_LINKS = [
-  { label: 'Behance',   href: 'https://behance.net/creativemoon' },
-  { label: 'Instagram', href: 'https://instagram.com/creative_moon' },
-  { label: 'LinkedIn',  href: 'https://linkedin.com/in/creativemoon' },
-  { label: 'GitHub',    href: 'https://github.com/creativemoon' },
+  { label: 'Behance',   href: 'https://www.behance.net/crtvmoon' },
+  { label: 'Instagram', href: 'https://www.instagram.com/creative_____moon/' },
+  { label: 'LinkedIn',  href: 'https://www.linkedin.com/in/creative-moon/' },
+  { label: 'GitHub',    href: 'https://github.com/Touch-Moon' },
 ];
+
+/* ── Nav reveal variants (Hero 애니메이션과 동일) ── */
+const EASE_OUT = [0.19, 1, 0.22, 1];
+
+const navClipVariants: Variants = {
+  hidden: {
+    clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
+    transition: { duration: 0.4, ease: EASE_OUT },
+  },
+  visible: (i: number) => ({
+    clipPath: [
+      'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
+      'polygon(0% 0%, 100% 0%, 100% 15%, 0% 100%)',
+      'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+    ],
+    transition: { duration: 1.5, ease: EASE_OUT, times: [0, 0.4, 1], delay: 0.1 + i * 0.18 },
+  }),
+};
+
+const navSlideVariants: Variants = {
+  hidden: {
+    y: '110%',
+    transition: { duration: 0.4, ease: EASE_OUT },
+  },
+  visible: (i: number) => ({
+    y: '0%',
+    transition: { duration: 1.0, ease: EASE_OUT, delay: 0.1 + i * 0.18 },
+  }),
+};
+
+const navLeftItemVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: -20,
+    transition: { duration: 0.4, ease: EASE_OUT },
+  },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 1.2, ease: EASE_OUT, delay: 0.3 + i * 0.15 },
+  }),
+};
 
 /* ── Component ─────────────────────────────────── */
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isClosingMenu, setIsClosingMenu] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const lenisRef = useLenis();
@@ -38,6 +82,7 @@ export default function Header() {
   const toggleRef = useRef<HTMLButtonElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
   const navToggleRef = useRef<HTMLDivElement>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /* ── Scroll: show/hide fixed header ──────────── */
   const isPastHeroRef = useRef(false);
@@ -134,6 +179,15 @@ export default function Header() {
     };
   }, [menuOpen, lenisRef]);
 
+  /* ── Cleanup: close timer on unmount ─────────── */
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+      }
+    };
+  }, []);
+
   /* ── Settled: X 애니메이션 완료 후 hover 분기 활성화 ── */
   const settledTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
@@ -161,22 +215,41 @@ export default function Header() {
 
   /* ── Toggle menu ─────────────────────────────── */
   const toggleMenu = useCallback(() => {
-    // 헤더 토글의 현재 위치를 nav overlay 토글에 동기화 (top + right)
-    syncTogglePosition();
-    setMenuOpen(prev => !prev);
-  }, [syncTogglePosition]);
+    if (menuOpen && !isClosingMenu) {
+      // Closing menu: wait for hidden variants to complete
+      // Max close timing: last nav item = 3 * 0.05 + 0.5 = 0.65s
+      // Add small buffer: 700ms
+      setIsClosingMenu(true);
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+      }
+      closeTimerRef.current = setTimeout(() => {
+        setMenuOpen(false);
+        setIsClosingMenu(false);
+        closeTimerRef.current = null;
+      }, 400);
+    } else if (!menuOpen) {
+      // Opening menu: toggle immediately and sync position
+      syncTogglePosition();
+      setMenuOpen(true);
+    }
+  }, [menuOpen, isClosingMenu, syncTogglePosition]);
 
   /* ── Keyboard: Escape closes menu ────────────── */
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && menuOpen) {
-        setMenuOpen(false);
-        toggleRef.current?.focus();
+      if (e.key === 'Escape' && (menuOpen || isClosingMenu)) {
+        // Use toggleMenu logic to close with animation delay
+        toggleMenu();
+        // Focus will happen after animation, so defer it
+        setTimeout(() => {
+          toggleRef.current?.focus();
+        }, 400);
       }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [menuOpen]);
+  }, [menuOpen, isClosingMenu, toggleMenu]);
 
   /* ── Sync toggle positions when menu opens/closes, on resize, or header position changes ── */
   useEffect(() => {
@@ -333,16 +406,29 @@ export default function Header() {
         <div className="nav__container">
           {/* Left: Logo symbol + Social links */}
           <div className="nav__left">
-            <div className="nav__logo" aria-hidden="true">
+            <m.div
+              className="nav__logo"
+              aria-hidden="true"
+              custom={0}
+              variants={navLeftItemVariants}
+              initial="hidden"
+              animate={!isClosingMenu && menuOpen ? 'visible' : 'hidden'}
+            >
               <svg viewBox="0 0 512 288" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M450.722 186.841C454.233 180.823 462.929 180.823 466.44 186.841L509.494 260.636C516.57 272.766 507.82 288 493.775 288H423.388C409.343 288 400.592 272.766 407.669 260.636L450.722 186.841Z" fill="currentColor"/>
                 <path d="M343.793 5.52236C348.005 -1.7774 358.53 -1.77743 362.742 5.52236L447.663 152.692C435.097 137.448 410.353 138.818 399.976 156.801L334.782 269.785C328.282 281.049 316.264 287.989 303.257 287.989H199.759C191.335 287.989 186.071 278.857 190.285 271.554L343.793 5.52236Z" fill="currentColor"/>
                 <path d="M154.992 5.47483C159.204 -1.82493 169.729 -1.82496 173.941 5.47483L258.862 152.644C246.296 137.4 221.552 138.77 211.175 156.754L145.981 269.737C139.481 281.002 127.463 287.942 114.456 287.942H10.958C2.5336 287.942 -2.73038 278.81 1.48379 271.506L154.992 5.47483Z" fill="currentColor"/>
                 <path d="M258.862 0.0477592C278.711 0.0478042 294.802 16.1368 294.802 35.9836C294.802 55.8303 278.711 71.9194 258.862 71.9194C239.013 71.9194 222.922 55.8303 222.922 35.9836C222.922 16.1368 239.013 0.0477592 258.862 0.0477592Z" fill="currentColor"/>
               </svg>
-            </div>
+            </m.div>
 
-            <div className="nav__secondary">
+            <m.div
+              className="nav__secondary"
+              custom={1}
+              variants={navLeftItemVariants}
+              initial="hidden"
+              animate={!isClosingMenu && menuOpen ? 'visible' : 'hidden'}
+            >
               <ul>
                 {SOCIAL_LINKS.map((link) => (
                   <li key={link.label}>
@@ -356,7 +442,7 @@ export default function Header() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </m.div>
           </div>
 
           {/* Right: Primary nav links */}
@@ -365,14 +451,29 @@ export default function Header() {
               <ul>
                 {NAV_LINKS.map((link, i) => (
                   <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      onClick={() => handleNavClick(link.href)}
-                      ref={i === 0 ? firstLinkRef : undefined}
-                      className="use-nav-transition"
+                    <m.span
+                      className="nav__item-clip"
+                      custom={i}
+                      variants={navClipVariants}
+                      initial="hidden"
+                      animate={!isClosingMenu && menuOpen ? 'visible' : 'hidden'}
                     >
-                      {link.label}
-                    </Link>
+                      <m.span
+                        custom={i}
+                        variants={navSlideVariants}
+                        initial="hidden"
+                        animate={!isClosingMenu && menuOpen ? 'visible' : 'hidden'}
+                      >
+                        <Link
+                          href={link.href}
+                          onClick={() => handleNavClick(link.href)}
+                          ref={i === 0 ? firstLinkRef : undefined}
+                          className="use-nav-transition"
+                        >
+                          {link.label}
+                        </Link>
+                      </m.span>
+                    </m.span>
                   </li>
                 ))}
               </ul>

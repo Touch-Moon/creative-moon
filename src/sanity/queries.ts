@@ -174,6 +174,7 @@ export type WorkSingleData = {
   categories?: string[];
   heroMedia?: {
     type: "image" | "video";
+    fullBleed?: boolean;
     image?: SanityImageSource;
     video?: { asset: { url: string } };
   };
@@ -213,6 +214,7 @@ export const WORK_BY_SLUG_QUERY = `
     "categories": categories[]->title,
     heroMedia {
       type,
+      fullBleed,
       "image": image { asset->{ url } },
       "video": video { asset->{ url } }
     },
@@ -271,28 +273,37 @@ export type StoryListItem = {
   order?: number;
 };
 
-export type StoryModuleType = StoryMediaModule | StoryTwoColImageModule | StoryTextModule;
+export type StoryModuleType = StoryMediaBlock | StoryTextBlock | StorySpacerBlock;
 
-export type StoryMediaModule = {
-  _type: "storyMediaModule";
+export type StoryMediaLayout =
+  | "1col"
+  | "2col"
+  | "2col-narrow-wide"
+  | "2col-wide-narrow"
+  | "3col";
+
+export type StoryMediaSpacing = "default" | "tight" | "none" | "no-gap";
+
+export type StoryMediaBlock = {
+  _type: "storyMediaBlock";
   _key: string;
-  mediaType: "image" | "video";
-  image?: { asset: { url: string } };
-  video?: { asset: { url: string } };
+  layout?: StoryMediaLayout;
+  spacing?: StoryMediaSpacing;
+  fullBleed?: boolean;
   narrow?: boolean;
+  image1?: { asset: { url: string } };
+  video1?: { asset: { url: string } };
+  image2?: { asset: { url: string } };
+  video2?: { asset: { url: string } };
+  image3?: { asset: { url: string } };
+  video3?: { asset: { url: string } };
 };
 
-export type StoryTwoColImageModule = {
-  _type: "storyTwoColImageModule";
-  _key: string;
-  leftImage?: { asset: { url: string } };
-  rightImage?: { asset: { url: string } };
-};
-
-export type StoryTextModule = {
-  _type: "storyTextModule";
+export type StoryTextBlock = {
+  _type: "storyTextBlock";
   _key: string;
   paddingTop?: number;
+  theme?: "light" | "dark";
   centered?: boolean;
   offsetCols?: number;
   colWidth?: number;
@@ -302,8 +313,15 @@ export type StoryTextModule = {
   body?: PortableTextBlock[];
 };
 
+export type StorySpacerBlock = {
+  _type: "storySpacerBlock";
+  _key: string;
+  size?: "small" | "medium" | "large";
+};
+
 export type StoryHeroMedia = {
-  mediaType: "image" | "video";
+  type: "image" | "video";
+  fullBleed?: boolean;
   image?: { asset: { url: string } };
   video?: { asset: { url: string } };
 };
@@ -314,9 +332,14 @@ export type StorySingleData = {
   slug: { current: string };
   category?: string;
   publishedAt?: string;
-  thumbnail?: SanityImageSource;
   thumbnailUrl?: string;
+  thumbnailLandscape?: SanityImageSource;
+  thumbnailLandscapeUrl?: string;
+  thumbnailPortrait?: SanityImageSource;
+  thumbnailPortraitUrl?: string;
+  subtitle?: string;
   excerpt?: string;
+  listDescription?: string;
   heroMedia?: StoryHeroMedia;
   modules?: StoryModuleType[];
 };
@@ -331,8 +354,11 @@ export const STORIES_LIST_QUERY = `
     slug,
     category,
     publishedAt,
-    "thumbnailUrl": thumbnail.asset->url,
+    "thumbnailUrl": coalesce(thumbnailPortrait.asset->url, thumbnailLandscape.asset->url),
+    "thumbnailLandscapeUrl": thumbnailLandscape.asset->url,
+    "thumbnailPortraitUrl": thumbnailPortrait.asset->url,
     excerpt,
+    listDescription,
     order
   }
 `;
@@ -345,19 +371,26 @@ export const STORY_BY_SLUG_QUERY = `
     slug,
     category,
     publishedAt,
-    "thumbnailUrl": thumbnail.asset->url,
+    "thumbnailUrl": coalesce(thumbnailPortrait.asset->url, thumbnailLandscape.asset->url),
+    "thumbnailLandscapeUrl": thumbnailLandscape.asset->url,
+    "thumbnailPortraitUrl": thumbnailPortrait.asset->url,
+    subtitle,
     excerpt,
+    listDescription,
     heroMedia {
-      mediaType,
+      type,
+      fullBleed,
       "image": image { asset->{ url } },
       "video": video { asset->{ url } }
     },
     "modules": modules[] {
       ...,
-      "image": image { asset->{ url } },
-      "video": video { asset->{ url } },
-      "leftImage": leftImage { asset->{ url } },
-      "rightImage": rightImage { asset->{ url } }
+      "image1": image1 { asset->{ url } },
+      "video1": video1 { asset->{ url } },
+      "image2": image2 { asset->{ url } },
+      "video2": video2 { asset->{ url } },
+      "image3": image3 { asset->{ url } },
+      "video3": video3 { asset->{ url } }
     }
   }
 `;
@@ -369,7 +402,7 @@ export const STORIES_CAROUSEL_QUERY = `
     title,
     slug,
     category,
-    "thumbnailUrl": thumbnail.asset->url
+    "thumbnailUrl": coalesce(thumbnailPortrait.asset->url, thumbnailLandscape.asset->url)
   }
 `;
 

@@ -3,7 +3,9 @@
 @use '@/styles/primitives/space' as *;
 
 .home-intro {
-  background-color: transparent;
+  // transparent → #fff 고정: Hero(dark)와 테마 전환 딜레이가 겹칠 때
+  // 검정 배경에 검정 텍스트가 되어 iOS에서 콘텐츠가 안 보이는 문제 방지
+  background-color: #fff;
   padding: 0 $gutter-desktop fvw(330); // plastic: ~23vw padding-bottom
 
   // ── Video area — plastic.design home-intro-video 매칭 ──

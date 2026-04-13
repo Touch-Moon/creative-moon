@@ -11,10 +11,22 @@ import './HomeStories.scss';
 
 const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
 
-const titleVariants: Variants = {
+const titleClipVariants: Variants = {
+  hidden: { clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)' },
+  visible: {
+    clipPath: [
+      'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
+      'polygon(0% 0%, 100% 0%, 100% 15%, 0% 100%)',
+      'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+    ],
+    transition: { duration: 2.1, ease: EASE_OUT, times: [0, 0.4, 1] },
+  },
+};
+
+const titleSlideVariants: Variants = {
   hidden: { y: '110%' },
   visible: {
-    y: 0,
+    y: '0%',
     transition: { duration: 1.4, ease: EASE_OUT },
   },
 };
@@ -317,16 +329,19 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
     <section ref={sectionRef} className="home-stories" data-theme="dark">
       <div className="wrap">
       <div className="home-stories__header">
-        <div className="home-stories__title-wrap">
+        <m.div
+          className="home-stories__title-wrap"
+          variants={titleClipVariants}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+        >
           <m.h2
             className="home-stories__title"
-            variants={titleVariants}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
+            variants={titleSlideVariants}
           >
             INSIGHT.
           </m.h2>
-        </div>
+        </m.div>
         <m.div
           className="home-stories__arrows"
           initial={{ opacity: 0 }}
@@ -359,11 +374,18 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
         role="region"
         aria-label="Stories slider"
       >
-        {stories.map((item, i) => (
+        {stories.map((item, i) => {
+          const heroSrc = item.thumbnailUrl
+            ? item.thumbnailUrl.startsWith('https://cdn.sanity.io')
+              ? `/_next/image?url=${encodeURIComponent(item.thumbnailUrl)}&w=960&q=80`
+              : item.thumbnailUrl
+            : '';
+          return (
           <MotionLink
             key={item._id}
             href={`/stories/${item.slug.current}`}
             className="home-stories__card"
+            data-hero-src={heroSrc}
             custom={i}
             variants={cardVariants}
             initial="hidden"
@@ -388,7 +410,8 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
             <span className="home-stories__card-category">{item.category}</span>
             <h3 className="home-stories__card-title">{item.title}</h3>
           </MotionLink>
-        ))}
+          );
+        })}
       </div>
       </div>
 

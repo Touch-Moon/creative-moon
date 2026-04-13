@@ -19,10 +19,22 @@ import './WorksSlider.scss';
 
 const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
 
-const titleVariants: Variants = {
+const titleClipVariants: Variants = {
+  hidden: { clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)' },
+  visible: (i: number) => ({
+    clipPath: [
+      'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
+      'polygon(0% 0%, 100% 0%, 100% 15%, 0% 100%)',
+      'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+    ],
+    transition: { duration: 2.1, ease: EASE_OUT, times: [0, 0.4, 1], delay: i * 0.12 },
+  }),
+};
+
+const titleSlideVariants: Variants = {
   hidden: { y: '115%' },
   visible: (i: number) => ({
-    y: 0,
+    y: '0%',
     transition: { duration: 1.4, ease: EASE_OUT, delay: i * 0.12 },
   }),
 };
@@ -357,12 +369,20 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
             {['SELECTED', 'WORKS'].map((line, i) => (
               <div key={i} className="works-slider__title-line">
                 <m.span
+                  style={{ display: 'block' }}
                   custom={i}
-                  variants={titleVariants}
+                  variants={titleClipVariants}
                   initial="hidden"
                   animate={revealed ? 'visible' : 'hidden'}
                 >
-                  {line}
+                  <m.span
+                    custom={i}
+                    variants={titleSlideVariants}
+                    initial="hidden"
+                    animate={revealed ? 'visible' : 'hidden'}
+                  >
+                    {line}
+                  </m.span>
                 </m.span>
               </div>
             ))}
@@ -433,6 +453,7 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
               initial="hidden"
               animate={revealed ? 'visible' : 'hidden'}
               draggable={false}
+              data-hero-src={work.src}
               onClick={(e) => { if (dragRef.current.hasDragged) e.preventDefault(); }}
             >
               <div className="ws__card-img">

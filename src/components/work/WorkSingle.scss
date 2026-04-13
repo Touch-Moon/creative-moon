@@ -61,6 +61,10 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     align-items: flex-end;
     gap: 0 0.22em;
     margin: 0;
+
+    &.headline-1 {
+      line-height: 112%;
+    }
   }
 
   // 외부 span: clip-path 마스크 (Framer Motion polygon)
@@ -111,6 +115,13 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
       display: block;
       width: 100%;
       height: auto;
+    }
+
+    // Guttered variant — 다른 섹션과 동일한 좌우 여백
+    &--guttered {
+      padding-left: $gutter-desktop;
+      padding-right: $gutter-desktop;
+      background: transparent;
     }
   }
 

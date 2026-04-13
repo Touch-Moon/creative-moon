@@ -1,18 +1,38 @@
 'use client';
 
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { m, useInView } from 'framer-motion';
+import { m, AnimatePresence, useInView, type Variants } from 'framer-motion';
 import type { BezierDefinition } from 'framer-motion';
 import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import './ContactPage.scss';
 
 const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
 
+const clipVariants: Variants = {
+  hidden: { clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)' },
+  visible: (i: number) => ({
+    clipPath: [
+      'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
+      'polygon(0% 0%, 100% 0%, 100% 15%, 0% 100%)',
+      'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+    ],
+    transition: { duration: 1.8, ease: EASE_OUT, times: [0, 0.4, 1], delay: i * 0.12 },
+  }),
+};
+
+const slideVariants: Variants = {
+  hidden: { y: '110%' },
+  visible: (i: number) => ({
+    y: '0%',
+    transition: { duration: 1.2, ease: EASE_OUT, delay: i * 0.12 },
+  }),
+};
+
 const socialLinks = [
-  { name: 'Behance', href: 'https://behance.net/creativemoon' },
-  { name: 'Instagram', href: 'https://instagram.com/creative_moon' },
-  { name: 'LinkedIn', href: 'https://linkedin.com/in/creativemoon' },
-  { name: 'GitHub', href: 'https://github.com/creativemoon' },
+  { name: 'Behance',   href: 'https://www.behance.net/crtvmoon' },
+  { name: 'Instagram', href: 'https://www.instagram.com/creative_____moon/' },
+  { name: 'LinkedIn',  href: 'https://www.linkedin.com/in/creative-moon/' },
+  { name: 'GitHub',    href: 'https://github.com/Touch-Moon' },
 ];
 
 // ── Style-guide form 상태 관리 훅 ────────────────────────
@@ -98,7 +118,8 @@ function ContactPageInner() {
     honeypot: '', // 봇 트랩 — 실제 사용자는 보이지 않음
   });
   const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [formAnimKey, setFormAnimKey] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
@@ -110,7 +131,6 @@ function ContactPageInner() {
 
   const titleInView = useInView(titleRef, { once: true, margin: '0px 0px -10% 0px' });
   const descInView = useInView(descRef, { once: true, margin: '0px 0px -10% 0px' });
-  const formInView = useInView(formRef, { once: true, margin: '0px 0px -10% 0px' });
   const leftInView = useInView(leftRef, { once: true, margin: '0px 0px -10% 0px' });
   const socialInView = useInView(socialRef, { once: true, margin: '0px 0px -10% 0px' });
 
@@ -193,7 +213,7 @@ function ContactPageInner() {
         throw new Error(data.error || 'Failed to send message.');
       }
 
-      setSent(true);
+      setToastVisible(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
     } finally {
@@ -219,7 +239,7 @@ function ContactPageInner() {
               <div className="contact-block">
                 <div className="contact-block__title body-text-caps">Drop me a line</div>
                 <div className="contact-block__text headline-6">
-                  <a href="mailto:hello@creativemoon.com">hello@creativemoon.com</a>
+                  <a href="mailto:touch@creative-moon.com">touch@creative-moon.com</a>
                 </div>
               </div>
               <div className="contact-block">
@@ -233,26 +253,26 @@ function ContactPageInner() {
 
               {/* 타이틀 — 라인 마스크 애니메이션 */}
               <h1 className="contact-title headline-2 split" ref={titleRef}>
-                <div className="line">
+                {["I\u2019d love to", 'hear from you.'].map((text, i) => (
                   <m.div
-                    className="line-child"
-                    initial={{ y: '115%' }}
-                    animate={titleInView ? { y: 0 } : { y: '115%' }}
-                    transition={{ duration: 1.2, ease: EASE_OUT, delay: 0 }}
+                    key={i}
+                    className="line"
+                    custom={i}
+                    variants={clipVariants}
+                    initial="hidden"
+                    animate={titleInView ? 'visible' : 'hidden'}
                   >
-                    Let&apos;s talk about
+                    <m.div
+                      className="line-child"
+                      custom={i}
+                      variants={slideVariants}
+                      initial="hidden"
+                      animate={titleInView ? 'visible' : 'hidden'}
+                    >
+                      {text}
+                    </m.div>
                   </m.div>
-                </div>
-                <div className="line">
-                  <m.div
-                    className="line-child"
-                    initial={{ y: '115%' }}
-                    animate={titleInView ? { y: 0 } : { y: '115%' }}
-                    transition={{ duration: 1.2, ease: EASE_OUT, delay: 0.1 }}
-                  >
-                    your next project.
-                  </m.div>
-                </div>
+                ))}
               </h1>
 
               {/* 설명 텍스트 */}
@@ -270,20 +290,15 @@ function ContactPageInner() {
 
               {/* 폼 */}
               <m.div
+                key={formAnimKey}
                 className="contact-form"
                 ref={formRef}
                 initial={{ opacity: 0, y: 40 }}
-                animate={formInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '0px 0px -10% 0px' }}
                 transition={{ duration: 1.0, ease: EASE_OUT, delay: 0.3 }}
               >
-                {sent ? (
-                  <div className="contact-form__sent">
-                    <p className="headline-4">
-                      Thanks. You&apos;ll hear back as soon as possible.
-                    </p>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} noValidate>
+                <form onSubmit={handleSubmit} noValidate>
 
                     {/* Honeypot — 봇 트랩, 사용자에게 완전히 숨김 */}
                     <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', opacity: 0, pointerEvents: 'none' }}>
@@ -410,12 +425,55 @@ function ContactPageInner() {
                     </div>
 
                   </form>
-                )}
               </m.div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* ── 발송 완료 토스트 (Plastic.design 스타일) ── */}
+      <AnimatePresence>
+        {toastVisible && (
+          <m.div
+            className="contact-toast"
+            role="status"
+            style={{ x: '-50%' }}
+            initial={{ opacity: 0, y: 80 }}
+            animate={{ opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }}
+            exit={{ opacity: 0, y: 80, transition: { duration: 0.3, ease: [0.4, 0, 1, 1] } }}
+          >
+            {/* 종이비행기 아이콘 */}
+            <div className="contact-toast__icon">
+              <svg viewBox="0 0 51 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50.4994 9.98547L5.84619 1L15.4351 15.6433L25.9597 32.4357L50.4994 9.98547Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M50.4996 9.9855L15.426 15.6415L13.7293 24.073L19.3905 22.5143" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            {/* 메시지 */}
+            <div className="contact-toast__message">
+              <span className="contact-toast__thanks">Thanks.</span>
+              <span className="contact-toast__sub">We&apos;ll get back to you as soon as we possibly can.</span>
+            </div>
+            {/* 닫기 버튼 */}
+            <button
+              className="contact-toast__close"
+              onClick={() => {
+                setToastVisible(false);
+                setFormState({ name: '', email: '', message: '', privacy: false, honeypot: '' });
+                setError(null);
+                setFieldErrors({});
+                setFormAnimKey(k => k + 1);
+              }}
+              aria-label="Close"
+            >
+              <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1L17 17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <path d="M17 1L1 17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </m.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Social 섹션 ── */}
       <section className="contact-social" ref={socialRef}>

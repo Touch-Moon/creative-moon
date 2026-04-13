@@ -8,14 +8,15 @@ import { PortableText } from '@portabletext/react';
 import type { PortableTextBlockComponent, PortableTextMarkComponentProps } from '@portabletext/react';
 import type {
   StorySingleData,
-  StoryMediaModule,
-  StoryTwoColImageModule,
-  StoryTextModule,
+  StoryMediaBlock,
+  StoryTextBlock,
+  StorySpacerBlock,
   StoryHeroMedia,
 } from '@/sanity/queries';
 import './StorySingle.scss';
 
 const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
+const EASE_INOUT: BezierDefinition = [0.76, 0, 0.24, 1];
 
 // ── Portable Text components ──────────────────────────────────────
 type LinkMark = { _type: 'link'; href: string; blank?: boolean };
@@ -40,168 +41,194 @@ const ptComponents = {
   },
 };
 
-// ── Hero Media Module ─────────────────────────────────────────────
+// ── Hero Media Module (Work와 동일: slide-up from bottom) ──────────
 function HeroModuleBlock({ heroMedia }: { heroMedia: StoryHeroMedia }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-10%' });
+  const videoUrl = heroMedia.video?.asset?.url;
+  const imageUrl = heroMedia.image?.asset?.url;
+  if (!videoUrl && !imageUrl) return null;
 
-  if (heroMedia.mediaType === 'video' && heroMedia.video?.asset?.url) {
-    return (
-      <div className="story-module story-module--hero" ref={ref}>
-        <m.div
-          className="story-module__media-inner"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 1.2, ease: EASE_OUT }}
-        >
-          <video
-            src={heroMedia.video.asset.url}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            className="story-module__hero-video"
-          />
-        </m.div>
-      </div>
-    );
-  }
-
-  if (heroMedia.image?.asset?.url) {
-    return (
-      <div className="story-module story-module--hero" ref={ref}>
-        <m.div
-          className="story-module__media-inner"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 1.2, ease: EASE_OUT }}
-        >
-          <div className="story-module__hero-image-wrap">
-            <Image
-              src={heroMedia.image.asset.url}
-              alt=""
-              fill
-              className="story-module__hero-image"
-              sizes="(max-width: 575px) 100vw, (max-width: 1023px) 100vw, 80vw"
-              quality={85}
-              priority
-            />
-          </div>
-        </m.div>
-      </div>
-    );
-  }
-
-  return null;
-}
-
-// ── Media Module ──────────────────────────────────────────────────
-function MediaModuleBlock({ mod }: { mod: StoryMediaModule }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-10%' });
-
-  if (mod.mediaType === 'video' && mod.video?.asset?.url) {
-    return (
-      <div
-        className={`story-module story-module--media${mod.narrow ? ' story-module--narrow' : ''}`}
-        ref={ref}
-      >
-        <m.div
-          className="story-module__media-inner"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 1.2, ease: EASE_OUT }}
-        >
-          <video
-            src={mod.video.asset.url}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            className="story-module__video"
-          />
-        </m.div>
-      </div>
-    );
-  }
-
-  if (mod.image?.asset?.url) {
-    return (
-      <div
-        className={`story-module story-module--media${mod.narrow ? ' story-module--narrow' : ''}`}
-        ref={ref}
-      >
-        <m.div
-          className="story-module__media-inner"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 1.2, ease: EASE_OUT }}
-        >
-          <div className="story-module__image-wrap">
-            <Image
-              src={mod.image.asset.url}
-              alt=""
-              fill
-              className="story-module__image"
-              sizes="(max-width: 575px) 100vw, (max-width: 1023px) 100vw, 80vw"
-              quality={80}
-            />
-          </div>
-        </m.div>
-      </div>
-    );
-  }
-
-  return null;
-}
-
-// ── Two-Col Image Module ──────────────────────────────────────────
-function TwoColImageModuleBlock({ mod }: { mod: StoryTwoColImageModule }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-8%' });
+  const isVideo = heroMedia.type === 'video' && !!videoUrl;
+  const fullBleed = heroMedia.fullBleed !== false; // default true
+  const bleedCls = fullBleed ? '' : ' story-single__hero--guttered';
 
   return (
-    <div className="story-module story-module--two-col-image" ref={ref}>
-      <div className="story-module__two-col-inner">
-        {mod.leftImage?.asset?.url && (
-          <m.div
-            className="story-module__two-col-item"
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 1.1, ease: EASE_OUT, delay: 0 }}
-          >
-            <Image
-              src={mod.leftImage.asset.url}
-              alt=""
-              fill
-              className="story-module__two-col-img"
-              sizes="(max-width: 575px) 100vw, 50vw"
-              quality={80}
-            />
-          </m.div>
-        )}
-        {mod.rightImage?.asset?.url && (
-          <m.div
-            className="story-module__two-col-item"
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 1.1, ease: EASE_OUT, delay: 0.1 }}
-          >
-            <Image
-              src={mod.rightImage.asset.url}
-              alt=""
-              fill
-              className="story-module__two-col-img"
-              sizes="(max-width: 575px) 100vw, 50vw"
-              quality={80}
-            />
-          </m.div>
-        )}
+    <m.div
+      className={`story-single__hero${bleedCls}`}
+      initial={{ y: '100vh' }}
+      animate={{ y: '0vh' }}
+      transition={{ duration: 1.0, ease: EASE_INOUT }}
+    >
+      {isVideo ? (
+        <video
+          src={videoUrl}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="story-single__hero-video"
+          style={{ width: '100%', display: 'block' }}
+        />
+      ) : (
+        <div className="story-single__hero-image-wrap">
+          <Image
+            src={imageUrl as string}
+            alt=""
+            width={1440}
+            height={900}
+            priority
+            quality={85}
+            sizes="100vw"
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          />
+        </div>
+      )}
+    </m.div>
+  );
+}
+
+// ── Media Slot (single image or video inside a block cell) ────────
+function StoryMediaSlot({
+  videoUrl,
+  imageUrl,
+  sizes,
+}: {
+  videoUrl?: string;
+  imageUrl?: string;
+  sizes?: string;
+}) {
+  if (videoUrl) {
+    return (
+      <video
+        src={videoUrl}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        className="story-module__video"
+      />
+    );
+  }
+  if (imageUrl) {
+    return (
+      <div className="story-module__image-wrap">
+        <Image
+          src={imageUrl}
+          alt=""
+          fill
+          className="story-module__image"
+          sizes={sizes ?? '(max-width: 575px) 100vw, (max-width: 1023px) 100vw, 80vw'}
+          quality={80}
+        />
       </div>
+    );
+  }
+  return null;
+}
+
+// ── Media Block ───────────────────────────────────────────────────
+// Work의 mediaBlock과 동일한 레이아웃(Frame) + Image/Video 슬롯 구조
+function MediaBlock({ mod }: { mod: StoryMediaBlock }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-10%' });
+
+  const layout = mod.layout || '1col';
+  const spacing = mod.spacing || 'default';
+  const bleed = mod.fullBleed ?? false;
+  const narrow = mod.narrow ?? false;
+
+  const spacingCls =
+    spacing === 'tight' ? ' story-media--sp-tight'
+    : spacing === 'none' ? ' story-media--sp-none'
+    : spacing === 'no-gap' ? ' story-media--sp-no-gap'
+    : '';
+  const bleedCls = bleed ? ' story-media--bleed' : '';
+  const narrowCls = narrow && layout === '1col' ? ' story-module--narrow' : '';
+
+  const slot1 = (sizes?: string) => (
+    <StoryMediaSlot
+      videoUrl={mod.video1?.asset?.url}
+      imageUrl={mod.image1?.asset?.url}
+      sizes={sizes}
+    />
+  );
+  const slot2 = (sizes?: string) => (
+    <StoryMediaSlot
+      videoUrl={mod.video2?.asset?.url}
+      imageUrl={mod.image2?.asset?.url}
+      sizes={sizes}
+    />
+  );
+  const slot3 = (sizes?: string) => (
+    <StoryMediaSlot
+      videoUrl={mod.video3?.asset?.url}
+      imageUrl={mod.image3?.asset?.url}
+      sizes={sizes}
+    />
+  );
+
+  // 1-column layout
+  if (layout === '1col') {
+    return (
+      <div
+        className={`story-module story-module--media story-media--1col${bleedCls}${spacingCls}${narrowCls}`}
+        ref={ref}
+      >
+        <m.div
+          className="story-module__media-inner"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 1.2, ease: EASE_OUT }}
+        >
+          {slot1('(max-width: 575px) 100vw, (max-width: 1023px) 100vw, 90vw')}
+        </m.div>
+      </div>
+    );
+  }
+
+  // 2/3-column layouts
+  const is3 = layout === '3col';
+  const layoutCls =
+    is3 ? 'story-media--3col'
+    : layout === '2col-narrow-wide' ? 'story-media--2col story-media--2col-nw'
+    : layout === '2col-wide-narrow' ? 'story-media--2col story-media--2col-wn'
+    : 'story-media--2col';
+
+  const sizesMain = is3
+    ? '(max-width: 575px) 100vw, 33vw'
+    : layout === '2col-narrow-wide' ? '(max-width: 575px) 100vw, 35vw'
+    : layout === '2col-wide-narrow' ? '(max-width: 575px) 100vw, 60vw'
+    : '(max-width: 575px) 100vw, (max-width: 1023px) 50vw, 48vw';
+  const sizesSub = is3
+    ? '(max-width: 575px) 100vw, 33vw'
+    : layout === '2col-narrow-wide' ? '(max-width: 575px) 100vw, 60vw'
+    : layout === '2col-wide-narrow' ? '(max-width: 575px) 100vw, 35vw'
+    : '(max-width: 575px) 100vw, (max-width: 1023px) 50vw, 48vw';
+
+  return (
+    <div
+      className={`story-module story-module--media ${layoutCls}${bleedCls}${spacingCls}`}
+      ref={ref}
+    >
+      <m.div
+        className="story-module__two-col-inner"
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 1.1, ease: EASE_OUT }}
+      >
+        <div className="story-module__two-col-item">{slot1(sizesMain)}</div>
+        <div className="story-module__two-col-item">{slot2(sizesSub)}</div>
+        {is3 && <div className="story-module__two-col-item">{slot3(sizesSub)}</div>}
+      </m.div>
     </div>
   );
+}
+
+// ── Spacer Block ──────────────────────────────────────────────────
+function SpacerBlock({ mod }: { mod: StorySpacerBlock }) {
+  const size = mod.size || 'medium';
+  return <div className={`story-module story-module--spacer story-module--spacer-${size}`} />;
 }
 
 // ── Text Module ───────────────────────────────────────────────────
@@ -221,7 +248,7 @@ function TwoColImageModuleBlock({ mod }: { mod: StoryTwoColImageModule }) {
 //     └─ Heading column + body column side by side.
 //        │ [offset] │ [heading col] │ [body col] │ …
 //
-function TextModuleBlock({ mod }: { mod: StoryTextModule }) {
+function TextModuleBlock({ mod }: { mod: StoryTextBlock }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-8%' });
 
@@ -231,12 +258,13 @@ function TextModuleBlock({ mod }: { mod: StoryTextModule }) {
   const offsetCols = mod.offsetCols ?? 0;
   const headingInSeparateCol = mod.headingInSeparateCol ?? false;
   const headingColWidth = mod.headingColWidth ?? 5;
+  const themeCls = mod.theme === 'dark' ? ' story-module--dark' : '';
 
   // ── Centered layout ────────────────────────────────────────────
   if (centered) {
     return (
       <div
-        className="story-module story-module--text story-module--text-centered"
+        className={`story-module story-module--text story-module--text-centered${themeCls}`}
         style={{ '--story-pt': paddingTop } as React.CSSProperties}
         ref={ref}
       >
@@ -263,7 +291,7 @@ function TextModuleBlock({ mod }: { mod: StoryTextModule }) {
   // ── Left-aligned layout (12-col grid) ─────────────────────────
   return (
     <div
-      className="story-module story-module--text story-module--text-grid"
+      className={`story-module story-module--text story-module--text-grid${themeCls}`}
       style={{ '--story-pt': paddingTop } as React.CSSProperties}
       ref={ref}
     >
@@ -361,7 +389,7 @@ const DUMMY_STORY: StorySingleData = {
   excerpt: 'A reflection on ten years of e-commerce and retail design.',
   modules: [
     {
-      _type: 'storyTextModule',
+      _type: 'storyTextBlock',
       _key: 'intro',
       paddingTop: 120,
       centered: true,
@@ -383,7 +411,7 @@ const DUMMY_STORY: StorySingleData = {
       ],
     },
     {
-      _type: 'storyTextModule',
+      _type: 'storyTextBlock',
       _key: 'section1',
       paddingTop: 160,
       centered: false,
@@ -409,7 +437,7 @@ const DUMMY_STORY: StorySingleData = {
       ],
     },
     {
-      _type: 'storyTextModule',
+      _type: 'storyTextBlock',
       _key: 'section2',
       paddingTop: 160,
       centered: true,
@@ -448,14 +476,14 @@ export default function StorySingle({ data }: { data: StorySingleData | null }) 
 
       {/* Content modules */}
       {story.modules?.map((mod) => {
-        if (mod._type === 'storyMediaModule') {
-          return <MediaModuleBlock key={mod._key} mod={mod} />;
+        if (mod._type === 'storyMediaBlock') {
+          return <MediaBlock key={mod._key} mod={mod} />;
         }
-        if (mod._type === 'storyTwoColImageModule') {
-          return <TwoColImageModuleBlock key={mod._key} mod={mod} />;
-        }
-        if (mod._type === 'storyTextModule') {
+        if (mod._type === 'storyTextBlock') {
           return <TextModuleBlock key={mod._key} mod={mod} />;
+        }
+        if (mod._type === 'storySpacerBlock') {
+          return <SpacerBlock key={mod._key} mod={mod} />;
         }
         return null;
       })}

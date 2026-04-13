@@ -8,10 +8,12 @@ const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
 
 export default function HomeIntro() {
   const videoRef = useRef(null);
-  const videoInView = useInView(videoRef, { once: true, margin: '-10%' });
+  // margin 제거: iOS Safari에서 negative rootMargin이 트리거를 놓치는 케이스 방지
+  // 요소가 뷰포트에 진입하는 즉시 애니메이션 시작
+  const videoInView = useInView(videoRef, { once: true });
 
   const textRef = useRef(null);
-  const textInView = useInView(textRef, { once: true, margin: '-12%' });
+  const textInView = useInView(textRef, { once: true });
 
   return (
     <section className="home-intro" data-theme="light">
