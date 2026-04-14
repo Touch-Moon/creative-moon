@@ -5,6 +5,7 @@ import { m, useInView } from 'framer-motion';
 import type { BezierDefinition } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { sanityImg } from '@/sanity/queries';
 import type { StoryListItem } from '@/sanity/queries';
 import './StoriesList.scss';
 
@@ -72,11 +73,13 @@ function StoryCard({ story, index }: { story: StoryListItem; index: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-8%' });
 
-  // Canvas (PageTransition clone): CORS-safe URL — Sanity CDN → /_next/image proxy
-  const heroSrc = story.thumbnailUrl
-    ? story.thumbnailUrl.startsWith('https://cdn.sanity.io')
-      ? `/_next/image?url=${encodeURIComponent(story.thumbnailUrl)}&w=960&q=80`
-      : story.thumbnailUrl
+  // Apply Sanity CDN transforms (WebP/AVIF, w=960)
+  const optimizedThumb = sanityImg(story.thumbnailUrl, 960, 80);
+  // Canvas (PageTransition clone): CORS-safe URL via /_next/image proxy
+  const heroSrc = optimizedThumb
+    ? optimizedThumb.startsWith('https://cdn.sanity.io')
+      ? `/_next/image?url=${encodeURIComponent(optimizedThumb)}&w=960&q=80`
+      : optimizedThumb
     : '';
 
   return (
@@ -91,9 +94,9 @@ function StoryCard({ story, index }: { story: StoryListItem; index: number }) {
       <Link href={`/stories/${story.slug.current}`} className="story-card__link">
         {/* Thumbnail */}
         <div className="story-card__image">
-          {story.thumbnailUrl ? (
+          {optimizedThumb ? (
             <Image
-              src={story.thumbnailUrl}
+              src={optimizedThumb}
               alt={story.title}
               fill
               className="story-card__img"

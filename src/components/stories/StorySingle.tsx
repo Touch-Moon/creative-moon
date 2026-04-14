@@ -6,6 +6,7 @@ import type { BezierDefinition } from 'framer-motion';
 import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
 import type { PortableTextBlockComponent, PortableTextMarkComponentProps } from '@portabletext/react';
+import { sanityImg } from '@/sanity/queries';
 import type {
   StorySingleData,
   StoryMediaBlock,
@@ -44,12 +45,14 @@ const ptComponents = {
 // ── Hero Media Module (same as Work: slide-up from bottom) ───────
 function HeroModuleBlock({ heroMedia }: { heroMedia: StoryHeroMedia }) {
   const videoUrl = heroMedia.video?.asset?.url;
-  const imageUrl = heroMedia.image?.asset?.url;
-  if (!videoUrl && !imageUrl) return null;
+  const rawImageUrl = heroMedia.image?.asset?.url;
+  if (!videoUrl && !rawImageUrl) return null;
 
   const isVideo = heroMedia.type === 'video' && !!videoUrl;
   const fullBleed = heroMedia.fullBleed !== false; // default true
   const bleedCls = fullBleed ? '' : ' story-single__hero--guttered';
+  // Apply Sanity CDN transforms: auto=format (WebP/AVIF), w=1440, q=85
+  const imageUrl = sanityImg(rawImageUrl, 1440, 85);
 
   return (
     <m.div
@@ -111,10 +114,12 @@ function StoryMediaSlot({
     );
   }
   if (imageUrl) {
+    // Apply Sanity CDN transforms before passing to next/image
+    const optimizedUrl = sanityImg(imageUrl, 1440, 80);
     return (
       <div className="story-module__image-wrap">
         <Image
-          src={imageUrl}
+          src={optimizedUrl as string}
           alt=""
           fill
           className="story-module__image"

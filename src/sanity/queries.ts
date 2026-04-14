@@ -322,8 +322,8 @@ export type StorySpacerBlock = {
 export type StoryHeroMedia = {
   type: "image" | "video";
   fullBleed?: boolean;
-  image?: { asset: { url: string } };
-  video?: { asset: { url: string } };
+  image?: { asset: { url: string }; posterUrl?: string };
+  video?: { asset: { url: string }; posterUrl?: string };
 };
 
 export type StorySingleData = {
@@ -380,8 +380,14 @@ export const STORY_BY_SLUG_QUERY = `
     heroMedia {
       type,
       fullBleed,
-      "image": image { asset->{ url } },
-      "video": video { asset->{ url } }
+      "image": image {
+        asset->{ url },
+        "posterUrl": asset->metadata.image.dominantColor
+      },
+      "video": video {
+        asset->{ url },
+        "posterUrl": coalesce(posterImage.asset->url, null)
+      }
     },
     "modules": modules[] {
       ...,

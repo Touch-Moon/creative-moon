@@ -6,6 +6,7 @@ import type { BezierDefinition } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import ArrowButton from '@/components/common/ArrowButton';
+import { sanityImg } from '@/sanity/queries';
 import type { StoryListItem } from '@/sanity/queries';
 import './HomeStories.scss';
 
@@ -375,10 +376,13 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
         aria-label="Stories slider"
       >
         {stories.map((item, i) => {
-          const heroSrc = item.thumbnailUrl
-            ? item.thumbnailUrl.startsWith('https://cdn.sanity.io')
-              ? `/_next/image?url=${encodeURIComponent(item.thumbnailUrl)}&w=960&q=80`
-              : item.thumbnailUrl
+          // Apply Sanity CDN transforms (WebP/AVIF, w=960)
+          const optimizedThumb = sanityImg(item.thumbnailUrl, 960, 80);
+          // Canvas (PageTransition clone): CORS-safe URL via /_next/image proxy
+          const heroSrc = optimizedThumb
+            ? optimizedThumb.startsWith('https://cdn.sanity.io')
+              ? `/_next/image?url=${encodeURIComponent(optimizedThumb)}&w=960&q=80`
+              : optimizedThumb
             : '';
           return (
           <MotionLink
@@ -393,9 +397,9 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
             draggable={false}
           >
             <div className="home-stories__card-img">
-              {item.thumbnailUrl ? (
+              {optimizedThumb ? (
                 <Image
-                  src={item.thumbnailUrl}
+                  src={optimizedThumb}
                   alt={item.title}
                   fill
                   draggable={false}
