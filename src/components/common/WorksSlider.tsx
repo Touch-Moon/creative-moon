@@ -81,7 +81,7 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
 
   const isScrollingRef  = useRef(false);
   const scrollTimerRef  = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const dragRef         = useRef({ active: false, startX: 0, scrollLeft: 0, hasDragged: false, startIdx: 0 });
+  const dragRef         = useRef({ active: false, startX: 0, scrollLeft: 0, hasDragged: false });
   const bounceRef       = useRef({ overscroll: 0, animating: false });
   const bounceRafRef    = useRef<number>(0);
   const velBufferRef    = useRef<{ scroll: number; t: number }[]>([]);
@@ -196,23 +196,20 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
     bounceRafRef.current = requestAnimationFrame(tick);
   }, []);
 
-  // ── Velocity-based card snap (max ±1 from drag start) ───────────────────────
+  // ── Velocity-based card snap ──────────────────────────────────────────────────
   const doSnapByIntent = useCallback((scrollLeft: number, velocity: number) => {
     if (!trackRef.current) return;
     const track = trackRef.current;
     const pl = parseFloat(getComputedStyle(track).paddingLeft) || 0;
     const cards = Array.from(track.children) as HTMLElement[];
-    const startIdx = dragRef.current.startIdx;
-    // Only consider cards within ±1 of the drag-start card
-    let nearest = startIdx, minDist = Infinity;
+    let nearest = 0, minDist = Infinity;
     cards.forEach((card, i) => {
-      if (Math.abs(i - startIdx) > 1) return;
       const dist = Math.abs(card.offsetLeft - pl - scrollLeft);
       if (dist < minDist) { minDist = dist; nearest = i; }
     });
-    // Clamp to startIdx ±1
-    let target = Math.max(startIdx - 1, Math.min(startIdx + 1, nearest));
-    target = Math.max(0, Math.min(cards.length - 1, target));
+    let target = nearest;
+    if (velocity > 8 && target < cards.length - 1) target++;
+    else if (velocity < -8 && target > 0) target--;
     const targetCard = cards[target] as HTMLElement;
     if (targetCard) {
       isScrollingRef.current = true;
@@ -240,7 +237,6 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
       startX: e.pageX - trackRef.current.offsetLeft,
       scrollLeft: trackRef.current.scrollLeft,
       hasDragged: false,
-      startIdx: current,
     };
   };
 
