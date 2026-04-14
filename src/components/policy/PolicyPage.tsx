@@ -23,7 +23,7 @@ interface PolicyPageProps {
   sections: PolicySection[];
 }
 
-/* ── 개별 섹션 ── */
+/* ── Individual section ── */
 function Section({ section, index }: { section: PolicySection; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '0px 0px -10% 0px' });
@@ -54,7 +54,7 @@ function Section({ section, index }: { section: PolicySection; index: number }) 
   );
 }
 
-/* ── 메인 Policy 페이지 ── */
+/* ── Main Policy page ── */
 export default function PolicyPage({ label, title, updatedDate, sections }: PolicyPageProps) {
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true, margin: '0px 0px -10% 0px' });

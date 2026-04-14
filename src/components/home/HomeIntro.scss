@@ -3,18 +3,18 @@
 @use '@/styles/primitives/space' as *;
 
 .home-intro {
-  // transparent → #fff 고정: Hero(dark)와 테마 전환 딜레이가 겹칠 때
-  // 검정 배경에 검정 텍스트가 되어 iOS에서 콘텐츠가 안 보이는 문제 방지
+  // Fixed white bg: prevents dark hero/light intro theme-switch overlap
+  // where black background + black text causes invisible content on iOS
   background-color: #fff;
-  padding: 0 $gutter-desktop fvw(330); // plastic: ~23vw padding-bottom
+  padding: 0 $gutter-desktop fvw(330); // ~23vw bottom padding
 
-  // ── Video area — plastic.design home-intro-video 매칭 ──
-  // Desktop: 16:9, 좌우 gutter ~3.3vw (container-fluid와 동일)
-  // Tablet:  16:9, 좌우 gutter ~3.3vw
-  // Mobile:  full-bleed (edge-to-edge), negative margin으로 확장
+  // ── Video area ───────────────────────────────
+  // Desktop: 16:9, left/right gutter ~3.3vw (same as container-fluid)
+  // Tablet:  16:9, left/right gutter ~3.3vw
+  // Mobile:  full-bleed (edge-to-edge via negative margin)
 
   .home-intro-video {
-    margin-bottom: fvw(36); // plastic: ~2.5vw gap between video and text
+    margin-bottom: fvw(36); // ~2.5vw gap between video and text
   }
 
   .home-intro-video__video {
@@ -33,7 +33,7 @@
     }
   }
 
-  // ── 소개 텍스트 ──────────────────────────────
+  // ── Intro text ───────────────────────────────
   &__text {
     max-width: fvw(900);
 
@@ -49,14 +49,14 @@
 
   // ── Tablet ──────────────────────────────────
   @media (max-width: 1023.98px) {
-    padding: 0 $gutter-tablet 20vw; // plastic: ~23vw, slightly reduced for tablet
+    padding: 0 $gutter-tablet 20vw;
 
     .home-intro-video {
-      margin-bottom: 3vw; // plastic: ~2.5vw
+      margin-bottom: 3vw;
     }
 
     .home-intro-video__video {
-      padding-bottom: 56%; // 16:9 유지
+      padding-bottom: 56%; // maintain 16:9
     }
 
     &__text {
@@ -70,17 +70,17 @@
 
   // ── Mobile ───────────────────────────────────
   @media (max-width: 575.98px) {
-    padding: 0 $gutter-mobile 18vw; // proportional bottom spacing
+    padding: 0 $gutter-mobile 18vw;
 
     .home-intro-video {
-      // Full-bleed: 부모 gutter를 상쇄하는 negative margin
+      // Full-bleed: negative margin cancels parent gutter
       margin-left: -$gutter-mobile;
       margin-right: -$gutter-mobile;
       margin-bottom: 5vw; // video → text gap
     }
 
     .home-intro-video__video {
-      padding-bottom: 75%; // 4:3 aspect ratio
+      padding-bottom: 75%; // 4:3 aspect ratio on mobile
     }
 
     &__text {

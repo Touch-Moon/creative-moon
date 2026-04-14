@@ -5,7 +5,7 @@ import './ArrowButton.scss';
 const EASE = 'cubic-bezier(0.19, 1, 0.22, 1)';
 const DUR  = '0.45s';
 
-// plastic.design 기준: line + chevron, 같은 SVG를 prev는 rotate(180deg) flip
+// plastic.design standard: line + chevron, same SVG flipped with rotate(180deg) for prev
 const Arrow = () => (
   <svg width="38" height="18" viewBox="0 0 38 18" fill="none" aria-hidden="true">
     <line x1="0.75" y1="8.75" x2="36.5" y2="8.75" stroke="currentColor" strokeWidth="1.5" />
@@ -35,7 +35,7 @@ export default function ArrowButton({
     if (disabled) return;
     const fill = fillRef.current;
     if (!fill) return;
-    // 아래서 위로 진입
+    // enter from bottom to top
     fill.style.transition = `transform ${DUR} ${EASE}`;
     fill.style.transform = 'translateY(0)';
   };
@@ -44,10 +44,10 @@ export default function ArrowButton({
     if (disabled) return;
     const fill = fillRef.current;
     if (!fill) return;
-    // 위로 빠져나감
+    // exit upward
     fill.style.transition = `transform ${DUR} ${EASE}`;
     fill.style.transform = 'translateY(-100%)';
-    // 퇴장 완료 후 원위치 (transition 없이)
+    // reset to original position after exit completes (without transition)
     fill.addEventListener('transitionend', () => {
       fill.style.transition = 'none';
       fill.style.transform = 'translateY(100%)';

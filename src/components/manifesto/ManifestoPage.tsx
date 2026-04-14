@@ -86,14 +86,14 @@ const manifestoItems = [
   },
 ];
 
-/* ── 개별 Manifesto 아이템 ── */
+/* ── Individual Manifesto item ── */
 function ManifestoItem({ item, index }: { item: typeof manifestoItems[0]; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '0px 0px -20% 0px' });
 
   return (
     <div ref={ref} className={`manifesto-item${inView ? ' is-visible' : ''}`}>
-      {/* 라인 */}
+      {/* Line */}
       <div className="manifesto-item__line">
         <m.div
           className="manifesto-item__line-inner"
@@ -103,7 +103,7 @@ function ManifestoItem({ item, index }: { item: typeof manifestoItems[0]; index:
         />
       </div>
 
-      {/* 콘텐츠 */}
+      {/* Content */}
       <m.div
         className="manifesto-item__content"
         initial={{ opacity: 0, y: 60 }}
@@ -126,7 +126,7 @@ function ManifestoItem({ item, index }: { item: typeof manifestoItems[0]; index:
   );
 }
 
-/* ── 메인 Manifesto 페이지 ── */
+/* ── Main Manifesto page ── */
 export default function ManifestoPage() {
   const stickyRef = useRef<HTMLDivElement>(null);
   const stickyInView = useInView(stickyRef, { once: true, margin: '0px 0px -30% 0px' });
@@ -136,11 +136,11 @@ export default function ManifestoPage() {
 
   return (
     <div className="manifesto-page" data-theme="dark">
-      {/* ── Manifesto 섹션 ── */}
+      {/* ── Manifesto section ── */}
       <section className="manifesto-section">
         <div className="wrapper">
           <div className="manifesto-section__content">
-            {/* 좌측 sticky 텍스트 */}
+            {/* Left sticky text */}
             <div className="manifesto-section__sticky-col" ref={stickyRef}>
               <m.div
                 className="manifesto-section__sticky"
@@ -160,7 +160,7 @@ export default function ManifestoPage() {
               </m.div>
             </div>
 
-            {/* 우측 아이템 목록 */}
+            {/* Right item list */}
             <m.div
               className="manifesto-section__items"
               ref={itemsRef}

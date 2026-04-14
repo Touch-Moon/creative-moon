@@ -302,7 +302,7 @@ only screen and (min-resolution:200dpi) {
 }
 
 /* ── Desktop XL cap (1921px +) ─────────────────────────────
-   vw 값을 1920px 기준 고정 px로 동결 */
+   Freeze vw values as fixed px at 1920px base */
 @media (min-width: 1921px) {
   .button span {
     font-size: 17.58px;

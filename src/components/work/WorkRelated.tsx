@@ -1,11 +1,12 @@
 'use client';
 /**
- * WorkRelated — 싱글 페이지 하단 SELECTED WORKS 섹션
- * 현재 slug를 제외한 works 배열 준비만 담당, 렌더링은 WorksSlider에 위임.
+ * WorkRelated — SELECTED WORKS section at the bottom of the single page
+ * Responsible only for preparing the works array with the current slug excluded;
+ * rendering is delegated to WorksSlider.
  *
- * Thumbnail 선택 규칙 (cardSize 기반):
- *  - large / wide   → Landscape 썸네일
- *  - tall / compact → Portrait  썸네일
+ * Thumbnail selection rules (based on cardSize):
+ *  - large / wide   → Landscape thumbnail
+ *  - tall / compact → Portrait  thumbnail
  */
 import { useMemo } from 'react';
 import { SELECTED_WORKS, type CardSize, type SelectedWork } from '@/data/works';
@@ -14,7 +15,7 @@ import WorksSlider from '@/components/common/WorksSlider';
 
 const MAX_WORKS = 10;
 
-// ── Sanity 데이터 → works 배열 변환 (없으면 SELECTED_WORKS 폴백) ──────────
+// ── Convert Sanity data → works array (falls back to SELECTED_WORKS if absent) ──
 function buildWorksList(serverWorks?: SelectedWorkSanity[]): SelectedWork[] {
   if (!serverWorks || serverWorks.length === 0) return SELECTED_WORKS;
   return serverWorks.map((sw, i) => {
@@ -26,8 +27,8 @@ function buildWorksList(serverWorks?: SelectedWorkSanity[]): SelectedWork[] {
       ? (getThumbLandscape(sw.thumbnailLandscape) ?? getThumbPortrait(sw.thumbnailPortrait, undefined))
       : getThumbPortrait(sw.thumbnailPortrait, sw.thumbnailLandscape);
     const rawSrc = sanityUrl ?? fallback.src;
-    // Canvas(WaveImage): same-origin /_next/image 프록시
-    // w는 next.config.ts deviceSizes 내 값만 허용 (외 값은 400 에러)
+    // Canvas (WaveImage): same-origin /_next/image proxy
+    // w must be a value from next.config.ts deviceSizes (other values return a 400 error)
     // large/wide → w=1920 / tall/compact → w=960
     const optimizedW = useLandscape ? 1920 : 960;
     const src = rawSrc.startsWith('https://cdn.sanity.io')

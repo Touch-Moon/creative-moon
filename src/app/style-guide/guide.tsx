@@ -57,7 +57,7 @@ function getSpec(spec: string | BreakpointValues, bp: Breakpoint): string {
 function renderSpec(text: string): React.ReactNode {
   const match = text.match(/calc\((\d+) \//);
   if (!match || match.index === undefined) return text;
-  const prefix = text.slice(0, match.index + 5); // 'calc(' 포함
+  const prefix = text.slice(0, match.index + 5); // includes 'calc('
   const num    = match[1];
   const suffix = text.slice(match.index + 5 + num.length);
   return (
@@ -560,13 +560,13 @@ export default function StyleGuideMenu() {
     window.localStorage.setItem('cm-theme', theme);
   }, [theme]);
 
-  // footer를 style-guide 테마와 동기화
+  // Sync footer theme with the style-guide theme
   useEffect(() => {
     const footer = document.querySelector<HTMLElement>('.footer');
     if (footer) footer.dataset.theme = theme;
   }, [theme]);
 
-  // 페이지 언마운트 시 footer를 원래 dark로 복원
+  // Restore footer to its original dark theme on page unmount
   useEffect(() => {
     return () => {
       const footer = document.querySelector<HTMLElement>('.footer');
@@ -574,8 +574,8 @@ export default function StyleGuideMenu() {
     };
   }, []);
 
-  // CSS 미디어 쿼리와 동일한 기준으로 브레이크포인트 감지
-  // matchMedia: 경계값을 넘을 때만 1회 발생 → resize 디바운스 불필요
+  // Detect breakpoints using the same criteria as CSS media queries
+  // matchMedia fires only once when a boundary is crossed → no resize debounce needed
   useEffect(() => {
     const queries: [MediaQueryList, Breakpoint][] = [
       [window.matchMedia('(min-width: 1921px)'), 'desktopXl'],
@@ -590,7 +590,7 @@ export default function StyleGuideMenu() {
       setBreakpoint('mobile');
     }
 
-    detect(); // 초기 감지
+    detect(); // initial detection
 
     queries.forEach(([mq]) => mq.addEventListener('change', detect));
     return () => queries.forEach(([mq]) => mq.removeEventListener('change', detect));
@@ -620,7 +620,7 @@ export default function StyleGuideMenu() {
 
   return (
     <>
-      {/* Portal: page-transition-container stacking context를 탈출하여 body에 직접 마운트 */}
+      {/* Portal: escapes the page-transition-container stacking context and mounts directly on body */}
       {mounted && createPortal(toggleBtn, document.body)}
 
     <div className="cm-root" data-theme={theme}>

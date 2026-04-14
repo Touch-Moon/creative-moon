@@ -168,7 +168,7 @@
 /* ── Responsive — tablet & mobile ───────────────── */
 @media (max-width: 1023.98px) {
   .cd-doc {
-    padding-top: 140px; // 헤더 + 로고 높이 × 2 이상 간격
+    padding-top: 140px; // clear header + logo height × 2
   }
 
   .cd-item {
@@ -183,7 +183,7 @@
 
 @media (max-width: 575.98px) {
   .cd-doc {
-    padding-top: 130px; // 헤더 + 로고 높이 × 2 이상 간격
+    padding-top: 130px; // clear header + logo height × 2
   }
 }
 

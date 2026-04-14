@@ -7,7 +7,7 @@ import './Footer.scss';
 
 export default function Footer() {
   const pathname = usePathname();
-  // /work 리스트 페이지만 라이트 footer — 싱글 페이지는 다크 유지
+  // light footer only on /work list page — single pages stay dark
   const theme = pathname === '/work' ? 'light' : 'dark';
   const isContact = pathname === '/contact';
   const showCTA = !isContact;
@@ -17,7 +17,7 @@ export default function Footer() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // 마우스 lerp 추적 (WorksSlider와 동일 패턴)
+  // mouse lerp tracking (same pattern as WorksSlider)
   useEffect(() => {
     let tx = 0, ty = 0, cx = 0, cy = 0, init = false, raf: number;
     const onMove = (e: MouseEvent) => {
@@ -28,7 +28,7 @@ export default function Footer() {
     const loop = () => {
       cx = lerp(cx, tx, 0.1); cy = lerp(cy, ty, 0.1);
       if (cursorRef.current)
-        // WorksSlider와 동일 — top-left 기준, 커서 우하단에 서클 표시
+        // same as WorksSlider — top-left origin, circle displayed bottom-right of cursor
         cursorRef.current.style.transform = `translate(${cx}px, ${cy}px)`;
       raf = requestAnimationFrame(loop);
     };
@@ -42,7 +42,7 @@ export default function Footer() {
 
   return (
     <footer className={`footer${isContact ? ' footer--contact' : ''}`} data-theme={theme}>
-      {/* ── CTA 영역 ─────────────────────────────── */}
+      {/* ── CTA area ──────────────────────────────── */}
       {showCTA && (
         <div
           className="footer__cta-area"
@@ -63,7 +63,7 @@ export default function Footer() {
         </div>
       )}
 
-      {/* ── 링크 영역 ────────────────────────────── */}
+      {/* ── Links area ───────────────────────────── */}
       <div className="footer__links">
         <div className="wrapper">
           {showLinks && (
@@ -83,14 +83,14 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* ── 카피라이트 ───────────────────────────── */}
+      {/* ── Copyright ────────────────────────────── */}
       <div className="footer__meta">
         <div className="wrapper">
           <span className="footer__copy">©2026 Creative Moon. All rights reserved.</span>
         </div>
       </div>
 
-      {/* ── Mix-blend 커서 서클 (body portal) ─────── */}
+      {/* ── Mix-blend cursor circle (body portal) ──── */}
       {mounted && createPortal(
         <div ref={cursorRef} className="footer__cursor" aria-hidden="true">
           <div className="footer__cursor-bg" />

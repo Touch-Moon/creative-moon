@@ -4,7 +4,7 @@ import { Redis } from '@upstash/redis';
 import { Resend } from 'resend';
 
 // ── Rate limiter: max 3 requests per IP per hour ─────────────────
-// Redis 연결 실패 시 rate limit을 건너뜀 (개발 환경 대비)
+// Skip rate limiting if Redis connection fails (handles development environment)
 let ratelimit: Ratelimit | null = null;
 try {
   ratelimit = new Ratelimit({

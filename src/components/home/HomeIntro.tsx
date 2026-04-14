@@ -8,8 +8,8 @@ const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
 
 export default function HomeIntro() {
   const videoRef = useRef(null);
-  // margin 제거: iOS Safari에서 negative rootMargin이 트리거를 놓치는 케이스 방지
-  // 요소가 뷰포트에 진입하는 즉시 애니메이션 시작
+  // No margin: prevents iOS Safari from missing triggers with a negative rootMargin
+  // Animation starts as soon as the element enters the viewport
   const videoInView = useInView(videoRef, { once: true });
 
   const textRef = useRef(null);
@@ -18,7 +18,7 @@ export default function HomeIntro() {
   return (
     <section className="home-intro" data-theme="light">
       <div className="wrap">
-      {/* ── Video placeholder — plastic.design home-intro-video 영역 매칭 ── */}
+      {/* ── Video placeholder — matches the plastic.design home-intro-video area ── */}
       <m.div
         ref={videoRef}
         className="home-intro-video"
@@ -27,7 +27,7 @@ export default function HomeIntro() {
         transition={{ duration: 1.4, ease: EASE_OUT }}
       >
         <div className="home-intro-video__video">
-          {/* 1. 비디오 */}
+          {/* 1. Video */}
           <video
             src="/videos/video-moon-ver1.2.mp4"
             autoPlay
@@ -38,9 +38,9 @@ export default function HomeIntro() {
             poster="/images/intro-video-placeholder.webp"
             style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
           />
-          {/* 2. 블랙 마스크 */}
+          {/* 2. Black mask */}
           <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)' }} />
-          {/* 3. 로고 */}
+          {/* 3. Logo */}
           <img
             src="/images/Logo-white.svg"
             alt="Creative Moon"
@@ -49,7 +49,7 @@ export default function HomeIntro() {
         </div>
       </m.div>
 
-      {/* ── 소개 텍스트 ── */}
+      {/* ── Intro text ── */}
       <m.div
         ref={textRef}
         className="home-intro__text"

@@ -26,7 +26,7 @@
     justify-content: space-between;
   }
 
-  // ── Sticky 좌측 텍스트 ──
+  // ── Sticky left column ──
   &__sticky-col {
     flex: 0 0 auto;
     width: calc(33.333% - #{$space-5});
@@ -55,7 +55,7 @@
     }
   }
 
-  // ── 우측 아이템 목록 ──
+  // ── Right items list ──
   &__items {
     flex: 0 0 auto;
     width: 58.333%;
@@ -103,7 +103,7 @@
     font-weight: $fw-regular;
     color: $m-white;
     letter-spacing: $ls-tight;
-    margin: 0; // h2 브라우저 기본 margin(0.83em top/bottom) 리셋
+    margin: 0; // reset browser default h2 margin (0.83em top/bottom)
   }
 
   &__title-number {
@@ -295,13 +295,13 @@
     }
 
     &__title-text {
-      // plastic.design mobile headline-2 exact value
+      // mobile headline-2 exact value
       font-size: 12.3077vw;
       line-height: 116%;
     }
 
     &__title-number {
-      // plastic.design mobile number exact value
+      // mobile number exact value
       font-size: 8.20513vw;
       line-height: 112%;
       padding-top: 0.2em;
@@ -314,7 +314,7 @@
     }
   }
 
-  // ── Mobile SVG positions (plastic.design 기준) ──
+  // ── Mobile SVG positions ──
 
   // Item 01 — underline waves
   .manifesto-item:first-child .manifesto-item__title .manifesto-item__svg {
@@ -377,15 +377,15 @@
 
   .manifesto-item {
     &__title-text {
-      // plastic.design: no tablet override — desktop --fs-h2 scales via token
-      // --fs-h2 at 768px = 46px (matches plastic desktop scale at 768)
+      // no tablet override — desktop --fs-h2 scales via token
+      // --fs-h2 at 768px = 46px
       font-size: var(--fs-h2);
       line-height: $lh-h2;
     }
 
     &__title-number {
-      // plastic.design: no tablet override — desktop --fs-h3 scales via token
-      // --fs-h3 at 768px = 39px (matches plastic desktop scale at 768)
+      // no tablet override — desktop --fs-h3 scales via token
+      // --fs-h3 at 768px = 39px
       font-size: var(--fs-h3);
     }
 

@@ -2,15 +2,15 @@
 import { useRef, useEffect, useState } from 'react';
 import './HomeMarquee.scss';
 
-// 4 rows — UX/UI 디자인 & 개발 철학 키워드
-// 글자 수 비율을 plastic.design .clients 와 맞춰 그리드 유지:
+// 4 rows — UX/UI design & development philosophy keywords
+// Character-count ratios match plastic.design .clients to maintain grid:
 // rows 1–2: 3 items  (6–7 chars each — space-between)
 // row  3:   2 items  (11 + 7 chars  — space-between)
 // row  4:   2 items  (12 + 7 chars  — flex-start + margin-left)
 type ClientRow = string[];
 
 const ROWS: ClientRow[] = [
-  ['Design.', 'Build.', 'Refine.'],   // craft mindset — 7·6·7
+  ['Design.', 'Build.', 'Refine.'],   // craft mindset  — 7·6·7
   ['Feel.', 'Flow.', 'Respond.'],     // UX/interaction — 5·5·8
   ['Typography.', 'Motion.'],         // craft areas    — 11·7
   ['Interaction.', 'Intent.'],        // last row       — 12·7

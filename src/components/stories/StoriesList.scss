@@ -2,10 +2,20 @@
 @use '@/styles/primitives/type' as *;
 @use '@/styles/primitives/space' as *;
 
+// ── Mobile story card micro-typography tokens ─────────────────────
+// These are intentionally very small fixed px values for the compressed
+// card layout on mobile. They do not map to the main type scale.
+$story-card-mobile-meta-fs:    10px; // date / category badge
+$story-card-mobile-title-fs:   15px; // card title in list view
+$story-card-mobile-excerpt-fs: 11px; // truncated excerpt
+$story-view-btn-size:          38px; // view toggle button width
+$story-view-btn-height:        32px; // view toggle button height
+$story-view-btn-icon:          16px; // icon inside view toggle
+
 // ── Stories List ──────────────────────────────────────────────────
 .stories-list {
-  padding-top: fvw(170); // match site rhythm ~12vw
-  padding-bottom: fvw(170); // match site rhythm ~12vw
+  padding-top: fvw(170); // ~12vw
+  padding-bottom: fvw(170); // ~12vw
 }
 
 // ── Header ────────────────────────────────────────────────────────
@@ -54,8 +64,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 32px;
+  width: $story-view-btn-size;
+  height: $story-view-btn-height;
   padding: 0;
   background: transparent;
   color: var(--foreground);
@@ -85,8 +95,8 @@
   }
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: $story-view-btn-icon;
+    height: $story-view-btn-icon;
   }
 
   @media (max-width: 575.98px) {
@@ -164,7 +174,6 @@
     min-height: 0;
     overflow: hidden;
   }
-
 }
 
 // ── Story Card ────────────────────────────────────────────────────
@@ -285,7 +294,7 @@
   }
 
   .stories-list__header {
-    padding: 16vw $gutter-tablet 32px; // proportional top
+    padding: 16vw $gutter-tablet 32px;
   }
 
   .stories-list__header-inner {
@@ -334,7 +343,7 @@
   }
 
   .stories-list__header {
-    padding: 28vw $gutter-mobile 24px; // proportional top
+    padding: 28vw $gutter-mobile 24px;
   }
 
   .stories-list__header-inner {
@@ -397,13 +406,13 @@
     padding-top: $space-3;
     padding-bottom: $space-2;
     gap: 5px;
-    font-size: 10px;
+    font-size: $story-card-mobile-meta-fs;
     flex-wrap: nowrap;
     overflow: hidden;
   }
 
   .story-card__category {
-    font-size: 10px;
+    font-size: $story-card-mobile-meta-fs;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -412,13 +421,13 @@
   }
 
   .story-card__date {
-    font-size: 10px;
+    font-size: $story-card-mobile-meta-fs;
     white-space: nowrap;
     flex-shrink: 0;
   }
 
   .story-card__title {
-    font-size: 15px;
+    font-size: $story-card-mobile-title-fs;
     overflow-wrap: break-word;
     word-break: break-word;
   }
@@ -428,7 +437,7 @@
   }
 
   .story-card__excerpt {
-    font-size: 11px;
+    font-size: $story-card-mobile-excerpt-fs;
     line-height: 1.4;
     -webkit-line-clamp: 1;
   }

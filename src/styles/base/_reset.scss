@@ -14,12 +14,12 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: geometricPrecision;
   font-size: 100%;
-  overflow-x: hidden; // 캐러셀 트랙 확장으로 인한 가로 스크롤 방지
+  overflow-x: hidden; // prevent horizontal scroll caused by carousel track expansion
 }
 
 body {
   margin: 0;
-  overflow-x: hidden; // 모바일 가로스크롤 방지 (html 단독으로는 일부 브라우저에서 body overflow가 전달되지 않음)
+  overflow-x: hidden; // mobile horizontal scroll fix (html alone doesn't propagate overflow in all browsers)
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-inter-display), sans-serif;
@@ -58,7 +58,7 @@ button {
   font-family: inherit;
 }
 
-// ── Accessibility: 시각적으로 숨기고 스크린 리더에만 노출 ─────────
+// ── Accessibility: visually hidden, exposed to screen readers only ─
 .sr-only {
   position: absolute;
   width: 1px;
@@ -71,8 +71,8 @@ button {
   border: 0;
 }
 
-// ── Accessibility: 키보드 포커스 링 ──────────────────────────────
-// 마우스 클릭 시에는 숨기고, 키보드 탐색 시에만 표시 (:focus-visible)
+// ── Accessibility: keyboard focus ring ──────────────────────────
+// Hidden on mouse click; visible only during keyboard navigation (:focus-visible)
 :focus {
   outline: none;
 }
@@ -83,7 +83,7 @@ button {
   border-radius: 2px;
 }
 
-// ── Accessibility: skip-to-content 링크 ─────────────────────────
+// ── Accessibility: skip-to-content link ──────────────────────────
 .skip-to-content {
   position: fixed;
   top: -100%;

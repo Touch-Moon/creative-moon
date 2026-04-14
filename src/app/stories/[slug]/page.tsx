@@ -57,11 +57,11 @@ export default async function StorySlugPage({ params }: Props) {
   try {
     story = await getStoryBySlug(slug);
   } catch {
-    // Sanity 미연결 → 더미 데이터 사용 (StorySingle 내부에서 처리)
+    // Sanity not connected — use dummy data (handled inside StorySingle)
     story = null;
   }
 
-  // Sanity에 데이터가 있지만 해당 slug가 없는 경우 → 404
+  // Data exists in Sanity but the given slug was not found → 404
   if (story === undefined) {
     notFound();
   }

@@ -2,7 +2,7 @@
 @use '@/styles/primitives/type' as *;
 @use '@/styles/primitives/space' as *;
 
-// ── CSS 애니메이션 키프레임 ──────────────────────────────────────
+// ── CSS animation keyframes ──────────────────────────────────────
 @keyframes reveal-clip {
   from {
     clip-path: inset(0 0 100% 0);
@@ -28,11 +28,11 @@
 // ── Work List Section ────────────────────────────────────────────
 
 .work-list {
-  padding-bottom: fvw(170); // plastic: footer follows immediately, add bottom breathing
+  padding-bottom: fvw(170); // bottom breathing room before footer
 
-  // ── 카테고리 필터 (대형 헤드라인 스타일) ──────────────────
+  // ── Category filter (large headline style) ───────────────────
   &__filter {
-    padding: fvw(369) $gutter-desktop fvw(34); // plastic: pt ~25.6vw, pb ~2.4vw
+    padding: fvw(369) $gutter-desktop fvw(34); // pt ~25.6vw, pb ~2.4vw
 
     &--animate {
       animation: fade-up 0.8s ease both;
@@ -49,12 +49,12 @@
     align-items: baseline;
   }
 
-  // li 항목 — 구분자 "—" 포함
+  // li item — includes "—" separator
   &__filter-item {
     display: flex;
     align-items: baseline;
 
-    // 구분자: 마지막 항목 제외
+    // Separator: all items except last
     &:not(:last-child)::after {
       content: ' —';
       font-size: fvw(50);
@@ -67,7 +67,7 @@
     }
   }
 
-  // 필터 버튼 — 대형 헤드라인 (plastic.design 맞춤: fvw(50) ≈ 45px @ 767px)
+  // Filter button — large headline style (~fvw(50) ≈ 45px @ 767px)
   &__filter-btn {
     background: none;
     border: none;
@@ -95,7 +95,7 @@
     }
   }
 
-  // 카운트 숫자 (상단 작은 superscript)
+  // Count superscript
   &__filter-count {
     font-size: var(--fs-body-caps);
     line-height: 1;
@@ -104,9 +104,9 @@
     margin-left: fvw(2);
   }
 
-  // ── 그리드 ────────────────────────────────────────
-  // column-gap = gutter-desktop → 좌우 여백과 카드 사이 간격 일치
-  // align-items: start → 높이가 달라도 stretch 없이 각자 높이 유지
+  // ── Grid ────────────────────────────────────────────────────
+  // column-gap = gutter-desktop — matches card side margins
+  // align-items: start — no stretch on variable-height cards
   &__grid {
     padding: 0 $gutter-desktop;
     display: grid;
@@ -121,7 +121,7 @@
     padding-bottom: 12vw;
 
     &__filter {
-      padding: 22vw $gutter-tablet 2.5vw; // plastic proportional
+      padding: 22vw $gutter-tablet 2.5vw;
       overflow-x: auto;
       scrollbar-width: none;
 
@@ -136,13 +136,13 @@
 
     &__filter-item {
       &:not(:last-child)::after {
-        font-size: calc(30 / 768 * 100vw); // plastic.design .work-nav a — 30px @ 768
+        font-size: calc(30 / 768 * 100vw); // 30px @ 768
         margin: 0 $space-2;
       }
     }
 
     &__filter-btn {
-      font-size: calc(30 / 768 * 100vw); // plastic.design .work-nav a — 30px @ 768
+      font-size: calc(30 / 768 * 100vw); // 30px @ 768
       line-height: 1;
       white-space: nowrap;
     }
@@ -163,18 +163,18 @@
     padding-bottom: 10vw;
 
     &__filter {
-      padding: 36vw $gutter-mobile 4vw; // plastic proportional
+      padding: 36vw $gutter-mobile 4vw;
     }
 
     &__filter-item {
       &:not(:last-child)::after {
-        font-size: calc(25 / 375 * 100vw); // plastic.design .work-nav a — 25px @ 375
+        font-size: calc(25 / 375 * 100vw); // 25px @ 375
         margin: 0 6px;
       }
     }
 
     &__filter-btn {
-      font-size: calc(25 / 375 * 100vw); // plastic.design .work-nav a — 25px @ 375
+      font-size: calc(25 / 375 * 100vw); // 25px @ 375
       line-height: 1.1;
     }
 
@@ -191,30 +191,30 @@
   }
 }
 
-// ── Work List 나가기 트랜지션 ──────────────────────────────────────
-// 워크 카드 클릭 시:
-//   - 필터 + 비활성 카드 → opacity 0 (0.28s)
-//   - 활성 카드 [data-active] → opacity 1 유지 (이미지 "잔존" 효과)
-//   - 활성 카드의 텍스트는 같이 사라짐
+// ── Work List exit transition ────────────────────────────────────
+// On work card click:
+//   - filter + inactive cards → opacity 0 (0.28s)
+//   - active card [data-active] → opacity 1 stays (image "lingers" effect)
+//   - active card text fades with everything else
 
 .work-list.is-exiting {
   .work-list__filter {
-    animation: none; // animation-fill-mode:both 가 opacity:1 을 고정하므로 해제
+    animation: none; // release animation-fill-mode:both that locks opacity:1
     opacity: 0;
     transition: opacity 0.22s ease;
   }
 
   .work-item {
-    animation: none; // 동일 이유
+    animation: none; // same reason
     opacity: 0;
     transition: opacity 0.28s ease;
 
-    // 클릭된 카드만 남김
+    // Keep clicked card visible
     &[data-active] {
       opacity: 1;
       transition: none;
 
-      // 텍스트(캡션)는 같이 사라짐
+      // Caption fades together
       .work-item__text {
         opacity: 0;
         transition: opacity 0.18s ease;
@@ -223,7 +223,7 @@
   }
 }
 
-// ── Work Cursor (전역 fixed 커서 배지) ────────────────────────────
+// ── Work Cursor (global fixed cursor badge) ──────────────────────
 
 .work-cursor {
   position: fixed;
@@ -231,14 +231,14 @@
   left: 0;
   pointer-events: none;
   z-index: 1000;
-  width: 76px;
-  height: 76px;
+  width: $cursor-badge-size;
+  height: $cursor-badge-size;
 
-  // 배경 원 — static flow, scale(0.5)→scale(1) 로 등장
-  // translate 없음: 부모 top-left = 커서 위치 → 원 center = 커서 +38px 우하단
+  // Background circle — static flow, scale(0.5)→scale(1) entrance
+  // No translate: parent top-left = cursor position → circle center = cursor +38px diagonal
   &__bg {
-    width: 76px;
-    height: 76px;
+    width: $cursor-badge-size;
+    height: $cursor-badge-size;
     border-radius: 50%;
     background: var(--foreground);
     transform: scale(0.5);
@@ -247,7 +247,7 @@
       opacity 0.2s ease-in-out 0.3s;
   }
 
-  // 텍스트 레이블 — 부모 중앙(= 원 중앙)에 위치
+  // Text label — centered on parent (= circle center)
   &__label {
     position: absolute;
     top: 50%;
@@ -256,10 +256,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 76px;
-    height: 76px;
+    width: $cursor-badge-size;
+    height: $cursor-badge-size;
     color: var(--background);
-    font-size: 9px;
+    font-size: $cursor-label-fs;
     font-weight: 400;
     letter-spacing: normal;
     white-space: nowrap;
@@ -283,16 +283,16 @@
 // ── Work Item ─────────────────────────────────────────────────────
 
 .work-item {
-  grid-column: span 1; // HALF: 1컬럼
+  grid-column: span 1; // HALF: 1 column
 
-  // CSS @keyframes reveal (JS 없음)
-  // duration + ease를 커튼·__top 높이 애니메이션과 통일
+  // CSS @keyframes reveal
+  // Duration + ease unified with curtain/__top height animation
   &--animate {
     animation: reveal-clip 1.0s cubic-bezier(0.76, 0, 0.24, 1) both;
     animation-delay: var(--anim-delay, 0ms);
   }
 
-  // FULL: 2컬럼 전체 너비
+  // FULL: span both columns
   &--full {
     grid-column: span 2;
   }
@@ -303,14 +303,14 @@
     color: inherit;
   }
 
-  // 이미지 컨테이너
+  // Image container
   &__image {
     position: relative;
     width: 100%;
     overflow: hidden;
     background: color-mix(in srgb, var(--foreground) 5%, transparent);
 
-    // 비율: --aspect-ratio CSS 변수로 동적 제어 (기본 120%)
+    // Aspect ratio via --aspect-ratio CSS variable (default 120%)
     &::before {
       content: '';
       display: block;
@@ -322,7 +322,6 @@
       inset: 0;
       cursor: none;
 
-      // 내부 inner도 절대위치 채우기
       &__inner {
         inset: 0;
         width: 100%;
@@ -331,12 +330,12 @@
     }
   }
 
-  // FULL 아이템: 기본 16:9, --aspect-ratio 변수로 override 가능
+  // FULL item: default 16:9; overridable via --aspect-ratio
   &--full &__image::before {
     padding-top: var(--aspect-ratio, 56.25%);
   }
 
-  // 텍스트 (이미지 하단) — 멀티라인 허용 (plastic.design 스타일)
+  // Caption text below image — multiline allowed
   &__text {
     margin-top: $space-3;
     font-size: var(--fs-h6);
@@ -351,7 +350,7 @@
   @media (max-width: 1023.98px) {
     &__text {
       margin-top: 10px;
-      font-size: var(--fs-h6); // plastic.design — 16px @ 768
+      font-size: var(--fs-h6); // 16px @ 768
     }
   }
 
@@ -369,7 +368,7 @@
 
     &__text {
       margin-top: $space-8;
-      font-size: var(--fs-h6); // plastic.design — 20px @ 390
+      font-size: var(--fs-h6); // 20px @ 390
     }
   }
 }

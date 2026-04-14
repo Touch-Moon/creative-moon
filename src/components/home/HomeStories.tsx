@@ -42,7 +42,7 @@ const cardVariants: Variants = {
 
 const MotionLink = m.create(Link);
 
-// 더미 데이터 (Sanity 미연결 시 사용)
+// Dummy data (used when Sanity is not connected)
 const DUMMY_STORIES: StoryListItem[] = [
   { _id: '01', category: 'Insights', title: 'The digital challenge of the industrial sector.', slug: { current: 'the-digital-challenge-of-the-industrial-sector' }, order: 1 },
   { _id: '02', category: 'Process', title: 'Reflections on design, current context.', slug: { current: 'reflections-on-design-current-context' }, order: 2 },
@@ -63,16 +63,16 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
 
   useEffect(() => setMounted(true), []);
 
-  // ── 드래그 상태 ──────────────────────────────────────
+  // ── Drag state ──────────────────────────────────────
   const dragRef = useRef({ active: false, startX: 0, scrollLeft: 0, hasDragged: false, startIdx: 0 });
   const isScrollingRef = useRef(false);
   const scrollTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  // ── 바운스 상태 ──────────────────────────────────────
+  // ── Bounce state ──────────────────────────────────────
   const bounceRef = useRef({ overscroll: 0, animating: false });
   const bounceRafRef = useRef<number>(0);
 
-  // ── 관성 스크롤 ──────────────────────────────────────
+  // ── Momentum scroll ──────────────────────────────────────
   const velBufferRef = useRef<{ scroll: number; t: number }[]>([]);
   const momentumRafRef = useRef<number>(0);
   const justDraggedRef = useRef(false);
@@ -84,7 +84,7 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
     return sign * maxOverscroll * (1 - Math.exp(-abs / maxOverscroll * 0.55));
   };
 
-  // ── 바운스 spring 복귀 ───────────────────────────────
+  // ── Bounce spring return ───────────────────────────────
   const animateBounceBack = useCallback(() => {
     if (!trackRef.current) return;
     const track = trackRef.current;
@@ -109,21 +109,21 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
     bounceRafRef.current = requestAnimationFrame(tick);
   }, []);
 
-  // ── 드래그 의도 기반 카드 스냅 ──────────────────────
-  // nearest card 기준 + 빠른 플릭이면 한 칸 추가 이동
+  // ── Intent-based card snap ──────────────────────
+  // Based on nearest card + advances one extra step on a fast flick
   const doSnapByIntent = useCallback((scrollLeft: number, velocity: number) => {
     if (!trackRef.current) return;
     const track = trackRef.current;
     const cards = Array.from(track.children) as HTMLElement[];
     const startIdx = dragRef.current.startIdx;
-    // 드래그 시작 카드 기준 ±1 범위 내 카드만 탐색
+    // Search only cards within ±1 range of the drag-start card
     let nearestIdx = startIdx, minDist = Infinity;
     cards.forEach((card, i) => {
       if (Math.abs(i - startIdx) > 1) return;
       const dist = Math.abs(card.offsetLeft - scrollLeft);
       if (dist < minDist) { minDist = dist; nearestIdx = i; }
     });
-    // 최종 이동 범위를 startIdx ±1로 고정
+    // Clamp final movement to startIdx ±1
     let targetIdx = Math.max(startIdx - 1, Math.min(startIdx + 1, nearestIdx));
     targetIdx = Math.max(0, Math.min(stories.length - 1, targetIdx));
     const targetCard = cards[targetIdx] as HTMLElement;
@@ -142,7 +142,7 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
     }
   }, [stories.length]);
 
-  // ── 버튼 네비 ────────────────────────────────────────
+  // ── Button navigation ────────────────────────────────────────
   const scroll = (dir: 'prev' | 'next') => {
     if (!trackRef.current) return;
     isScrollingRef.current = true;
@@ -159,7 +159,7 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
     scrollTimerRef.current = setTimeout(() => { isScrollingRef.current = false; }, 1000);
   };
 
-  // ── 스크롤 sync ──────────────────────────────────────
+  // ── Scroll sync ──────────────────────────────────────
   const handleScroll = useCallback(() => {
     if (isScrollingRef.current || !trackRef.current) return;
     const { scrollLeft } = trackRef.current;
@@ -172,7 +172,7 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
     setCurrent(Math.max(0, Math.min(closestIdx, stories.length - 1)));
   }, []);
 
-  // ── 마우스 드래그 ────────────────────────────────────
+  // ── Mouse drag ────────────────────────────────────
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!trackRef.current) return;
     cancelAnimationFrame(bounceRafRef.current);
@@ -218,7 +218,7 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
         track.style.transform = '';
         track.scrollLeft = desiredScroll;
       }
-      // 속도 버퍼 기록
+      // Record velocity buffer
       velBufferRef.current.push({ scroll: track.scrollLeft, t: performance.now() });
       if (velBufferRef.current.length > 6) velBufferRef.current.shift();
     }
@@ -232,7 +232,7 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
 
     if (dragRef.current.hasDragged) {
       justDraggedRef.current = true;
-      // 속도 계산
+      // Calculate velocity
       const buf = velBufferRef.current;
       let velocity = 0;
       if (buf.length >= 2) {
@@ -243,7 +243,7 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
       }
       velBufferRef.current = [];
 
-      // ── 관성 슬라이딩 후 snap (Flickity 스타일) ──
+      // ── Snap after momentum sliding (Flickity style) ──
       const FRICTION = 0.92;
       const MAX_VEL = 30;
       let vel = Math.max(-MAX_VEL, Math.min(MAX_VEL, velocity));
@@ -275,14 +275,14 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
     cancelAnimationFrame(momentumRafRef.current);
   }, []);
 
-  // ── window mouseup: 트랙 밖에서 버튼 떼어도 드래그 종료 ──
+  // ── window mouseup: end drag even when the button is released outside the track ──
   useEffect(() => {
     const handler = () => { if (dragRef.current.active) onDragEnd(); };
     window.addEventListener('mouseup', handler);
     return () => window.removeEventListener('mouseup', handler);
   }, [onDragEnd]);
 
-  // ── 드래그 직후 링크 클릭 방지 ──────────────────────
+  // ── Prevent link click immediately after drag ──────────────────────
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (!justDraggedRef.current) return;
@@ -294,7 +294,7 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
     return () => window.removeEventListener('click', handler, true);
   }, []);
 
-  // ── 커스텀 커서 lerp RAF ──────────────────────────────
+  // ── Custom cursor lerp RAF ──────────────────────────────
   useEffect(() => {
     let targetX = 0, targetY = 0;
     let currentX = 0, currentY = 0;
@@ -318,7 +318,7 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
     return () => { window.removeEventListener('mousemove', onMove); cancelAnimationFrame(rafId); };
   }, []);
 
-  // ── 커서 show/hide ───────────────────────────────────
+  // ── Cursor show/hide ───────────────────────────────────
   const handleTrackMouseEnter = () => { cursorRef.current?.classList.add('is-visible'); };
   const handleTrackMouseLeave = () => {
     onDragEnd();
@@ -353,7 +353,7 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
         </m.div>
       </div>
 
-      {/* 스크린 리더: 현재 슬라이드 위치 안내 */}
+      {/* Screen reader: announces current slide position */}
       <div
         aria-live="polite"
         aria-atomic="true"

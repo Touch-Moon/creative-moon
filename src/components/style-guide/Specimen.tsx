@@ -17,22 +17,22 @@ export default function Specimen({ className, vpWidth, children }: Props) {
     if (!textRef.current || vpWidth <= 0) return;
     const cs = getComputedStyle(textRef.current);
 
-    // font-size: 현재 viewport 기준 px (breakpoint 진입 시 고정값 반영)
+    // font-size: current px at the active viewport (reflects fixed values at breakpoint entry)
     const pxSize = parseFloat(cs.fontSize);
     const px = Math.round(pxSize);
 
-    // letter-spacing: px → em
+    // letter-spacing: convert px → em
     const lsPx = parseFloat(cs.letterSpacing);
     const lsEm = isNaN(lsPx) ? '0em' : (lsPx / pxSize).toFixed(2) + 'em';
 
-    // line-height: px → %
+    // line-height: convert px → %
     const lhPx = parseFloat(cs.lineHeight);
     const lhStr = isNaN(lhPx) ? '' : Math.round((lhPx / pxSize) * 100) + '%';
 
-    // 활성 breakpoint 기준 viewport 결정 (375 mobile / 768 tablet / 1440 desktop)
+    // Determine reference viewport for the active breakpoint (375 mobile / 768 tablet / 1440 desktop)
     const isDesktopXL = vpWidth > 1920;
     const refVp = vpWidth <= 575 ? 375 : vpWidth <= 1023 ? 768 : REF_VP;
-    // 현재 렌더링된 px를 레퍼런스 뷰포트 기준으로 역산
+    // Back-calculate the currently rendered px relative to the reference viewport
     const refPx = Math.round(pxSize * refVp / vpWidth);
     const calcStr = isDesktopXL
       ? `${px}px · fixed (1920px cap)`

@@ -22,10 +22,10 @@
     border-top: 1px solid var(--foreground-dim);
     grid-template-columns: 4fr 8fr;
     padding-top: $space-20;
-    padding-bottom: fvw(340); // plastic: home-services pb ~24vw
+    padding-bottom: fvw(340); // ~24vw bottom padding
   }
 
-  // ── 좌측 sticky 라벨 ─────────────────────────
+  // ── Left sticky label ────────────────────────
   &__label-wrap {
   }
 
@@ -42,11 +42,10 @@
     height: fit-content;
   }
 
-  // ── 우측 목록 ────────────────────────────────
+  // ── Right list ───────────────────────────────
   &__list {
     display: flex;
     flex-direction: column;
-
   }
 
   &__item {
@@ -95,21 +94,20 @@
     position: relative;
     height: 1px;
     width: 100%;
-    background: var(--foreground-dim); // 트랙 (흐린 배경선)
+    background: var(--foreground-dim); // track (faint background line)
   }
 
   &__rule-inner {
     position: absolute;
     inset: 0;
-    background: var(--foreground); // 채워지는 선
+    background: var(--foreground); // fill line
     transform-origin: left center;
     will-change: transform;
     display: block;
   }
 
   // ── Tablet ──────────────────────────────────
-  // plastic.design .home-service__content 동일:
-  // Number 숨김, title(1fr) | desc(2fr) 2컬럼 유지
+  // Number hidden; title(1fr) | desc(2fr) two-column layout maintained
   @media (max-width: 1023.98px) {
     &__rule {
       display: none;
@@ -118,7 +116,7 @@
     .wrap {
       grid-template-columns: 1fr;
       padding-top: $section-title-space;
-      padding-bottom: 20vw; // plastic: ~24vw, adjusted for tablet
+      padding-bottom: 20vw;
     }
 
     &__label-wrap {
@@ -128,7 +126,7 @@
     &__label {
       position: static;
       margin-bottom: $space-10;
-      font-size: var(--fs-body-3); // plastic.design .service__top span — 16px @ 768
+      font-size: var(--fs-body-3); // 16px @ 768
     }
 
     &__number {
@@ -138,7 +136,7 @@
     &__item-inner {
       grid-template-columns: 1fr 2fr;
       gap: 0 $gutter-tablet;
-      padding: 36px 0;
+      padding: $space-10 0; // ≈ 32px @ 1440 (was hardcoded 36px)
     }
 
     &__desc {
@@ -148,17 +146,16 @@
     }
 
     &__title {
-      font-size: var(--fs-body-3); // plastic.design .service__content .service__list — 16px @ 768
+      font-size: var(--fs-body-3); // 16px @ 768
     }
   }
 
   // ── Mobile ───────────────────────────────────
-  // plastic.design .home-service__content 동일:
-  // 단일 컬럼 스택, Number 숨김, title 아래 gutter 간격
+  // Single-column stack, number hidden, title gap matches gutter
   @media (max-width: 575.98px) {
     .wrap {
       padding-top: 50px;
-      padding-bottom: 16vw; // proportional bottom spacing
+      padding-bottom: 16vw;
     }
 
     &__label-wrap {
@@ -171,7 +168,7 @@
     }
 
     &__title {
-      font-size: var(--fs-body-3); // plastic.design .service__content .service__list — 20px @ 390
+      font-size: var(--fs-body-3); // 20px @ 390
       margin-bottom: $gutter-mobile;
     }
 

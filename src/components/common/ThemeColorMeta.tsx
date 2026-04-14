@@ -1,12 +1,12 @@
 'use client';
 // =============================================
 // ThemeColorMeta
-// body[data-theme] 변화를 감지해서
-// <meta id="theme-color-meta" name="theme-color"> 를 실시간 업데이트
-// → iOS Safari 상단 상태바 / 하단 주소바 색상 일치
+// Detects changes to body[data-theme] and updates
+// <meta id="theme-color-meta" name="theme-color"> in real time
+// → Keeps iOS Safari top status bar / bottom address bar color in sync
 //
-// ※ 주의: layout.tsx <head>에 단일 태그를 직접 선언하고
-//         이 컴포넌트가 content만 교체하는 방식으로 동작
+// Note: A single tag is declared directly in layout.tsx <head>,
+//       and this component only swaps the content attribute
 // =============================================
 
 import { useEffect } from 'react';
@@ -26,10 +26,10 @@ export default function ThemeColorMeta() {
       meta.content = THEME_COLORS[theme] ?? '#ffffff';
     };
 
-    // 초기값 즉시 적용
+    // Apply initial value immediately
     applyColor();
 
-    // body[data-theme] 변경 감지 → 실시간 업데이트
+    // Detect body[data-theme] changes → update in real time
     const observer = new MutationObserver(applyColor);
     observer.observe(document.body, {
       attributes: true,

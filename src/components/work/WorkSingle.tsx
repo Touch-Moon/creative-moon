@@ -1,8 +1,8 @@
 'use client';
 /**
- * WorkSingle — /work/{slug} 싱글 페이지
- * 구조: .work__top → .work__hero → .work__text → .work__modules → WorkRelated
- * 모듈 체계: mediaBlock / textBlock / spacerBlock (3-module system)
+ * WorkSingle — /work/{slug} single page
+ * Structure: .work__top → .work__hero → .work__text → .work__modules → WorkRelated
+ * Module system: mediaBlock / textBlock / spacerBlock (3-module system)
  */
 import { useState, useRef, useEffect } from 'react';
 import { m, type Variants } from 'framer-motion';
@@ -23,7 +23,7 @@ import './WorkSingle.scss';
 const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
 const EASE_INOUT: BezierDefinition = [0.76, 0, 0.24, 1];
 
-// ── 타이틀 word clip-path + slide 변형 ──────────────────────────
+// ── Title word clip-path + slide variants ───────────────────────
 const clipVariants: Variants = {
   hidden: { clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)' },
   visible: (i: number) => ({
@@ -49,7 +49,7 @@ const fadeUpVariants: Variants = {
   }),
 };
 
-// ── 더미 Single 데이터 ─────────────────────────────────────────────
+// ── Dummy single data ─────────────────────────────────────────────
 const DUMMY_SINGLE: WorkSingleData = {
   _id: 'dummy',
   title: 'Hyundai Annual Convention.',
@@ -73,13 +73,13 @@ const DUMMY_SINGLE: WorkSingleData = {
   ],
 };
 
-// ── Placeholder URL 유틸 ──────────────────────────────────────────
+// ── Placeholder URL utility ──────────────────────────────────────
 function ph(w: number, h: number, n = '') {
   return `https://placehold.co/${w}x${h}/1a1a1a/555555${n ? `?text=${encodeURIComponent(n)}` : ''}`;
 }
 const isPlaceholder = (src: string) => src.includes('placehold.co');
 
-// ── Viewport-aware Video (50% 진입 시 재생, 벗어나면 일시정지) ────
+// ── Viewport-aware Video (play at 50% entry, pause when out of view) ─
 function ViewportVideo({ src, style }: { src: string; style?: React.CSSProperties }) {
   const ref = useRef<HTMLVideoElement>(null);
 
@@ -116,17 +116,17 @@ function ViewportVideo({ src, style }: { src: string; style?: React.CSSPropertie
 }
 
 // ── Device Config ─────────────────────────────────────────────────
-// 모든 값은 비율(%) 기반 — col 폭에 무관하게 반응형 작동
-// ※ mobile.frameRatio: PNG 실제 크기 확인 후 조정 필요
+// All values are percentage-based — responsive regardless of column width
+// Note: mobile.frameRatio — adjust after verifying the actual PNG dimensions
 const DEVICE_CONFIG = {
   desktop: {
-    src: null,                      // PNG 없음, 순수 CSS 프레임
-    frameRatio: null,               // height auto (영상 크기 따름)
+    src: null,                      // No PNG — pure CSS frame
+    frameRatio: null,               // height auto (follows video size)
     paddingTopBottom: 13.54,        // (680-413)/2 ÷ 986 × 100
   },
   tablet: {
     src: '/images/devices/ipad.webp',
-    frameRatio: '1308 / 931',       // PNG 실측
+    frameRatio: '1308 / 931',       // Measured from PNG
     screen: {
       left:         4.09,
       top:          5.49,
@@ -137,12 +137,12 @@ const DEVICE_CONFIG = {
   },
   mobile: {
     src: '/images/devices/iphone.webp',
-    frameRatio: '440 / 916',        // PNG 실측 (881×1834 @2x)
+    frameRatio: '440 / 916',        // Measured from PNG (881×1834 @2x)
     screen: {
       left:         4.09,           // (881-808)/2 ÷ 881 → (440-404)/2 ÷ 440
       top:          2.24,           // (1834-1750)/2 ÷ 1834 → (916-875)/2 ÷ 916
       width:        91.82,          // 808 ÷ 881 → 404 ÷ 440
-      aspectRatio:  '808 / 1750',   // 비디오 마스크 비율
+      aspectRatio:  '808 / 1750',   // Video mask aspect ratio
       borderRadius: 13.61,          // 110 ÷ 808
     },
   },
@@ -157,7 +157,7 @@ const BG_COLORS: Record<string, string> = {
 type DeviceSkin = 'none' | 'desktop' | 'tablet' | 'mobile';
 type DeviceBg   = 'transparent' | 'dark' | 'light' | 'white' | 'image';
 
-// ── Device Mockup 래퍼 ────────────────────────────────────────────
+// ── Device Mockup wrapper ─────────────────────────────────────────
 function DeviceMockup({
   skin,
   bg = 'transparent',
@@ -175,7 +175,7 @@ function DeviceMockup({
     : bgColor ? { backgroundColor: bgColor }
     : {};
 
-  // ── Desktop: PNG 없는 순수 CSS 프레임 ──────────────────────────
+  // ── Desktop: pure CSS frame without PNG ─────────────────────────
   if (skin === 'desktop') {
     const { paddingTopBottom } = DEVICE_CONFIG.desktop;
     return (
@@ -187,15 +187,15 @@ function DeviceMockup({
     );
   }
 
-  // ── Tablet / Mobile: PNG 프레임 ────────────────────────────────
+  // ── Tablet / Mobile: PNG frame ──────────────────────────────────
   const cfg = DEVICE_CONFIG[skin];
   const { frameRatio, screen } = cfg as typeof DEVICE_CONFIG.tablet;
 
   return (
     <div className={`dm dm--${skin}`} style={bgStyle}>
-      {/* 디바이스 래퍼 (max-width + 가운데 정렬) */}
+      {/* Device wrapper (max-width + centered) */}
       <div className="dm__device" style={{ aspectRatio: frameRatio }}>
-        {/* [1] 영상/이미지 콘텐츠 */}
+        {/* [1] Video/image content */}
         <div
           className="dm__screen"
           style={{
@@ -208,7 +208,7 @@ function DeviceMockup({
         >
           {children}
         </div>
-        {/* [2] 디바이스 프레임 PNG — 맨 앞 */}
+        {/* [2] Device frame PNG — rendered on top */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="dm__frame" src={cfg.src!} alt="" aria-hidden="true" />
       </div>
@@ -216,7 +216,7 @@ function DeviceMockup({
   );
 }
 
-// ── 슬롯 렌더러 ──────────────────────────────────────────────────
+// ── Slot renderer ─────────────────────────────────────────────────
 function MediaSlot({
   videoUrl, imageField, fallback, w = 900, sizes,
   skin, skinBg, skinBgImageUrl,
@@ -225,7 +225,7 @@ function MediaSlot({
   imageField?: { asset?: { url?: string } };
   fallback?: string;
   w?: number;
-  /** next/image sizes 문자열 — 레이아웃에 따라 ModuleMediaBlock이 주입 */
+  /** next/image sizes string — injected by ModuleMediaBlock based on layout */
   sizes?: string;
   skin?: DeviceSkin;
   skinBg?: DeviceBg;
@@ -234,7 +234,7 @@ function MediaSlot({
   const media = videoUrl
     ? <ViewportVideo src={videoUrl} />
     : (() => {
-        // Sanity CDN 변환 적용 (auto=format → WebP/AVIF 자동 서빙, fit=max, width, quality)
+        // Apply Sanity CDN transform (auto=format → auto-serve WebP/AVIF, fit=max, width, quality)
         const rawUrl = imageField?.asset?.url ?? null;
         const src = sanityImg(rawUrl, w) ?? fallback ?? ph(w, Math.round(w * 0.75));
         return <Image src={src} alt="" width={w} height={Math.round(w * 0.75)}
@@ -253,7 +253,7 @@ function MediaSlot({
   return media;
 }
 
-// ── 모듈 렌더러: Media Block ──────────────────────────────────────
+// ── Module renderer: Media Block ─────────────────────────────────
 function ModuleMediaBlock({ mod, delay = 0 }: { mod: MediaBlock; delay?: number }) {
   const layout = mod.layout || '1col';
   const bleed = mod.fullBleed ?? false;
@@ -272,16 +272,16 @@ function ModuleMediaBlock({ mod, delay = 0 }: { mod: MediaBlock; delay?: number 
     );
   }
 
-  // Multi-column — sizes 설정
+  // Multi-column — configure sizes
   const is3 = layout === '3col';
-  // narrow-wide / wide-narrow 는 col마다 비율이 다르므로 개별 지정
+  // narrow-wide / wide-narrow have different ratios per column, so specify individually
   const sizesMain: string = is3
     ? '(max-width: 575px) 100vw, 33vw'
     : layout === '2col-narrow-wide'
       ? '(max-width: 575px) 100vw, 35vw'   // narrow col
       : layout === '2col-wide-narrow'
         ? '(max-width: 575px) 100vw, 60vw'  // wide col
-        : '(max-width: 575px) 100vw, (max-width: 1023px) 50vw, 48vw'; // 2col 균등
+        : '(max-width: 575px) 100vw, (max-width: 1023px) 50vw, 48vw'; // 2col equal
   const sizesSub: string = is3
     ? '(max-width: 575px) 100vw, 33vw'
     : layout === '2col-narrow-wide'
@@ -320,7 +320,7 @@ function ModuleMediaBlock({ mod, delay = 0 }: { mod: MediaBlock; delay?: number 
   );
 }
 
-// ── 모듈 렌더러: Text Block ───────────────────────────────────────
+// ── Module renderer: Text Block ──────────────────────────────────
 function ModuleTextBlock({ mod, delay = 0 }: { mod: TextBlock; delay?: number }) {
   const layout = mod.layout || 'default';
   const theme = mod.theme || 'light';
@@ -361,13 +361,13 @@ function ModuleTextBlock({ mod, delay = 0 }: { mod: TextBlock; delay?: number })
   );
 }
 
-// ── 모듈 렌더러: Spacer ──────────────────────────────────────────
+// ── Module renderer: Spacer ──────────────────────────────────────
 function ModuleSpacer({ mod }: { mod: SpacerBlock }) {
   const size = mod.size || 'medium';
   return <div className={`wm wm--spacer wm--spacer-${size}`} />;
 }
 
-// ── 모듈 디스패처 ─────────────────────────────────────────────────
+// ── Module dispatcher ─────────────────────────────────────────────
 function renderModule(mod: ModuleType, index: number) {
   const delay = index * 100;
   switch (mod._type) {
@@ -466,7 +466,7 @@ export default function WorkSingle({ data, selectedWorks }: Props) {
         )}
       </m.div>
 
-      {/* ── .work__text: 프로젝트 정보 ── */}
+      {/* ── .work__text: project info ── */}
       <div className="work-single__text work-single__text--animate">
         <div className="work-single__text-inner">
           {work.services && work.services.length > 0 && (

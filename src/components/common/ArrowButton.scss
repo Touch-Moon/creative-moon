@@ -2,13 +2,13 @@
 @use '@/styles/primitives/space' as *;
 
 // =============================================
-// ArrowButton — 공통 화살표 버튼
-// plastic.design 기준: 46×24px pill shape
+// ArrowButton — shared arrow button component
+// Shape: 46×24px pill (fvw-scaled on desktop)
 // =============================================
 .arrow-btn {
   position: relative;
   overflow: hidden;
-  isolation: isolate; // mix-blend-mode를 버튼 내로 격리
+  isolation: isolate; // contain mix-blend-mode within button bounds
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -17,20 +17,20 @@
   border-radius: 9999px;
   border: none;
   padding: 0;
-  // inset box-shadow = 테두리 — CSS 변수로 라이트/다크 테마 자동 대응
+  // inset box-shadow acts as border — auto light/dark via CSS variable
   box-shadow: var(--foreground) 0 0 0 1.5px inset;
   background: transparent;
   color: var(--foreground);
   cursor: pointer;
   transition: box-shadow 0.35s ease;
 
-  // ── 호버 fill 레이어 — JS로 제어 (enter: 아래→위, leave: 위→밖) ──
+  // ── Hover fill layer — controlled by JS (enter: bottom→top, leave: top→out) ──
   &__fill {
     position: absolute;
     inset: 0;
     background: var(--foreground);
     border-radius: 0;
-    transform: translateY(100%); // 초기: 버튼 아래 대기
+    transform: translateY(100%); // initial: waiting below button
     pointer-events: none;
   }
 
@@ -38,24 +38,23 @@
     position: relative;
     z-index: 1;
     flex-shrink: 0;
-    mix-blend-mode: difference; // fill과 자동 반전 → 라이트/다크 모두 대응
+    mix-blend-mode: difference; // auto-inverts with fill — works on both light/dark
     color: var(--foreground);
-    // plastic.design 기준: SVG width를 명시적으로 제한 (1.73993vw ≈ fvw(25))
-    width: fvw(25);
+    width: fvw(25); // SVG constrained to ~1.74vw
     height: auto;
   }
 
-  // ── prev: SVG rotate(180deg) flip — plastic.design 방식
+  // ── prev: rotate SVG 180deg
   &--prev svg {
     transform: rotate(180deg);
   }
 
-  // ── hover (box-shadow만 변경 — 색은 mix-blend-mode가 처리) ──
+  // ── hover (box-shadow only — color handled by mix-blend-mode) ──
   &:hover:not(:disabled) {
     box-shadow: var(--foreground) 0 0 0 1.5px inset;
   }
 
-  // ── disabled — svg opacity 낮춤
+  // ── disabled — lower svg opacity
   &:disabled {
     cursor: default;
     pointer-events: none;
@@ -65,7 +64,7 @@
     }
 
     .arrow-btn__fill {
-      background: rgba(0, 0, 0, 0.25)
+      background: rgba(0, 0, 0, 0.25);
     }
   }
 

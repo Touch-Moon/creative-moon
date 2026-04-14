@@ -63,7 +63,7 @@ const labelSlideVariants: Variants = {
   },
 };
 
-// ── 각 아이템이 독립적으로 뷰포트 진입 감지 ──
+// ── Each item detects viewport entry independently ──
 type SkillItemProps = {
   item: typeof skills[0];
   index: number;
@@ -92,7 +92,7 @@ function SkillItem({ item, index, isRevealed, setItemRef }: SkillItemProps) {
         <p className="home-skills__desc">{item.desc}</p>
       </div>
 
-      {/* ── 라인 애니메이션 (plastic.design home-service__line 방식) ── */}
+      {/* ── Line animation (plastic.design home-service__line approach) ── */}
       <div className="home-skills__rule">
         <m.span
           className="home-skills__rule-inner"
@@ -113,12 +113,12 @@ export default function HomeSkills() {
   const sectionRef  = useRef(null);
   const sectionInView = useInView(sectionRef, { once: true, margin: '0px 0px -40% 0px' });
 
-  // 한 번 active된 항목은 영구 revealed 처리
+  // Items that have been active once are permanently marked as revealed
   useEffect(() => {
     setRevealedItems(prev => new Set([...prev, activeIndex]));
   }, [activeIndex]);
 
-  // 스크롤 위치에 따른 active 항목 업데이트
+  // Update active item based on scroll position
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
 
@@ -138,7 +138,7 @@ export default function HomeSkills() {
   return (
     <section ref={sectionRef} className="home-skills" data-theme="light">
       <div className="wrap">
-      {/* ── 좌측 sticky 라벨 ── */}
+      {/* ── Left sticky label ── */}
       <m.div
         className="home-skills__label-wrap"
         variants={labelClipVariants}
@@ -153,7 +153,7 @@ export default function HomeSkills() {
         </m.div>
       </m.div>
 
-      {/* ── 우측 번호 목록 — 각 항목 개별 진입 감지 ── */}
+      {/* ── Right numbered list — each item detects entry individually ── */}
       <div className="home-skills__list">
         {skills.map((item, i) => (
           <SkillItem

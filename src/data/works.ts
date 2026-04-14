@@ -1,6 +1,6 @@
 /**
- * SELECTED_WORKS — 홈 Selected Works 섹션 + 싱글 페이지 Related 섹션 공유 데이터
- * HomeWorks.tsx / WorkRelated.tsx 양쪽에서 import하여 사용
+ * SELECTED_WORKS — shared data for the home Selected Works section and the single-page Related section
+ * Imported by both HomeWorks.tsx and WorkRelated.tsx
  */
 
 export type CardSize = 'large' | 'wide' | 'tall' | 'compact';

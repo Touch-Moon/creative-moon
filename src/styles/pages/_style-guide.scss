@@ -5,7 +5,7 @@
 
 @use '../primitives/space' as *;
 
-/* @property — CSS 변수를 애니메이션 가능하게 등록 */
+/* @property — register CSS custom properties for animation */
 @property --cm-bg {
   syntax: '<color>';
   initial-value: #ffffff;
@@ -60,7 +60,7 @@
 }
 
 .cm-theme-toggle {
-  /* cm-root 밖에서도 동작하도록 자체 CSS 변수 정의 (light default) */
+  /* Define own CSS vars so it works outside cm-root (light default) */
   --cm-fg: #000;
   --cm-bg: #fff;
 
@@ -85,7 +85,7 @@
   background: transparent;
   color: var(--cm-fg);
 
-  /* Center icon — overflow:hidden 으로 ::before 마스크 */
+  /* Center icon — ::before masked by overflow:hidden */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -94,13 +94,13 @@
   transition: color 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* cm-root 밖으로 이동 시 data-theme으로 직접 색상 제어 */
+/* When moved outside cm-root, colour controlled directly by data-theme */
 .cm-theme-toggle[data-theme="dark"] {
   --cm-fg: #fff;
   --cm-bg: #000;
 }
 
-/* Eclipse — 왼쪽에서 오른쪽으로 슬라이드 */
+/* Eclipse — slides left to right */
 .cm-theme-toggle::before {
   content: '';
   position: absolute;
@@ -197,14 +197,14 @@
 /* ---- Desktop XL — max-width cap + center ---- */
 @media (min-width: 1921px) {
 
-  /* section: 1920px 컨테이너로 가운데 정렬 */
+  /* section: centre inside 1920px container */
   .cm-section {
     max-width: 1920px;
     margin-left: auto;
     margin-right: auto;
   }
 
-  /* header: 배경은 full-width, 내부 콘텐츠는 1920px 기준 가운데 */
+  /* header: background full-width, inner content centred at 1920px */
   .cm-header {
     padding-left: calc((100vw - 1920px) / 2 + 64px);
     padding-right: calc((100vw - 1920px) / 2 + 64px);
@@ -354,9 +354,9 @@
 }
 
 /* ---- mix-blend-mode ---- */
-/* .button span 의 difference 는 전역 styles.scss 값을 그대로 사용
-   → div 가 올라올 때 텍스트가 자연스럽게 반전되어 깜빡임 없음
-   .button--secondary 엘리먼트 자체만 normal 로 고정 */
+/* .button span keeps difference from global styles.scss
+   → text inverts naturally as the fill div rises — no flicker
+   .button--secondary element itself is forced to normal */
 .cm-root .button--secondary {
   mix-blend-mode: normal;
   box-shadow: none !important;
@@ -373,7 +373,7 @@
   font-weight: 400;
 }
 
-/* Light mode — white bg 위에서 버튼이 보이도록 */
+/* Light mode — ensure button is visible on white background */
 .cm-root[data-theme='light'] .cm-btn-dark .button {
   box-shadow: inset 0 0 0 1.5px #000;
 }
@@ -509,7 +509,7 @@
 .cm-space-item {
   display: flex;
   align-items: center;
-  gap: 36px; // 2.5vw @ 1440px — 고정값으로 통일
+  gap: 36px; // 2.5vw @ 1440px — fixed to align bar start points
   padding: 1.4vw 0;
   border-bottom: 1px solid var(--cm-soft-border);
 }
@@ -522,7 +522,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.3em;
-  min-width: 144px; // 10vw @ 1440px — 고정값으로 bar 시작점 통일
+  min-width: 144px; // 10vw @ 1440px — fixed to align bar start points
   flex-shrink: 0;
 }
 
@@ -564,14 +564,14 @@
     padding-right: $gutter-tablet;
   }
 
-  /* 버튼 크기 고정 — button--s tablet 기본값(6.51vw = 66px)이 너무 커서 desktop과 맞춤 */
+  /* Fix button size — button--s tablet default (6.51vw = 66px) is too large, match desktop */
   .cm-header__body .button--s span {
     height: 32px;
     font-size: 11px;
     padding: 0 18px;
   }
 
-  /* space-item: min-width 고정으로 bar 시작점 통일 */
+  /* space-item: fixed min-width to align bar start points */
   .cm-space-item {
     gap: 24px;
   }
@@ -633,14 +633,14 @@
     padding-right: $gutter-mobile;
   }
 
-  /* 버튼 크기 고정 */
+  /* Fix button size */
   .cm-header__body .button--s span {
     height: 32px;
     font-size: 11px;
     padding: 0 18px;
   }
 
-  /* 모바일: 버튼 행 세로 정렬 */
+  /* Mobile: stack button row vertically */
   .cm-btn-row {
     display: flex;
     flex-direction: column;
@@ -649,7 +649,7 @@
     gap: 1.2vw;
   }
 
-  /* space-item: mobile도 고정값 */
+  /* space-item: fixed values on mobile too */
   .cm-space-item {
     gap: 16px;
   }
@@ -721,9 +721,9 @@
 
 /* ---- Textarea — prevent JS auto-grow in style guide demo ---- */
 /*
- * JS가 textarea에 el.style.height 를 인라인으로 직접 세팅함.
- * form-control 을 flex 컨테이너로, textarea 를 flex:1 로 만들어
- * CSS 레이아웃이 높이를 결정하게 하고, !important 로 인라인 height 를 무력화.
+ * JS sets el.style.height on textarea inline.
+ * Make form-control a flex container and textarea flex:1
+ * so CSS controls the height, then neutralise the inline height with !important.
  */
 .cm-root .form-group.is-textarea .form-control {
   display: flex;
@@ -822,7 +822,7 @@
 
 .cm-root[data-theme='dark'] .cm-color-group {
   background-color: #fff;
-  /* 흰 배경 위에서 텍스트 및 border가 보이도록 --cm-fg / --cm-soft-border 로컬 오버라이드 */
+  /* Local override so text and borders remain visible on white background */
   --cm-fg: #000;
   --cm-soft-border: rgba(0, 0, 0, 0.1);
 }
@@ -1251,7 +1251,7 @@
 }
 
 /* ── Desktop XL cap (1921px +) ─────────────────────────────
-   vw 값을 1920px 기준 고정 px로 동결 */
+   Freeze vw values as fixed px at 1920px base */
 @media (min-width: 1921px) {
 
   /* Header */

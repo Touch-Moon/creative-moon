@@ -361,7 +361,7 @@ export default function AboutPage() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────
-          8. PHILOSOPHY (홈페이지와 공유)
+          8. PHILOSOPHY (shared with homepage)
       ───────────────────────────────────────────────────────── */}
       <HomeMarquee />
 

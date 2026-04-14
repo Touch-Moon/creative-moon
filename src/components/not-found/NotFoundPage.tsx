@@ -7,15 +7,15 @@ import './NotFoundPage.scss';
 const ORBITAL_PATH =
   'M239.593 36.2019C239.593 36.2019 55.3702 108.19 14.3204 250.389C-166.663 877.325 1557.46 937.857 1497.78 512.469C1468.75 305.49 940.396 437.475 802.939 502.791C621.902 588.816 375.877 755.292 436.044 965.727C449.839 1013.98 473.152 1041.9 514.806 1074.55C563.565 1112.76 609.96 1133.15 669.771 1155.72C747.397 1185.01 927.439 1233.13 1166.87 1262.22';
 
-// ── 타이밍 설정 ─────────────────────────────────────
-const MOVE_DURATION     = 9000;  // 비행기가 경로를 완주하는 시간 (ms)
-const FADE_OUT_DURATION = 500;   // 완주 후 페이드아웃 시간 (ms)
-const FADE_IN_DURATION  = 500;   // 재시작 전 페이드인 시간 (ms)
+// ── Timing settings ─────────────────────────────────
+const MOVE_DURATION     = 9000;  // time for the plane to complete the path (ms)
+const FADE_OUT_DURATION = 500;   // fade-out duration after completion (ms)
+const FADE_IN_DURATION  = 500;   // fade-in duration before restart (ms)
 const TOTAL_DURATION    = MOVE_DURATION + FADE_OUT_DURATION + FADE_IN_DURATION;
 
 /**
  * CSS cubic-bezier(p1x, p1y, p2x, p2y) easing solver.
- * Newton's method으로 bezier parameter t를 구하고 Y(t) 반환.
+ * Solves bezier parameter t via Newton's method and returns Y(t).
  */
 function cubicBezierEase(p1x: number, p1y: number, p2x: number, p2y: number) {
   const cx = 3 * p1x,  bx = 3 * (p2x - p1x) - cx,  ax = 1 - cx - bx;
@@ -39,9 +39,9 @@ const ease = cubicBezierEase(0.42, 0, 0.58, 1);
 export default function NotFoundPage() {
   const [mounted, setMounted] = useState(false);
 
-  const pathRef  = useRef<SVGPathElement>(null); // 측정용 (invisible)
-  const trailRef = useRef<SVGPathElement>(null); // 트레일 선
-  const planeRef = useRef<SVGGElement>(null);    // 비행기 그룹
+  const pathRef  = useRef<SVGPathElement>(null); // for measurement (invisible)
+  const trailRef = useRef<SVGPathElement>(null); // trail line
+  const planeRef = useRef<SVGGElement>(null);    // plane group
 
   const rafRef   = useRef<number>(0);
   const startRef = useRef<number | null>(null);
@@ -63,7 +63,7 @@ export default function NotFoundPage() {
 
     const total = pathEl.getTotalLength();
     trailEl.style.strokeDasharray  = `${total}`;
-    trailEl.style.strokeDashoffset = `${total}`; // 처음엔 아무것도 안 보임
+    trailEl.style.strokeDashoffset = `${total}`; // nothing visible at the start
 
     const tick = (ts: number) => {
       if (!startRef.current) startRef.current = ts;
@@ -73,31 +73,31 @@ export default function NotFoundPage() {
       let opacity: number;
 
       if (elapsed < MOVE_DURATION) {
-        // ── Phase 1: 비행기 이동 ─────────────────
+        // ── Phase 1: plane moving ────────────────
         const t   = elapsed / MOVE_DURATION;
         len       = ease(t) * total;
         opacity   = 1;
 
       } else if (elapsed < MOVE_DURATION + FADE_OUT_DURATION) {
-        // ── Phase 2: 완주 후 페이드아웃 ──────────
-        // 비행기는 끝점에 고정, 트레일도 전체 유지
+        // ── Phase 2: fade-out after completion ───
+        // plane fixed at endpoint, trail also fully visible
         len     = total;
         const t = (elapsed - MOVE_DURATION) / FADE_OUT_DURATION;
         opacity = 1 - t; // 1 → 0
 
       } else {
-        // ── Phase 3: 시작점에서 페이드인 ─────────
-        // 비행기는 시작점, 트레일 0부터
+        // ── Phase 3: fade-in from start point ────
+        // plane at start point, trail from 0
         len     = 0;
         const t = (elapsed - MOVE_DURATION - FADE_OUT_DURATION) / FADE_IN_DURATION;
         opacity = t; // 0 → 1
       }
 
-      // 트레일: 시작부터 len까지만 표시
+      // trail: display only from start up to len
       trailEl.style.strokeDashoffset = `${total - len}`;
       trailEl.style.opacity          = `${opacity}`;
 
-      // 비행기: len 위치에 배치 + 경로 방향으로 회전
+      // plane: position at len + rotate to follow path direction
       const safeLen = Math.max(0, Math.min(len, total));
       const pt      = pathEl.getPointAtLength(safeLen);
       const ahead   = Math.min(safeLen + 10, total);
@@ -128,10 +128,10 @@ export default function NotFoundPage() {
           xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="xMidYMid meet"
         >
-          {/* 길이 측정용 — 화면에 보이지 않음 */}
+          {/* for length measurement — not visible on screen */}
           <path ref={pathRef} d={ORBITAL_PATH} stroke="none" fill="none" />
 
-          {/* 트레일 선 */}
+          {/* trail line */}
           <path
             ref={trailRef}
             d={ORBITAL_PATH}
@@ -142,7 +142,7 @@ export default function NotFoundPage() {
             vectorEffect="nonScalingStroke"
           />
 
-          {/* 종이비행기 */}
+          {/* paper plane */}
           <g ref={planeRef} className="plane-group">
             <path
               d="M312.316 9.95847L267.797 1L277.357 15.5993L287.85 32.3412L312.316 9.95847Z"

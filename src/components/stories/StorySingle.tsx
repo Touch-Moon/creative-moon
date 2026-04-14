@@ -41,7 +41,7 @@ const ptComponents = {
   },
 };
 
-// ── Hero Media Module (Work와 동일: slide-up from bottom) ──────────
+// ── Hero Media Module (same as Work: slide-up from bottom) ───────
 function HeroModuleBlock({ heroMedia }: { heroMedia: StoryHeroMedia }) {
   const videoUrl = heroMedia.video?.asset?.url;
   const imageUrl = heroMedia.image?.asset?.url;
@@ -128,7 +128,7 @@ function StoryMediaSlot({
 }
 
 // ── Media Block ───────────────────────────────────────────────────
-// Work의 mediaBlock과 동일한 레이아웃(Frame) + Image/Video 슬롯 구조
+// Same layout (Frame) + Image/Video slot structure as Work's mediaBlock
 function MediaBlock({ mod }: { mod: StoryMediaBlock }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-10%' });
@@ -379,7 +379,7 @@ function TitleBlock({ title, category }: { title: string; category?: string }) {
   );
 }
 
-// ── Dummy data (Sanity 미연결 시) ─────────────────────────────────
+// ── Dummy data (used when Sanity is not connected) ────────────────
 const DUMMY_STORY: StorySingleData = {
   _id: 'dummy',
   title: 'We review a decade of experience in retail.',

@@ -68,13 +68,13 @@ export default async function WorkSlugPage({ params }: Props) {
       getSelectedWorks(),
     ]);
   } catch {
-    // Sanity 미연결 → 더미 데이터 사용 (WorkSingle 내부에서 처리)
+    // Sanity not connected — use dummy data (handled inside WorkSingle)
     work = null;
     selectedWorks = undefined;
   }
 
-  // Sanity에 데이터가 있지만 해당 slug가 없는 경우 → 404
-  // Sanity 자체가 비어있을 때는 더미로 폴백
+  // Data exists in Sanity but the given slug was not found → 404
+  // When Sanity itself is empty, fall back to dummy data
   if (work === undefined) {
     notFound();
   }

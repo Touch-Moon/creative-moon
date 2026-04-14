@@ -1,11 +1,11 @@
 /**
  * On-demand ISR revalidation
- * Sanity webhook 또는 수동 호출로 Work/Story 페이지 캐시 즉시 갱신
+ * Immediately purges the Work/Story page cache via Sanity webhook or manual call.
  *
  * POST /api/revalidate
  * Body: { secret: "...", paths: ["/work", "/"] }
  *
- * 또는 GET /api/revalidate?secret=...&path=/work
+ * Or: GET /api/revalidate?secret=...&path=/work
  */
 import { revalidatePath } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';

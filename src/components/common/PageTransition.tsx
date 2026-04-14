@@ -1,15 +1,15 @@
 'use client';
 
 /**
- * PageTransition — 썸네일 고정 + 파동 + 커튼 페이지 트랜지션
+ * PageTransition — thumbnail freeze + wave + curtain page transition
  * ──────────────────────────────────────────────────────────────────
  * EXIT: capture-phase click → fade + clone + scroll → safePush
- * ENTER: useLayoutEffect([pathname]) → DOM 의 클론 감지 → wave → curtain → reveal
+ * ENTER: useLayoutEffect([pathname]) → detect clone in DOM → wave → curtain → reveal
  *
- * 견고성:
- * - EXIT / ENTER 모두 failsafe 타이머로 교착 방지
- * - wave 에 별도 타임아웃 (WAVE_TIMEOUT_MS) 적용
- * - isNavigating 은 EXIT failsafe 에서도 리셋
+ * Robustness:
+ * - both EXIT / ENTER use failsafe timers to prevent deadlocks
+ * - wave has a separate timeout (WAVE_TIMEOUT_MS)
+ * - isNavigating is also reset in EXIT failsafe
  */
 
 import { usePathname } from 'next/navigation';
@@ -18,11 +18,11 @@ import { initCanvas, runWave } from '@/lib/canvasWave';
 import { useLenis } from './LenisContext';
 import './PageTransition.scss';
 
-/** Lenis 스크롤을 맨 위로 리셋하고 재시작 */
+/** Reset Lenis scroll to top and restart */
 function resetLenisAndStart(lenisRef: React.RefObject<import('lenis').default | null>) {
   const lenis = lenisRef.current;
   if (lenis) {
-    // Lenis 내부 스크롤 상태 강제 리셋
+    // Force-reset Lenis internal scroll state
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const l = lenis as any;
     if (typeof l.targetScroll !== 'undefined') l.targetScroll = 0;
@@ -32,7 +32,7 @@ function resetLenisAndStart(lenisRef: React.RefObject<import('lenis').default | 
   lenis?.start();
 }
 
-/** 안전한 네비게이션 — useRouter 클로저 무효화 방지 */
+/** Safe navigation — prevents useRouter closure invalidation */
 function safePush(href: string) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const r = (window as any).next?.router;
@@ -43,13 +43,13 @@ function safePush(href: string) {
   }
 }
 
-// ── 상수 ─────────────────────────────────────────────────────────
+// ── Constants ────────────────────────────────────────────────────
 const SCROLL_MS        = 480;
 const CURTAIN_MS       = 900;
 const NAV_DELAY        = 20;
-const FAILSAFE_MS      = 5000;   // ENTER 전체 failsafe
+const FAILSAFE_MS      = 5000;   // overall ENTER failsafe
 const EXIT_FAILSAFE_MS = 3000;   // EXIT failsafe (scroll+navigate)
-const WAVE_TIMEOUT_MS  = 2000;   // wave 개별 타임아웃
+const WAVE_TIMEOUT_MS  = 2000;   // individual wave timeout
 const CLONE_ATTR       = 'data-pt-clone';
 const CLONE_SEL        = `[${CLONE_ATTR}]`;
 
@@ -63,7 +63,7 @@ function easeInOut(t: number): number {
   return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 }
 
-/** 모든 트랜지션 잔재를 강제 정리 */
+/** Force-clean all transition remnants */
 function forceCleanup() {
   document.querySelectorAll(CLONE_SEL).forEach((el) => el.remove());
   document.documentElement.classList.remove(
@@ -84,14 +84,14 @@ export default function PageTransition({ children }: { children: React.ReactNode
   const lenisRef = useLenis();
   const prevPath = useRef(pathname);
 
-  // ── ENTER: pathname 변경 시 클론이 DOM 에 남아있으면 트랜지션 실행 ──
+  // ── ENTER: run transition if clone is still in DOM after pathname change ──
   useLayoutEffect(() => {
-    // ★ clone 존재 여부를 가장 먼저 확인 — prevPath 보다 우선
+    // ★ check for clone first — takes priority over prevPath
     const clone = document.querySelector(CLONE_SEL) as HTMLElement | null;
 
     if (!clone) {
       forceCleanup();
-      lenisRef.current?.start();   // 클론 없음 → 스크롤 리셋 불필요
+      lenisRef.current?.start();   // no clone → scroll reset not needed
       prevPath.current = pathname;
       return;
     }
@@ -103,7 +103,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
       main.style.opacity    = '0';
     }
 
-    // ── 캔버스 + 이미지 참조 꺼내기 ─────────────────────────────
+    // ── Extract canvas + image reference ────────────────────────
     const canvas = clone.querySelector('canvas') as HTMLCanvasElement | null;
     const imgSrc = clone.getAttribute('data-pt-src') || '';
 
@@ -113,24 +113,24 @@ export default function PageTransition({ children }: { children: React.ReactNode
       return;
     }
 
-    // ── Failsafe (ENTER 전체) ────────────────────────────────────
+    // ── Failsafe (full ENTER sequence) ──────────────────────────
     const failsafeTimer = setTimeout(() => {
       forceCleanup();
       resetLenisAndStart(lenisRef);
     }, FAILSAFE_MS);
 
-    // ── startCurtain: 커튼을 아래→위로 올린 뒤 main reveal ──────
+    // ── startCurtain: raise curtain bottom→top then reveal main ─
     let curtainStarted = false;
     const startCurtain = () => {
-      if (curtainStarted) return;   // 중복 호출 방지
+      if (curtainStarted) return;   // prevent duplicate calls
       curtainStarted = true;
 
-      // 커튼: clip-path 아래→위
+      // curtain: clip-path bottom→top
       clone.getBoundingClientRect();          // reflow
       clone.style.transition = `clip-path ${CURTAIN_MS}ms cubic-bezier(0.76, 0, 0.24, 1)`;
       clone.style.clipPath   = 'inset(0 0 100% 0)';
 
-      // 커튼 50% → main 슬라이드 업 + 페이드 인
+      // curtain 50% → main slide up + fade in
       setTimeout(() => {
         document.documentElement.classList.remove(
           'is-page-exiting', 'is-thumb-exiting', 'is-work-exiting',
@@ -144,7 +144,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
         }
       }, Math.round(CURTAIN_MS * 0.5));
 
-      // 커튼 완료 → 정리
+      // curtain complete → cleanup
       setTimeout(() => {
         clearTimeout(failsafeTimer);
         clone.remove();
@@ -159,12 +159,12 @@ export default function PageTransition({ children }: { children: React.ReactNode
       }, CURTAIN_MS + 120);
     };
 
-    // ── 이미지 로드 → wave (+ 타임아웃) → curtain ────────────────
+    // ── Image load → wave (+ timeout) → curtain ─────────────────
     if (imgSrc) {
       const img = new window.Image();
       img.crossOrigin = 'anonymous';
 
-      // wave 타임아웃: WAVE_TIMEOUT_MS 안에 끝나지 않으면 강제 curtain
+      // wave timeout: force curtain if not done within WAVE_TIMEOUT_MS
       let waveTimerId: ReturnType<typeof setTimeout> | null = null;
 
       const onLoaded = () => {
@@ -195,7 +195,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
     }
   }, [pathname, lenisRef]);
 
-  // ── pathname 변경 시 work-list 잔재 정리 ─────────────────────────
+  // ── Clean up work-list remnants on pathname change ────────────
   useEffect(() => {
     document.querySelector('.work-list')?.classList.remove('is-exiting');
     document.querySelectorAll('[data-active]').forEach(
@@ -203,7 +203,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
     );
   }, [pathname]);
 
-  // ── EXIT: 내부 링크 클릭 인터셉트 ─────────────────────────────────
+  // ── EXIT: intercept internal link clicks ──────────────────────
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       const anchor = (e.target as Element).closest('a') as HTMLAnchorElement | null;
@@ -251,13 +251,13 @@ export default function PageTransition({ children }: { children: React.ReactNode
           return;
         }
 
-        // Lenis 정지
+        // Stop Lenis
         lenisRef.current?.stop();
 
-        // ① fadeout
+        // ① fade out
         document.documentElement.classList.add('is-thumb-exiting');
 
-        // ② clone 생성 — data-pt-src 에 이미지 경로 저장
+        // ② create clone — store image path in data-pt-src
         const rect   = imgEl.getBoundingClientRect();
         const docTop = rect.top + window.scrollY;
 
@@ -265,7 +265,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
         const canvas   = document.createElement('canvas');
         const fallback = document.createElement('img');
 
-        // fallback img: 브라우저 캐시에서 즉시 표시 (canvas 로드 전 공백 방지)
+        // fallback img: show immediately from browser cache (prevents blank before canvas loads)
         fallback.src = src;
         fallback.setAttribute('aria-hidden', 'true');
         fallback.style.cssText =
@@ -290,20 +290,20 @@ export default function PageTransition({ children }: { children: React.ReactNode
           'clip-path:inset(0 0 0% 0)',
         ].join(';');
 
-        clone.appendChild(fallback); // 아래: 즉시 보이는 이미지
-        clone.appendChild(canvas);   // 위: wave 용 캔버스 (로드 전 투명)
+        clone.appendChild(fallback); // below: immediately visible image
+        clone.appendChild(canvas);   // above: canvas for wave (transparent before load)
         document.body.appendChild(clone);
 
-        // ③ 이미지를 canvas 에 그리기 (wave ENTER 에서 사용)
+        // ③ draw image to canvas (used during wave ENTER)
         initCanvas(canvas, src, () => {});
 
-        // ④ EXIT failsafe — scroll + navigate 가 끝나지 않으면 강제 navigate
+        // ④ EXIT failsafe — force navigate if scroll + navigate don't complete
         const exitFailsafe = setTimeout(() => {
           safePush(href);
-          // isNavigating 은 ENTER 에서 리셋
+          // isNavigating is reset in ENTER
         }, EXIT_FAILSAFE_MS);
 
-        // ⑤ 스크롤 애니메이션
+        // ⑤ scroll animation
         const space16       = getSpace16();
         const targetScrollY = Math.max(0, docTop - space16);
         const startScrollY  = window.scrollY;

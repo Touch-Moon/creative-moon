@@ -1,6 +1,6 @@
 /**
- * canvasWave.ts — WaveImage.tsx 와 동일한 파동 수학을 PageTransition 에서 재사용
- * WAVE_AMP / WAVE_SIGMA_PCT / WAVE_CYCLES / PULSE_SPEED 는 WaveImage 와 동일
+ * canvasWave.ts — reuses the same wave math as WaveImage.tsx inside PageTransition
+ * WAVE_AMP / WAVE_SIGMA_PCT / WAVE_CYCLES / PULSE_SPEED are identical to those in WaveImage
  */
 
 const WAVE_AMP       = 20;
@@ -12,7 +12,7 @@ function drawFrame(canvas: HTMLCanvasElement, img: HTMLImageElement, p: number) 
   if (canvas.width === 0 || canvas.height === 0) return;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
-  // ★ 이미지 로드 실패 시 빈 캔버스 유지 (에러 방지)
+  // ★ Keep canvas empty if image fails to load (prevents errors)
   if (!img.naturalWidth || !img.naturalHeight) return;
 
   const W = canvas.width, H = canvas.height;
@@ -54,8 +54,8 @@ function drawFrame(canvas: HTMLCanvasElement, img: HTMLImageElement, p: number) 
 }
 
 /**
- * 이미지를 캔버스에 로드하고 첫 프레임(p=0) 렌더링.
- * 로드 완료 시 onReady(img) 호출.
+ * Load an image onto the canvas and render the first frame (p=0).
+ * Calls onReady(img) when loading is complete.
  */
 export function initCanvas(
   canvas: HTMLCanvasElement,
@@ -71,15 +71,15 @@ export function initCanvas(
     drawFrame(canvas, img, 0);
     onReady(img);
   };
-  // 로드 실패해도 트랜지션은 계속 진행 (빈 캔버스)
+  // Transition continues even on load failure (empty canvas)
   img.onerror = () => onReady(img);
   img.src = src;
 }
 
 /**
- * WaveImage 호버 효과와 동일한 파동 1회 실행.
- * 파동 완료 시 onComplete() 호출.
- * 페이지 트랜지션용이므로 딜레이 없이 즉시 시작.
+ * Run one wave pass identical to the WaveImage hover effect.
+ * Calls onComplete() when the wave finishes.
+ * Starts immediately without delay since this is for page transitions.
  */
 export function runWave(
   canvas: HTMLCanvasElement,
@@ -103,7 +103,7 @@ export function runWave(
     } catch (err) {
       console.error('[canvasWave] drawFrame error:', err);
       cancelAnimationFrame(rafId);
-      onComplete(); // ★ 에러 발생해도 커튼 체인 진행
+      onComplete(); // ★ Continue curtain chain even if an error occurs
     }
   };
   rafId = requestAnimationFrame(loop);

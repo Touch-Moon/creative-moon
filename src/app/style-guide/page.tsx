@@ -59,13 +59,13 @@ export default function StyleGuidePage() {
     window.localStorage.setItem('cm-theme', theme);
   }, [theme]);
 
-  // footer를 style-guide 테마와 동기화
+  // Sync footer theme with the style-guide theme
   useEffect(() => {
     const footer = document.querySelector<HTMLElement>('.footer');
     if (footer) footer.dataset.theme = theme;
   }, [theme]);
 
-  // 페이지 언마운트 시 footer를 원래 dark로 복원
+  // Restore footer to its original dark theme on page unmount
   useEffect(() => {
     return () => {
       const footer = document.querySelector<HTMLElement>('.footer');
@@ -160,7 +160,7 @@ export default function StyleGuidePage() {
 
   return (
     <>
-      {/* Portal: page-transition-container stacking context를 탈출하여 body에 직접 마운트 */}
+      {/* Portal: escapes the page-transition-container stacking context and mounts directly on body */}
       {mounted && createPortal(toggleBtn, document.body)}
 
     <div className="cm-root" data-theme={theme}>

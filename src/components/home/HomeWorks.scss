@@ -4,9 +4,9 @@
 
 .home-works {
   background-color: transparent;
-  position: relative; // 라인 absolute 기준
+  position: relative; // line absolute reference
 
-  // ── 수평 라인 (TOP / BOTTOM) ──────────────────
+  // ── Horizontal lines (TOP / BOTTOM) ──────────
   &__line-h {
     display: block;
     height: 1px;
@@ -15,7 +15,7 @@
     transform: scaleX(0);
     transition: transform 0.67s cubic-bezier(0.19, 1, 0.22, 1);
 
-    // ① TOP: 블록 요소 — margin-left + 계산 width로 인셋
+    // ① TOP: block element — margin-left + calc width for inset
     &--top {
       margin-left: $space-12;
       width: calc(100% - #{$space-12} * 2);
@@ -36,7 +36,7 @@
       transition-delay: 0s;
     }
 
-    // ③ BOTTOM: absolute — left + 계산 width로 인셋
+    // ③ BOTTOM: absolute — left + calc width for inset
     &--bottom {
       position: absolute;
       bottom: 0;
@@ -61,7 +61,7 @@
     }
   }
 
-  // ── 수직 라인 (사이드바 우측) ─────────────────
+  // ── Vertical line (sidebar right edge) ───────
   &__line-v {
     display: block;
     position: absolute;
@@ -73,7 +73,7 @@
     transform-origin: left top;
     transform: scaleY(0);
     transition: transform 0.67s cubic-bezier(0.19, 1, 0.22, 1);
-    // ② 수직: delay 0.67s (top 후)
+    // ② Vertical: delay 0.67s (after top line)
     transition-delay: 0.67s;
 
     &.is-revealed {
@@ -90,14 +90,14 @@
     align-items: stretch;
   }
 
-  // ── 좌측 사이드바 ──────────────────────────────
+  // ── Left sidebar ─────────────────────────────
   &__sidebar {
     flex: 0 0 fvw(424);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: $space-12 $space-10;
-    // border-right은 __line-v 가 대체
+    // border-right replaced by __line-v
   }
 
   &__title {
@@ -125,7 +125,7 @@
     gap: $space-5;
   }
 
-  // ── Counter — plastic.design 방식: overflow:hidden + translateY ──
+  // ── Counter — overflow:hidden + translateY slide
   &__counter {
     display: flex;
     align-items: center;
@@ -139,7 +139,7 @@
     height: 1em;
     overflow: hidden;
     text-align: right;
-    min-width: 1.6em; // "01"~"99" 폭 확보
+    min-width: 1.6em; // enough width for "01"–"99"
   }
 
   &__counter-list {
@@ -165,19 +165,19 @@
     gap: $space-2;
   }
 
-  // ── 우측 카드 트랙 ────────────────────────────
+  // ── Right card track ─────────────────────────
   &__track {
-    position: relative; // card.offsetLeft 기준점 고정
+    position: relative; // card.offsetLeft reference point
     flex: 1;
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scroll-padding-left: $space-10; // snap 시 padding 반영
+    scroll-padding-left: $space-10; // reflect padding in snap
     scroll-behavior: smooth;
     padding: $space-12 $space-10;
     gap: $space-6;
     cursor: grab;
-    will-change: transform; // 바운스 translateX 성능 최적화
+    will-change: transform; // bounce translateX performance
 
     &:active {
       cursor: grabbing;
@@ -197,10 +197,9 @@
     text-decoration: none;
     color: inherit;
     display: block;
-    cursor: pointer; // 트랙의 cursor:none 을 카드(링크) 위에서 포인터로 복원
-    // ── 카드 사이즈 variants ──
-    // 높이 fvw(520) 고정, aspect ratio로 폭 결정
-    // large   ~1.27:1  wide ~1.5:1  tall ~0.8:1  compact ~1:1
+    cursor: pointer;
+    // ── Card size variants ──
+    // Fixed height fvw(520), width determined by aspect ratio
     &--large   { flex-basis: calc(fvw(520) * 1.27); }
     &--wide    { flex-basis: calc(fvw(520) * 1.5);  }
     &--tall    { flex-basis: calc(fvw(520) * 0.8);  }
@@ -210,27 +209,27 @@
   &__card-img {
     position: relative;
     width: 100%;
-    height: fvw(520); // fallback
+    height: fvw(520);
     overflow: hidden;
     background: color-mix(in srgb, var(--foreground) 5%, transparent);
     border-radius: 0;
     cursor: pointer;
   }
 
-  // ── 커스텀 커서 배지 (Work 페이지와 동일 스타일) ─
+  // ── Custom cursor badge ───────────────────────
   &__cursor {
     position: fixed;
     top: 0;
     left: 0;
     pointer-events: none;
     z-index: 1000;
-    width: 76px;
-    height: 76px;
+    width: $cursor-badge-size;
+    height: $cursor-badge-size;
   }
 
   &__cursor-bg {
-    width: 76px;
-    height: 76px;
+    width: $cursor-badge-size;
+    height: $cursor-badge-size;
     border-radius: 50%;
     background: #0a0a0a;
     transform: scale(0.5);
@@ -247,10 +246,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 76px;
-    height: 76px;
+    width: $cursor-badge-size;
+    height: $cursor-badge-size;
     color: #fff;
-    font-size: 9px;
+    font-size: $cursor-label-fs;
     font-weight: 400;
     letter-spacing: normal;
     white-space: nowrap;
@@ -271,10 +270,10 @@
     visibility: visible;
   }
 
-  // scale + parallax 래퍼
+  // ── Scale + parallax wrapper
   &__card-img-inner {
     position: absolute;
-    // parallax 패닝 여유: 좌우 5%씩 확장
+    // Parallax panning room: expand 5% each side
     inset: 0 -5%;
     width: 110%;
     overflow: hidden;
@@ -283,7 +282,7 @@
     transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
-  // Canvas — 이미지 + 파동 드로우 대상
+  // Canvas — image + wave draw target
   &__card-img-canvas {
     position: absolute;
     inset: 0;

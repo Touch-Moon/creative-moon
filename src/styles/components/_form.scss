@@ -315,7 +315,7 @@
   .form-group.is-focused.is-textarea .form-textarea,
   .form-group.has-content.is-textarea .form-textarea {
     padding-top: 2.6041666667vw;
-    /* base 값 복원 */
+    /* restore base value */
   }
 }
 
@@ -324,7 +324,7 @@
   .form-group.is-focused.is-textarea .form-textarea,
   .form-group.has-content.is-textarea .form-textarea {
     padding-top: 7.6923076923vw;
-    /* base 값 복원 */
+    /* restore base value */
   }
 }
 
@@ -715,7 +715,7 @@
 }
 
 /* ── Desktop XL cap (1921px +) ─────────────────────────────
-   vw 값을 1920px 기준 고정 px로 동결 */
+   Freeze vw values as fixed px at 1920px base */
 @media (min-width: 1921px) {
 
   /* placeholder / input / textarea base font */

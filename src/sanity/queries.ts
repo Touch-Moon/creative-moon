@@ -2,7 +2,7 @@ import { client } from "./client";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import type { PortableTextBlock } from "@portabletext/react";
 
-// SanityImageSource: Parameters 헬퍼로 builder.image() 인자 타입 추출
+// SanityImageSource: extract argument type for builder.image() via Parameters helper
 type SanityImageSource = Parameters<ReturnType<typeof createImageUrlBuilder>['image']>[0];
 
 // ── Image URL builder ────────────────────────────────────────────
@@ -13,14 +13,14 @@ export function urlFor(source: SanityImageSource) {
 }
 
 /**
- * Sanity CDN 이미지 URL에 변환 파라미터 추가
- * - auto=format  → 브라우저 지원에 따라 WebP/AVIF 자동 서빙
- * - fit=max      → 원본보다 크게 확대 안 함
- * - w, q         → 레이아웃별 너비 + 품질
+ * Adds transform parameters to a Sanity CDN image URL.
+ * - auto=format  → serves WebP/AVIF automatically based on browser support
+ * - fit=max      → never upscales beyond original dimensions
+ * - w, q         → width + quality per layout
  *
- * next/image 를 거치는 이미지에도 적용하면 Sanity CDN에서 1차 변환,
- * Next.js에서 2차 캐시 → 이중 최적화.
- * WaveImage(canvas)처럼 next/image 를 안 거치는 경우엔 필수.
+ * Applying this to images that also pass through next/image gives a first-pass
+ * transform by Sanity CDN and a second-pass cache by Next.js — double optimization.
+ * For cases that bypass next/image (e.g. WaveImage canvas), this is required.
  */
 export function sanityImg(url: string | null | undefined, width: number, quality = 80): string | null {
   if (!url || !url.includes('cdn.sanity.io')) return url ?? null;
@@ -33,10 +33,10 @@ export function sanityImg(url: string | null | undefined, width: number, quality
 }
 
 /**
- * Canvas(WaveImage)용 Sanity CDN URL 변환.
- * /_next/image 프록시를 거치지 않고 Sanity CDN에서 직접 변환.
- * 기존 파라미터를 모두 제거하고 새로 설정함.
- * @param crop true → fit=crop + crop=center + h=w*(9/16) (16:9 가로형)
+ * Sanity CDN URL transform for Canvas (WaveImage).
+ * Transforms directly via Sanity CDN without going through the /_next/image proxy.
+ * Removes all existing params and sets them fresh.
+ * @param crop true → fit=crop + crop=center + h=w*(9/16) (16:9 landscape)
  */
 export function buildCanvasSrc(
   url: string | null | undefined,
@@ -46,7 +46,7 @@ export function buildCanvasSrc(
 ): string | null {
   if (!url || !url.includes('cdn.sanity.io')) return url ?? null;
   const u = new URL(url);
-  // 기존 파라미터 전부 제거 후 재설정 (중복/충돌 방지)
+  // Remove all existing params before re-setting (prevents duplicates/conflicts)
   Array.from(u.searchParams.keys()).forEach(k => u.searchParams.delete(k));
   u.searchParams.set('auto', 'format');
   u.searchParams.set('w', String(width));
@@ -67,50 +67,50 @@ export type WorkListItem = {
   _id: string;
   title: string;
   slug: { current: string };
-  /** Portrait — Work 50% 세로형 + Selected Works (optional, Landscape 폴백) */
+  /** Portrait — Work 50% vertical card + Selected Works (optional, Landscape fallback) */
   thumbnailPortrait?: SanityImageSource;
-  /** Landscape — Work 100% 가로형 (required) */
+  /** Landscape — Work 100% horizontal card (required) */
   thumbnailLandscape?: SanityImageSource;
-  /** Portrait 이미지의 실제 가로÷세로 비율. CSS padding-top = (1/ratio)*100% */
+  /** Actual aspect ratio (width÷height) of the Portrait image. CSS padding-top = (1/ratio)*100% */
   portraitAspectRatio?: number;
   listDescription?: string;
   categories?: string[];
   order?: number;
 };
 
-// Selected Works 캐러셀용 타입 (홈 + 싱글 Related)
+// Type for Selected Works carousel (home + single Related)
 export type SelectedWorkSanity = {
   _id: string;
   title: string;
   slug: { current: string };
-  thumbnailPortrait?: SanityImageSource;  // 1762×1309 — 직접 등록 시 우선 사용
-  thumbnailLandscape?: SanityImageSource; // 3584×2016 — Portrait 미등록 시 센터 크롭 폴백
+  thumbnailPortrait?: SanityImageSource;  // 1762×1309 — takes priority when registered directly
+  thumbnailLandscape?: SanityImageSource; // 3584×2016 — center-crop fallback when Portrait is absent
   cardSize?: 'large' | 'wide' | 'compact' | 'tall';
   order?: number;
 };
 
 // ── Thumbnail URL helpers ─────────────────────────────────────────
 
-// Portrait: 자연 비율 그대로 서빙 (height 강제 X → 업로드 이미지 비율 보존)
-// Portrait 미등록 시 Landscape에서 자연 비율로 폴백
-// 사용처: Work 페이지 50% 세로형, 홈 Selected Works
-// w=1440 → 720px 컬럼 기준 2x retina 대응 (기존 1762 → 절감)
+// Portrait: served at natural ratio (no forced height → preserves uploaded image ratio)
+// Falls back to Landscape at natural ratio when Portrait is not registered
+// Used by: Work page 50% vertical card, Home Selected Works
+// w=1440 → covers 2x retina for a 720px column (reduced from original 1762)
 export function getThumbPortrait(
   thumbnailPortrait?: SanityImageSource,
   thumbnailLandscape?: SanityImageSource,
 ): string | null {
   const src = thumbnailPortrait ?? thumbnailLandscape;
   if (!src) return null;
-  // quality/format 제거 — /_next/image가 2차 변환 담당 (중복 파라미터 → 400 방지)
+  // omit quality/format — /_next/image handles secondary transform (duplicate params → 400 error)
   return urlFor(src).width(1440).url();
 }
 
-// Landscape: 16:9 비율 고정
-// 사용처: Work 페이지 100% 가로형
-// w=1920 → 기존 3584에서 대폭 축소 (1920px이 최대 디스플레이 기준)
+// Landscape: fixed 16:9 ratio
+// Used by: Work page 100% horizontal card
+// w=1920 → significantly reduced from original 3584 (1920px is the max display width)
 export function getThumbLandscape(thumbnailLandscape?: SanityImageSource): string | null {
   if (!thumbnailLandscape) return null;
-  // quality/format 제거 — /_next/image가 2차 변환 담당 (중복 파라미터 → 400 방지)
+  // omit quality/format — /_next/image handles secondary transform (duplicate params → 400 error)
   return urlFor(thumbnailLandscape).width(1920).height(1080).fit('crop').crop('center').url();
 }
 
@@ -184,8 +184,8 @@ export type WorkSingleData = {
 // ── GROQ Queries ─────────────────────────────────────────────────
 
 // Work list: all works ordered by `order`
-// thumbnailPortrait/Wide — raw image objects (asset ref + hotspot/crop)으로 fetch
-// → 프론트에서 urlFor()로 크롭 URL 생성 (getThumbPortrait/Wide 헬퍼 사용)
+// thumbnailPortrait/Wide — fetched as raw image objects (asset ref + hotspot/crop)
+// → front-end builds crop URLs via urlFor() (using getThumbPortrait/Wide helpers)
 export const WORKS_LIST_QUERY = `
   *[_type == "work"] | order(order asc) {
     _id,
@@ -236,8 +236,8 @@ export const WORK_BY_SLUG_QUERY = `
   }
 `;
 
-// Selected Works: 홈 캐러셀 & 싱글 Related Works용
-// thumbnailPortrait 우선, 없으면 thumbnailLandscape 에서 자동 센터 크롭 (getThumbPortrait 헬퍼)
+// Selected Works: for home carousel & single Related Works
+// thumbnailPortrait takes priority; falls back to auto center-crop from thumbnailLandscape (getThumbPortrait helper)
 export const SELECTED_WORKS_QUERY = `
   *[_type == "work"] | order(order asc) {
     _id,

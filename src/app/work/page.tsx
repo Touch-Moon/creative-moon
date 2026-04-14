@@ -8,10 +8,10 @@ export const metadata: Metadata = {
   alternates: { canonical: '/work' },
 };
 
-export const revalidate = 60; // ISR: 60초마다 재검증
+export const revalidate = 60; // ISR: revalidate every 60 seconds
 
 export default async function WorkPage() {
-  // Sanity에서 데이터 가져오기 (실패 시 빈 배열 → 클라이언트에서 더미 사용)
+  // Fetch data from Sanity (on failure, returns empty array — client uses dummy data)
   let works: WorkItem[] = [];
 
   try {
@@ -20,18 +20,18 @@ export default async function WorkPage() {
       _id: item._id,
       title: item.title,
       slug: item.slug,
-      // half 레이아웃 (1st, 2nd): Portrait 우선, 없으면 Wide에서 센터 크롭 폴백
+      // half layout (1st, 2nd): Portrait preferred; falls back to center-cropped Wide image
       thumbnailPortraitUrl: getThumbPortrait(item.thumbnailPortrait, item.thumbnailLandscape) ?? undefined,
-      // full 레이아웃 (3rd): Landscape 직접 사용
+      // full layout (3rd): Landscape used directly
       thumbnailLandscapeUrl: getThumbLandscape(item.thumbnailLandscape) ?? undefined,
-      // Portrait 이미지의 실제 가로÷세로 비율 → CSS padding-top 계산에 사용
+      // Actual width÷height ratio of Portrait image → used to calculate CSS padding-top
       portraitAspectRatio: item.portraitAspectRatio,
       listDescription: item.listDescription,
       categories: item.categories,
       order: item.order,
     }));
   } catch {
-    // Sanity 미연결 또는 비어있을 때 — WorkList 내 더미 데이터 사용
+    // Sanity not connected or empty — use dummy data inside WorkList
     works = [];
   }
 

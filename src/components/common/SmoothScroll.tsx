@@ -7,26 +7,26 @@ import LenisContext from './LenisContext'
 /**
  * SmoothScroll
  * ─────────────────────────────────────────────
- * Lenis 기반 smooth scroll provider.
- * - 트랙패드, 터치, 키보드 스크롤 모두 지원
- * - ResizeObserver로 브라우저 리사이즈 대응
- * - cleanup 시 인스턴스를 완전히 파괴하여 메모리 누수 방지
- * - LenisContext로 인스턴스를 하위 컴포넌트에 공유
+ * Lenis-based smooth scroll provider.
+ * - Supports trackpad, touch, and keyboard scroll
+ * - Handles browser resize via ResizeObserver
+ * - Fully destroys instance on cleanup to prevent memory leaks
+ * - Shares instance with child components via LenisContext
  */
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null)
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,           // 관성 지속 시간 (초)
+      duration: 1.2,           // inertia duration (seconds)
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easeOutExpo
-      touchMultiplier: 2,      // 터치 감도
-      infinite: false,         // 무한 스크롤 비활성화
+      touchMultiplier: 2,      // touch sensitivity
+      infinite: false,         // disable infinite scroll
     })
 
     lenisRef.current = lenis
 
-    // rAF 루프: Lenis가 매 프레임 스크롤 보간을 처리
+    // rAF loop: Lenis handles scroll interpolation every frame
     function raf(time: number) {
       lenis.raf(time)
       requestAnimationFrame(raf)

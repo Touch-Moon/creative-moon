@@ -29,7 +29,7 @@ export default async function Home() {
       getStoriesCarousel(),
     ]);
   } catch {
-    // Sanity 미연결 → 각 컴포넌트 내부 fallback 사용
+    // Sanity not connected — each component uses its internal fallback
     selectedWorks = undefined;
     storiesData = [];
   }

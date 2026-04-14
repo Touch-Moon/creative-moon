@@ -4,7 +4,7 @@
 
 $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 
-// ── CSS 애니메이션 키프레임 ──────────────────────────────────────
+// ── CSS animation keyframes ──────────────────────────────────────
 @keyframes ws-clip {
   from { clip-path: inset(0 0 100% 0); }
   to   { clip-path: inset(0 0 0% 0); }
@@ -30,8 +30,8 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 .work-single {
 
   // ── .work__top ─────────────────────────────────────
-  // 정적 75svh — 높이 애니메이션 없음
-  // 타이틀/연도/설명은 __hero 올라온 후(heroDone) Framer Motion으로 reveal
+  // Static 75svh — no height animation.
+  // Title/year/description reveal via Framer Motion after hero rises (heroDone).
   &__top {
     height: 75svh;
     display: flex;
@@ -54,7 +54,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     flex: 1;
   }
 
-  // 단어별 Framer Motion span 으로 분리된 타이틀
+  // Title split into per-word Framer Motion spans
   &__title {
     display: flex;
     flex-wrap: wrap;
@@ -67,13 +67,13 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     }
   }
 
-  // 외부 span: clip-path 마스크 (Framer Motion polygon)
+  // Outer span: clip-path mask (Framer Motion polygon)
   &__title-word {
     display: inline-block;
     will-change: clip-path;
   }
 
-  // 내부 span: translateY 슬라이드
+  // Inner span: translateY slide
   &__title-inner {
     display: inline-block;
     will-change: transform;
@@ -83,26 +83,26 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     flex-shrink: 0;
     color: var(--foreground-muted);
     padding-top: fvw(6);
-    // Framer Motion fade-up 으로 처리 (CSS animation 제거)
+    // Handled by Framer Motion fade-up (no CSS animation)
   }
 
   &__subtitle {
     color: var(--foreground-muted);
     max-width: fvw(800);
     margin: 0;
-    // Framer Motion fade-up 으로 처리 (CSS animation 제거)
+    // Handled by Framer Motion fade-up (no CSS animation)
   }
 
   // ── .work__hero ─────────────────────────────────────
-  // 히어로는 Framer Motion y: 100vh → 0 으로 아래에서 올라옴
-  // (CSS @keyframes 애니메이션 없음 — translateY 가 커튼과 겹치도록)
+  // Hero enters via Framer Motion y: 100vh → 0 (rises from below)
+  // No CSS keyframes — translateY must not conflict with curtain effect.
   &__hero {
     width: 100%;
     overflow: hidden;
     background: color-mix(in srgb, var(--foreground) 5%, transparent);
     will-change: transform;
 
-    // 이미지: 16:9 고정 크롭
+    // Image: fixed 16:9 crop
     img {
       display: block;
       width: 100%;
@@ -110,14 +110,14 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
       object-fit: cover;
     }
 
-    // 비디오: 자연 비율 그대로 (위아래 잘림 없음)
+    // Video: natural aspect ratio (no crop)
     video {
       display: block;
       width: 100%;
       height: auto;
     }
 
-    // Guttered variant — 다른 섹션과 동일한 좌우 여백
+    // Guttered variant — matches other sections' left/right margins
     &--guttered {
       padding-left: $gutter-desktop;
       padding-right: $gutter-desktop;
@@ -136,7 +136,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 
   &__text-inner {
     display: grid;
-    // col-3 : col-7 비율
+    // col-3 : col-7 ratio
     grid-template-columns: calc(3 / 10 * 100%) 1fr;
     gap: $space-16;
     align-items: start;
@@ -194,7 +194,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 
   // ── .work__modules ──────────────────────────────────
   &__modules {
-    padding-bottom: fvw(167); // plastic: ~11.6vw
+    padding-bottom: fvw(167); // ~11.6vw
   }
 
   // ── Tablet ────────────────────────────────────────
@@ -219,20 +219,20 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 
   // ── Mobile ──────────────────────────────────────────
   @media (max-width: 575.98px) {
-    &__top { padding: 0 $gutter-mobile 24px; }
+    &__top { padding: 0 $gutter-mobile $space-8; } // was hardcoded 24px → $space-8 (≈32px)
     &__text { padding: 32px $gutter-mobile; }
     &__modules { padding-bottom: 8vw; }
   }
 }
 
 // ── Device Mockup (dm) ───────────────────────────────────────────
-// 모든 수치는 % 비율 기반 — col 폭(full/half/1/3)에 무관하게 반응형 작동
+// All values are % based — responsive regardless of column width (full/half/1/3)
 
 .dm {
   position: relative;
   width: 100%;
 
-  // ── [1] 디바이스 래퍼 (tablet/mobile — max-width + 가운데 정렬) ─
+  // ── [1] Device wrapper (tablet/mobile — max-width + center align) ─
   &__device {
     position: relative;
     width: 100%;
@@ -240,7 +240,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     margin-right: auto;
   }
 
-  // ── [2] 스크린 마스크 (tablet / mobile 공용) ─────────────
+  // ── [2] Screen mask (shared tablet / mobile) ─────────────
   &__screen {
     position: absolute;
     overflow: hidden;
@@ -254,7 +254,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     }
   }
 
-  // ── [3] 디바이스 프레임 PNG — 맨 앞 ──────────────────────
+  // ── [3] Device frame PNG — frontmost ──────────────────────
   &__frame {
     position: absolute;
     inset: 0;
@@ -266,7 +266,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     filter: drop-shadow(0 4px 32px rgba(0, 0, 0, 0.75));
   }
 
-  // ── [4] 영상/이미지 콘텐츠 (desktop 전용) ────────────────
+  // ── [4] Video/image content (desktop only) ────────────────
   &__content {
     position: relative;
     width: 100%;
@@ -279,9 +279,9 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     }
   }
 
-  // ── Desktop: 순수 CSS 프레임 (PNG 없음) ──────────────────
-  // padding-top/bottom = (680-413)/2 ÷ 986 = 13.54% (CSS % = element 폭 기준)
-  // 콘텐츠 max-width = 645 ÷ 986 = 65.42%
+  // ── Desktop: pure CSS frame (no PNG) ──────────────────────
+  // padding-top/bottom = (680-413)/2 ÷ 986 = 13.54% (CSS % = element width)
+  // content max-width = 645 ÷ 986 = 65.42%
   &--desktop {
     display: block;
 
@@ -294,10 +294,9 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 
   // ── Tablet (iPad Pro 11" M4 Silver Landscape) ────────────
   // PNG max-width: 1308 ÷ 1736 = 75.35%
-  // 비디오 마스크: 1201 ÷ 1736 = 69.18% (자동)
-  // padding: Desktop 동일 (13.54%)
+  // padding: (1560-931)/2 ÷ 1736 = 18.12%
   &--tablet {
-    padding-top: 18.12%;            // (1560-931)/2 ÷ 1736
+    padding-top: 18.12%;
     padding-bottom: 18.12%;
 
     .dm__device { max-width: 75.35%; }  // 1308 ÷ 1736
@@ -305,10 +304,9 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 
   // ── Mobile (iPhone 17 Pro Deep Blue) ─────────────────────
   // PNG max-width: 881 ÷ 1609 = 54.75%
-  // 비디오 마스크: 808 ÷ 1609 = 50.22% (자동)
   // padding: (2302-1834)/2 ÷ 1609 = 14.54%
   &--mobile {
-    padding-top: 14.54%;            // (2302-1834)/2 ÷ 1609
+    padding-top: 14.54%;
     padding-bottom: 14.54%;
 
     .dm__device { max-width: 54.75%; }  // 881 ÷ 1609
@@ -326,7 +324,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     animation-delay: var(--anim-delay, 0ms);
   }
 
-  // ── Spacing 옵션 ────────────────────────────────────
+  // ── Spacing options ─────────────────────────────────────────
   &--sp-tight { margin-bottom: $space-2 !important; }
   &--sp-none  { margin-bottom: 0 !important; }
   &--sp-no-gap { &.wm--2col, &.wm--3col { gap: 0; } }
@@ -359,7 +357,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 
     img { width: 100%; height: auto; display: block; }
 
-    // 비대칭 비율
+    // Asymmetric ratios
     &-nw { grid-template-columns: 1fr 2fr; }  // narrow : wide (1:2)
     &-wn { grid-template-columns: 2fr 1fr; }  // wide : narrow (2:1)
   }
@@ -385,11 +383,11 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 
     &.wm--animate { animation-name: wm-fade; }
 
-    // paddingTop 옵션
+    // paddingTop options
     &.wm--pt-lg   { padding-top: fvw(140); }
     &.wm--pt-none { padding-top: 0; }
 
-    // centered 옵션
+    // centered option
     &.wm--text-center {
       text-align: center;
       .wm__text-col { margin-left: auto; margin-right: auto; }

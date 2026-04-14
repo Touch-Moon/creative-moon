@@ -10,7 +10,7 @@ import './StoriesList.scss';
 
 const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
 
-// ── Dummy data (Sanity 미연결 시) ─────────────────────────────────
+// ── Dummy data (used when Sanity is not connected) ────────────────
 const DUMMY_STORIES: StoryListItem[] = [
   {
     _id: '1',
@@ -72,7 +72,7 @@ function StoryCard({ story, index }: { story: StoryListItem; index: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-8%' });
 
-  // Canvas(PageTransition clone): CORS 안전 URL — Sanity CDN → /_next/image 프록시
+  // Canvas (PageTransition clone): CORS-safe URL — Sanity CDN → /_next/image proxy
   const heroSrc = story.thumbnailUrl
     ? story.thumbnailUrl.startsWith('https://cdn.sanity.io')
       ? `/_next/image?url=${encodeURIComponent(story.thumbnailUrl)}&w=960&q=80`

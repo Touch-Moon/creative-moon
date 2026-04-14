@@ -3,11 +3,11 @@
 @use '@/styles/primitives/space' as *;
 
 .home-stories {
-  overflow: visible; // 트랙이 section 우측 경계 밖으로 확장 허용
+  overflow: visible; // allow track to extend past section right edge
   background-color: transparent;
-  padding: fvw(170) $gutter-desktop fvw(170); // plastic: stories pt ~12vw, pb ~12vw
+  padding: fvw(170) $gutter-desktop fvw(170); // ~12vw top/bottom
 
-  // ── 헤더 ─────────────────────────────────────
+  // ── Header ───────────────────────────────────
   &__header {
     display: flex;
     align-items: flex-end;
@@ -33,7 +33,7 @@
     gap: $space-2;
   }
 
-  // ── 카드 트랙 ────────────────────────────────
+  // ── Card track ───────────────────────────────
   &__track {
     display: flex;
     gap: $space-6;
@@ -41,8 +41,8 @@
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
-    // 왼쪽은 section padding에 맞추고, 오른쪽은 뷰포트 끝까지 확장
-    // 1920px 이상에서는 section auto-margin(= (100vw - 1920px) / 2)까지 추가 확장
+    // Left aligns with section padding; right extends to viewport edge.
+    // At >1920px, also includes the centering auto-margin.
     margin-right: calc(-1 * (#{$gutter-desktop} + max(0px, (100vw - 1920px) / 2)));
     width: calc(100% + #{$gutter-desktop} + max(0px, (100vw - 1920px) / 2));
     cursor: grab;
@@ -57,20 +57,20 @@
     }
   }
 
-  // ── 커스텀 커서 배지 ──────────────────────────
+  // ── Custom cursor badge ───────────────────────
   &__cursor {
     position: fixed;
     top: 0;
     left: 0;
     pointer-events: none;
     z-index: 1000;
-    width: 76px;
-    height: 76px;
+    width: $cursor-badge-size;
+    height: $cursor-badge-size;
   }
 
   &__cursor-bg {
-    width: 76px;
-    height: 76px;
+    width: $cursor-badge-size;
+    height: $cursor-badge-size;
     border-radius: 50%;
     background: #0a0a0a;
     transform: scale(0.5);
@@ -87,10 +87,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 76px;
-    height: 76px;
+    width: $cursor-badge-size;
+    height: $cursor-badge-size;
     color: #fff;
-    font-size: 9px;
+    font-size: $cursor-label-fs;
     font-weight: 400;
     letter-spacing: normal;
     white-space: nowrap;
@@ -139,7 +139,7 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--foreground-muted);
-    margin-top: $space-4; // 이미지 → 카테고리 간격
+    margin-top: $space-4; // image → category gap
   }
 
   &__card-title {
@@ -148,12 +148,12 @@
     color: inherit;
     letter-spacing: -0.02em;
     line-height: 1.3;
-    margin: $space-1 0 0; // 카테고리 → 타이틀 간격 (좁게)
+    margin: $space-1 0 0; // category → title gap (tight)
   }
 
   // ── Tablet ──────────────────────────────────
   @media (max-width: 1023.98px) {
-    padding: 14vw $gutter-tablet 14vw; // proportional vertical spacing
+    padding: 14vw $gutter-tablet 14vw;
 
     &__track {
       margin-right: -$gutter-tablet;
@@ -169,7 +169,7 @@
     }
 
     &__title {
-      font-size: var(--fs-body-4); // plastic.design .home-stories__title — 14px @ 768
+      font-size: var(--fs-body-4); // 14px @ 768
     }
 
     &__arrows {
@@ -192,7 +192,7 @@
 
   // ── Mobile ───────────────────────────────────
   @media (max-width: 575.98px) {
-    padding: 12vw $gutter-mobile 12vw; // proportional vertical spacing
+    padding: 12vw $gutter-mobile 12vw;
 
     &__track {
       margin-right: -$gutter-mobile;
@@ -208,12 +208,12 @@
     }
 
     &__title {
-      font-size: var(--fs-body-caps); // plastic.design .home-stories__title — 14px @ 390
+      font-size: var(--fs-body-caps); // 14px @ 390
     }
 
     &__track {
       padding: 0;
-      gap: 14px;
+      gap: $gutter-mobile; // was hardcoded 14px — aligned to $gutter-mobile (16px)
     }
 
     &__card {

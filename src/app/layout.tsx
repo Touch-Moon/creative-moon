@@ -62,7 +62,7 @@ export const metadata: Metadata = {
   },
 };
 
-// iOS Safari 상태바 / 주소바 초기 색상 (JS에서 동적 업데이트됨)
+// Initial color for iOS Safari status bar / address bar (dynamically updated by JS)
 export const viewport: Viewport = {
   themeColor: '#ffffff',
 };
@@ -78,18 +78,18 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
       </head>
       {/* 2. Add attributes to the body tag as well */}
       <body suppressHydrationWarning>
-        {/* ✅ Skip-to-content: 키보드 사용자 메인 콘텐츠 바로 이동 */}
+        {/* ✅ Skip-to-content: allows keyboard users to jump directly to main content */}
         <a href="#main-content" className="skip-to-content">Skip to content</a>
         <FontLoader>
           <MotionProvider>
           <SmoothScroll>
-            {/* ✅ Viewport-based background transition layer + iOS 상태바 색상 동기화 */}
+            {/* ✅ Viewport-based background transition layer + iOS status bar color sync */}
             <ThemeBackground />
 
             {/* ✅ Header rendered above all pages */}
             <Header />
 
-            {/* ✅ Actual page content — PageTransition이 화이트 커튼 처리 */}
+            {/* ✅ Actual page content — PageTransition handles the white curtain effect */}
             <main id="main-content">
               {children}
             </main>

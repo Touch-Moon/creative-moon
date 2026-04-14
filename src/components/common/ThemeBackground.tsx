@@ -13,10 +13,10 @@ export default function ThemeBackground() {
     const setTheme = (theme: string) => {
       document.body.dataset.theme = theme;
 
-      // iOS Safari 상태바 / 주소바 색상 동기화
+      // Sync iOS Safari status bar / address bar color
       let metaThemeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
       if (!metaThemeColor) {
-        // 없으면 직접 생성
+        // If not found, create one
         metaThemeColor = document.createElement('meta');
         metaThemeColor.name = 'theme-color';
         document.head.appendChild(metaThemeColor);
@@ -32,22 +32,22 @@ export default function ThemeBackground() {
       }
     };
 
-    // 스타일 가이드 페이지에서는 IntersectionObserver 비활성화
-    // — cm-root가 자체 테마를 관리하므로 ThemeBackground 스크롤 이펙트 불필요
+    // Disable IntersectionObserver on the style guide page
+    // — cm-root manages its own theme, so ThemeBackground scroll effect is not needed
     if (pathname.startsWith('/style-guide')) {
       setTheme('light');
       return;
     }
 
-    // /work 리스트 페이지만 라이트 테마 고정
-    // 싱글 페이지(/work/[slug])는 홈페이지처럼 섹션별 data-theme으로 전환
+    // Lock light theme only on the /work list page
+    // Single pages (/work/[slug]) switch per-section via data-theme, same as the homepage
     if (pathname === '/work') {
       setTheme('light');
       return;
     }
 
-    // 페이지 진입 시 첫 번째 섹션의 data-theme으로 초기화
-    // (다른 페이지에서 다크테마로 끝났을 때 잔류하는 문제 방지)
+    // Initialize to the first section's data-theme on page entry
+    // (prevents leftover dark theme when navigating from another page)
     const firstSection = document.querySelector<HTMLElement>('[data-theme]');
     setTheme(firstSection?.dataset.theme ?? 'light');
 
@@ -62,14 +62,14 @@ export default function ThemeBackground() {
       },
       {
         threshold: 0,
-        rootMargin: '-50% 0px -50% 0px', // 뷰포트 중앙을 가로지를 때 감지
+        rootMargin: '-50% 0px -50% 0px', // Trigger when crossing the viewport center
       }
     );
 
     const sections = document.querySelectorAll<HTMLElement>('[data-theme]');
     sections.forEach(s => observer.observe(s));
 
-    // pathname이 바뀔 때마다 이전 observer를 끊고 새 섹션들을 다시 감지
+    // Disconnect the previous observer and re-observe new sections whenever pathname changes
     return () => observer.disconnect();
   }, [pathname]);
 

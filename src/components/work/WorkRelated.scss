@@ -4,11 +4,11 @@
 
 $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 
-// ── Work Related Section — HomeWorks 레이아웃과 동일 ──────────────────────────
+// ── Work Related Section — same layout as HomeWorks ──────────────────────────
 
 .work-related {
-  position: relative; // line absolute 기준
-  margin-top: fvw(330); // plastic more-work: pt ~22.9vw
+  position: relative; // anchor for absolute lines
+  margin-top: fvw(330); // ~22.9vw
 
   @media (max-width: 1023.98px) {
     margin-top: 18vw;
@@ -18,7 +18,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     margin-top: 14vw;
   }
 
-  // ── 수평 라인 (TOP / BOTTOM) ──────────────────────
+  // ── Horizontal lines (TOP / BOTTOM) ──────────────────────
   &__line-h {
     display: block;
     height: 1px;
@@ -69,7 +69,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     }
   }
 
-  // ── 수직 라인 ──────────────────────────────────────
+  // ── Vertical line ──────────────────────────────────────
   &__line-v {
     display: block;
     position: absolute;
@@ -94,7 +94,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     align-items: stretch;
   }
 
-  // ── 좌측 사이드바 ──────────────────────────────────
+  // ── Left sidebar ──────────────────────────────────
   &__sidebar {
     flex: 0 0 fvw(424);
     display: flex;
@@ -129,6 +129,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   // ── Counter ────────────────────────────────────────
+
   &__counter {
     display: flex;
     align-items: center;
@@ -168,7 +169,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     gap: $space-2;
   }
 
-  // ── 카드 트랙 ──────────────────────────────────────
+  // ── Card track ──────────────────────────────────────
   &__track {
     position: relative;
     flex: 1;
@@ -226,7 +227,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
   }
 }
 
-// ── 카드 (wr prefix — WorkRelated) ──────────────────────────────────────────
+// ── Card (wr prefix — WorkRelated) ──────────────────────────────────────────
 
 .wr {
   &__card {

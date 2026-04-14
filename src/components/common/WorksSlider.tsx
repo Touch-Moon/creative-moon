@@ -1,8 +1,8 @@
 'use client';
 /**
- * WorksSlider — SELECTED WORKS 공통 슬라이더
- * HomeWorks 와 WorkRelated 가 공유하는 레이아웃 + 기능 컴포넌트.
- * 데이터(works 배열)만 props로 받고, 나머지는 모두 여기서 관리.
+ * WorksSlider — SELECTED WORKS shared slider
+ * Shared layout + logic component used by HomeWorks and WorkRelated.
+ * Receives only the data (works array) as props; everything else is managed here.
  */
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
@@ -15,7 +15,7 @@ import './WaveImage.scss';
 import type { SelectedWork, CardSize } from '@/data/works';
 import './WorksSlider.scss';
 
-// ── 애니메이션 ─────────────────────────────────────────────────────────────────
+// ── Animation ─────────────────────────────────────────────────────────────────
 
 const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
 
@@ -49,7 +49,7 @@ const cardVariants: Variants = {
 
 const MotionLink = m.create(Link);
 
-// ── Parallax 속도 ──────────────────────────────────────────────────────────────
+// ── Parallax speed ────────────────────────────────────────────────────────────
 
 const PARALLAX_SPEED: Record<CardSize, number> = {
   large: 1.0,
@@ -65,7 +65,7 @@ interface WorksSliderProps {
   dataTheme?: 'dark' | 'light';
 }
 
-// ── 컴포넌트 ───────────────────────────────────────────────────────────────────
+// ── Component ─────────────────────────────────────────────────────────────────
 
 export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderProps) {
   const [current, setCurrent]   = useState(0);
@@ -88,7 +88,7 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
   const justDraggedRef  = useRef(false);
   const onDragEndRef    = useRef<() => void>(() => {});
 
-  // ── 섹션 진입 감지 (라인 + 타이틀 reveal) ───────────────────────────────────
+  // ── Section entry detection (line + title reveal) ───────────────────────────
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
@@ -100,7 +100,7 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
     return () => io.disconnect();
   }, []);
 
-  // ── 버튼으로 카드 이동 ────────────────────────────────────────────────────────
+  // ── Navigate cards via buttons ───────────────────────────────────────────────
   const scrollTo = (idx: number) => {
     if (!trackRef.current) return;
     isScrollingRef.current = true;
@@ -123,7 +123,7 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
   // ── Parallax ──────────────────────────────────────────────────────────────────
   const applyParallax = useCallback(() => {
     if (!trackRef.current) return;
-    // 터치 기기(iPhone 등): native scroll + CSS transition 간섭 → jitter 발생하므로 생략
+    // Touch devices (iPhone etc.): skip to avoid jitter caused by native scroll + CSS transition interference
     if (window.matchMedia('(hover: none)').matches) return;
     const scrollLeft = trackRef.current.scrollLeft;
     const trackWidth = trackRef.current.clientWidth;
@@ -133,9 +133,9 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
       const card = inner.closest('.ws__card') as HTMLElement;
       if (!card) return;
 
-      // 카드 가시성 비율 계산 (0 = 완전 off-screen, 1 = 완전 in-view)
-      // off-screen 카드에 큰 translateX가 적용되면 wave-image__inner의
-      // 여백(3%)을 초과해 회색 배경이 노출되는 문제를 방지
+      // Calculate card visibility ratio (0 = fully off-screen, 1 = fully in-view)
+      // Prevents large translateX on off-screen cards from exceeding the
+      // wave-image__inner margin (3%) and exposing the grey background
       const cardLeft  = card.offsetLeft;
       const cardRight = card.offsetLeft + card.offsetWidth;
       const viewLeft  = scrollLeft;
@@ -145,17 +145,17 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
 
       const rawOffset = (card.offsetLeft + card.offsetWidth / 2 - scrollLeft - trackWidth / 2)
         * (speed - 1) * 0.4;
-      // 가시성에 비례해 오프셋 감쇠: off-screen → 0, fully visible → 원래 값
+      // Attenuate offset proportional to visibility: off-screen → 0, fully visible → original value
       const offset = rawOffset * visibilityRatio;
 
       const scale = inner.dataset.hoverScale || '1';
-      // transition: none — 스크롤 tick마다 0.7s transition이 재시작되는 jitter 방지
+      // transition: none — prevents jitter caused by 0.7s transition restarting on every scroll tick
       inner.style.transition = 'none';
       inner.style.transform = `translateX(${offset}px) scale(${scale})`;
     });
   }, [works]);
 
-  // ── 스크롤 → current 동기화 ───────────────────────────────────────────────────
+  // ── Sync scroll position → current index ─────────────────────────────────────
   const handleScroll = useCallback(() => {
     applyParallax();
     if (isScrollingRef.current || !trackRef.current) return;
@@ -176,7 +176,7 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
     return s * max * (1 - Math.exp(-Math.abs(o) / max * 0.55));
   };
 
-  // ── Bounce spring 복귀 ────────────────────────────────────────────────────────
+  // ── Bounce spring return ──────────────────────────────────────────────────────
   const animateBounceBack = useCallback(() => {
     if (!trackRef.current) return;
     const track = trackRef.current;
@@ -196,7 +196,7 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
     bounceRafRef.current = requestAnimationFrame(tick);
   }, []);
 
-  // ── 속도 기반 카드 snap ───────────────────────────────────────────────────────
+  // ── Velocity-based card snap ──────────────────────────────────────────────────
   const doSnapByIntent = useCallback((scrollLeft: number, velocity: number) => {
     if (!trackRef.current) return;
     const track = trackRef.current;
@@ -226,7 +226,7 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
     }
   }, []);
 
-  // ── 마우스 드래그 ─────────────────────────────────────────────────────────────
+  // ── Mouse drag ───────────────────────────────────────────────────────────────
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!trackRef.current) return;
     cancelAnimationFrame(bounceRafRef.current);
@@ -298,10 +298,10 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
     dragRef.current.active = false;
   }, [animateBounceBack, doSnapByIntent]);
 
-  // 최신 onDragEnd를 ref에 유지 (window handler에서 stale closure 방지)
+  // Keep the latest onDragEnd in a ref (prevents stale closure in window handler)
   onDragEndRef.current = onDragEnd;
 
-  // ── 커스텀 DRAG 커서 ──────────────────────────────────────────────────────────
+  // ── Custom DRAG cursor ────────────────────────────────────────────────────────
   const handleTrackEnter = () => cursorRef.current?.classList.add('is-visible');
   const handleTrackLeave = () => {
     onDragEnd();
@@ -326,14 +326,14 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
     return () => { window.removeEventListener('mousemove', onMove); cancelAnimationFrame(raf); };
   }, []);
 
-  // ── window mouseup — 트랙 밖 마우스 업도 드래그 종료 ─────────────────────────
+  // ── window mouseup — end drag even when mouse is released outside the track ───
   useEffect(() => {
     const h = () => { if (dragRef.current.active) onDragEndRef.current(); };
     window.addEventListener('mouseup', h);
     return () => window.removeEventListener('mouseup', h);
   }, []);
 
-  // ── window click capture — 드래그 직후 링크 클릭 차단 ───────────────────────
+  // ── window click capture — block link click immediately after drag ───────────
   useEffect(() => {
     const h = (e: MouseEvent) => {
       if (!justDraggedRef.current) return;
@@ -356,14 +356,14 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
   return (
     <section ref={sectionRef} className="works-slider" data-theme={dataTheme}>
 
-      {/* 수평 TOP 라인 */}
+      {/* Horizontal TOP line */}
       <span className={`works-slider__line-h works-slider__line-h--top${revealed ? ' is-revealed' : ''}`} />
-      {/* 수직 라인 */}
+      {/* Vertical line */}
       <span className={`works-slider__line-v${revealed ? ' is-revealed' : ''}`} />
 
       <div className="works-slider__inner">
 
-        {/* ── 사이드바 ── */}
+        {/* ── Sidebar ── */}
         <div className="works-slider__sidebar">
           <h2 className="works-slider__title">
             {['SELECTED', 'WORKS'].map((line, i) => (
@@ -432,7 +432,7 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
           </m.div>
         </div>
 
-        {/* ── 카드 트랙 ── */}
+        {/* ── Card track ── */}
         <div
           className="works-slider__track"
           ref={trackRef}
@@ -470,10 +470,10 @@ export default function WorksSlider({ works, dataTheme = 'dark' }: WorksSliderPr
 
       </div>
 
-      {/* 수평 BOTTOM 라인 */}
+      {/* Horizontal BOTTOM line */}
       <span className={`works-slider__line-h works-slider__line-h--bottom${revealed ? ' is-revealed' : ''}`} />
 
-      {/* DRAG 커서 (body portal) */}
+      {/* DRAG cursor (body portal) */}
       {mounted && createPortal(
         <div ref={cursorRef} className="works-slider__cursor" aria-hidden="true">
           <div className="works-slider__cursor-bg" />

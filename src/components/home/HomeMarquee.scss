@@ -2,7 +2,7 @@
 @use '@/styles/primitives/type' as *;
 
 // ─────────────────────────────────────────────────────────────
-// HomeMarquee — rebuilt to match plastic.design .clients
+// HomeMarquee
 //
 // Key mechanism:
 //   .mix-blend            → mix-blend-mode: difference (global util)
@@ -11,16 +11,16 @@
 //   IntersectionObserver adds .is-visible on scroll-in
 // ─────────────────────────────────────────────────────────────
 
-// ── Global utility (matches plastic.design's .mix-blend) ─────
+// ── Global utility ───────────────────────────────────────────
 .mix-blend {
   mix-blend-mode: difference;
 }
 
 .home-marquee {
-  overflow: hidden; // 대형 폰트·margin-left 조합이 vw를 초과해 레이아웃 파괴하는 것 방지
+  overflow: hidden; // prevent large font + margin-left combos from breaking layout
   color: $m-white; // white → inverts via mix-blend-mode
-  padding-top: var(--section-space); // ≈ 3.47985vw @ 1440
-  padding-bottom: var(--section-space); // ≈ 18.96vw @ 1440  (tall bottom space)
+  padding-top: var(--section-space);
+  padding-bottom: var(--section-space);
 
   // ── Wrapper (side padding) ──────────────────────────────────
   &__wrapper {
@@ -28,9 +28,9 @@
     padding-right: fvw(47);
   }
 
-  // ── "CLIENTS" label ────────────────────────────────────────
+  // ── Label ───────────────────────────────────────────────────
   &__label {
-    font-size: var(--fs-body-caps); // responsive token
+    font-size: var(--fs-body-caps);
     font-weight: $fw-light; // 300
     letter-spacing: 0.04em;
     line-height: 100%;
@@ -41,7 +41,7 @@
   // ── Lists container (width animates 70 → 100%) ─────────────
   &__lists {
     width: 70%;
-    transition: width 2s cubic-bezier(0.22, 1, 0.36, 1); // plastic.design exact
+    transition: width 2s cubic-bezier(0.22, 1, 0.36, 1);
 
     &--mobile {
       display: none;
@@ -59,7 +59,7 @@
     text-transform: uppercase;
     max-width: 1440px;
 
-    // Last row: flex-start + offset last item (like CONTROLS / HITACHI.)
+    // Last row: flex-start + offset last item
     &--last {
       justify-content: flex-start;
 
@@ -85,7 +85,7 @@
     padding-bottom: 18vw;
 
     &__list {
-      // plastic.design: no tablet override — desktop fvw(88) scales naturally
+      // fvw(88) scales naturally — no tablet override needed
 
       &--last>div:last-child {
         margin-left: 13vw;
@@ -105,7 +105,7 @@
     }
 
     &__list {
-      font-size: var(--fs-h4); // plastic.design .clients__list — 32px @ 390
+      font-size: var(--fs-h4); // 32px @ 390
 
       &--last>div:last-child {
         margin-left: 8vw;

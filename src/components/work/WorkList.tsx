@@ -1,8 +1,8 @@
 'use client';
 /**
- * WorkList — plastic.design /work 리스트
- * 애니메이션: CSS @keyframes (JS 상태 없음 → React Compiler 영향 없음)
- * 카테고리 필터만 useState 사용
+ * WorkList — /work list page
+ * Animation: CSS @keyframes (no JS state → unaffected by React Compiler)
+ * Only category filter uses useState
  */
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
@@ -11,26 +11,26 @@ import WaveImage from '@/components/common/WaveImage';
 import '@/components/common/WaveImage.scss';
 import './WorkList.scss';
 
-// ── 타입 ──────────────────────────────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────
 export type WorkItem = {
   _id: string;
   title: string;
   slug: { current: string };
-  /** Portrait — 50% 세로형. 미등록 시 서버에서 Landscape를 센터 크롭한 URL */
+  /** Portrait — 50% vertical. If not set, the server provides a center-cropped Landscape URL */
   thumbnailPortraitUrl?: string;
-  /** Landscape — 100% 가로형 */
+  /** Landscape — 100% horizontal */
   thumbnailLandscapeUrl?: string;
-  /** Portrait 이미지의 실제 가로÷세로 비율 (width÷height). 없으면 기본값 사용 */
+  /** Actual width÷height aspect ratio of the Portrait image. Falls back to a default if absent */
   portraitAspectRatio?: number;
   listDescription?: string;
   categories?: string[];
   order?: number;
 };
 
-// ── 더미 데이터 ───────────────────────────────────────────────────
-// thumbnailPortraitUrl: 50% 세로형 (Portrait)
-// thumbnailLandscapeUrl: 100% 가로형 (Landscape)
-// portraitAspectRatio: width÷height (예: 0.8 = 세로형, 1.35 = 가로 세로 비슷)
+// ── Dummy data ────────────────────────────────────────────────────
+// thumbnailPortraitUrl: 50% vertical (Portrait)
+// thumbnailLandscapeUrl: 100% horizontal (Landscape)
+// portraitAspectRatio: width÷height (e.g. 0.8 = portrait, 1.35 = nearly square)
 const DUMMY_WORKS: WorkItem[] = [
   {
     _id: 'd1', title: 'Hyundai Annual Convention.', slug: { current: 'hyundai' },
@@ -76,7 +76,7 @@ const DUMMY_WORKS: WorkItem[] = [
   },
 ];
 
-// ── 카테고리 유틸 ─────────────────────────────────────────────────
+// ── Category utility ──────────────────────────────────────────────
 function buildCategories(works: WorkItem[]) {
   const counts: Record<string, number> = {};
   works.forEach((w) => (w.categories || []).forEach((c) => { counts[c] = (counts[c] || 0) + 1; }));
@@ -91,21 +91,21 @@ function WorkCard({ work, layout, animDelay, onImageEnter, onImageLeave }: {
   onImageEnter: () => void;
   onImageLeave: () => void;
 }) {
-  // layout에 따라 thumbnail 선택
-  // full (3rd)  → Wide (3584×2016, 16:9 가로형)
-  // half (1,2nd) → Portrait (1762×1309, 세로형) — 폴백은 서버에서 Wide 센터 크롭으로 처리됨
+  // Select thumbnail based on layout
+  // full (3rd)   → Wide (3584×2016, 16:9 landscape)
+  // half (1,2nd) → Portrait (1762×1309, vertical) — fallback is handled server-side as a Wide center crop
   const rawSrc = layout === 'full'
     ? (work.thumbnailLandscapeUrl || `https://placehold.co/1792x1008/1a1a1a/555555?text=${encodeURIComponent(work.title)}`)
     : (work.thumbnailPortraitUrl || `https://placehold.co/864x1037/1a1a1a/555555?text=${encodeURIComponent(work.title)}`);
-  // Canvas(WaveImage): same-origin /_next/image 프록시 → Sanity CDN 서버사이드 fetch (CORS 없음)
-  // half(portrait) → w=960 / full(landscape) → w=1920
+  // Canvas (WaveImage): same-origin /_next/image proxy → server-side fetch from Sanity CDN (no CORS)
+  // half (portrait) → w=960 / full (landscape) → w=1920
   const optimizedW = layout === 'full' ? 1920 : 960;
   const src = rawSrc.startsWith('https://cdn.sanity.io')
     ? `/_next/image?url=${encodeURIComponent(rawSrc)}&w=${optimizedW}&q=80`
     : rawSrc;
 
-  // full: Landscape 16:9 고정 (56.25%)
-  // half: Portrait 이미지의 실제 비율 사용. 없으면 1309/1762 기본값
+  // full: fixed Landscape 16:9 (56.25%)
+  // half: use the actual Portrait image ratio; fall back to 1309/1762 if absent
   const ratio = layout === 'full'
     ? 0.5625
     : (work.portraitAspectRatio ? 1 / work.portraitAspectRatio : 1309 / 1762);
@@ -146,7 +146,7 @@ export default function WorkList({ initialWorks }: Props) {
     ? works
     : works.filter((w) => (w.categories || []).includes(activeCategory));
 
-  // 전역 마우스 추적 — lerp로 부드럽게 지연 추적
+  // Global mouse tracking — smoothly lagged via lerp
   useEffect(() => {
     let targetX = 0, targetY = 0;
     let currentX = 0, currentY = 0;
@@ -187,13 +187,13 @@ export default function WorkList({ initialWorks }: Props) {
   return (
     <section className="work-list" data-theme="light">
 
-      {/* ── 전역 커서 배지 ── */}
+      {/* ── Global cursor badge ── */}
       <div ref={cursorRef} className="work-cursor" aria-hidden="true">
         <div className="work-cursor__bg" />
         <span className="work-cursor__label">View work</span>
       </div>
 
-      {/* ── 카테고리 필터 ── */}
+      {/* ── Category filter ── */}
       <nav className="work-list__filter work-list__filter--animate" aria-label="Work category filter">
         <ul className="work-list__filter-list">
           <li className="work-list__filter-item">
@@ -219,7 +219,7 @@ export default function WorkList({ initialWorks }: Props) {
         </ul>
       </nav>
 
-      {/* ── 그리드 ── */}
+      {/* ── Grid ── */}
       <div className="work-list__grid">
         {filtered.map((work, i) => {
           const originalIndex = works.indexOf(work);

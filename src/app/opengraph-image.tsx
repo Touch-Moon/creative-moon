@@ -21,7 +21,7 @@ export default function Image() {
           fontFamily: 'sans-serif',
         }}
       >
-        {/* 로고 텍스트 */}
+        {/* Logo text */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <div
             style={{
@@ -36,7 +36,7 @@ export default function Image() {
           </div>
         </div>
 
-        {/* 메인 카피 */}
+        {/* Main copy */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div
             style={{
@@ -62,7 +62,7 @@ export default function Image() {
           </div>
         </div>
 
-        {/* 하단 설명 */}
+        {/* Bottom description */}
         <div
           style={{
             fontSize: 20,

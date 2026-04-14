@@ -24,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.8,
     }));
-  } catch { /* Sanity 미연결 시 skip */ }
+  } catch { /* Skip if Sanity is not connected */ }
 
   let storyPages: MetadataRoute.Sitemap = [];
   try {
@@ -35,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     }));
-  } catch { /* Sanity 미연결 시 skip */ }
+  } catch { /* Skip if Sanity is not connected */ }
 
   return [
     ...STATIC_PAGES.map((p) => ({ ...p, lastModified: now })),

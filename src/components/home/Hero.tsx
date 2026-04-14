@@ -12,7 +12,7 @@ export default function Hero() {
   const fontsLoaded = useFontsLoaded();
   const lines = ["Transform ideas", "into fluid digital", "experiences."];
 
-  // 매 마운트마다 false → true 변화를 만들어 페이지 전환 후에도 애니메이션 재실행
+  // Force a false → true transition on every mount so the animation re-runs after page navigation
   const [shouldAnimate, setShouldAnimate] = useState(false);
   useEffect(() => {
     if (fontsLoaded) {
@@ -63,8 +63,8 @@ export default function Hero() {
     },
   };
 
-  /* shouldAnimate가 true일 때만 애니메이션 트리거
-     (페이지 전환 후에도 false → true 변화가 생겨 재실행됨) */
+  /* Trigger animation only when shouldAnimate is true
+     (the false → true transition after page navigation ensures re-execution) */
   const animState = shouldAnimate ? "visible" : "hidden";
   const sectionAnimState = shouldAnimate ? "animate" : "initial";
 

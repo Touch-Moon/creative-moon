@@ -13,12 +13,12 @@
 
 // ── Contact Section ────────────────────────────
 .contact-section {
-  padding-top: fvw(350); // plastic: ~24.3vw
+  padding-top: $contact-pt-desktop; // ~24.3vw
 
   .wrapper {
-    max-width: fvw(1320);
+    max-width: $contact-wrapper-max;
     margin: 0 auto;
-    padding: 0 fvw(30);
+    padding: 0 $contact-wrapper-px;
   }
 
   &__row {
@@ -26,13 +26,13 @@
     flex-wrap: wrap;
   }
 
-  // 좌측 정보
+  // Left info column
   &__left {
     flex: 0 0 auto;
     width: 41.667%;
   }
 
-  // 우측 폼
+  // Right form column
   &__right {
     flex: 0 0 auto;
     width: 54%;
@@ -75,13 +75,13 @@
   line-height: $lh-h2;
   font-weight: $fw-regular;
   color: $m-white;
-  margin-bottom: fvw(56);
+  margin-bottom: $contact-title-mb;
   letter-spacing: $ls-tight;
 
   .line {
     display: block;
-    padding: fvw(6) 0;
-    margin: calc(fvw(6) * -1) 0;
+    padding: $contact-title-py 0;
+    margin: calc(#{$contact-title-py} * -1) 0;
     text-transform: uppercase;
   }
 
@@ -95,25 +95,25 @@
   font-size: var(--fs-body-2);
   line-height: $lh-body-2;
   color: rgba($m-white, 0.7);
-  max-width: fvw(666);
+  max-width: $contact-desc-max;
 }
 
 // ── Contact Form ───────────────────────────────
 .contact-form {
   margin-top: $section-title-space;
 
-  // Submit row — reCAPTCHA text (left) + Send button (right)
+  // Submit row — recaptcha text (left) + Send button (right)
   .form-group--submit {
     align-items: center;
     display: flex;
     justify-content: space-between;
     gap: $space-8;
-    margin-top: fvw(56); // checkbox → submit row 간격
+    margin-top: $contact-submit-mt;
 
     // reCAPTCHA disclaimer text
     .submit-recaptcha {
       width: 100%;
-      max-width: fvw(250);
+      max-width: $contact-recaptcha-max;
       color: rgba($m-white, 1);
       font-family: 'Figtree', sans-serif;
       font-size: var(--fs-body-5);
@@ -131,19 +131,19 @@
       }
     }
 
-    // Send button — same flex weight as recaptcha area
+    // Send button
     .button--xl {
-      max-width: fvw(240);
+      max-width: $contact-btn-xl-max;
       width: 100%;
     }
   }
 
-  // textarea → privacy checkbox 간격
+  // textarea → privacy checkbox gap
   .form-group:has(.form-checkbox) {
     margin-top: $space-10;
   }
 
-  // API 레벨 에러 메시지 (전송 실패 등)
+  // API-level error message (e.g. send failure)
   &__error {
     color: #FB6262;
     font-size: var(--fs-body-5);
@@ -153,12 +153,12 @@
 }
 
 // ══════════════════════════════════════════════════
-// Dark theme overrides for style-guide form system
-// _form.scss는 기본 light 테마 → 여기서 dark 오버라이드
+// Dark theme overrides for the form system
+// _form.scss defaults to light theme; overridden here for dark bg
 // ══════════════════════════════════════════════════
 .contact-page {
 
-  // 밑줄 색상 오버라이드
+  // Underline color override
   .form-group .form-control::before,
   .form-group .form-control::after {
     background: $m-white;
@@ -168,25 +168,25 @@
     opacity: 0.15;
   }
 
-  // error 상태: 밑줄 opacity 100%
+  // Error state: underline at full opacity
   .form-group.is-error .form-control::before,
   .form-group.is-error .form-control::after {
     background: #FB6262;
     opacity: 1;
   }
 
-  // placeholder 색상
+  // Placeholder color
   .form-group .form-placeholder {
     color: rgba($m-white, 1);
   }
 
-  // input / textarea 색상
+  // Input / textarea color
   .form-group .form-input,
   .form-group .form-textarea {
     color: $m-white;
   }
 
-  // autofill 오버라이드 (dark)
+  // Autofill override (dark)
   .form-group .form-input:-webkit-autofill,
   .form-group .form-input:-webkit-autofill:active,
   .form-group .form-input:-webkit-autofill:focus,
@@ -200,7 +200,7 @@
     -webkit-box-shadow: inset 0 0 0 1000px $m-black;
   }
 
-  // checkbox 색상 오버라이드
+  // Checkbox color override
   .form-group .form-checkbox label .form-checkbox__check {
     border-color: rgba($m-white, 0.5);
     color: $m-white;
@@ -220,24 +220,23 @@
     }
   }
 
-  // error 색상은 동일 (#FB6262) — _form.scss에서 이미 처리됨
-  // checkbox 에러 메시지 위치 (checkbox는 form-control이 없어 별도 지정)
+  // Checkbox error message position (no form-control wrapper — positioned separately)
   .form-group:has(.form-checkbox) .error-message {
     bottom: auto;
     margin-top: $space-2;
     position: relative;
     right: auto;
     text-align: left;
-    padding-left: 1.8315018315vw; // checkbox__text padding-left와 동일
+    padding-left: 1.8315018315vw; // matches form-checkbox__text padding-left
   }
 
-  // button--secondary dark bg 위에서 border 보정
+  // button--secondary border fix on dark bg
   .button--secondary {
     border-color: $m-white;
   }
 }
 
-// ── 발송 완료 토스트 (Plastic.design 스타일) ──────
+// ── Send confirmation toast ───────────────────────
 .contact-toast {
   align-items: center;
   background: #fff;
@@ -302,11 +301,12 @@
     overflow: hidden;
     padding: 0;
     position: relative;
-    transform: translateZ(0);    // GPU 컴포지팅 레이어 → clip 경계 안티에일리어싱
+    // GPU compositing layer — improves clip edge anti-aliasing
+    transform: translateZ(0);
     -webkit-transform: translateZ(0);
     width: fvw(36);
 
-    // fill overlay — hover 시 아래서 위로, 아웃 시 위로 사라짐 (.button div 와 동일 패턴)
+    // Fill overlay — rises from bottom on hover, exits upward on out
     &::before {
       background: #fff;
       bottom: 0;
@@ -316,7 +316,7 @@
       right: 0;
       top: 0;
       transform: scaleY(0);
-      transform-origin: top;        // 기본: top → 마우스 아웃 시 위로 사라짐
+      transform-origin: top;        // default: top → exits upward on mouse-out
       transition: transform 0.3s cubic-bezier(0.52, 0.24, 0.08, 1);
       will-change: transform;
     }
@@ -324,10 +324,10 @@
     @media (hover: hover) and (pointer: fine) {
       &:hover::before {
         transform: scaleY(1);
-        transform-origin: bottom;   // hover 시: bottom → 아래서 위로 차오름
+        transform-origin: bottom;   // hover: rises from bottom
       }
 
-      // fill이 올라오면 X를 검정으로
+      // When fill rises, switch X to black
       &:hover svg {
         color: #000;
       }
@@ -335,7 +335,7 @@
 
     svg {
       display: block;
-      position: relative; // fill 위에 오도록
+      position: relative; // sits above fill layer
       transition: color 0.3s cubic-bezier(0.52, 0.24, 0.08, 1);
       width: fvw(12);
       height: fvw(12);
@@ -346,21 +346,21 @@
 
 @keyframes plane-float {
   0%   { transform: translateY(0)       rotate(0deg); }
-  25%  { transform: translateY(fvw(-3)) rotate(-4deg); }  // 올라갈 때 살짝 위 기울기
-  50%  { transform: translateY(fvw(-5)) rotate(0deg); }   // 정점
-  75%  { transform: translateY(fvw(-2)) rotate(4deg); }   // 내려올 때 살짝 아래 기울기
+  25%  { transform: translateY(fvw(-3)) rotate(-4deg); }  // slight tilt up while rising
+  50%  { transform: translateY(fvw(-5)) rotate(0deg); }   // peak
+  75%  { transform: translateY(fvw(-2)) rotate(4deg); }   // slight tilt down while descending
   100% { transform: translateY(0)       rotate(0deg); }
 }
 
 // ── Contact Social ─────────────────────────────
 .contact-social {
-  padding-top: fvw(153); // plastic: ~10.6vw
-  padding-bottom: fvw(139); // plastic: ~9.7vw
+  padding-top: $contact-social-pt;
+  padding-bottom: $contact-social-pb;
 
   .wrapper {
-    max-width: fvw(1320);
+    max-width: $contact-wrapper-max;
     margin: 0 auto;
-    padding: 0 fvw(30);
+    padding: 0 $contact-wrapper-px;
   }
 
   &__title {
@@ -394,7 +394,7 @@
       display: inline-block;
     }
 
-    // hover: 다른 링크들은 opacity 낮춤
+    // Hover: dim other links
     ul:hover a:not(:hover) {
       opacity: 0.3;
     }
@@ -406,17 +406,11 @@
   .contact-form .form-group--submit {
     gap: var(--space-16); // ~20px @ 1024
     margin-top: 2.930vw; // ~30px @ 1024
-
-    .submit-recaptcha {
-      font-size: var(--fs-body-5);
-    }
-  }
-
-  .contact-form .form-group--submit {
     flex-direction: column;
     max-width: 100%;
 
     .submit-recaptcha {
+      font-size: var(--fs-body-5);
       max-width: 100%;
     }
 
@@ -439,24 +433,22 @@
   }
 
   .contact-social {
-    padding-top: 10vw; // plastic proportional
+    padding-top: 10vw;
     padding-bottom: 9vw;
   }
 
   .contact-block__title {
     &.body-text-caps {
-      font-size: var(--fs-body-caps); // plastic.design: body-caps at tablet
+      font-size: var(--fs-body-caps);
     }
   }
 
   .contact-block__text {
-
     &.headline-6,
     &.headline-6 a {
-      font-size: var(--fs-h6); // plastic.design: headline-6 at tablet
+      font-size: var(--fs-h6);
     }
   }
-
 }
 
 // ── Mobile (max-width: 575.98px) ───────────────────────
@@ -484,13 +476,13 @@
       text-align: left;
 
       .contact-description {
-        font-size: var(--fs-body-2); // plastic: 30.8px@500 → 23@375 ≈ --fs-body-2 (22/375 = 29.3@500)
+        font-size: var(--fs-body-2);
         max-width: 100%;
       }
     }
   }
 
-  // Form font sizes — plastic uses ~25.6px@500 for inputs ≈ --fs-body-3
+  // Form font sizes on mobile
   .contact-page .form-group .form-placeholder {
     font-size: var(--fs-body-3);
   }
@@ -501,29 +493,29 @@
   }
 
   .contact-page .form-group .form-checkbox label .form-checkbox__text {
-    font-size: var(--fs-body-4); // plastic: body-text-5 ≈ 20.5px@500 → nearest --fs-body-4 (16@375 = 21.3@500)
+    font-size: var(--fs-body-4);
   }
 
   .contact-title {
     display: inline-block;
     width: 89.744vw; // ~90% of viewport
     margin-bottom: 6.944vw; // ~40px @ 576
-    font-size: var(--fs-h2); // plastic: 61.5px@500 → 46@375 ≈ --fs-h2 (46/375)
-    line-height: 116%; // plastic: 71.4/61.5 ≈ 116%
-    text-transform: uppercase; // plastic uses uppercase on mobile
+    font-size: var(--fs-h2); // ~46px @ 375
+    line-height: 116%;
+    text-transform: uppercase;
   }
 
   .contact-description {
     width: 100%;
-    font-size: var(--fs-body-2); // plastic: 30.8px@500 → 23@375 ≈ --fs-body-2 (22/375 = 29.3@500)
+    font-size: var(--fs-body-2); // ~22px @ 375
     line-height: 140%;
-    font-weight: 300; // plastic: fontWeight 300
+    font-weight: 300;
   }
 
   .contact-form {
     margin-top: 5.556vw; // ~32px @ 576
 
-    // 모바일: submit row를 세로 스택으로 (reCAPTCHA 위 / 버튼 아래 full-width)
+    // Mobile: submit row stacks vertically
     .form-group--submit {
       flex-direction: column;
       align-items: stretch;
@@ -531,7 +523,7 @@
       gap: var(--space-32); // ~20px @ 576
 
       .submit-recaptcha {
-        font-size: var(--fs-body-5); // plastic: recaptcha ≈ --fs-body-5
+        font-size: var(--fs-body-5);
         text-align: left;
         max-width: 100%;
       }
@@ -543,7 +535,7 @@
 
         span {
           height: 15vw;
-          font-size: var(--fs-body-3); // plastic: submit btn ≈ 25.6px@500 → nearest --fs-body-3 (20@375 = 26.7@500)
+          font-size: var(--fs-body-3);
         }
       }
     }
@@ -565,18 +557,14 @@
     }
 
     &__text {
-      font-size: var(--fs-body-4); // plastic: body-text-4 ≈ 20.5px@500 → nearest --fs-body-4 (16@375 = 21.3@500)
+      font-size: var(--fs-body-4);
     }
   }
 
   .contact-social {
-    padding-top: 12vw; // plastic proportional
-    padding-bottom: 10vw; // plastic proportional
-    text-align: right;
-
-    @media (max-width: 575.98px) {
-      text-align: left;
-    }
+    padding-top: 12vw;
+    padding-bottom: 10vw;
+    text-align: left;
 
     .wrapper {
       padding: 0 $gutter-mobile; // 16px
@@ -587,15 +575,15 @@
     }
 
     &__list a {
-      font-size: var(--fs-h3); // plastic proportional — reduce from h1
+      font-size: var(--fs-h3);
       line-height: 130%;
     }
   }
 }
 
-/* ── reCAPTCHA v3 badge 숨김 ──
-   폼 하단 "protected by reCAPTCHA" 문구가 있으므로 Google 정책 충족
-   ──────────────────────────────── */
+/* ── Hide reCAPTCHA v3 badge ──
+   Google policy met by inline disclaimer text in the form
+   ────────────────────────────── */
 .grecaptcha-badge {
   visibility: hidden !important;
 }

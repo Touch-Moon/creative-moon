@@ -5,15 +5,15 @@
 $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 
 // ══════════════════════════════════════════════════════════════════════════════
-// WorksSlider — SELECTED WORKS 공통 슬라이더
-// HomeWorks 와 WorkRelated 가 공유하는 레이아웃 + 기능 CSS
+// WorksSlider — SELECTED WORKS shared slider
+// Layout + behaviour CSS shared by HomeWorks and WorkRelated
 // ══════════════════════════════════════════════════════════════════════════════
 
 .works-slider {
-  position: relative; // line absolute 기준
-  overflow: visible; // 트랙이 section 우측 경계 밖으로 확장 허용
+  position: relative; // anchor for absolute lines
+  overflow: visible; // allow track to expand past the right section boundary
 
-  // ── 수평 라인 (TOP / BOTTOM) ──────────────────
+  // ── Horizontal lines (TOP / BOTTOM) ──────────────────
   &__line-h {
     display: block;
     height: 1px;
@@ -22,7 +22,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     transform: scaleX(0);
     transition: transform 0.67s $ease-out;
 
-    // ① TOP: block — margin-left + 계산 width로 인셋
+    // ① TOP: block — margin-left + calculated width for inset
     &--top {
       margin-left: $space-12;
       width: calc(100% - #{$space-12} * 2);
@@ -43,7 +43,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
       transition-delay: 0s;
     }
 
-    // ③ BOTTOM: absolute — left + 계산 width로 인셋
+    // ③ BOTTOM: absolute — left + calculated width for inset
     &--bottom {
       position: absolute;
       bottom: 0;
@@ -68,7 +68,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     }
   }
 
-  // ── 수직 라인 (사이드바 우측) ─────────────────
+  // ── Vertical line (right edge of sidebar) ─────────────────
   &__line-v {
     display: block;
     position: absolute;
@@ -80,7 +80,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     transform-origin: left top;
     transform: scaleY(0);
     transition: transform 0.67s $ease-out;
-    // ② 수직: delay 0.67s (top 후)
+    // ② vertical: delay 0.67s (after top line)
     transition-delay: 0.67s;
 
     &.is-revealed {
@@ -98,7 +98,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     align-items: stretch;
   }
 
-  // ── 좌측 사이드바 ──────────────────────────────
+  // ── Left sidebar ──────────────────────────────
   &__sidebar {
     flex: 0 0 fvw(328);
     display: flex;
@@ -131,7 +131,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     gap: $space-5;
   }
 
-  // ── Counter — overflow:hidden + translateY 슬라이드 ──
+  // ── Counter — overflow:hidden + translateY slide ──
   &__counter {
     display: flex;
     align-items: center;
@@ -145,7 +145,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     height: 1em;
     overflow: hidden;
     text-align: right;
-    min-width: 1.6em; // "01"~"99" 폭 확보
+    min-width: 1.6em; // reserve width for "01"–"99"
   }
 
   &__counter-list {
@@ -171,21 +171,21 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     gap: $space-2;
   }
 
-  // ── 우측 카드 트랙 ────────────────────────────
+  // ── Right card track ────────────────────────────
   &__track {
-    position: relative; // card.offsetLeft 기준점 고정
-    flex: none; // 명시적 width로 뷰포트까지 확장
-    // 1920px 초과 시 section auto-margin(=(100vw-1920px)/2)만큼 추가 확장
+    position: relative; // anchor for card.offsetLeft calculations
+    flex: none; // explicit width expands to viewport edge
+    // Beyond 1920px, extend by section auto-margin = (100vw - 1920px) / 2
     width: calc(100% - #{fvw(424)} + max(0px, (100vw - 1920px) / 2));
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scroll-padding-left: 0; // padding-left 없음 — gap으로만 카드 간격 처리
+    scroll-padding-left: 0; // no padding-left — card spacing handled by gap only
     scroll-behavior: smooth;
-    padding: $space-12 $space-10 $space-12 0; // left: 0 — 스크롤된 카드 peek 방지
+    padding: $space-12 $space-10 $space-12 0; // left: 0 — prevents peeking of scrolled cards
     gap: $space-6;
     cursor: grab;
-    will-change: transform; // bounce translateX 성능 최적화
+    will-change: transform; // perf optimisation for bounce translateX
 
     &:active {
       cursor: grabbing;
@@ -199,18 +199,18 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     scrollbar-width: none;
   }
 
-  // ── 커스텀 DRAG 커서 (body portal) ────────────
+  // ── Custom DRAG cursor (body portal) ────────────
   &__cursor {
     position: fixed;
     top: 0;
     left: 0;
     pointer-events: none;
     z-index: 1000;
-    width: 76px;
-    height: 76px;
-    transform: translate(-999px, -999px); // 초기 오프스크린
+    width: $cursor-badge-size;
+    height: $cursor-badge-size;
+    transform: translate(-999px, -999px); // initial offscreen position
 
-    // 터치 기기에서는 마우스 커서 자체가 없으므로 숨김
+    // touch devices have no mouse cursor — hide badge
     @media (hover: none) {
       display: none;
     }
@@ -220,7 +220,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    // body portal이라 테마 CSS 변수가 body 기준으로 바뀜 → 고정 색상 사용
+    // body portal — theme CSS vars update at body level, use fixed colour
     background: #0a0a0a;
     transform: scale(0.5);
     opacity: 0;
@@ -236,10 +236,10 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 76px;
-    height: 76px;
+    width: $cursor-badge-size;
+    height: $cursor-badge-size;
     color: #fff;
-    font-size: 9px;
+    font-size: $cursor-label-fs;
     font-weight: 400;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -261,8 +261,8 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   // ── Tablet ────────────────────────────────────
-  // 데스크탑과 동일한 가로 레이아웃 유지 (sidebar 좌 / track 우)
-  // 간격·padding만 태블릿 gutter에 맞게 조정
+  // Keep the same horizontal layout as desktop (sidebar left / track right)
+  // Only adjust gap and padding to tablet gutters
   @media (max-width: 1023.98px) {
     &__sidebar {
       padding: $space-12 $space-8;
@@ -312,7 +312,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// ws — 카드 공통 (works-slider 카드 접두사)
+// ws — shared card styles (works-slider card prefix)
 // ══════════════════════════════════════════════════════════════════════════════
 
 .ws {
@@ -324,7 +324,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     display: block;
     cursor: pointer;
 
-    // 카드 사이즈 variants — 높이 fvw(520) 기준, aspect ratio로 폭 결정
+    // card size variants — height fvw(520) base, width determined by aspect ratio
     &--large {
       flex-basis: calc(fvw(520) * 1.27);
     }

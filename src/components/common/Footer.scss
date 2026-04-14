@@ -2,7 +2,7 @@
 @use '@/styles/primitives/type' as *;
 @use '@/styles/primitives/space' as *;
 
-// ── Shared wrapper inside footer ────────────────────────────
+// ── Shared wrapper inside footer ─────────────────────────────
 .footer .wrapper {
   padding-left: $gutter-desktop;
   padding-right: $gutter-desktop;
@@ -26,8 +26,9 @@
   position: relative;
 }
 
-// body[data-theme] 상속에 의존하지 않고 footer 자체에서 CSS 변수 정의
-// — style-guide처럼 body theme와 footer theme가 분리된 경우에도 올바르게 동작
+// Self-contained CSS variable definitions on footer element.
+// Avoids relying on body[data-theme] inheritance — works correctly
+// when style-guide body theme and footer theme differ.
 .footer[data-theme="dark"] {
   --foreground: #fff;
   --foreground-muted: rgba(255, 255, 255, 0.45);
@@ -42,7 +43,7 @@
   background-color: #fff;
 }
 
-// ── CTA 영역 ────────────────────────────────────
+// ── CTA area ─────────────────────────────────────
 .footer__cta-area {
   padding-top: var(--section-space);
   padding-bottom: var(--section-space);
@@ -78,7 +79,7 @@
   }
 
   @media (max-width: 575.98px) {
-    font-size: calc(64 / 375 * 100vw);
+    font-size: calc(64 / 375 * 100vw); // intentional: larger than --fs-h1 token on mobile
     white-space: nowrap;
   }
 }
@@ -90,7 +91,7 @@
   svg {
     width: $space-20;
     height: auto;
-    color: var(--foreground); // currentColor 상속 → 다크/라이트 자동 대응
+    color: var(--foreground); // inherits via currentColor — auto light/dark
   }
 
   @media (max-width: 1023.98px) {
@@ -106,19 +107,20 @@
   }
 }
 
-// ── Mix-blend 커서 서클 (body portal) ────────────
-// mix-blend-mode는 반드시 container에 — child에 걸면 z-index stacking context가
-// 블렌딩을 격리시켜 페이지 콘텐츠와 합성이 안 됨
+// ── Mix-blend cursor circle (body portal) ────────
+// mix-blend-mode must be on the container, not the child —
+// applying to child creates a stacking context that isolates
+// blending from page content.
 .footer__cursor {
   position: fixed;
   top: 0;
   left: 0;
   pointer-events: none;
   z-index: 9999;
-  width: 76px;
-  height: 76px;
-  // container에 mix-blend-mode: 흰 서클이 페이지 전체와 difference 합성
-  // 다크 bg(#000) → 흰 서클 그대로 / 라이트 bg(#fff) → 검정 서클로 자동 반전
+  width: $cursor-badge-size;
+  height: $cursor-badge-size;
+  // White circle composites with entire page via difference:
+  // dark bg (#000) → white circle stays / light bg (#fff) → inverts to black
   mix-blend-mode: difference;
 
   @media (hover: none) {
@@ -142,7 +144,7 @@
   opacity: 1;
 }
 
-// ── 플로팅 볼 (장식) ────────────────────────────
+// ── Decorative floating ball ──────────────────────
 .footer__cta-ball {
   position: absolute;
   top: fvw(140);
@@ -170,7 +172,7 @@
   }
 }
 
-// ── 링크 영역 ───────────────────────────────────
+// ── Links area ───────────────────────────────────
 .footer__links {
   padding-bottom: $space-10;
 
@@ -231,20 +233,20 @@
   }
 }
 
-// ── Contact 페이지: 카피라이트를 콘텐츠 그리드에 맞춤 ──
+// ── Contact page: align copyright to content grid ──
 //
-// contact-section .wrapper 의 left gutter = centering margin + padding-left
+// contact-section .wrapper left gutter = centering margin + padding-left
 //
 // [Desktop/Tablet ≥576px]
 //   max-width: min(91.6667vw, 1320px) / margin: 0 auto / padding: min(2.0833vw, 30px)
 //   → centering margin = (100vw - min(91.6667vw, 1320px)) / 2
 //   → total gutter     = calc((100vw - min(91.6667vw, 1320px)) / 2 + min(2.0833vw, 30px))
-//   예) 1440px: (1440-1320)/2 + 30 = 90px
-//       1280px: (1280-1173)/2 + 27 = 80px  (≈ 6.25vw)
-//        768px: (768-704)/2   + 16 = 48px  (≈ 6.25vw)
+//   e.g. 1440px: (1440-1320)/2 + 30 = 90px
+//        1280px: (1280-1173)/2 + 27 = 80px (≈ 6.25vw)
+//         768px: (768-704)/2   + 16 = 48px (≈ 6.25vw)
 //
 // [Mobile ≤575.98px]
-//   padding 이 $gutter-mobile(16px)으로 교체됨
+//   padding replaced with $gutter-mobile (16px)
 //   → centering margin = (100vw - 91.6667vw) / 2 = 4.1667vw
 //   → total gutter     = calc(4.1667vw + 16px)
 .footer--contact .footer__meta .wrapper {
@@ -259,14 +261,14 @@
   }
 }
 
-// footer__copy 에 직접 걸린 text-align: center 도 해제
+// Also clear text-align: center on footer__copy directly
 .footer--contact .footer__copy {
   @media (max-width: 575.98px) {
     text-align: left;
   }
 }
 
-// ── 카피라이트 ──────────────────────────────────
+// ── Copyright ────────────────────────────────────
 .footer__meta {
   padding-bottom: $space-16;
 

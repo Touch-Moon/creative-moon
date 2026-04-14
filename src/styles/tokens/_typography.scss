@@ -53,12 +53,10 @@
   --ls-wide:  #{$ls-wide};
 }
 
-// ── Tablet (≤1024px) — plastic.design 768px base ────────────
+// ── Tablet (≤1024px) — 768px base ───────────────────────────
 @media (max-width: 1023.98px) {
   :root {
-    /* ─── Font Size — Headlines ───
-       h1–h4b: plastic.design desktop scale @ 768px (no tablet override)
-       h5–h6:  plastic.design tablet override @ 768px */
+    /* ─── Font Size — Headlines (768px base) ─── */
     --fs-h1:        calc(75 / 768 * 100vw);
     --fs-h2:        calc(46 / 768 * 100vw);
     --fs-h3:        calc(39 / 768 * 100vw);
@@ -67,8 +65,7 @@
     --fs-h5:        calc(22 / 768 * 100vw);
     --fs-h6:        calc(16 / 768 * 100vw);
 
-    /* ─── Font Size — Body ───
-       plastic.design tablet override @ 768px */
+    /* ─── Font Size — Body (768px base) ─── */
     --fs-body-1:    calc(20 / 768 * 100vw);
     --fs-body-2:    calc(20 / 768 * 100vw);
     --fs-body-3:    calc(16 / 768 * 100vw);
@@ -78,11 +75,10 @@
   }
 }
 
-// ── Mobile (≤576px) — plastic.design @ 375px base ───────────
+// ── Mobile (≤576px) — 375px base ────────────────────────────
 @media (max-width: 575.98px) {
   :root {
-    /* ─── Font Size — Headlines ───
-       plastic.design mobile — values at 375px viewport */
+    /* ─── Font Size — Headlines (375px base) ─── */
     --fs-h1:        calc(54 / 375 * 100vw);
     --fs-h2:        calc(46 / 375 * 100vw);
     --fs-h3:        calc(34 / 375 * 100vw);
@@ -91,8 +87,7 @@
     --fs-h5:        calc(24 / 375 * 100vw);
     --fs-h6:        calc(18 / 375 * 100vw);
 
-    /* ─── Font Size — Body ───
-       plastic.design mobile — values at 375px viewport */
+    /* ─── Font Size — Body (375px base) ─── */
     --fs-body-1:    calc(24 / 375 * 100vw);
     --fs-body-2:    calc(22 / 375 * 100vw);
     --fs-body-3:    calc(20 / 375 * 100vw);

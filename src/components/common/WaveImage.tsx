@@ -1,8 +1,8 @@
 'use client';
 /**
- * WaveImage — Canvas 기반 마우스오버 파동 효과
- * HomeWorks.tsx 에서 추출한 공통 컴포넌트.
- * 마우스 진입 시 수건-탁 파동이 왼→오 방향으로 한 번 흐름.
+ * WaveImage — Canvas-based mouseover wave effect
+ * Common component extracted from HomeWorks.tsx.
+ * On mouse enter, a snapping wave flows once in the left→right direction.
  */
 import { useRef, useCallback, useEffect } from 'react';
 
@@ -12,14 +12,14 @@ const WAVE_CYCLES = 0.5;
 const PULSE_SPEED = 0.032;
 
 type Props = {
-  /** img src (public 경로 또는 절대 URL) */
+  /** img src (public path or absolute URL) */
   src: string;
   alt: string;
-  /** 래퍼 div 추가 className (선택) */
+  /** additional className for wrapper div (optional) */
   className?: string;
-  /** 커서 배지 라벨 (기본: undefined → 배지 없음) */
+  /** cursor badge label (default: undefined → no badge) */
   cursorLabel?: string;
-  /** parallaxRef — 외부에서 inner div ref를 가져갈 때 사용 */
+  /** parallaxRef — used when receiving the inner div ref from outside */
   parallaxRef?: React.Ref<HTMLDivElement>;
 };
 
@@ -110,8 +110,8 @@ export default function WaveImage({ src, alt, className = '', cursorLabel, paral
     sizeCanvas();
     drawFrame(0);
     if (wrapRef.current) {
-      // applyParallax 가 transition:'none' 을 인라인으로 세팅할 수 있으므로
-      // hover 애니메이션은 여기서 inline transition 을 직접 복원
+      // applyParallax may set transition:'none' inline,
+      // so restore the inline transition here for hover animation
       wrapRef.current.style.transition = 'transform 0.7s cubic-bezier(0.19, 1, 0.22, 1)';
       wrapRef.current.style.transform = `scale(1.06)`;
     }

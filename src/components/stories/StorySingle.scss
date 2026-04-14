@@ -4,17 +4,17 @@
 
 // ── Story Single ──────────────────────────────────────────────────
 .story-single {
-  padding-top: fvw(274); // plastic: ~19vw
+  padding-top: fvw(274); // ~19vw
 }
 
 .story-single__end {
-  height: fvw(167); // plastic: modules pb ~11.6vw
+  height: fvw(167); // ~11.6vw
 }
 
 // ── Module base ───────────────────────────────────────────────────
 .story-module {}
 
-// ── Hero section (Work와 동일: slide-up from bottom, 16:9 이미지) ──
+// ── Hero section (same as Work: slide-up from bottom, 16:9 image) ──
 .story-single__hero {
   width: 100%;
   overflow: hidden;
@@ -30,7 +30,7 @@
     object-fit: cover;
   }
 
-  // Guttered variant — 다른 섹션과 동일한 좌우 여백
+  // Guttered variant — same horizontal margins as other sections
   &--guttered {
     padding-left: $gutter-desktop;
     padding-right: $gutter-desktop;
@@ -90,7 +90,7 @@
     object-fit: cover;
   }
 
-  // Narrow variant — add side gutter padding
+  // Narrow variant — applies side gutter padding
   &.story-module--narrow {
     padding: 0 $gutter-desktop;
 
@@ -104,7 +104,7 @@
   }
 }
 
-// ── Two-col image module (legacy — kept for backwards compatibility) ──
+// ── Two-col image module (legacy — retained for compatibility) ──
 .story-module--two-col-image {
   margin-top: $space-20;
   padding: 0 $gutter-desktop;

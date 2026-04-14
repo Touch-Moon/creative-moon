@@ -6,20 +6,20 @@ import { FontProvider } from '@/context/FontContext'
 /**
  * FontLoader
  * ─────────────────────────────────────────────
- * 폰트가 완전히 로드될 때까지 페이지 콘텐츠를 숨기고,
- * 로드 완료 후 fade-in으로 부드럽게 보여줌.
- * FontProvider로 fontsLoaded 상태를 하위 컴포넌트에 공유.
+ * Hides page content until all fonts are fully loaded,
+ * then reveals it smoothly with a fade-in.
+ * Shares fontsLoaded state with child components via FontProvider.
  */
 export default function FontLoader({ children }: { children: React.ReactNode }) {
   const [fontsLoaded, setFontsLoaded] = useState(false)
 
   useEffect(() => {
-    // document.fonts.ready는 모든 폰트 로딩이 완료되면 resolve되는 Promise
+    // document.fonts.ready is a Promise that resolves when all fonts have finished loading
     document.fonts.ready.then(() => {
       setFontsLoaded(true)
     })
 
-    // 안전장치: 3초 후에는 폰트 로딩 여부와 관계없이 페이지를 보여줌
+    // Fallback: show the page after 3 seconds regardless of font load status
     const timeout = setTimeout(() => {
       setFontsLoaded(true)
     }, 3000)

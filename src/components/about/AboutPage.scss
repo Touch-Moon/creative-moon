@@ -1,5 +1,5 @@
 // ================================================
-// ABOUT PAGE — Full layout matching plastic.design structure
+// ABOUT PAGE
 // Sections: Hero → Full Image → Image+Text → 2Col Images →
 //           Text Left → Text Right → Awards → Clients → Compliance
 // ================================================
@@ -32,8 +32,8 @@
 // 1. HERO TITLE
 // ================================================
 .about-title {
-  padding-top: fvw(330); // plastic: ~23vw
-  padding-bottom: fvw(36); // plastic: ~2.6vw
+  padding-top: fvw(330); // ~23vw
+  padding-bottom: fvw(36); // ~2.6vw
 
   @media (max-width: 1023.98px) {
     padding-top: 20vw;
@@ -54,12 +54,11 @@
     margin: 0;
 
     @media (max-width: 1023.98px) {
-      // plastic.design: no tablet override — desktop --fs-h2 scales via token
       line-height: 1.05;
     }
 
     @media (max-width: 575.98px) {
-      font-size: var(--fs-h3); // plastic.design .about-title__content — 36px @ 390
+      font-size: var(--fs-h3); // ~36px @ 390
       line-height: 1.08;
     }
   }
@@ -80,7 +79,7 @@
 // 2. FULL-WIDTH IMAGE + TEXT
 // ================================================
 .about-full-image {
-  padding-bottom: fvw(230); // plastic: ~16vw
+  padding-bottom: fvw(230); // ~16vw
 
   @media (max-width: 1023.98px) {
     padding-bottom: 14vw;
@@ -96,7 +95,6 @@
     height: fvw(560);
     overflow: hidden;
     margin-bottom: $section-title-space;
-
 
     @media (max-width: 1023.98px) {
       height: 50vw;
@@ -172,7 +170,6 @@
     height: fvw(600);
     overflow: hidden;
 
-
     @media (max-width: 1023.98px) {
       height: 46vw;
     }
@@ -204,7 +201,7 @@
     }
 
     @media (max-width: 575.98px) {
-      font-size: var(--fs-h4); // plastic proportional — reduce from h2
+      font-size: var(--fs-h4);
       margin-bottom: 20px;
     }
   }
@@ -267,7 +264,6 @@
     height: fvw(480);
     overflow: hidden;
 
-
     @media (max-width: 1023.98px) {
       height: 40vw;
     }
@@ -279,7 +275,7 @@
 }
 
 // ================================================
-// 5. TEXT LEFT — "It's all about the people"
+// 5. TEXT LEFT
 // ================================================
 .about-text-left {
   padding-top: 0;
@@ -310,7 +306,7 @@
     }
 
     @media (max-width: 575.98px) {
-      font-size: var(--fs-h3); // plastic proportional — reduce from h1
+      font-size: var(--fs-h3);
       margin-bottom: 28px;
     }
   }
@@ -345,7 +341,7 @@
 }
 
 // ================================================
-// 6. TEXT RIGHT — "If you're gonna do it..."
+// 6. TEXT RIGHT
 // ================================================
 .about-text-right {
   padding-top: 0;
@@ -396,7 +392,7 @@
     }
 
     @media (max-width: 575.98px) {
-      font-size: var(--fs-h4); // plastic proportional — reduce from h2
+      font-size: var(--fs-h4);
       line-height: $lh-h5;
       margin-bottom: 20px;
     }
@@ -424,8 +420,8 @@
 // 7. AWARDS
 // ================================================
 .about-awards {
-  padding-top: fvw(214); // plastic: ~14.9vw
-  padding-bottom: fvw(214); // plastic: ~14.9vw
+  padding-top: fvw(214); // ~14.9vw
+  padding-bottom: fvw(214);
 
   @media (max-width: 1023.98px) {
     padding-top: 12vw;
@@ -466,7 +462,7 @@
     }
 
     @media (max-width: 575.98px) {
-      font-size: var(--fs-h4); // plastic proportional — reduce from h2
+      font-size: var(--fs-h4);
     }
   }
 
@@ -553,8 +549,8 @@
 // 8. CLIENTS — Large names
 // ================================================
 .about-clients {
-  padding-top: fvw(48); // plastic: ~3.5vw
-  padding-bottom: fvw(270); // plastic: ~19vw
+  padding-top: fvw(48); // ~3.5vw
+  padding-bottom: fvw(270); // ~19vw
   overflow: hidden;
 
   @media (max-width: 1023.98px) {
@@ -596,7 +592,7 @@
   }
 
   &__name {
-    font-size: var(--fs-h1); // 140px @ 1440
+    font-size: var(--fs-h1); // large fluid size
     font-weight: $fw-regular;
     line-height: $lh-h1; // 96%
     letter-spacing: $ls-tight;
@@ -608,7 +604,7 @@
     }
 
     @media (max-width: 575.98px) {
-      font-size: var(--fs-h4); // plastic.design .clients__list — 32px @ 390
+      font-size: var(--fs-h4); // ~32px @ 390
     }
   }
 }
@@ -617,8 +613,8 @@
 // 9. COMPLIANCE — 3-column cards
 // ================================================
 .about-compliance {
-  padding-top: 0; // plastic: flows from clients
-  padding-bottom: fvw(178); // plastic: about wrapper pb ~12.4vw
+  padding-top: 0;
+  padding-bottom: fvw(178); // ~12.4vw
 
   @media (max-width: 1023.98px) {
     padding-top: 0;
@@ -643,7 +639,7 @@
     }
 
     @media (max-width: 575.98px) {
-      font-size: var(--fs-h5); // plastic proportional — reduce from h2
+      font-size: var(--fs-h5);
       margin-bottom: $space-24;
     }
   }
@@ -688,7 +684,7 @@
     }
 
     @media (max-width: 575.98px) {
-      font-size: var(--fs-h5); // plastic.design .compliance__item__title — 24px @ 390
+      font-size: var(--fs-h5); // ~24px @ 390
       margin-bottom: $space-3;
     }
   }

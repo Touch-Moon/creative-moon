@@ -24,7 +24,7 @@
     padding-right: $gutter-mobile;
   }
 
-  // BEM: Element (__ 사용)
+  // BEM elements
   &__title {
     font-family: var(--font-inter-display), sans-serif;
     font-size: var(--fs-h1); // 140px @ 1440 → 64px @ 1024 → 40px @ 576
@@ -39,7 +39,7 @@
     gap: 0.05em;
     -webkit-font-smoothing: antialiased;
 
-    // plastic.design: home hero title ≈ 46px @ 500 → ~34px @ 375 ≈ --fs-h3
+    // Mobile: step down one level to --fs-h3 (~34px @ 375)
     @media (max-width: 575.98px) {
       font-size: var(--fs-h3);
     }
