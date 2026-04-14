@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
 
   devIndicators: false, // 에러 없을 때 N 아이콘 숨김 (에러 발생 시 오버레이는 자동 표시)
 
+  // Allow local network IPs to access the dev server (HMR WebSocket + cross-origin).
+  // Next 15.2+ blocks cross-origin dev requests by default.
+  allowedDevOrigins: ['192.168.68.60'],
+
   images: {
     // AVIF → WebP → 원본 순으로 브라우저 지원에 따라 자동 제공
     formats: ['image/avif', 'image/webp'],

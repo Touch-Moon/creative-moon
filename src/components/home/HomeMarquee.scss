@@ -35,7 +35,7 @@
     letter-spacing: 0.04em;
     line-height: 100%;
     text-transform: uppercase;
-    margin-bottom: fvw(26); // ≈ 1.8315vw
+    padding-bottom: var(--space-4);
   }
 
   // ── Lists container (width animates 70 → 100%) ─────────────
@@ -71,6 +71,10 @@
         }
       }
     }
+
+    @media (max-width: 575.98px) {
+      padding-bottom: var(--space-2);
+    }
   }
 
   // ── Scroll trigger: .is-visible expands the lists ──────────
@@ -82,7 +86,6 @@
 
   // ── Tablet (1024px and below) ───────────────────────────────
   @media (max-width: 1023.98px) {
-    padding-bottom: 18vw;
 
     &__list {
       // fvw(88) scales naturally — no tablet override needed

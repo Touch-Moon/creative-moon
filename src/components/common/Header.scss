@@ -612,7 +612,7 @@ $_mp: 576;  // mobile base
   .nav__container {
     flex-direction: column;
     margin: 0;
-    padding: min(calc(var(--space-40) * 2), 10vh) 0 0;
+    padding: min(var(--space-40), 10vh) 0 0;
   }
 
   .nav__left {
@@ -620,7 +620,7 @@ $_mp: 576;  // mobile base
     flex-direction: row;
     justify-content: flex-start;
     gap: $space-12;
-    padding-top: calc(var(--space-32) * 2);
+    padding-top: var(--space-24);
     padding-bottom: 0;
   }
 
@@ -630,7 +630,7 @@ $_mp: 576;  // mobile base
 
   .nav__secondary {
     li {
-      margin-bottom: $space-3;
+      margin-bottom: var(--space-3);
     }
 
     a {
@@ -646,7 +646,7 @@ $_mp: 576;  // mobile base
     }
 
     li {
-      margin-bottom: $space-3;
+      margin-bottom: var(--space-3);
     }
   }
 
@@ -656,7 +656,7 @@ $_mp: 576;  // mobile base
 
   .nav__email {
     position: static;
-    margin-top: calc(var(--space-40) * 2);
+    margin-top: var(--space-32);
 
     a {
       font-size: var(--fs-body-3); // 14px @ 576

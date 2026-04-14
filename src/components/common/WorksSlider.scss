@@ -100,6 +100,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 
   // ── Left sidebar ──────────────────────────────
   &__sidebar {
+    box-sizing: content-box; // flex-basis excludes padding — preserves sidebar width vs global border-box reset
     flex: 0 0 fvw(328);
     display: flex;
     flex-direction: column;
@@ -173,6 +174,7 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 
   // ── Right card track ────────────────────────────
   &__track {
+    box-sizing: content-box; // width excludes padding — preserves intended right-edge extension
     position: relative; // anchor for card.offsetLeft calculations
     flex: none; // explicit width expands to viewport edge
     // Beyond 1920px, extend by section auto-margin = (100vw - 1920px) / 2
@@ -284,18 +286,19 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
       flex: none;
       flex-direction: row;
       align-items: center;
-      padding: var(--space-32) $gutter-mobile var(--space-1);
+      padding: var(--space-12) $gutter-mobile var(--space-2);
     }
 
     &__title {
       font-size: var(--fs-body-4);
       display: flex;
-      gap: $space-4;
+      gap: var(--space-2);
     }
 
     &__nav {
       flex-direction: row;
       align-items: center;
+      display: none;
     }
 
     &__arrows {
@@ -305,8 +308,12 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     &__track {
       width: 100%;
       scroll-padding-left: $gutter-mobile;
-      padding: var(--space-16) 16px var(--space-32) $gutter-mobile;
+      padding: var(--space-2) 16px var(--space-12) $gutter-mobile;
       gap: $gutter-mobile;
+    }
+
+    &__line-h--bottom {
+      display: none;
     }
   }
 }
@@ -361,16 +368,16 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
   // ── Mobile ────────────────────────────────────
   @media (max-width: 575.98px) {
     &__card {
-      flex: 0 0 85vw;
+      flex: 0 0 80vw;
     }
 
     &__card-img {
-      height: 55vw;
+      height: 56vw;
     }
 
     &__card-title {
-      font-size: var(--fs-body-3);
-      margin: var(--space-8) 0 0;
+      font-size: var(--fs-body-4);
+      margin: var(--space-5) 0 0;
     }
   }
 }

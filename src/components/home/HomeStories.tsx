@@ -33,11 +33,10 @@ const titleSlideVariants: Variants = {
 };
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { clipPath: 'inset(0 0 100% 0)' },
   visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 1.1, ease: EASE_OUT, delay: i * 0.1 },
+    clipPath: 'inset(0 0 0% 0)',
+    transition: { duration: 1.1, ease: EASE_OUT, delay: 0.3 + i * 0.1 },
   }),
 };
 
@@ -77,6 +76,7 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
   const velBufferRef = useRef<{ scroll: number; t: number }[]>([]);
   const momentumRafRef = useRef<number>(0);
   const justDraggedRef = useRef(false);
+  const onDragEndRef = useRef<() => void>(() => {});
 
   // ── rubber-band ──────────────────────────────────────
   const rubberBand = (overscroll: number, maxOverscroll = 140) => {
@@ -244,21 +244,8 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
       }
       velBufferRef.current = [];
 
-      // ── Snap after momentum sliding (Flickity style) ──
-      const FRICTION = 0.92;
-      const MAX_VEL = 30;
-      let vel = Math.max(-MAX_VEL, Math.min(MAX_VEL, velocity));
-      const momentumScroll = () => {
-        if (!trackRef.current) return;
-        if (Math.abs(vel) < 0.8) {
-          doSnapByIntent(trackRef.current.scrollLeft, vel);
-          return;
-        }
-        trackRef.current.scrollLeft += vel;
-        vel *= FRICTION;
-        momentumRafRef.current = requestAnimationFrame(momentumScroll);
-      };
-      momentumRafRef.current = requestAnimationFrame(momentumScroll);
+      // Snap directly — momentum is handled inside doSnapByIntent via startIdx ±1
+      doSnapByIntent(track.scrollLeft, velocity);
     } else {
       track.style.scrollSnapType = '';
       track.style.scrollBehavior = '';
@@ -269,6 +256,9 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
     dragRef.current.active = false;
   }, [animateBounceBack, doSnapByIntent]);
 
+  // Keep the latest onDragEnd in a ref (prevents stale closure in window handler)
+  onDragEndRef.current = onDragEnd;
+
   // cleanup
   useEffect(() => () => {
     clearTimeout(scrollTimerRef.current);
@@ -278,10 +268,10 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
 
   // ── window mouseup: end drag even when the button is released outside the track ──
   useEffect(() => {
-    const handler = () => { if (dragRef.current.active) onDragEnd(); };
+    const handler = () => { if (dragRef.current.active) onDragEndRef.current(); };
     window.addEventListener('mouseup', handler);
     return () => window.removeEventListener('mouseup', handler);
-  }, [onDragEnd]);
+  }, []);
 
   // ── Prevent link click immediately after drag ──────────────────────
   useEffect(() => {
@@ -322,7 +312,7 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
   // ── Cursor show/hide ───────────────────────────────────
   const handleTrackMouseEnter = () => { cursorRef.current?.classList.add('is-visible'); };
   const handleTrackMouseLeave = () => {
-    onDragEnd();
+    onDragEndRef.current();
     cursorRef.current?.classList.remove('is-visible');
   };
 

@@ -165,7 +165,11 @@
   }
 
   .form-group .form-control::before {
-    opacity: 0.15;
+    opacity: 0.5;
+
+    @media (max-width: 575.98px) {
+      opacity: 0.5;
+    }
   }
 
   // Error state: underline at full opacity
@@ -316,7 +320,7 @@
       right: 0;
       top: 0;
       transform: scaleY(0);
-      transform-origin: top;        // default: top → exits upward on mouse-out
+      transform-origin: top; // default: top → exits upward on mouse-out
       transition: transform 0.3s cubic-bezier(0.52, 0.24, 0.08, 1);
       will-change: transform;
     }
@@ -324,7 +328,7 @@
     @media (hover: hover) and (pointer: fine) {
       &:hover::before {
         transform: scaleY(1);
-        transform-origin: bottom;   // hover: rises from bottom
+        transform-origin: bottom; // hover: rises from bottom
       }
 
       // When fill rises, switch X to black
@@ -345,11 +349,28 @@
 }
 
 @keyframes plane-float {
-  0%   { transform: translateY(0)       rotate(0deg); }
-  25%  { transform: translateY(fvw(-3)) rotate(-4deg); }  // slight tilt up while rising
-  50%  { transform: translateY(fvw(-5)) rotate(0deg); }   // peak
-  75%  { transform: translateY(fvw(-2)) rotate(4deg); }   // slight tilt down while descending
-  100% { transform: translateY(0)       rotate(0deg); }
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(fvw(-3)) rotate(-4deg);
+  }
+
+  // slight tilt up while rising
+  50% {
+    transform: translateY(fvw(-5)) rotate(0deg);
+  }
+
+  // peak
+  75% {
+    transform: translateY(fvw(-2)) rotate(4deg);
+  }
+
+  // slight tilt down while descending
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
 }
 
 // ── Contact Social ─────────────────────────────
@@ -444,6 +465,7 @@
   }
 
   .contact-block__text {
+
     &.headline-6,
     &.headline-6 a {
       font-size: var(--fs-h6);
@@ -484,7 +506,7 @@
 
   // Form font sizes on mobile
   .contact-page .form-group .form-placeholder {
-    font-size: var(--fs-body-3);
+    font-size: var(--fs-body-5);
   }
 
   .contact-page .form-group .form-input,
@@ -512,8 +534,13 @@
     font-weight: 300;
   }
 
+  .form-group .form-control::before {
+    opacity: 0.8;
+  }
+
   .contact-form {
     margin-top: 5.556vw; // ~32px @ 576
+    border-top: 1px solid rgba($m-white, 0.5);
 
     // Mobile: submit row stacks vertically
     .form-group--submit {
@@ -521,6 +548,10 @@
       align-items: stretch;
       margin-top: 6.944vw; // ~40px @ 576
       gap: var(--space-32); // ~20px @ 576
+
+      @media (max-width: 575.98px) {
+        gap: var(--space-8);
+      }
 
       .submit-recaptcha {
         font-size: var(--fs-body-5);

@@ -55,8 +55,8 @@
   }
 
   @media (max-width: 575.98px) {
-    padding-top: calc(var(--space-40) * 4);
-    padding-bottom: calc(var(--space-40) * 4);
+    padding-top: var(--space-20);
+    padding-bottom: var(--space-20);
   }
 }
 
@@ -277,7 +277,7 @@
   }
 
   @media (max-width: 575.98px) {
-    padding-bottom: var(--space-40);
+    padding-bottom: var(--space-10);
   }
 }
 
@@ -292,7 +292,7 @@
   }
 
   @media (max-width: 575.98px) {
-    font-size: calc(var(--fs-body-3) * 0.8);
+    font-size: calc(var(--fs-body-5) * 0.8);
     display: block;
     text-align: center;
   }

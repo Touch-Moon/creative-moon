@@ -155,7 +155,7 @@ export default function AboutPage() {
             animate={fullImg.inView ? 'visible' : 'hidden'}
           >
             <Image
-              src="/images/about/about-hero-v2.webp"
+              src="/images/about-hero.jpg"
               alt="Creative Moon — workspace"
               fill
               style={{ objectFit: 'cover' }}
@@ -222,7 +222,7 @@ export default function AboutPage() {
                 what draws attention, and where friction lives. The goal is always
                 the same: a website that feels intuitive, loads fast, and guides
                 visitors toward what matters. Work spans{' '}
-                <span style={{ textDecoration: 'underline', textUnderlineOffset: '0.2em' }}>
+                <span className="about-image-text__desc-underline">
                   Web Design, UI/UX Design, Front-End Development,
                   and interactive digital experiences
                 </span>.

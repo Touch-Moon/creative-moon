@@ -5,31 +5,53 @@
 // Cap: values freeze at 1920px viewport (× 1.3333 from 1440 base)
 // ================================================
 
-$space-1:  min(0.2778vw, 5.33px);    //   4px @ 1440 →   5.33px @ 1920
-$space-2:  min(0.5556vw, 10.67px);   //   8px @ 1440 →  10.67px @ 1920
-$space-3:  min(0.8333vw, 16px);      //  12px @ 1440 →  16px    @ 1920
-$space-4:  min(1.1111vw, 21.33px);   //  16px @ 1440 →  21.33px @ 1920
-$space-5:  min(1.3889vw, 26.67px);   //  20px @ 1440 →  26.67px @ 1920
-$space-6:  min(1.6667vw, 32px);      //  24px @ 1440 →  32px    @ 1920
-$space-8:  min(2.2222vw, 42.67px);   //  32px @ 1440 →  42.67px @ 1920
-$space-10: min(2.7778vw, 53.33px);   //  40px @ 1440 →  53.33px @ 1920
-$space-12: min(3.3333vw, 64px);      //  48px @ 1440 →  64px    @ 1920
-$space-16: min(4.4444vw, 85.33px);   //  64px @ 1440 →  85.33px @ 1920
-$space-20: min(5.5556vw, 106.67px);  //  80px @ 1440 → 106.67px @ 1920
-$space-24: min(6.6667vw, 128px);     //  96px @ 1440 → 128px    @ 1920
-$space-32: min(8.8889vw, 170.67px);  // 128px @ 1440 → 170.67px @ 1920
+$space-1: min(0.2778vw, 5.33px); //   4px @ 1440 →   5.33px @ 1920
+$space-2: min(0.5556vw, 10.67px); //   8px @ 1440 →  10.67px @ 1920
+$space-3: min(0.8333vw, 16px); //  12px @ 1440 →  16px    @ 1920
+$space-4: min(1.1111vw, 21.33px); //  16px @ 1440 →  21.33px @ 1920
+$space-5: min(1.3889vw, 26.67px); //  20px @ 1440 →  26.67px @ 1920
+$space-6: min(1.6667vw, 32px); //  24px @ 1440 →  32px    @ 1920
+$space-8: min(2.2222vw, 42.67px); //  32px @ 1440 →  42.67px @ 1920
+$space-10: min(2.7778vw, 53.33px); //  40px @ 1440 →  53.33px @ 1920
+$space-12: min(3.3333vw, 64px); //  48px @ 1440 →  64px    @ 1920
+$space-16: min(4.4444vw, 85.33px); //  64px @ 1440 →  85.33px @ 1920
+$space-20: min(5.5556vw, 106.67px); //  80px @ 1440 → 106.67px @ 1920
+$space-24: min(6.6667vw, 128px); //  96px @ 1440 → 128px    @ 1920
+$space-32: min(8.8889vw, 170.67px); // 128px @ 1440 → 170.67px @ 1920
 $space-40: min(11.1111vw, 213.33px); // 160px @ 1440 → 213.33px @ 1920
+
+// ── Mobile spacing scale (375px base) ──────────
+// Use inside @media (max-width: 575.98px) via _spacing.scss :root override
+// calc(N / 375 * 100vw) — N matches the intended px value
+$space-m-1: calc(4 / 375 * 100vw); //   4px @ 375
+$space-m-2: calc(8 / 375 * 100vw); //   8px @ 375
+$space-m-3: calc(12 / 375 * 100vw); //  12px @ 375
+$space-m-4: calc(16 / 375 * 100vw); //  16px @ 375
+$space-m-5: calc(20 / 375 * 100vw); //  20px @ 375
+$space-m-6: calc(24 / 375 * 100vw); //  24px @ 375
+$space-m-8: calc(32 / 375 * 100vw); //  32px @ 375
+$space-m-10: calc(40 / 375 * 100vw); //  40px @ 375
+$space-m-12: calc(48 / 375 * 100vw); //  48px @ 375
+$space-m-16: calc(64 / 375 * 100vw); //  64px @ 375
+$space-m-20: calc(80 / 375 * 100vw); //  80px @ 375
+$space-m-24: calc(96 / 375 * 100vw); //  96px @ 375
+$space-m-32: calc(128 / 375 * 100vw); // 128px @ 375
+$space-m-40: calc(160 / 375 * 100vw); // 160px @ 375
+
+// ── Section-level mobile ────────────────────────
+$section-space-m: calc(48 / 375 * 100vw); //  80px @ 375
+$section-title-space-m: calc(40 / 375 * 100vw); //  40px @ 375
 
 // ── Section side gutters (fixed) ───────────────
 // Browser left/right margin — fixed px per breakpoint
-$gutter-desktop: $space-12;   // 3.3333vw ≈ 48px @ 1440 → max 64px @ 1920
-$gutter-tablet:  20px;        // fixed
-$gutter-mobile:  16px;        // fixed
+$gutter-desktop: $space-12; // 3.3333vw ≈ 48px @ 1440 → max 64px @ 1920
+$gutter-tablet: 20px; // fixed
+$gutter-mobile: 16px; // fixed
 
 // ── Section-level semantic spacing ─────────────
 // Shared section vertical padding / title bottom gap
-$section-space:       min(8.3333vw, 160px);   // 120px @ 1440 → 160px @ 1920
-$section-title-space: min(4.1667vw, 80px);    //  60px @ 1440 →  80px @ 1920
+$section-space: min(8.3333vw, 160px); // 120px @ 1440 → 160px @ 1920
+$section-title-space: min(4.1667vw, 80px); //  60px @ 1440 →  80px @ 1920
 
 // ── Cursor badge (custom cursor circle) ────────
 // Fixed size — intentional: cursor badge should not scale with viewport
@@ -43,29 +65,29 @@ $cursor-label-fs: 9px;
 // These override .button--xs inside .header at each breakpoint.
 // Expressed as vw to match the fluid button system.
 // Desktop (1440px base)
-$btn-xs-fs-desktop:      0.9157509158vw;   // ≈ 13.2px @ 1440
-$btn-xs-h-desktop:       2.3351648352vw;   // ≈ 33.6px @ 1440
-$btn-xs-px-desktop:      1.0989010989vw;   // ≈ 15.8px @ 1440
+$btn-xs-fs-desktop: 0.9157509158vw; // ≈ 13.2px @ 1440
+$btn-xs-h-desktop: 2.3351648352vw; // ≈ 33.6px @ 1440
+$btn-xs-px-desktop: 1.0989010989vw; // ≈ 15.8px @ 1440
 // Tablet (1024px base)
-$btn-xs-fs-tablet:       1.6927083333vw;   // ≈ 17.3px @ 1024
-$btn-xs-h-tablet:        4.1666666667vw;   // ≈ 42.7px @ 1024
-$btn-xs-px-tablet:       1.953125vw;       // ≈ 20px   @ 1024
+$btn-xs-fs-tablet: 1.6927083333vw; // ≈ 17.3px @ 1024
+$btn-xs-h-tablet: 4.1666666667vw; // ≈ 42.7px @ 1024
+$btn-xs-px-tablet: 1.953125vw; // ≈ 20px   @ 1024
 // Mobile (576px base)
-$btn-xs-fs-mobile:       3.7333333333vw;   // ≈ 21.5px @ 576
-$btn-xs-h-mobile:        8.5333333333vw;   // ≈ 49px   @ 576
-$btn-xs-px-mobile:       4.2666666667vw;   // ≈ 24.6px @ 576
+$btn-xs-fs-mobile: 3.7333333333vw; // ≈ 21.5px @ 576
+$btn-xs-h-mobile: 8.5333333333vw; // ≈ 49px   @ 576
+$btn-xs-px-mobile: 4.2666666667vw; // ≈ 24.6px @ 576
 
 // ── Contact section layout tokens ──────────────
 // Fluid values for contact page layout (1440px base, 1920px cap)
 // Expressed as min(calc(...)) — same formula as fvw() in _type.scss
-$contact-pt-desktop:    min(calc(350 / 1440 * 100vw), 466.67px);  // ≈ 24.3vw — top padding
-$contact-wrapper-max:   min(calc(1320 / 1440 * 100vw), 1760px);   // max-width
-$contact-wrapper-px:    min(calc(30 / 1440 * 100vw), 40px);       // side padding
-$contact-title-mb:      min(calc(56 / 1440 * 100vw), 74.67px);    // title margin-bottom
-$contact-title-py:      min(calc(6 / 1440 * 100vw), 8px);         // title line vertical padding
-$contact-desc-max:      min(calc(666 / 1440 * 100vw), 888px);     // description max-width
-$contact-submit-mt:     min(calc(56 / 1440 * 100vw), 74.67px);    // submit row top margin
-$contact-recaptcha-max: min(calc(250 / 1440 * 100vw), 333.33px);  // recaptcha text max-width
-$contact-btn-xl-max:    min(calc(240 / 1440 * 100vw), 320px);     // send button max-width
-$contact-social-pt:     min(calc(153 / 1440 * 100vw), 204px);     // social section top padding
-$contact-social-pb:     min(calc(139 / 1440 * 100vw), 185.33px);  // social section bottom padding
+$contact-pt-desktop: min(calc(350 / 1440 * 100vw), 466.67px); // ≈ 24.3vw — top padding
+$contact-wrapper-max: min(calc(1320 / 1440 * 100vw), 1760px); // max-width
+$contact-wrapper-px: min(calc(30 / 1440 * 100vw), 40px); // side padding
+$contact-title-mb: min(calc(56 / 1440 * 100vw), 74.67px); // title margin-bottom
+$contact-title-py: min(calc(6 / 1440 * 100vw), 8px); // title line vertical padding
+$contact-desc-max: min(calc(666 / 1440 * 100vw), 888px); // description max-width
+$contact-submit-mt: min(calc(56 / 1440 * 100vw), 74.67px); // submit row top margin
+$contact-recaptcha-max: min(calc(250 / 1440 * 100vw), 333.33px); // recaptcha text max-width
+$contact-btn-xl-max: min(calc(240 / 1440 * 100vw), 320px); // send button max-width
+$contact-social-pt: min(calc(153 / 1440 * 100vw), 204px); // social section top padding
+$contact-social-pb: min(calc(139 / 1440 * 100vw), 185.33px); // social section bottom padding

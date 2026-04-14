@@ -3,6 +3,12 @@
    ================================================ */
 @use '../primitives/space' as *;
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

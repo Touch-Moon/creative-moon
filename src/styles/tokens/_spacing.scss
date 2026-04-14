@@ -28,3 +28,26 @@
   --section-space:       #{$section-space};       /* 120px */
   --section-title-space: #{$section-title-space}; /*  60px */
 }
+
+// ── Mobile overrides (375px base) ────────────────────────
+@media (max-width: 575.98px) {
+  :root {
+    --space-1:  #{$space-m-1};   /*   4px @ 375 */
+    --space-2:  #{$space-m-2};   /*   8px @ 375 */
+    --space-3:  #{$space-m-3};   /*  12px @ 375 */
+    --space-4:  #{$space-m-4};   /*  16px @ 375 */
+    --space-5:  #{$space-m-5};   /*  20px @ 375 */
+    --space-6:  #{$space-m-6};   /*  24px @ 375 */
+    --space-8:  #{$space-m-8};   /*  32px @ 375 */
+    --space-10: #{$space-m-10};  /*  40px @ 375 */
+    --space-12: #{$space-m-12};  /*  48px @ 375 */
+    --space-16: #{$space-m-16};  /*  64px @ 375 */
+    --space-20: #{$space-m-20};  /*  80px @ 375 */
+    --space-24: #{$space-m-24};  /*  96px @ 375 */
+    --space-32: #{$space-m-32};  /* 128px @ 375 */
+    --space-40: #{$space-m-40};  /* 160px @ 375 */
+
+    --section-space:       #{$section-space-m};       /*  80px @ 375 */
+    --section-title-space: #{$section-title-space-m}; /*  40px @ 375 */
+  }
+}
