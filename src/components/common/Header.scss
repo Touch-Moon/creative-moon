@@ -1,6 +1,5 @@
 /* ================================================
    COMPONENT — Header & Nav Overlay
-   Ref: Plastic.design Nav → Creative Moon tokens
    ================================================ */
 @use '@/styles/primitives/colors' as *;
 @use '@/styles/primitives/type' as *;
@@ -8,7 +7,7 @@
 
 /* ── Viewport-specific fluid helpers ──────────── */
 $_tp: 1024; // tablet base
-$_mp: 576; // mobile base
+$_mp: 576;  // mobile base
 
 @function tvw($px) {
   @return calc(#{$px} / #{$_tp} * 100vw);
@@ -20,33 +19,18 @@ $_mp: 576; // mobile base
 
 /* ── Keyframes ─────────────────────────────────── */
 @keyframes header-fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @keyframes nav-slide-down {
-  from {
-    transform: translateY(-101%);
-  }
-
-  to {
-    transform: translateY(0);
-  }
+  from { transform: translateY(-101%); }
+  to   { transform: translateY(0); }
 }
 
 @keyframes nav-slide-up {
-  from {
-    transform: translateY(0);
-  }
-
-  to {
-    transform: translateY(-101%);
-  }
+  from { transform: translateY(0); }
+  to   { transform: translateY(-101%); }
 }
 
 @keyframes lineHover {
@@ -88,42 +72,40 @@ $_mp: 576; // mobile base
   mix-blend-mode: difference;
   color: #fff;
 
-  // mix-blend-mode 플리커 방지:
-  // will-change를 base 상태에서 제거 → 페이지 로드 시
-  // 브라우저가 컴포지팅 레이어를 비동기로 생성/파괴하는 타이밍 충돌 차단.
-  // translateZ(0)으로 첫 번째 페인트부터 GPU 레이어를 고정하여
-  // blend context가 항상 안정적으로 확립됨.
-  transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+  // isolation: isolate creates a stacking context for mix-blend-mode
+  // without promoting to a GPU compositing layer — avoids clip-path
+  // conflicts with the nav overlay (translateZ(0) caused the same issue)
+  isolation: isolate;
 
-  // 페이지(재)로드 시 헤더 페이드인:
-  // fill-mode: both → delay 0.2s 동안 opacity:0 유지(첫 keyframe 즉시 적용),
-  //                    완료 후 opacity:1 고정(forwards).
-  // is-page-transitioning에서 animation: none으로 리셋 → class 제거 시
-  // 애니메이션이 재시작되어 페이지 전환 후에도 자연스럽게 페이드인 반복.
+  // Page (re)load fade-in:
+  // fill-mode: both → opacity:0 held during 0.2s delay (first keyframe applied immediately);
+  //                    opacity:1 locked after completion (forwards).
+  // animation: none in is-page-transitioning resets it → removed class restarts
+  // the fade-in, so it repeats naturally after page transitions.
   animation: header-fade-in 0.6s ease 0.2s both;
 
   /* Fixed on scroll */
   &.is-fixed {
     position: fixed;
     padding-top: $space-3;
-    // 애니메이션이 실행되는 is-fixed 구간에서만 will-change 적용
-    will-change: transform;
   }
 
   &.is-fixed.is-visible {
     animation: nav-slide-down 0.5s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+    // will-change scoped to slide animation only — avoids GPU layer conflict
+    // that broke clip-path on .nav__item-clip while header was fixed
+    will-change: transform;
   }
 
-  // is-leaving: slide-up이 slide-down보다 높은 specificity로 덮어씀
+  // is-leaving: slide-up overrides slide-down via higher specificity
   &.is-fixed.is-visible.is-leaving {
     animation: nav-slide-up 0.4s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+    will-change: transform;
   }
 
-  /* 페이지 전환 시 헤더도 함께 페이드 — plastic.design 동일 */
-  // animation: none → base의 header-fade-in을 중단시켜 opacity transition이 동작하게 함.
-  // class 제거 시 header-fade-in이 재시작 → 새 페이지에서도 페이드인.
+  // Page transition: header fades with page content.
+  // animation: none stops base header-fade-in so opacity transition kicks in.
+  // Removing the class restarts header-fade-in on the new page.
   &.is-page-transitioning {
     animation: none;
     opacity: 0;
@@ -177,15 +159,15 @@ $_mp: 576; // mobile base
   margin-right: $space-10; // ~40px
 }
 
-/* Desktop / Tablet: XS 클래스 무시 — 기본 .button 사이즈 유지 */
+/* Desktop / Tablet: override .button--xs to match header scale */
 .header__talk.button--xs span {
-  font-size: .9157509158vw;
-  height: 2.3351648352vw;
-  padding: 0 1.0989010989vw;
+  font-size: $btn-xs-fs-desktop;
+  height: $btn-xs-h-desktop;
+  padding: 0 $btn-xs-px-desktop;
 }
 
 /* ─────────────────────────────────────────────────
-   2. HAMBURGER TOGGLE — plastic.design 1:1 매칭
+   2. HAMBURGER TOGGLE
    ───────────────────────────────────────────────── */
 .toggle {
   -webkit-tap-highlight-color: transparent;
@@ -226,8 +208,7 @@ $_mp: 576; // mobile base
     }
   }
 
-  /* Opened: 기본 X 모양 */
-  /* plastic.design spec: rotate(45deg) translateY(4.5px) */
+  /* Opened: X shape */
   &.is-opened div:first-child {
     transform: translateY(4.5px) rotate(45deg);
   }
@@ -236,7 +217,7 @@ $_mp: 576; // mobile base
     transform: translateY(-4.5px) rotate(-45deg);
   }
 
-  /* Settled + mouse out: — 모양 (X 애니메이션 완료 후에만 활성화) */
+  /* Settled + mouse out: dash shape (only after X animation completes) */
   @media (hover: hover) and (pointer: fine) {
     &.is-opened.is-settled:not(:hover) div:first-child {
       transform: translateY(4.5px);
@@ -247,7 +228,7 @@ $_mp: 576; // mobile base
     }
   }
 
-  /* Settled + hover: X 유지 */
+  /* Settled + hover: keep X */
   @media (hover: hover) and (pointer: fine) {
     &.is-opened.is-settled:hover div:first-child {
       transform: translateY(4.5px) rotate(45deg);
@@ -291,7 +272,7 @@ $_mp: 576; // mobile base
   padding-right: fvw(356); // ~24.72vw
   padding-bottom: $space-16; // ~64px
 
-  /* 오버레이 내부 스크롤이 body로 전파되지 않도록 */
+  // Prevent overlay scroll from propagating to body
   overscroll-behavior: none;
 
   /* Hidden by default */
@@ -312,7 +293,7 @@ $_mp: 576; // mobile base
 }
 
 /* ── Toggle inside overlay ─────────────────────── */
-/* top은 JS에서 헤더 토글의 실제 위치를 동적으로 설정 */
+/* top is set dynamically in JS to match header toggle position */
 .nav__toggle {
   position: fixed;
   right: $space-12;
@@ -323,9 +304,9 @@ $_mp: 576; // mobile base
   display: flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 999.67px; // 1920px 이상에서 너비 고정
+  max-width: 999.67px; // intentional fixed cap: locks width at 1920px+ viewports
   padding: min(fvw(36), 4vh) 0 min($space-20, 4vh);
-  margin: min(fvw(100), 8vh) auto; // vh 제한으로 짧은 뷰포트 대응
+  margin: min(fvw(100), 8vh) auto; // vh cap for short viewports
 }
 
 /* ── Left column: Logo + Social ────────────────── */
@@ -420,8 +401,6 @@ $_mp: 576; // mobile base
   }
 }
 
-/* Social + Logo fade in — Framer Motion handles animation */
-
 /* ── Bottom: Policy + Email ────────────────────── */
 .nav__policy {
   position: absolute;
@@ -466,7 +445,7 @@ $_mp: 576; // mobile base
 }
 
 /* ─────────────────────────────────────────────────
-   4. TABLET (≤ 767.98px)
+   4. TABLET (≤ 1023.98px)
    ───────────────────────────────────────────────── */
 @media (max-width: 1023.98px) {
   .header {
@@ -489,14 +468,14 @@ $_mp: 576; // mobile base
   }
 
   .header__talk {
-    margin-right: 20px; // 고정 px — vw 토큰($space-6)은 태블릿에서 ~17px까지 쪼그라듦
+    margin-right: 20px; // fixed px — vw token ($space-6) shrinks to ~17px on tablet
   }
 
-  /* Tablet: XS 클래스 무시 — 기본 .button 태블릿 사이즈 유지 */
+  /* Tablet: override .button--xs to tablet scale */
   .header__talk.button--xs span {
-    font-size: 1.6927083333vw;
-    height: 4.1666666667vw;
-    padding: 0 1.953125vw;
+    font-size: $btn-xs-fs-tablet;
+    height: $btn-xs-h-tablet;
+    padding: 0 $btn-xs-px-tablet;
   }
 
   .toggle {
@@ -536,10 +515,8 @@ $_mp: 576; // mobile base
     }
 
     a {
-      font-size: var(--fs-body-3);
+      font-size: var(--fs-body-3); // 14px @ 1024
     }
-
-    // 14px @ 1024
   }
 
   .nav__policy {
@@ -560,7 +537,7 @@ $_mp: 576; // mobile base
 }
 
 /* ─────────────────────────────────────────────────
-   5. MOBILE (≤ 375px)
+   5. MOBILE (≤ 575.98px)
    ───────────────────────────────────────────────── */
 @media (max-width: 575.98px) {
   .header {
@@ -579,37 +556,37 @@ $_mp: 576; // mobile base
   }
 
   .header__copyright {
-    display: none; // Hidden on mobile
+    display: none; // hidden on mobile
   }
 
-  /* Let's talk 버튼 기준 toggle 상하 가운데 정렬 */
+  /* Align toggle vertically with Let's talk button */
   .header__right {
     align-items: center;
   }
 
   .header__talk {
-    margin-right: 16px; // 고정 px — vw 토큰($space-8)은 375px에서 ~8px까지 쪼그라듦
+    margin-right: 16px; // fixed px — vw token ($space-8) shrinks to ~8px at 375px
   }
 
-  /* Mobile: XS 사이즈 적용 (desktop override specificity 해소) */
+  /* Mobile: apply XS size (override desktop specificity) */
   .header__talk.button--xs span {
-    font-size: 3.7333333333vw;
-    height: 8.5333333333vw;
-    padding: 0 4.2666666667vw;
+    font-size: $btn-xs-fs-mobile;
+    height: $btn-xs-h-mobile;
+    padding: 0 $btn-xs-px-mobile;
   }
 
   .toggle {
-    width: calc(36 / 375 * 100vw);   // plastic: 47.4px @ 500
+    width: calc(36 / 375 * 100vw);   // ~47.4px @ 500 — fluid
     min-width: 36px;
     height: calc(36 / 375 * 100vw);
     min-height: 36px;
 
     div {
       height: 1px;
-      margin: calc(3 / 375 * 100vw) 0; // plastic: 3px margin @ 500
+      margin: calc(3 / 375 * 100vw) 0; // ~3px margin @ 375
     }
 
-    /* 모바일: X 모양 — plastic translateY ≈ 4px @ 500 → 3px @ 375 */
+    /* Mobile: X shape — translateY ~4px */
     &.is-opened div:first-child {
       transform: translateY(calc(4 / 375 * 100vw)) rotate(45deg);
     }
@@ -624,12 +601,12 @@ $_mp: 576; // mobile base
     padding-left: $gutter-mobile;
     padding-right: $gutter-mobile;
     align-items: flex-start;
-    padding-top: mvw(80); // $space-20 @ 576
+    padding-top: mvw(80); // ~$space-20 @ 576
     flex-direction: column;
   }
 
   .nav__toggle {
-    right: calc(19 / 375 * 100vw); // plastic: 25.6px @ 500
+    right: calc(19 / 375 * 100vw); // ~25.6px @ 500 — fluid
   }
 
   .nav__container {
@@ -657,7 +634,7 @@ $_mp: 576; // mobile base
     }
 
     a {
-      font-size: calc(15 / 375 * 100vw); // plastic.design: social links ≈ 20.5px @ 500 → 15px @ 375
+      font-size: calc(15 / 375 * 100vw); // ~20.5px @ 500 — fluid social links
     }
   }
 
@@ -665,7 +642,7 @@ $_mp: 576; // mobile base
     padding-top: 0;
 
     a {
-      font-size: calc(42 / 375 * 100vw); // plastic.design: nav links ≈ 56px @ 500 → 42px @ 375
+      font-size: calc(42 / 375 * 100vw); // ~56px @ 500 — fluid nav links
     }
 
     li {
@@ -682,9 +659,7 @@ $_mp: 576; // mobile base
     margin-top: calc(var(--space-40) * 2);
 
     a {
-      font-size: var(--fs-body-3);
+      font-size: var(--fs-body-3); // 14px @ 576
     }
-
-    // 14px @ 576
   }
 }

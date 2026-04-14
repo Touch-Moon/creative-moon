@@ -22,7 +22,7 @@ const SOCIAL_LINKS = [
   { label: 'GitHub',    href: 'https://github.com/Touch-Moon' },
 ];
 
-/* ── Nav reveal variants (Hero 애니메이션과 동일) ── */
+/* ── Nav reveal variants (same as Hero animation) ── */
 const EASE_OUT = [0.19, 1, 0.22, 1] as const;
 
 const navClipVariants: Variants = {
@@ -91,9 +91,9 @@ export default function Header() {
   useEffect(() => {
     let ticking = false;
 
-    // 페이지별 threshold 계산:
-    // .work-list__grid 가 있으면 그 offsetTop을 사용 (work 페이지)
-    // 없으면 fallback: innerHeight * 0.8 (홈 등 hero 페이지)
+    // Per-page threshold calculation:
+    // Use offsetTop of .work-list__grid if present (work page)
+    // Otherwise fallback: innerHeight * 0.8 (home and other hero pages)
     const getThreshold = () => {
       const grid = document.querySelector<HTMLElement>('.work-list__grid');
       if (grid) return grid.offsetTop;
@@ -106,14 +106,14 @@ export default function Header() {
 
       requestAnimationFrame(() => {
         const y = window.scrollY;
-        // threshold는 첫 스크롤 시 계산 후 캐싱 (레이아웃 쉬프트 방지)
+        // threshold is calculated on first scroll then cached (prevents layout shift)
         if (thresholdRef.current === null) {
           thresholdRef.current = getThreshold();
         }
         const heroThreshold = thresholdRef.current;
 
         if (y > heroThreshold) {
-          // Hero 아래: 진입 중에 leave 타이머가 있으면 취소
+          // Below Hero: cancel leave timer if active on entry
           if (leaveTimerRef.current) {
             clearTimeout(leaveTimerRef.current);
             leaveTimerRef.current = null;
@@ -125,7 +125,7 @@ export default function Header() {
             setIsVisible(true);
           }
         } else {
-          // Hero 위: 처음 돌아오는 순간 슬라이드-업 후 fixed 해제
+          // Above Hero: slide up then release fixed on first return
           if (isPastHeroRef.current) {
             isPastHeroRef.current = false;
             setIsLeaving(true);
@@ -134,7 +134,7 @@ export default function Header() {
               setIsVisible(false);
               setIsLeaving(false);
               leaveTimerRef.current = null;
-            }, 450); // nav-slide-up 0.4s + 여유
+            }, 450); // nav-slide-up 0.4s + buffer
           }
         }
 
@@ -151,19 +151,19 @@ export default function Header() {
   }, []);
 
   /* ── Scroll lock (useEffect) ─────────────────────
-     Lenis.stop()으로 스크롤 엔진 자체를 정지.
-     Lenis가 delta를 내부에 쌓는 것이 scroll debt의 근본 원인이었음.
-     키보드 스크롤은 Lenis가 처리하지 않으므로 별도 차단 유지.
+     Stop the scroll engine itself via Lenis.stop().
+     Lenis accumulating delta internally was the root cause of scroll debt.
+     Keyboard scroll is not handled by Lenis so block it separately.
   ────────────────────────────────────────────────── */
   useEffect(() => {
     if (!menuOpen) return;
 
     const lenis = lenisRef.current;
 
-    // Lenis 스크롤 엔진 정지 → delta 축적 원천 차단
+    // Stop Lenis scroll engine → block delta accumulation at the source
     lenis?.stop();
 
-    // 키보드 스크롤 차단 (Lenis가 처리하지 않는 영역)
+    // Block keyboard scroll (area not handled by Lenis)
     const onKeyDown = (e: KeyboardEvent) => {
       const scrollKeys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
       const tag = (e.target as HTMLElement).tagName;
@@ -174,7 +174,7 @@ export default function Header() {
 
     return () => {
       window.removeEventListener('keydown', onKeyDown);
-      // Lenis 스크롤 엔진 재개
+      // Resume Lenis scroll engine
       lenis?.start();
     };
   }, [menuOpen, lenisRef]);
@@ -188,11 +188,11 @@ export default function Header() {
     };
   }, []);
 
-  /* ── Settled: X 애니메이션 완료 후 hover 분기 활성화 ── */
+  /* ── Settled: activate hover branch after X animation completes ── */
   const settledTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (menuOpen) {
-      // transform 0.2s 완료 + 유지 후 settled 활성화
+      // activate settled after transform 0.2s completes + hold
       settledTimerRef.current = setTimeout(() => setIsSettled(true), 625);
     } else {
       if (settledTimerRef.current) clearTimeout(settledTimerRef.current);
@@ -208,7 +208,7 @@ export default function Header() {
     if (toggleRef.current && navToggleRef.current) {
       const rect = toggleRef.current.getBoundingClientRect();
       navToggleRef.current.style.top = `${rect.top}px`;
-      // clientWidth를 사용: position:fixed의 right는 스크롤바를 제외한 뷰포트 기준
+      // use clientWidth: right for position:fixed is relative to viewport excluding scrollbar
       navToggleRef.current.style.right = `${document.documentElement.clientWidth - rect.right}px`;
     }
   }, []);
@@ -273,12 +273,12 @@ export default function Header() {
 
   /* ── Route change: header fade sync ─────────── */
   const isFirstMount = useRef(true);
-  // nav 링크 클릭 여부 추적 — pathname 변경 시 메뉴 닫기 판단에 사용
+  // track whether a nav link was clicked — used to decide whether to close menu on pathname change
   const navClickedRef = useRef(false);
-  // 직전 pathname 추적 — 하위 → 상위 페이지 이동 시 스크롤 복원 여부 판단
+  // track previous pathname — determines whether to restore scroll on child → parent navigation
   const prevPathnameRef = useRef('');
   useEffect(() => {
-    // 첫 마운트(새로고침)시에는 실행하지 않음 → Nav 깜빡거림 방지
+    // Skip on first mount (page refresh) → prevents Nav flicker
     if (isFirstMount.current) {
       isFirstMount.current = false;
       prevPathnameRef.current = pathname;
@@ -288,38 +288,38 @@ export default function Header() {
     const prevPath = prevPathnameRef.current;
     prevPathnameRef.current = pathname;
 
-    // 페이지 전환 시 threshold 캐시 초기화 (새 페이지의 레이아웃 기준 재계산)
+    // Reset threshold cache on page transition (recalculate for new page layout)
     thresholdRef.current = null;
 
-    // nav 링크 클릭으로 이동한 경우:
-    // pathname이 바뀐 시점 = 새 페이지 렌더가 시작된 시점 → 이때 오버레이를 닫아야
-    // "컨텐츠 로드 후 메뉴 사라짐"이 자연스럽게 연출됨.
-    // (클릭 즉시 닫으면 페이지 공백이 노출되어 어색함)
+    // When navigated via nav link click:
+    // pathname change = moment new page render starts → overlay should close here
+    // so "menu disappears after content loads" plays out naturally.
+    // (closing immediately on click exposes a blank page and looks jarring)
     if (navClickedRef.current) {
       navClickedRef.current = false;
       setMenuOpen(false);
     }
 
-    // 하위 페이지 → 상위 목록 페이지 이동인지 판단
-    // 예: /stories/some-slug → /stories
-    //     /work/some-slug   → /work
-    // 이 경우 최상단 스크롤을 생략 — 사용자의 목록 스크롤 위치를 유지
+    // Determine if navigating from a child page to a parent list page
+    // e.g. /stories/some-slug → /stories
+    //      /work/some-slug   → /work
+    // In this case skip scroll-to-top — preserve the user's list scroll position
     const isReturningToParent = prevPath.startsWith(pathname + '/');
 
-    // 페이지 전환 시 헤더가 같이 페이드 아웃/인
+    // Header fades out/in together during page transition
     setIsTransitioning(true);
     const timer = setTimeout(() => {
       setIsTransitioning(false);
       if (!isReturningToParent) {
         window.scrollTo(0, 0);
       }
-    }, 380); // plastic.design과 동일한 타이밍
+    }, 380); // same timing as plastic.design
 
     return () => clearTimeout(timer);
   }, [pathname]);
 
   /* ── Close menu on link click ────────────────── */
-  // href가 현재 페이지와 같으면 즉시 닫고, 다른 페이지면 pathname 변경 시 닫음.
+  // Close immediately if href matches current page; otherwise close when pathname changes.
   const handleNavClick = (href: string) => {
     if (href === pathname) {
       setMenuOpen(false);
@@ -452,6 +452,7 @@ export default function Header() {
                 {NAV_LINKS.map((link, i) => (
                   <li key={link.label}>
                     <m.span
+                      key={`clip-${link.label}-${menuOpen}`}
                       className="nav__item-clip"
                       custom={i}
                       variants={navClipVariants}
@@ -459,6 +460,7 @@ export default function Header() {
                       animate={!isClosingMenu && menuOpen ? 'visible' : 'hidden'}
                     >
                       <m.span
+                        key={`slide-${link.label}-${menuOpen}`}
                         custom={i}
                         variants={navSlideVariants}
                         initial="hidden"
