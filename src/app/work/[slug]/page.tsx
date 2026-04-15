@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import WorkSingle from '@/components/work/WorkSingle';
+import HomeStories from '@/components/home/HomeStories';
 import JsonLd from '@/components/common/JsonLd';
-import { getWorkBySlug, getWorksList, getSelectedWorks, urlFor } from '@/sanity/queries';
-import type { WorkSingleData } from '@/sanity/queries';
+import { getWorkBySlug, getWorksList, getSelectedWorks, getStoriesCarousel, urlFor } from '@/sanity/queries';
+import type { WorkSingleData, StoryListItem } from '@/sanity/queries';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://creative-moon.com';
 
@@ -61,16 +62,19 @@ export default async function WorkSlugPage({ params }: Props) {
 
   let work: WorkSingleData | null = null;
   let selectedWorks;
+  let stories: StoryListItem[] = [];
 
   try {
-    [work, selectedWorks] = await Promise.all([
+    [work, selectedWorks, stories] = await Promise.all([
       getWorkBySlug(decodedSlug),
       getSelectedWorks(),
+      getStoriesCarousel(),
     ]);
   } catch {
     // Sanity not connected — use dummy data (handled inside WorkSingle)
     work = null;
     selectedWorks = undefined;
+    stories = [];
   }
 
   // Data exists in Sanity but the given slug was not found → 404
@@ -97,6 +101,7 @@ export default async function WorkSlugPage({ params }: Props) {
     <main>
       {workSchema && <JsonLd data={workSchema} />}
       <WorkSingle data={work} selectedWorks={selectedWorks} />
+      <HomeStories initialStories={stories} />
     </main>
   );
 }

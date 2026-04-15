@@ -620,13 +620,13 @@ function StoryLinks({ githubUrl, stackblitzUrl }: { githubUrl?: string; stackbli
   return (
     <div className="story-single__links">
       {githubUrl && (
-        <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="story-single__link body-text-5">
-          GitHub →
+        <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="button button--m">
+          <span>GitHub</span>
         </a>
       )}
       {stackblitzUrl && (
-        <a href={stackblitzUrl} target="_blank" rel="noopener noreferrer" className="story-single__link body-text-5">
-          StackBlitz →
+        <a href={stackblitzUrl} target="_blank" rel="noopener noreferrer" className="button button--m">
+          <span>StackBlitz</span>
         </a>
       )}
     </div>
@@ -643,9 +643,6 @@ export default function StorySingle({ data }: { data: StorySingleData | null }) 
     <div className="story-single">
       {/* Title */}
       <TitleBlock title={story.title} category={primaryCategory} />
-
-      {/* External links (GitHub / StackBlitz) */}
-      <StoryLinks githubUrl={story.githubUrl} stackblitzUrl={story.stackblitzUrl} />
 
       {/* Hero Media (after title, before content modules) */}
       {story.heroMedia && <HeroModuleBlock heroMedia={story.heroMedia} />}
@@ -677,6 +674,9 @@ export default function StorySingle({ data }: { data: StorySingleData | null }) 
         }
         return null;
       })}
+
+      {/* External links (GitHub / StackBlitz) */}
+      <StoryLinks githubUrl={story.githubUrl} stackblitzUrl={story.stackblitzUrl} />
 
       {/* Bottom spacer */}
       <div className="story-single__end" />

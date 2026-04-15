@@ -11,27 +11,16 @@
   height: fvw(167); // ~11.6vw
 }
 
-// ── External links (GitHub / StackBlitz) ──────────────────────────
+// ── External links (GitHub / StackBlitz) — bottom buttons ─────────
 .story-single__links {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: fvw(24);
-  padding: fvw(24) fvw(120) 0;
-  margin-bottom: fvw(48);
+  gap: fvw(16);
+  padding: fvw(80) fvw(120) 0;
 
-  @media (max-width: 1023.98px) { padding: 24px 48px 0; gap: 20px; margin-bottom: 32px; }
-  @media (max-width: 575.98px)  { padding: 16px 24px 0; gap: 16px; margin-bottom: 24px; }
-}
-
-.story-single__link {
-  display: inline-flex;
-  align-items: center;
-  color: var(--foreground);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: opacity 0.2s ease;
-  &:hover { opacity: 0.6; }
+  @media (max-width: 1023.98px) { padding: 56px 48px 0; gap: 12px; }
+  @media (max-width: 575.98px)  { padding: 40px 24px 0; gap: 10px; }
 }
 
 // ── Module base ───────────────────────────────────────────────────
@@ -621,11 +610,19 @@
 // ── Inline code (within Portable Text) ────────────────────────────
 .story-inline-code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-  font-size: 0.9em;
-  padding: 0.1em 0.4em;
-  border-radius: 4px;
-  background: rgba(127, 127, 127, 0.15);
-  color: var(--foreground);
+  font-size: 0.875em;
+  padding: 0.15em 0.45em;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #c7254e;
+  white-space: nowrap;
+
+  body[data-theme="dark"] & {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #ff7b9c;
+  }
 }
 
 // ── Code block (Portable Text `codeBlock` type) ───────────────────
