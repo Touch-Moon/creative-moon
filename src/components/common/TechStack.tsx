@@ -129,7 +129,14 @@ export default function TechStack({
                 dangerouslySetInnerHTML={{ __html: icon.svg }}
               />
             ) : (
-              <span className="tech-stack__icon tech-stack__icon--empty" aria-hidden="true" />
+              <span
+                className="tech-stack__icon tech-stack__icon--code"
+                aria-hidden="true"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 7 3 12 8 17"/><polyline points="16 7 21 12 16 17"/></svg>',
+                }}
+              />
             )}
             <span className="tech-stack__label">{label}</span>
           </li>

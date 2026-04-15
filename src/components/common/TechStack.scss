@@ -37,10 +37,9 @@
       fill: currentColor;
     }
 
-    &--empty {
-      border: 1px dashed currentColor;
-      opacity: 0.35;
-      border-radius: 4px;
+    &--code svg {
+      fill: none;
+      stroke: currentColor;
     }
   }
 

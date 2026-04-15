@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import StorySingle from '@/components/stories/StorySingle';
-import { getStoryBySlug, getStoriesList } from '@/sanity/queries';
-import type { StorySingleData } from '@/sanity/queries';
+import HomeStories from '@/components/home/HomeStories';
+import { getStoryBySlug, getStoriesList, getStoriesCarousel } from '@/sanity/queries';
+import type { StorySingleData, StoryListItem } from '@/sanity/queries';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -53,12 +54,17 @@ export default async function StorySlugPage({ params }: Props) {
   const { slug } = await params;
 
   let story: StorySingleData | null = null;
+  let relatedStories: StoryListItem[] = [];
 
   try {
-    story = await getStoryBySlug(slug);
+    [story, relatedStories] = await Promise.all([
+      getStoryBySlug(slug),
+      getStoriesCarousel(),
+    ]);
   } catch {
     // Sanity not connected — use dummy data (handled inside StorySingle)
     story = null;
+    relatedStories = [];
   }
 
   // Data exists in Sanity but the given slug was not found → 404
@@ -66,9 +72,12 @@ export default async function StorySlugPage({ params }: Props) {
     notFound();
   }
 
+  const filtered = relatedStories.filter((s) => s.slug.current !== slug);
+
   return (
     <main>
       <StorySingle data={story} />
+      <HomeStories initialStories={filtered} />
     </main>
   );
 }

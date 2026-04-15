@@ -6,13 +6,15 @@
   overflow: visible; // allow track to extend past section right edge
   background-color: transparent;
   padding: fvw(170) $gutter-desktop fvw(170); // ~12vw top/bottom
+  position: relative;
+  z-index: 1;
 
   // ── Header ───────────────────────────────────
   &__header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    padding: 0 0 $space-12;
+    padding: 0 0 $space-8;
   }
 
   &__title-wrap {}
@@ -30,6 +32,8 @@
   &__arrows {
     display: flex;
     gap: $space-2;
+    position: relative;
+    z-index: 2;
   }
 
   // ── Card track ───────────────────────────────

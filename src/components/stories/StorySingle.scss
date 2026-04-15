@@ -606,6 +606,9 @@
 .story-module__techstack-inner {
   max-width: fvw(960);
   margin: 0 auto;
+  text-align: center;
+
+  .tech-stack { justify-content: center; }
 }
 
 .story-module__techstack-heading {
