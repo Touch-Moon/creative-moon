@@ -23,7 +23,8 @@ export function urlFor(source: SanityImageSource) {
  * For cases that bypass next/image (e.g. WaveImage canvas), this is required.
  */
 export function sanityImg(url: string | null | undefined, width: number, quality = 80): string | null {
-  if (!url || !url.includes('cdn.sanity.io')) return url ?? null;
+  if (!url) return null;
+  if (!url.includes('cdn.sanity.io')) return url;
   const u = new URL(url);
   u.searchParams.set('auto', 'format');
   u.searchParams.set('fit', 'max');
@@ -74,7 +75,8 @@ export type WorkListItem = {
   /** Actual aspect ratio (width÷height) of the Portrait image. CSS padding-top = (1/ratio)*100% */
   portraitAspectRatio?: number;
   listDescription?: string;
-  categories?: string[];
+  categories?: { _id: string; title: string; slug: string }[] | string[];
+  tags?: string[];
   order?: number;
 };
 
@@ -170,8 +172,10 @@ export type WorkSingleData = {
   subtitle?: string;
   overview?: string;
   services?: string[];
-  externalUrl?: string;
-  categories?: string[];
+  siteUrl?: string;
+  githubUrl?: string;
+  tags?: string[];
+  categories?: { _id: string; title: string; slug: string }[];
   heroMedia?: {
     type: "image" | "video";
     fullBleed?: boolean;
@@ -195,7 +199,8 @@ export const WORKS_LIST_QUERY = `
     thumbnailLandscape,
     "portraitAspectRatio": thumbnailPortrait.asset->metadata.dimensions.aspectRatio,
     listDescription,
-    "categories": categories[]->title,
+    tags,
+    "categories": categories[]->{ _id, title, "slug": slug.current },
     order
   }
 `;
@@ -210,8 +215,10 @@ export const WORK_BY_SLUG_QUERY = `
     subtitle,
     overview,
     services,
-    externalUrl,
-    "categories": categories[]->title,
+    siteUrl,
+    githubUrl,
+    tags,
+    "categories": categories[]->{ _id, title, "slug": slug.current },
     heroMedia {
       type,
       fullBleed,
@@ -250,13 +257,23 @@ export const SELECTED_WORKS_QUERY = `
   }
 `;
 
-// All category titles with counts
+// All workCategory titles with counts
 export const CATEGORIES_QUERY = `
-  *[_type == "category"] | order(title asc) {
+  *[_type == "workCategory"] | order(title asc) {
     _id,
     title,
     "slug": slug.current,
     "count": count(*[_type == "work" && references(^._id)])
+  }
+`;
+
+// Story categories with counts
+export const STORY_CATEGORIES_QUERY = `
+  *[_type == "storyCategory"] | order(title asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    "count": count(*[_type == "story" && references(^._id)])
   }
 `;
 
@@ -266,14 +283,54 @@ export type StoryListItem = {
   _id: string;
   title: string;
   slug: { current: string };
+  /** Legacy single-string category (kept for backward compat) */
   category?: string;
+  categories?: { _id: string; title: string; slug: string }[];
+  tags?: string[];
   publishedAt?: string;
   thumbnailUrl?: string;
   excerpt?: string;
   order?: number;
 };
 
-export type StoryModuleType = StoryMediaBlock | StoryTextBlock | StorySpacerBlock;
+export type StoryModuleType =
+  | StoryMediaBlock
+  | StoryTextBlock
+  | StorySpacerBlock
+  // Legacy modules (existing documents)
+  | LegacyStoryMediaModule
+  | LegacyStoryTwoColImageModule
+  | LegacyStoryTextModule;
+
+// ── Legacy Module Types (backward compat) ──────────────────────────
+export type LegacyStoryMediaModule = {
+  _type: "storyMediaModule";
+  _key: string;
+  mediaType?: "image" | "video";
+  image?: { asset: { url: string } };
+  video?: { asset: { url: string } };
+  narrow?: boolean;
+};
+
+export type LegacyStoryTwoColImageModule = {
+  _type: "storyTwoColImageModule";
+  _key: string;
+  leftImage?: { asset: { url: string } };
+  rightImage?: { asset: { url: string } };
+};
+
+export type LegacyStoryTextModule = {
+  _type: "storyTextModule";
+  _key: string;
+  paddingTop?: number;
+  centered?: boolean;
+  offsetCols?: number;
+  colWidth?: number;
+  heading?: string;
+  headingInSeparateCol?: boolean;
+  headingColWidth?: number;
+  body?: PortableTextBlock[];
+};
 
 export type StoryMediaLayout =
   | "1col"
@@ -330,7 +387,12 @@ export type StorySingleData = {
   _id: string;
   title: string;
   slug: { current: string };
+  /** Legacy single-string category (kept for backward compat) */
   category?: string;
+  categories?: { _id: string; title: string; slug: string }[];
+  tags?: string[];
+  githubUrl?: string;
+  stackblitzUrl?: string;
   publishedAt?: string;
   thumbnailUrl?: string;
   thumbnailLandscape?: SanityImageSource;
@@ -352,11 +414,13 @@ export const STORIES_LIST_QUERY = `
     _id,
     title,
     slug,
-    category,
+    "category": coalesce(categories[0]->title, category),
+    "categories": categories[]->{ _id, title, "slug": slug.current },
+    tags,
     publishedAt,
-    "thumbnailUrl": coalesce(thumbnailPortrait.asset->url, thumbnailLandscape.asset->url),
-    "thumbnailLandscapeUrl": thumbnailLandscape.asset->url,
-    "thumbnailPortraitUrl": thumbnailPortrait.asset->url,
+    "thumbnailUrl": coalesce(thumbnail.asset->url, thumbnailPortrait.asset->url, thumbnailLandscape.asset->url),
+    "thumbnailLandscapeUrl": coalesce(thumbnailLandscape.asset->url, thumbnail.asset->url),
+    "thumbnailPortraitUrl": coalesce(thumbnailPortrait.asset->url, thumbnail.asset->url),
     excerpt,
     listDescription,
     order
@@ -369,11 +433,15 @@ export const STORY_BY_SLUG_QUERY = `
     _id,
     title,
     slug,
-    category,
+    "category": coalesce(categories[0]->title, category),
+    "categories": categories[]->{ _id, title, "slug": slug.current },
+    tags,
+    githubUrl,
+    stackblitzUrl,
     publishedAt,
-    "thumbnailUrl": coalesce(thumbnailPortrait.asset->url, thumbnailLandscape.asset->url),
-    "thumbnailLandscapeUrl": thumbnailLandscape.asset->url,
-    "thumbnailPortraitUrl": thumbnailPortrait.asset->url,
+    "thumbnailUrl": coalesce(thumbnail.asset->url, thumbnailPortrait.asset->url, thumbnailLandscape.asset->url),
+    "thumbnailLandscapeUrl": coalesce(thumbnailLandscape.asset->url, thumbnail.asset->url),
+    "thumbnailPortraitUrl": coalesce(thumbnailPortrait.asset->url, thumbnail.asset->url),
     subtitle,
     excerpt,
     listDescription,
@@ -391,12 +459,18 @@ export const STORY_BY_SLUG_QUERY = `
     },
     "modules": modules[] {
       ...,
+      // New module fields
       "image1": image1 { asset->{ url } },
       "video1": video1 { asset->{ url } },
       "image2": image2 { asset->{ url } },
       "video2": video2 { asset->{ url } },
       "image3": image3 { asset->{ url } },
-      "video3": video3 { asset->{ url } }
+      "video3": video3 { asset->{ url } },
+      // Legacy module fields (storyMediaModule / storyTwoColImageModule / storyTextModule)
+      "image": image { asset->{ url } },
+      "video": video { asset->{ url } },
+      "leftImage": leftImage { asset->{ url } },
+      "rightImage": rightImage { asset->{ url } }
     }
   }
 `;
@@ -407,8 +481,8 @@ export const STORIES_CAROUSEL_QUERY = `
     _id,
     title,
     slug,
-    category,
-    "thumbnailUrl": coalesce(thumbnailPortrait.asset->url, thumbnailLandscape.asset->url)
+    "category": coalesce(categories[0]->title, category),
+    "thumbnailUrl": coalesce(thumbnail.asset->url, thumbnailPortrait.asset->url, thumbnailLandscape.asset->url)
   }
 `;
 

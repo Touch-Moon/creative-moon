@@ -1,10 +1,9 @@
 import { defineType, defineField } from "sanity";
 
 // ── Story / Insight Module Object Types ──────────────────────────────
-// Work와 동일한 Media/Spacer 구조 + Story 전용 Text 디자인 구조
+// Aligned with frontend StorySingle component (storyMediaBlock / storyTextBlock / storySpacerBlock)
 
-// Media Block — 이미지/영상 통합 모듈 (Work.mediaBlock와 동일 구조)
-// 1/2/3 컬럼, 비대칭 비율, guttered/full-bleed, 간격 조절
+// Media Block — 1/2/3 column image/video grid
 const storyMediaBlock = defineType({
   name: "storyMediaBlock",
   title: "Media Block",
@@ -52,31 +51,28 @@ const storyMediaBlock = defineType({
       title: "Narrow Layout (Reduce Height)",
       type: "boolean",
       initialValue: false,
-      description: "1col 전용. 세로 비율을 줄여 좁게 표시",
+      description: "1col only. Reduces vertical ratio.",
       hidden: ({ parent }) => parent?.layout !== "1col",
     }),
-    // ── Slot 1
+    // Slot 1
     defineField({
       name: "image1",
       title: "Image 1",
       type: "image",
       options: { hotspot: true },
-      description: "이미지 또는 영상 중 하나만 등록 | 1col guttered: 2688px · full-bleed: 2560px · 2col equal: 1340px · 2col 1:2 narrow: 900px · 2col 2:1 wide: 1800px",
     }),
     defineField({
       name: "video1",
       title: "Video 1 (overrides Image 1)",
       type: "file",
       options: { accept: "video/*" },
-      description: "등록 시 Image 1 대신 영상 표시 | 권장 1920×1080 (FHD) · 8~15MB 이하",
     }),
-    // ── Slot 2
+    // Slot 2
     defineField({
       name: "image2",
       title: "Image 2",
       type: "image",
       options: { hotspot: true },
-      description: "2col equal: 1340px · 2col narrow:wide → wide: 1800px · 2col wide:narrow → narrow: 900px · 3col: 900px",
       hidden: ({ parent }) => !parent?.layout || parent.layout === "1col",
     }),
     defineField({
@@ -84,16 +80,14 @@ const storyMediaBlock = defineType({
       title: "Video 2 (overrides Image 2)",
       type: "file",
       options: { accept: "video/*" },
-      description: "등록 시 Image 2 대신 영상 표시 | 권장 1920×1080 (FHD)",
       hidden: ({ parent }) => !parent?.layout || parent.layout === "1col",
     }),
-    // ── Slot 3
+    // Slot 3
     defineField({
       name: "image3",
       title: "Image 3",
       type: "image",
       options: { hotspot: true },
-      description: "3col: 900px",
       hidden: ({ parent }) => parent?.layout !== "3col",
     }),
     defineField({
@@ -101,7 +95,6 @@ const storyMediaBlock = defineType({
       title: "Video 3 (overrides Image 3)",
       type: "file",
       options: { accept: "video/*" },
-      description: "등록 시 Image 3 대신 영상 표시 | 권장 1920×1080 (FHD)",
       hidden: ({ parent }) => parent?.layout !== "3col",
     }),
   ],
@@ -120,9 +113,7 @@ const storyMediaBlock = defineType({
   },
 });
 
-// Text Block — Story 전용 텍스트 디자인 구조
-// (Work의 textBlock과 다르게 centered/colWidth/offsetCols/heading-in-separate-col 등
-//  에세이/아티클형 레이아웃에 맞춘 유연한 그리드 구성)
+// Text Block — flexible essay/article layout
 const storyTextBlock = defineType({
   name: "storyTextBlock",
   title: "Text Block",
@@ -137,8 +128,25 @@ const storyTextBlock = defineType({
       name: "body",
       title: "Body Text",
       type: "array",
-      of: [{ type: "block" }, { type: "image" }],
-      description: "Rich text. 문단/이미지 혼합 가능",
+      of: [
+        {
+          type: "block",
+          marks: {
+            annotations: [
+              {
+                name: "link",
+                type: "object",
+                title: "Link",
+                fields: [
+                  { name: "href", type: "url", title: "URL" },
+                  { name: "blank", type: "boolean", title: "Open in new tab", initialValue: false },
+                ],
+              },
+            ],
+          },
+        },
+        { type: "image" },
+      ],
     }),
     defineField({
       name: "theme",
@@ -152,28 +160,25 @@ const storyTextBlock = defineType({
         layout: "radio",
       },
       initialValue: "light",
-      description: "배경색. Dark 선택 시 텍스트 자동 화이트",
     }),
     defineField({
       name: "paddingTop",
       title: "Padding Top (px)",
       type: "number",
       initialValue: 160,
-      description: "이 모듈 위 여백 (fvw 기반 px)",
     }),
     defineField({
       name: "centered",
       title: "Center Text",
       type: "boolean",
       initialValue: true,
-      description: "ON: 가운데 정렬 · OFF: 12-column 그리드 기반 배치",
+      description: "ON: centered · OFF: 12-column grid layout",
     }),
     defineField({
       name: "colWidth",
       title: "Column Width (1–12)",
       type: "number",
       initialValue: 6,
-      description: "centered=true 전용. 12-column 그리드에서의 가로폭",
       hidden: ({ parent }) => parent?.centered === false,
     }),
     defineField({
@@ -181,7 +186,6 @@ const storyTextBlock = defineType({
       title: "Offset Columns (0–12)",
       type: "number",
       initialValue: 0,
-      description: "centered=false 전용. 왼쪽 컬럼 offset",
       hidden: ({ parent }) => parent?.centered === true,
     }),
     defineField({
@@ -189,7 +193,6 @@ const storyTextBlock = defineType({
       title: "Heading in Separate Column",
       type: "boolean",
       initialValue: false,
-      description: "centered=false 전용. ON: 헤딩을 좌측 별도 컬럼으로",
       hidden: ({ parent }) => parent?.centered === true,
     }),
     defineField({
@@ -197,7 +200,6 @@ const storyTextBlock = defineType({
       title: "Heading Column Width (1–12)",
       type: "number",
       initialValue: 5,
-      description: "headingInSeparateCol=true 전용. 헤딩 컬럼 가로폭",
       hidden: ({ parent }) =>
         parent?.centered === true || parent?.headingInSeparateCol !== true,
     }),
@@ -210,7 +212,7 @@ const storyTextBlock = defineType({
   },
 });
 
-// Spacer — 모듈 사이 여백 조절 (Work.spacerBlock와 동일)
+// Spacer Block
 const storySpacerBlock = defineType({
   name: "storySpacerBlock",
   title: "Spacer",
@@ -239,7 +241,7 @@ const storySpacerBlock = defineType({
   },
 });
 
-// Hero Media Module — 타이틀 아래 Hero 영역 (Work와 동일 구조: type/image/video)
+// Hero Media Module
 const storyHeroModule = defineType({
   name: "storyHeroModule",
   title: "Hero Media",
@@ -257,27 +259,23 @@ const storyHeroModule = defineType({
       title: "Full Bleed (no side gutter)",
       type: "boolean",
       initialValue: true,
-      description: "ON → 좌우 여백 없이 꽉 차게 · OFF → 다른 섹션과 동일한 gutter 적용",
     }),
     defineField({
       name: "image",
       title: "Image",
       type: "image",
       options: { hotspot: true },
-      description: "권장 2880px wide (1440 @2x) · 비율 자유",
     }),
     defineField({
       name: "video",
       title: "Video File",
       type: "file",
       options: { accept: "video/*" },
-      description: "권장 1920×1080 (FHD) · 8~15MB 이하",
     }),
   ],
 });
 
-// ── Story / Insight Document Type ────────────────────────────────────
-
+// ── Story Document ─────────────────────────────────────────────────
 export const story = defineType({
   name: "story",
   title: "Story / Insight",
@@ -293,12 +291,10 @@ export const story = defineType({
     },
   ],
   fields: [
-    // ── Basic Info
     defineField({
       name: "title",
       title: "Title",
       type: "string",
-      description: 'e.g. "We review a decade of experience in retail."',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -308,11 +304,35 @@ export const story = defineType({
       options: { source: "title" },
       validation: (Rule) => Rule.required(),
     }),
+    // ── Categories (multi-select from Story Category documents)
     defineField({
-      name: "category",
-      title: "Category",
-      type: "string",
-      description: 'e.g. "Insights"',
+      name: "categories",
+      title: "Categories",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "storyCategory" }] }],
+      description: "Select one or more Story Categories",
+    }),
+    // ── Tags (free-form keywords)
+    defineField({
+      name: "tags",
+      title: "Tags",
+      type: "array",
+      of: [{ type: "string" }],
+      options: { layout: "tags" },
+      description: 'Free-form keywords, e.g. ["React", "Animation", "Tooling"]',
+    }),
+    // ── External Links (Single page buttons)
+    defineField({
+      name: "githubUrl",
+      title: "GitHub URL",
+      type: "url",
+      description: "Shown as 'GitHub' button on the Story single page",
+    }),
+    defineField({
+      name: "stackblitzUrl",
+      title: "StackBlitz URL",
+      type: "url",
+      description: "Shown as 'StackBlitz' button on the Story single page",
     }),
     defineField({
       name: "publishedAt",
@@ -325,34 +345,40 @@ export const story = defineType({
       title: "Subtitle",
       type: "text",
       rows: 2,
-      description: "타이틀 아래 짧은 한 줄 설명 (Single 페이지)",
+      description: "Short one-liner shown under the title on the single page.",
     }),
     defineField({
       name: "excerpt",
       title: "Excerpt",
       type: "text",
       rows: 3,
-      description: "리스트 뷰의 짧은 요약",
+      description: "Short summary for the list page card and SEO.",
     }),
 
-    // ── Thumbnails (Work와 동일한 2종 구조)
+    // ── Thumbnails ──
+    // `thumbnail` retained for backward compatibility with existing data.
     defineField({
-      name: "thumbnailLandscape",
-      title: "Thumbnail image — Landscape ★ 필수",
+      name: "thumbnail",
+      title: "Thumbnail Image (Legacy / Fallback)",
       type: "image",
       options: { hotspot: true },
-      description: "★ 필수. 권장 3584×2016 (16:9). Stories List 100% Landscape + Portrait 미등록 시 자동 센터 크롭 폴백.",
-      validation: (Rule) => Rule.required(),
+      description: "기존 단일 썸네일. 신규 작성 시 Landscape를 사용하세요.",
+    }),
+    defineField({
+      name: "thumbnailLandscape",
+      title: "Thumbnail — Landscape (★ 신규 권장)",
+      type: "image",
+      options: { hotspot: true },
+      description: "권장 3584×2016 (16:9). Stories List Landscape + 폴백 기준.",
     }),
     defineField({
       name: "thumbnailPortrait",
-      title: "Thumbnail image — Portrait (선택)",
+      title: "Thumbnail — Portrait (선택)",
       type: "image",
       options: { hotspot: true },
-      description: "선택. 권장 1762×1309. 홈/리스트 50% 세로형. 미등록 시 Landscape에서 자동 센터 크롭.",
+      description: "권장 1762×1309. 홈/리스트 50% 세로형. 미등록 시 Landscape에서 자동 폴백.",
     }),
 
-    // ── List Page Fields
     defineField({
       name: "listDescription",
       title: "List Description",
@@ -360,7 +386,7 @@ export const story = defineType({
       description: "리스트 페이지 썸네일 아래 노출 (선택)",
     }),
 
-    // ── Hero Media
+    // ── Hero Media ──
     defineField({
       name: "heroMedia",
       title: "Hero Media (After Title)",
@@ -368,39 +394,135 @@ export const story = defineType({
       description: "타이틀 이후, 콘텐츠 모듈 이전에 표시되는 이미지/영상",
     }),
 
-    // ── Content Modules
+    // ── Content Modules ──
     defineField({
       name: "modules",
       title: "Content Modules",
       type: "array",
       of: [
+        // New (recommended)
         { type: "storyMediaBlock" },
         { type: "storyTextBlock" },
         { type: "storySpacerBlock" },
+        // Legacy (kept for backward compat with existing documents)
+        { type: "storyMediaModule" },
+        { type: "storyTwoColImageModule" },
+        { type: "storyTextModule" },
       ],
-      description: "미디어(1/2/3컬럼 + 이미지/영상) · 텍스트 · 스페이서 자유 조합",
+      description: "신규: Media Block / Text Block / Spacer · 기존 데이터: Legacy 모듈 자동 인식",
     }),
 
-    // ── Display Order
     defineField({
       name: "order",
       title: "Display Order",
       type: "number",
-      description: "리스트 정렬 순서. 낮을수록 먼저. 비워두면 publishedAt 기준.",
+      initialValue: 99,
+      description: "낮을수록 먼저. 비워두면 publishedAt 기준.",
     }),
   ],
 
   preview: {
-    select: { title: "title", media: "thumbnailLandscape", category: "category" },
-    prepare({ title, media, category }) {
+    select: {
+      title: "title",
+      category0: "categories.0.title",
+      mediaLand: "thumbnailLandscape",
+      mediaLegacy: "thumbnail",
+    },
+    prepare({ title, category0, mediaLand, mediaLegacy }) {
       return {
         title: title || "Untitled Story",
-        media,
-        subtitle: category || "No category",
+        subtitle: category0 || "",
+        media: mediaLand || mediaLegacy,
       };
     },
   },
 });
 
-// Export module types
-export { storyMediaBlock, storyTextBlock, storySpacerBlock, storyHeroModule };
+// ── Legacy Module Types (backward compat for existing documents) ──────
+// 기존 문서가 가진 storyMediaModule / storyTwoColImageModule / storyTextModule
+// 데이터를 그대로 보존하기 위한 호환 타입. 신규 작성에는 사용하지 않음.
+
+const storyMediaModule = defineType({
+  name: "storyMediaModule",
+  title: "Media (Legacy)",
+  type: "object",
+  fields: [
+    defineField({ name: "mediaType", title: "Media Type", type: "string", options: { list: ["image", "video"] }, initialValue: "image" }),
+    defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true } }),
+    defineField({ name: "video", title: "Video", type: "file", options: { accept: "video/*" } }),
+    defineField({ name: "narrow", title: "Narrow", type: "boolean", initialValue: false }),
+  ],
+  preview: {
+    select: { image: "image", mediaType: "mediaType" },
+    prepare({ image, mediaType }) {
+      return { title: `Legacy Media (${mediaType || "image"})`, media: image };
+    },
+  },
+});
+
+const storyTwoColImageModule = defineType({
+  name: "storyTwoColImageModule",
+  title: "2-Col Images (Legacy)",
+  type: "object",
+  fields: [
+    defineField({ name: "leftImage", title: "Left Image", type: "image", options: { hotspot: true } }),
+    defineField({ name: "rightImage", title: "Right Image", type: "image", options: { hotspot: true } }),
+  ],
+  preview: {
+    select: { left: "leftImage" },
+    prepare({ left }) {
+      return { title: "Legacy 2-Col Images", media: left };
+    },
+  },
+});
+
+const storyTextModule = defineType({
+  name: "storyTextModule",
+  title: "Text Block (Legacy)",
+  type: "object",
+  fields: [
+    defineField({ name: "paddingTop", title: "Padding Top", type: "number", initialValue: 160 }),
+    defineField({ name: "centered", title: "Center Content", type: "boolean", initialValue: true }),
+    defineField({ name: "offsetCols", title: "Offset Cols", type: "number", initialValue: 0 }),
+    defineField({ name: "colWidth", title: "Col Width", type: "number", initialValue: 6 }),
+    defineField({ name: "heading", title: "Heading", type: "string" }),
+    defineField({ name: "headingInSeparateCol", title: "Heading in Separate Col", type: "boolean", initialValue: false }),
+    defineField({ name: "headingColWidth", title: "Heading Col Width", type: "number", initialValue: 5 }),
+    defineField({
+      name: "body",
+      title: "Body",
+      type: "array",
+      of: [{
+        type: "block",
+        marks: {
+          annotations: [{
+            name: "link",
+            type: "object",
+            title: "Link",
+            fields: [
+              { name: "href", type: "url", title: "URL" },
+              { name: "blank", type: "boolean", title: "Open in new tab", initialValue: false },
+            ],
+          }],
+        },
+      }],
+    }),
+  ],
+  preview: {
+    select: { heading: "heading" },
+    prepare({ heading }) {
+      return { title: heading ? `Legacy Text — ${heading}` : "Legacy Text Block" };
+    },
+  },
+});
+
+export {
+  storyMediaBlock,
+  storyTextBlock,
+  storySpacerBlock,
+  storyHeroModule,
+  // legacy
+  storyMediaModule,
+  storyTwoColImageModule,
+  storyTextModule,
+};

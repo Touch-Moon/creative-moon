@@ -112,9 +112,9 @@ function StoryCard({ story, index }: { story: StoryListItem; index: number }) {
         <div className="story-card__content">
           {/* Meta */}
           <div className="story-card__meta">
-            {story.category && (
+            {(story.categories?.[0]?.title || story.category) && (
               <span className="story-card__category body-text-caps">
-                {story.category}
+                {story.categories?.[0]?.title || story.category}
               </span>
             )}
             {story.publishedAt && (

@@ -23,7 +23,9 @@ export type WorkItem = {
   /** Actual width÷height aspect ratio of the Portrait image. Falls back to a default if absent */
   portraitAspectRatio?: number;
   listDescription?: string;
+  /** Category titles (string[]) for filtering. Sanity returns objects — the server flattens to titles. */
   categories?: string[];
+  tags?: string[];
   order?: number;
 };
 

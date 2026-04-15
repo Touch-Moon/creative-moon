@@ -1,21 +1,38 @@
 import { work, mediaBlock, textBlock, spacerBlock } from "./work";
-import { story, storyMediaBlock, storyTextBlock, storySpacerBlock, storyHeroModule } from "./story";
-import { category } from "./category";
+import { workCategory } from "./workCategory";
+import { storyCategory } from "./storyCategory";
+import {
+  story,
+  storyMediaBlock,
+  storyTextBlock,
+  storySpacerBlock,
+  storyHeroModule,
+  // Legacy (backward compat)
+  storyMediaModule,
+  storyTwoColImageModule,
+  storyTextModule,
+} from "./story";
 
 export const schemaTypes = [
   // Documents
   work,
   story,
-  category,
+  workCategory,
+  storyCategory,
 
-  // Object types — Work modules (리팩토링: 3 모듈 체계)
+  // Work object types (3-module system)
   mediaBlock,
   textBlock,
   spacerBlock,
 
-  // Object types — Story / Insight modules
+  // Story object types (aligned with frontend StorySingle)
   storyMediaBlock,
   storyTextBlock,
   storySpacerBlock,
   storyHeroModule,
+
+  // Legacy story modules (kept so existing documents still validate)
+  storyMediaModule,
+  storyTwoColImageModule,
+  storyTextModule,
 ];

@@ -180,6 +180,13 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     white-space: pre-line;
   }
 
+  &__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: fvw(24);
+    margin-top: fvw(12);
+  }
+
   &__link {
     // body-text-5 class
     display: inline-flex;

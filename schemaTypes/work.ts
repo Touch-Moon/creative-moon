@@ -61,6 +61,47 @@ const mediaBlock = defineType({
       options: { accept: "video/*" },
       description: "등록 시 Image 1 대신 영상 표시 | 권장 1920×1080 (FHD) · 8~15MB 이하",
     }),
+    defineField({
+      name: "skin1",
+      title: "Slot 1 — Device Skin",
+      type: "string",
+      options: {
+        list: [
+          { title: "None (기본)",  value: "none" },
+          { title: "Desktop",      value: "desktop" },
+          { title: "Tablet (iPad)", value: "tablet" },
+          { title: "Mobile (iPhone)", value: "mobile" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "none",
+      description: "영상/이미지를 디바이스 프레임 안에 표시",
+    }),
+    defineField({
+      name: "skinBg1",
+      title: "Slot 1 — Background",
+      type: "string",
+      options: {
+        list: [
+          { title: "Transparent", value: "transparent" },
+          { title: "Dark  (#2E2F32)", value: "dark" },
+          { title: "Light (#E8E9ED)", value: "light" },
+          { title: "White (#FFFFFF)", value: "white" },
+          { title: "Image", value: "image" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "transparent",
+      hidden: ({ parent }) => !parent?.skin1 || parent.skin1 === "none",
+    }),
+    defineField({
+      name: "skinBgImage1",
+      title: "Slot 1 — Background Image",
+      type: "image",
+      options: { hotspot: true },
+      description: "디바이스 프레임 배경 이미지 (영상 뒤에 표시)",
+      hidden: ({ parent }) => parent?.skinBg1 !== "image",
+    }),
     // ── Slot 2 ──────────────────────────────────────────────────────
     defineField({
       name: "image2",
@@ -78,6 +119,47 @@ const mediaBlock = defineType({
       description: "등록 시 Image 2 대신 영상 표시 | 권장 1920×1080 (FHD) · 8~15MB 이하",
       hidden: ({ parent }) => !parent?.layout || parent.layout === "1col",
     }),
+    defineField({
+      name: "skin2",
+      title: "Slot 2 — Device Skin",
+      type: "string",
+      options: {
+        list: [
+          { title: "None (기본)",    value: "none" },
+          { title: "Desktop",        value: "desktop" },
+          { title: "Tablet (iPad)",  value: "tablet" },
+          { title: "Mobile (iPhone)", value: "mobile" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "none",
+      description: "영상/이미지를 디바이스 프레임 안에 표시",
+      hidden: ({ parent }) => !parent?.layout || parent.layout === "1col",
+    }),
+    defineField({
+      name: "skinBg2",
+      title: "Slot 2 — Background",
+      type: "string",
+      options: {
+        list: [
+          { title: "Transparent", value: "transparent" },
+          { title: "Dark  (#2E2F32)", value: "dark" },
+          { title: "Light (#E8E9ED)", value: "light" },
+          { title: "White (#FFFFFF)", value: "white" },
+          { title: "Image", value: "image" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "transparent",
+      hidden: ({ parent }) => !parent?.skin2 || parent.skin2 === "none" || parent.layout === "1col",
+    }),
+    defineField({
+      name: "skinBgImage2",
+      title: "Slot 2 — Background Image",
+      type: "image",
+      options: { hotspot: true },
+      hidden: ({ parent }) => parent?.skinBg2 !== "image",
+    }),
     // ── Slot 3 ──────────────────────────────────────────────────────
     defineField({
       name: "image3",
@@ -94,6 +176,47 @@ const mediaBlock = defineType({
       options: { accept: "video/*" },
       description: "등록 시 Image 3 대신 영상 표시 | 권장 1920×1080 (FHD) · 8~15MB 이하",
       hidden: ({ parent }) => parent?.layout !== "3col",
+    }),
+    defineField({
+      name: "skin3",
+      title: "Slot 3 — Device Skin",
+      type: "string",
+      options: {
+        list: [
+          { title: "None (기본)",    value: "none" },
+          { title: "Desktop",        value: "desktop" },
+          { title: "Tablet (iPad)",  value: "tablet" },
+          { title: "Mobile (iPhone)", value: "mobile" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "none",
+      description: "영상/이미지를 디바이스 프레임 안에 표시",
+      hidden: ({ parent }) => parent?.layout !== "3col",
+    }),
+    defineField({
+      name: "skinBg3",
+      title: "Slot 3 — Background",
+      type: "string",
+      options: {
+        list: [
+          { title: "Transparent", value: "transparent" },
+          { title: "Dark  (#2E2F32)", value: "dark" },
+          { title: "Light (#E8E9ED)", value: "light" },
+          { title: "White (#FFFFFF)", value: "white" },
+          { title: "Image", value: "image" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "transparent",
+      hidden: ({ parent }) => !parent?.skin3 || parent.skin3 === "none" || parent.layout !== "3col",
+    }),
+    defineField({
+      name: "skinBgImage3",
+      title: "Slot 3 — Background Image",
+      type: "image",
+      options: { hotspot: true },
+      hidden: ({ parent }) => parent?.skinBg3 !== "image",
     }),
   ],
   preview: {
@@ -315,12 +438,23 @@ export const work = defineType({
       description: "Selected Works 캐러셀에서 카드의 가로 비율 결정",
     }),
 
-    // ── Categories
+    // ── Categories (multi-select from Work Category documents)
     defineField({
       name: "categories",
       title: "Categories",
       type: "array",
-      of: [{ type: "reference", to: [{ type: "category" }] }],
+      of: [{ type: "reference", to: [{ type: "workCategory" }] }],
+      description: "Select one or more Work Categories",
+    }),
+
+    // ── Tags (free-form keywords)
+    defineField({
+      name: "tags",
+      title: "Tags",
+      type: "array",
+      of: [{ type: "string" }],
+      options: { layout: "tags" },
+      description: 'Free-form keywords, e.g. ["Next.js", "Sanity", "Framer Motion"]',
     }),
 
     // ── Services (What We Do)
@@ -332,11 +466,18 @@ export const work = defineType({
       description: 'e.g. ["Strategic Design", "Research", "Branding"]',
     }),
 
-    // ── External Link
+    // ── External Links (Single page buttons)
     defineField({
-      name: "externalUrl",
-      title: "External URL (Visit Website)",
+      name: "siteUrl",
+      title: "Live Site URL",
       type: "url",
+      description: "Shown as 'Visit Site' button on the Work single page",
+    }),
+    defineField({
+      name: "githubUrl",
+      title: "GitHub Repo URL",
+      type: "url",
+      description: "Shown as 'GitHub' button on the Work single page",
     }),
 
     // ── Hero Media
@@ -351,13 +492,6 @@ export const work = defineType({
           type: "string",
           options: { list: ["image", "video"] },
           initialValue: "image",
-        }),
-        defineField({
-          name: "fullBleed",
-          title: "Full Bleed (no side gutter)",
-          type: "boolean",
-          initialValue: true,
-          description: "ON → 좌우 여백 없이 꽉 차게 · OFF → 다른 섹션과 동일한 gutter 적용",
         }),
         defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true }, description: "권장 2880px wide (1440 @2x) · 비율 자유" }),
         defineField({ name: "video", title: "Video File", type: "file", options: { accept: "video/*" }, description: "권장 1920×1080 (FHD) · 8~15MB 이하" }),

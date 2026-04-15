@@ -59,8 +59,9 @@ const DUMMY_SINGLE: WorkSingleData = {
   overview:
     'Hyundai Motor Company approached us to conceptualize and design the full visual identity for their annual convention — a gathering of thousands of dealers, partners, and stakeholders.',
   services: ['Strategic Design', 'Visual Identity', 'Motion Design', 'Experiences'],
-  externalUrl: 'https://www.hyundai.com',
-  categories: ['Strategic design', 'Experiences'],
+  siteUrl: 'https://www.hyundai.com',
+  githubUrl: undefined,
+  categories: [],
   heroMedia: { type: 'image', image: undefined },
   modules: [
     { _type: 'textBlock', _key: 'm1', heading: 'Challenge',
@@ -484,11 +485,21 @@ export default function WorkSingle({ data, selectedWorks }: Props) {
             {work.overview && (
               <p className="work-single__overview-text body-text-3">{work.overview}</p>
             )}
-            {work.externalUrl && (
-              <a href={work.externalUrl} target="_blank" rel="noopener noreferrer"
-                className="work-single__link body-text-5">
-                Visit website →
-              </a>
+            {(work.siteUrl || work.githubUrl) && (
+              <div className="work-single__links">
+                {work.siteUrl && (
+                  <a href={work.siteUrl} target="_blank" rel="noopener noreferrer"
+                    className="work-single__link body-text-5">
+                    Visit website →
+                  </a>
+                )}
+                {work.githubUrl && (
+                  <a href={work.githubUrl} target="_blank" rel="noopener noreferrer"
+                    className="work-single__link body-text-5">
+                    GitHub →
+                  </a>
+                )}
+              </div>
             )}
           </div>
         </div>

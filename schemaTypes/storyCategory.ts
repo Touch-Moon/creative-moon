@@ -1,8 +1,8 @@
 import { defineType, defineField } from "sanity";
 
-export const category = defineType({
-  name: "category",
-  title: "Category",
+export const storyCategory = defineType({
+  name: "storyCategory",
+  title: "Story Category",
   type: "document",
   fields: [
     defineField({
@@ -19,4 +19,10 @@ export const category = defineType({
       validation: (Rule) => Rule.required(),
     }),
   ],
+  preview: {
+    select: { title: "title", slug: "slug.current" },
+    prepare({ title, slug }) {
+      return { title: title || "Untitled", subtitle: slug };
+    },
+  },
 });

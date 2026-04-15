@@ -27,7 +27,9 @@ export default async function WorkPage() {
       // Actual width÷height ratio of Portrait image → used to calculate CSS padding-top
       portraitAspectRatio: item.portraitAspectRatio,
       listDescription: item.listDescription,
-      categories: item.categories,
+      categories: Array.isArray(item.categories)
+        ? item.categories.map((c) => (typeof c === 'string' ? c : c.title)).filter(Boolean)
+        : [],
       order: item.order,
     }));
   } catch {

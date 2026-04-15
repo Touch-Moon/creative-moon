@@ -11,6 +11,29 @@
   height: fvw(167); // ~11.6vw
 }
 
+// ── External links (GitHub / StackBlitz) ──────────────────────────
+.story-single__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: fvw(24);
+  padding: fvw(24) fvw(120) 0;
+  margin-bottom: fvw(48);
+
+  @media (max-width: 1023.98px) { padding: 24px 48px 0; gap: 20px; margin-bottom: 32px; }
+  @media (max-width: 575.98px)  { padding: 16px 24px 0; gap: 16px; margin-bottom: 24px; }
+}
+
+.story-single__link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.2s ease;
+  &:hover { opacity: 0.6; }
+}
+
 // ── Module base ───────────────────────────────────────────────────
 .story-module {}
 
@@ -52,14 +75,30 @@
     display: block;
   }
 
-  .story-module__headline-wrap {
-    overflow: hidden;
-  }
-
   .story-module__headline {
     margin: 0;
     line-height: 1.1;
     letter-spacing: -0.03em;
+    // Word-level mask: each word is its own clip-path box,
+    // so the reveal works the same no matter how many lines the title wraps to.
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.22em;
+    row-gap: 0.05em;
+  }
+
+  .story-module__headline-word {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;        // contain the slide-up child
+    will-change: clip-path;
+    // Initial hidden state so mask applies before hydration
+    clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
+  }
+
+  .story-module__headline-word-inner {
+    display: inline-block;
+    will-change: transform;
   }
 }
 

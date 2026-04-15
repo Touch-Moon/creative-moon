@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { m, useInView } from 'framer-motion';
-import type { BezierDefinition } from 'framer-motion';
+import type { BezierDefinition, Variants } from 'framer-motion';
 import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
 import type { PortableTextBlockComponent, PortableTextMarkComponentProps } from '@portabletext/react';
@@ -13,6 +13,9 @@ import type {
   StoryTextBlock,
   StorySpacerBlock,
   StoryHeroMedia,
+  LegacyStoryMediaModule,
+  LegacyStoryTwoColImageModule,
+  LegacyStoryTextModule,
 } from '@/sanity/queries';
 import './StorySingle.scss';
 
@@ -23,6 +26,19 @@ const EASE_INOUT: BezierDefinition = [0.76, 0, 0.24, 1];
 type LinkMark = { _type: 'link'; href: string; blank?: boolean };
 
 const ptComponents = {
+  types: {
+    // Guard inline image blocks: skip rendering when asset URL is missing
+    // (prevents "empty string passed to src" warning from default renderer)
+    image: ({ value }: { value?: { asset?: { url?: string } } }) => {
+      const url = value?.asset?.url;
+      if (!url) return null;
+      return (
+        <span className="story-inline-image-wrap">
+          <Image src={url} alt="" width={1200} height={800} style={{ width: '100%', height: 'auto' }} />
+        </span>
+      );
+    },
+  },
   block: {
     normal: (({ children }) => (
       <p className="body-text-4">{children}</p>
@@ -72,10 +88,10 @@ function HeroModuleBlock({ heroMedia }: { heroMedia: StoryHeroMedia }) {
           className="story-single__hero-video"
           style={{ width: '100%', display: 'block' }}
         />
-      ) : (
+      ) : imageUrl ? (
         <div className="story-single__hero-image-wrap">
           <Image
-            src={imageUrl as string}
+            src={imageUrl}
             alt=""
             width={1440}
             height={900}
@@ -85,7 +101,7 @@ function HeroModuleBlock({ heroMedia }: { heroMedia: StoryHeroMedia }) {
             style={{ width: '100%', height: 'auto', display: 'block' }}
           />
         </div>
-      )}
+      ) : null}
     </m.div>
   );
 }
@@ -116,10 +132,11 @@ function StoryMediaSlot({
   if (imageUrl) {
     // Apply Sanity CDN transforms before passing to next/image
     const optimizedUrl = sanityImg(imageUrl, 1440, 80);
+    if (!optimizedUrl) return null;
     return (
       <div className="story-module__image-wrap">
         <Image
-          src={optimizedUrl as string}
+          src={optimizedUrl}
           alt=""
           fill
           className="story-module__image"
@@ -353,32 +370,71 @@ function TextModuleBlock({ mod }: { mod: StoryTextBlock }) {
 
 // ── Title Block ───────────────────────────────────────────────────
 function TitleBlock({ title, category }: { title: string; category?: string }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-5%' });
+  // Force false → true on mount so Framer Motion runs the variant transition reliably
+  // (same pattern as Homepage Hero — ensures animation replays on every navigation)
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+  useEffect(() => {
+    setShouldAnimate(true);
+  }, []);
+
+  // Per-word clip-path mask + translateY (same as Homepage Hero).
+  // Word-level split makes the animation robust to line wrapping —
+  // each word is masked inside its own box, so the effect looks identical
+  // whether the headline renders as 1 line or 4 lines in any browser.
+  const clipVariants: Variants = {
+    hidden: { clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)' },
+    visible: (i: number) => ({
+      clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+      transition: { duration: 1.2, ease: EASE_OUT, delay: 0.2 + i * 0.08 },
+    }),
+  };
+  const slideVariants: Variants = {
+    hidden: { y: '100%' },
+    visible: (i: number) => ({
+      y: '0%',
+      transition: { duration: 1.2, ease: EASE_OUT, delay: 0.2 + i * 0.08 },
+    }),
+  };
+  const animState = shouldAnimate ? 'visible' : 'hidden';
+
+  const words = title.split(' ');
 
   return (
-    <div className="story-module story-module--title" ref={ref}>
+    <div className="story-module story-module--title">
       <div className="story-module__title-inner">
         {category && (
           <m.h3
             className="body-text-4 story-module__category"
             initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.9, ease: EASE_OUT }}
           >
             {category}.
           </m.h3>
         )}
-        <div className="story-module__headline-wrap">
-          <m.h1
-            className="headline-2 story-module__headline"
-            initial={{ y: '110%' }}
-            animate={inView ? { y: 0 } : {}}
-            transition={{ duration: 1.4, ease: EASE_OUT, delay: 0.1 }}
-          >
-            {title}
-          </m.h1>
-        </div>
+        <h1 className="headline-2 story-module__headline" aria-label={title}>
+          {words.map((word, i) => (
+            <m.span
+              key={i}
+              className="story-module__headline-word"
+              custom={i}
+              variants={clipVariants}
+              initial="hidden"
+              animate={animState}
+              aria-hidden="true"
+            >
+              <m.span
+                className="story-module__headline-word-inner"
+                custom={i}
+                variants={slideVariants}
+                initial="hidden"
+                animate={animState}
+              >
+                {word}
+              </m.span>
+            </m.span>
+          ))}
+        </h1>
       </div>
     </div>
   );
@@ -467,20 +523,90 @@ const DUMMY_STORY: StorySingleData = {
   ],
 };
 
+// ── Legacy → New Adapters ─────────────────────────────────────────
+// Existing documents use older module types. Convert on the fly so we
+// can reuse MediaBlock / TextModuleBlock instead of duplicating renderers.
+
+function adaptLegacyMedia(mod: LegacyStoryMediaModule): StoryMediaBlock {
+  return {
+    _type: 'storyMediaBlock',
+    _key: mod._key,
+    layout: '1col',
+    spacing: 'default',
+    fullBleed: !mod.narrow, // narrow=true in legacy ≈ guttered
+    narrow: mod.narrow,
+    image1: mod.image,
+    video1: mod.video,
+  };
+}
+
+function adaptLegacyTwoCol(mod: LegacyStoryTwoColImageModule): StoryMediaBlock {
+  return {
+    _type: 'storyMediaBlock',
+    _key: mod._key,
+    layout: '2col',
+    spacing: 'default',
+    fullBleed: false,
+    image1: mod.leftImage,
+    image2: mod.rightImage,
+  };
+}
+
+function adaptLegacyText(mod: LegacyStoryTextModule): StoryTextBlock {
+  return {
+    _type: 'storyTextBlock',
+    _key: mod._key,
+    paddingTop: mod.paddingTop,
+    theme: 'light',
+    centered: mod.centered,
+    offsetCols: mod.offsetCols,
+    colWidth: mod.colWidth,
+    heading: mod.heading,
+    headingInSeparateCol: mod.headingInSeparateCol,
+    headingColWidth: mod.headingColWidth,
+    body: mod.body,
+  };
+}
+
+// ── External Links (GitHub / StackBlitz) ─────────────────────────
+function StoryLinks({ githubUrl, stackblitzUrl }: { githubUrl?: string; stackblitzUrl?: string }) {
+  if (!githubUrl && !stackblitzUrl) return null;
+  return (
+    <div className="story-single__links">
+      {githubUrl && (
+        <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="story-single__link body-text-5">
+          GitHub →
+        </a>
+      )}
+      {stackblitzUrl && (
+        <a href={stackblitzUrl} target="_blank" rel="noopener noreferrer" className="story-single__link body-text-5">
+          StackBlitz →
+        </a>
+      )}
+    </div>
+  );
+}
+
 // ── Main Component ────────────────────────────────────────────────
 export default function StorySingle({ data }: { data: StorySingleData | null }) {
   const story = data ?? DUMMY_STORY;
+  const primaryCategory =
+    story.category ?? story.categories?.[0]?.title;
 
   return (
     <div className="story-single">
       {/* Title */}
-      <TitleBlock title={story.title} category={story.category} />
+      <TitleBlock title={story.title} category={primaryCategory} />
+
+      {/* External links (GitHub / StackBlitz) */}
+      <StoryLinks githubUrl={story.githubUrl} stackblitzUrl={story.stackblitzUrl} />
 
       {/* Hero Media (after title, before content modules) */}
       {story.heroMedia && <HeroModuleBlock heroMedia={story.heroMedia} />}
 
       {/* Content modules */}
       {story.modules?.map((mod) => {
+        // New module types
         if (mod._type === 'storyMediaBlock') {
           return <MediaBlock key={mod._key} mod={mod} />;
         }
@@ -489,6 +615,16 @@ export default function StorySingle({ data }: { data: StorySingleData | null }) 
         }
         if (mod._type === 'storySpacerBlock') {
           return <SpacerBlock key={mod._key} mod={mod} />;
+        }
+        // Legacy module types — adapt then reuse renderers
+        if (mod._type === 'storyMediaModule') {
+          return <MediaBlock key={mod._key} mod={adaptLegacyMedia(mod)} />;
+        }
+        if (mod._type === 'storyTwoColImageModule') {
+          return <MediaBlock key={mod._key} mod={adaptLegacyTwoCol(mod)} />;
+        }
+        if (mod._type === 'storyTextModule') {
+          return <TextModuleBlock key={mod._key} mod={adaptLegacyText(mod)} />;
         }
         return null;
       })}
