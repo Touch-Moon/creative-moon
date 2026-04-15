@@ -19,16 +19,16 @@ import SmoothScroll from "@/components/common/SmoothScroll";
 import MotionProvider from "@/components/common/MotionProvider";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://creative-moon.com';
-const OG_DESC = 'Creative Moon is a design-driven studio crafting interactive, high-quality digital experiences — strategy, branding, and digital products.';
+const OG_DESC = "I'm a Design Engineer based in Canada — I design in Figma and ship in Next.js. Crafting interaction-driven websites where design and engineering are owned end-to-end.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Creative Moon | Design-Driven Digital Studio',
+    default: 'Creative Moon | Design Engineer Portfolio',
     template: '%s | Creative Moon',
   },
   description: OG_DESC,
-  keywords: ['web design', 'branding', 'digital products', 'UX design', 'creative studio', 'portfolio'],
+  keywords: ['design engineer', 'UI/UX design', 'front-end development', 'React', 'Next.js', 'portfolio', 'Figma'],
   authors: [{ name: 'Creative Moon', url: SITE_URL }],
   creator: 'Creative Moon',
   openGraph: {
@@ -36,13 +36,13 @@ export const metadata: Metadata = {
     locale: 'ko_KR',
     url: SITE_URL,
     siteName: 'Creative Moon',
-    title: 'Creative Moon | Design-Driven Digital Studio',
+    title: 'Creative Moon | Design Engineer Portfolio',
     description: OG_DESC,
     images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'Creative Moon' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Creative Moon | Design-Driven Digital Studio',
+    title: 'Creative Moon | Design Engineer Portfolio',
     description: OG_DESC,
     images: ['/opengraph-image.png'],
   },

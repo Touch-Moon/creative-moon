@@ -173,12 +173,11 @@ export default function AboutPage() {
             animate={fullImg.inView ? 'visible' : 'hidden'}
           >
             <p>
-              I&apos;m a Designer and Developer based in Canada. Grounded in
-              years of hands-on experience and built around modern tools, every
-              project is delivered with the same commitment — strong design,
-              clean code, and a website that performs well after launch. From
-              e-commerce builds to custom web applications, the focus is always
-              on craft and how it feels to use.
+              I&apos;m a Design Engineer based in Canada — I design in Figma and ship in Next.js.
+              Grounded in years of experience across design and development, every
+              project is delivered with the same commitment — strong design, clean code,
+              and a product that performs after launch. From WordPress builds to React
+              applications, the focus is always on owning the full&nbsp;path.
             </p>
           </m.div>
         </div>
@@ -223,7 +222,7 @@ export default function AboutPage() {
                 the same: a website that feels intuitive, loads fast, and guides
                 visitors toward what matters. Work spans{' '}
                 <span className="about-image-text__desc-underline">
-                  Web Design, UI/UX Design, Front-End Development,
+                  UI/UX Design, Design Engineering, Front-End Development,
                   and interactive digital experiences
                 </span>.
               </p>

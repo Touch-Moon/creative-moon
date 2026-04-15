@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
 
     // ── 5. Send email via Resend ──────────────────────────
     const fromEmail = process.env.RESEND_FROM_EMAIL ?? 'onboarding@resend.dev';
-    const toEmail = process.env.CONTACT_TO_EMAIL ?? 'hello@creativemoon.com';
+    const toEmail = process.env.CONTACT_TO_EMAIL ?? 'touch@creative-moon.com';
 
     const safeName = escapeHtml(name.trim());
     const safeEmail = escapeHtml(email.trim());

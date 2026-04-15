@@ -3,7 +3,7 @@ import ContactPage from '@/components/contact/ContactPage';
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description: "Get in touch with Creative Moon — let's talk about your project.",
+  description: "Get in touch — let's talk about your project. Available for design, engineering, and full-stack web work.",
   alternates: { canonical: '/contact' },
 };
 

@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Creative Moon — Design-Driven Digital Studio';
+export const alt = 'Creative Moon — Design Engineer Portfolio';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -47,7 +47,7 @@ export default function Image() {
               letterSpacing: '-0.02em',
             }}
           >
-            Design-Driven
+            Design
           </div>
           <div
             style={{
@@ -58,7 +58,7 @@ export default function Image() {
               letterSpacing: '-0.02em',
             }}
           >
-            Digital Studio.
+            Engineer.
           </div>
         </div>
 
@@ -71,7 +71,7 @@ export default function Image() {
             lineHeight: 1.5,
           }}
         >
-          Strategy · Branding · Digital Products · Experiences
+          Figma · Next.js · React · TypeScript · Interaction
         </div>
       </div>
     ),

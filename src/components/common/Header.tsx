@@ -492,7 +492,7 @@ export default function Header() {
         </div>
 
         <div className="nav__email">
-          <a href="mailto:hello@creativemoon.com">hello@creativemoon.com</a>
+          <a href="mailto:touch@creative-moon.com">touch@creative-moon.com</a>
         </div>
       </div>
     </>

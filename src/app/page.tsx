@@ -4,7 +4,7 @@ import JsonLd from '@/components/common/JsonLd';
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://creative-moon.com';
 
 export const metadata: Metadata = {
-  title: { absolute: 'Creative Moon | Design-Driven Digital Studio' },
+  title: { absolute: 'Creative Moon | Design Engineer Portfolio' },
   alternates: { canonical: SITE_URL },
 };
 
@@ -43,8 +43,8 @@ export default async function Home() {
         name: 'Creative Moon',
         url: SITE_URL,
         logo: { '@type': 'ImageObject', url: `${SITE_URL}/icon.svg` },
-        email: 'hello@creativemoon.com',
-        description: 'Design-driven studio crafting interactive digital experiences — strategy, branding, and digital products.',
+        email: 'touch@creative-moon.com',
+        description: "Design Engineer portfolio — I design in Figma and ship in Next.js. Interaction-driven websites with design and engineering owned end-to-end.",
       },
       {
         '@type': 'WebSite',

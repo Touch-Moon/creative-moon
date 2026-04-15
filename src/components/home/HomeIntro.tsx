@@ -58,11 +58,10 @@ export default function HomeIntro() {
         transition={{ duration: 1.2, ease: EASE_OUT }}
       >
         <p>
-          A Designer and Developer based in Canada. Focused on
-          crafting responsive, interaction-driven websites where every detail of the user
-          experience is considered, from how a page feels to how it responds. Every project
-          is approached with the same standard: intentional design, clean code, and a
-          finished product that holds&nbsp;up.
+          I&apos;m a Design Engineer based in Canada — I design in Figma and ship in Next.js.
+          Focused on responsive, interaction-driven websites where every detail is considered,
+          from how a page looks to how it responds. Every project holds the same standard:
+          intentional design, clean code, and a finished product that holds&nbsp;up.
         </p>
       </m.div>
       </div>
