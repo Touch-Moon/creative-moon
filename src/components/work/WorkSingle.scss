@@ -150,8 +150,24 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
     letter-spacing: 0.1em;
   }
 
-  // What we do
+  // What I did
   &__summary { }
+
+  // Built with — centered full-width section near the bottom.
+  // Padding-bottom mirrors &__modules across all breakpoints.
+  &__builtwith {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: fvw(96) $gutter-desktop fvw(167);
+
+    .work-single__label { margin-bottom: fvw(20); }
+    .tech-stack { justify-content: center; }
+
+    @media (max-width: 1023.98px) { padding: 56px $gutter-tablet 10vw; }
+    @media (max-width:  575.98px) { padding: 40px $gutter-mobile 8vw;  }
+  }
 
   &__services {
     list-style: none;
@@ -202,6 +218,9 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
   // ── .work__modules ──────────────────────────────────
   &__modules {
     padding-bottom: fvw(167); // ~11.6vw
+
+    // When a Built with section follows, let it own the bottom padding.
+    &--has-builtwith { padding-bottom: 0; }
   }
 
   // ── Tablet ────────────────────────────────────────
@@ -221,14 +240,20 @@ $ease-out: cubic-bezier(0.19, 1, 0.22, 1);
       grid-template-columns: 1fr;
       gap: 36px;
     }
-    &__modules { padding-bottom: 10vw; }
+    &__modules {
+      padding-bottom: 10vw;
+      &--has-builtwith { padding-bottom: 0; }
+    }
   }
 
   // ── Mobile ──────────────────────────────────────────
   @media (max-width: 575.98px) {
     &__top { padding: 0 $gutter-mobile $space-8; } // was hardcoded 24px → $space-8 (≈32px)
     &__text { padding: 32px $gutter-mobile; }
-    &__modules { padding-bottom: 8vw; }
+    &__modules {
+      padding-bottom: 8vw;
+      &--has-builtwith { padding-bottom: 0; }
+    }
   }
 }
 

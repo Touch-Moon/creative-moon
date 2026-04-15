@@ -18,6 +18,7 @@ import type {
 } from '@/sanity/queries';
 import { sanityImg } from '@/sanity/queries';
 import WorkRelated from './WorkRelated';
+import TechStack from '@/components/common/TechStack';
 import './WorkSingle.scss';
 
 const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
@@ -472,7 +473,7 @@ export default function WorkSingle({ data, selectedWorks }: Props) {
         <div className="work-single__text-inner">
           {work.services && work.services.length > 0 && (
             <div className="work-single__summary">
-              <p className="work-single__label body-text-caps">What we do</p>
+              <p className="work-single__label body-text-caps">What I did</p>
               <ul className="work-single__services">
                 {work.services.map((s, i) => (
                   <li key={i} className="body-text-4">{s}</li>
@@ -507,9 +508,20 @@ export default function WorkSingle({ data, selectedWorks }: Props) {
 
       {/* ── .work__modules ── */}
       {work.modules && work.modules.length > 0 && (
-        <div className="work-single__modules" data-theme="light">
+        <div
+          className={`work-single__modules${work.tools && work.tools.length > 0 ? ' work-single__modules--has-builtwith' : ''}`}
+          data-theme="light"
+        >
           {work.modules.map((mod, i) => renderModule(mod, i))}
         </div>
+      )}
+
+      {/* ── Built with (Tech Stack, centered, bottom) ── */}
+      {work.tools && work.tools.length > 0 && (
+        <section className="work-single__builtwith">
+          <p className="work-single__label body-text-caps">Built with</p>
+          <TechStack items={work.tools} />
+        </section>
       )}
 
       {/* ── Related Works ── */}

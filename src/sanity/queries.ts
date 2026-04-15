@@ -172,6 +172,7 @@ export type WorkSingleData = {
   subtitle?: string;
   overview?: string;
   services?: string[];
+  tools?: string[];
   siteUrl?: string;
   githubUrl?: string;
   tags?: string[];
@@ -191,7 +192,7 @@ export type WorkSingleData = {
 // thumbnailPortrait/Wide — fetched as raw image objects (asset ref + hotspot/crop)
 // → front-end builds crop URLs via urlFor() (using getThumbPortrait/Wide helpers)
 export const WORKS_LIST_QUERY = `
-  *[_type == "work"] | order(order asc) {
+  *[_type == "work" && !(_id in path("drafts.**"))] | order(order asc) {
     _id,
     title,
     slug,
@@ -215,6 +216,7 @@ export const WORK_BY_SLUG_QUERY = `
     subtitle,
     overview,
     services,
+    tools,
     siteUrl,
     githubUrl,
     tags,
@@ -246,7 +248,7 @@ export const WORK_BY_SLUG_QUERY = `
 // Selected Works: for home carousel & single Related Works
 // thumbnailPortrait takes priority; falls back to auto center-crop from thumbnailLandscape (getThumbPortrait helper)
 export const SELECTED_WORKS_QUERY = `
-  *[_type == "work"] | order(order asc) {
+  *[_type == "work" && !(_id in path("drafts.**"))] | order(order asc) {
     _id,
     title,
     slug,
@@ -297,10 +299,19 @@ export type StoryModuleType =
   | StoryMediaBlock
   | StoryTextBlock
   | StorySpacerBlock
+  | StoryTechStack
   // Legacy modules (existing documents)
   | LegacyStoryMediaModule
   | LegacyStoryTwoColImageModule
   | LegacyStoryTextModule;
+
+export type StoryTechStack = {
+  _type: "storyTechStack";
+  _key: string;
+  heading?: string;
+  items?: string[];
+  paddingTop?: number;
+};
 
 // ── Legacy Module Types (backward compat) ──────────────────────────
 export type LegacyStoryMediaModule = {
@@ -410,7 +421,7 @@ export type StorySingleData = {
 
 // Stories list
 export const STORIES_LIST_QUERY = `
-  *[_type == "story"] | order(order asc, publishedAt desc) {
+  *[_type == "story" && !(_id in path("drafts.**"))] | order(order asc, publishedAt desc) {
     _id,
     title,
     slug,
@@ -477,7 +488,7 @@ export const STORY_BY_SLUG_QUERY = `
 
 // Stories for HomeStories carousel (ordered)
 export const STORIES_CAROUSEL_QUERY = `
-  *[_type == "story"] | order(order asc, publishedAt desc) [0...8] {
+  *[_type == "story" && !(_id in path("drafts.**"))] | order(order asc, publishedAt desc) [0...8] {
     _id,
     title,
     slug,

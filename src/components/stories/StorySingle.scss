@@ -585,6 +585,36 @@
   }
 }
 
+// ── Tech Stack module ─────────────────────────────────────────────
+.story-module--techstack {
+  padding-top: calc(var(--story-pt, 160) * 1px);
+  padding-left: fvw(120);
+  padding-right: fvw(120);
+
+  @media (max-width: 1023.98px) {
+    padding-left: 48px;
+    padding-right: 48px;
+    padding-top: calc(var(--story-pt, 160) * 0.6px);
+  }
+  @media (max-width: 575.98px)  {
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: calc(var(--story-pt, 160) * 0.5px);
+  }
+}
+
+.story-module__techstack-inner {
+  max-width: fvw(960);
+  margin: 0 auto;
+}
+
+.story-module__techstack-heading {
+  margin: 0 0 fvw(16);
+  color: var(--foreground-muted, var(--foreground));
+
+  @media (max-width: 1023.98px) { margin-bottom: 12px; }
+}
+
 // ── Inline code (within Portable Text) ────────────────────────────
 .story-inline-code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;

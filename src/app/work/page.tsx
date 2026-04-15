@@ -28,12 +28,13 @@ export default async function WorkPage() {
       portraitAspectRatio: item.portraitAspectRatio,
       listDescription: item.listDescription,
       categories: Array.isArray(item.categories)
-        ? item.categories.map((c) => (typeof c === 'string' ? c : c.title)).filter(Boolean)
+        ? item.categories
+            .map((c) => (c == null ? null : typeof c === 'string' ? c : c.title))
+            .filter((t): t is string => typeof t === 'string' && t.length > 0)
         : [],
       order: item.order,
     }));
   } catch {
-    // Sanity not connected or empty — use dummy data inside WorkList
     works = [];
   }
 

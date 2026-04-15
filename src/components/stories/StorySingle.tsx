@@ -13,10 +13,12 @@ import type {
   StoryTextBlock,
   StorySpacerBlock,
   StoryHeroMedia,
+  StoryTechStack as StoryTechStackData,
   LegacyStoryMediaModule,
   LegacyStoryTwoColImageModule,
   LegacyStoryTextModule,
 } from '@/sanity/queries';
+import TechStack from '@/components/common/TechStack';
 import './StorySingle.scss';
 
 const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
@@ -276,6 +278,25 @@ function MediaBlock({ mod }: { mod: StoryMediaBlock }) {
 function SpacerBlock({ mod }: { mod: StorySpacerBlock }) {
   const size = mod.size || 'medium';
   return <div className={`story-module story-module--spacer story-module--spacer-${size}`} />;
+}
+
+// ── Tech Stack Block ──────────────────────────────────────────────
+function TechStackBlock({ mod }: { mod: StoryTechStackData }) {
+  if (!mod.items?.length) return null;
+  const paddingTop = mod.paddingTop ?? 160;
+  return (
+    <div
+      className="story-module story-module--techstack"
+      style={{ '--story-pt': paddingTop } as React.CSSProperties}
+    >
+      <div className="story-module__techstack-inner">
+        {mod.heading && (
+          <p className="body-text-caps story-module__techstack-heading">{mod.heading}</p>
+        )}
+        <TechStack items={mod.items} />
+      </div>
+    </div>
+  );
 }
 
 // ── Text Module ───────────────────────────────────────────────────
@@ -640,6 +661,9 @@ export default function StorySingle({ data }: { data: StorySingleData | null }) 
         }
         if (mod._type === 'storySpacerBlock') {
           return <SpacerBlock key={mod._key} mod={mod} />;
+        }
+        if (mod._type === 'storyTechStack') {
+          return <TechStackBlock key={mod._key} mod={mod} />;
         }
         // Legacy module types — adapt then reuse renderers
         if (mod._type === 'storyMediaModule') {
