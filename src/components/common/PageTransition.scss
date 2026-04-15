@@ -11,6 +11,27 @@
 //   main#main-content receives inline transform: translateY(100svh) from JS;
 //   translateY(0) transition starts when curtain reaches 50%
 
+// ── Reserve scrollbar gutter so hiding overflow mid-transition
+//    doesn't re-flow the layout (prevents the "two scrollbars"
+//    flash during the wave/curtain sequence).
+html {
+  scrollbar-gutter: stable;
+}
+
+// ── Lock native overflow while a transition is in flight.
+//    The clone (position:fixed) and the main slide-up are the only
+//    things that should render during this window; anything scrollable
+//    underneath (body + inner .work-list etc.) must not draw its own
+//    scrollbar on top of the fixed clone.
+html.is-thumb-exiting,
+html.is-page-exiting,
+html.is-work-exiting,
+html.is-page-entering {
+  overflow: hidden;
+
+  body { overflow: hidden; }
+}
+
 // ── Thumbnail transition Exit ─────────────────────────────────────────
 html.is-thumb-exiting {
   main,

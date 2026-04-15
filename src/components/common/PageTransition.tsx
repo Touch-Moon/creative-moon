@@ -67,7 +67,7 @@ function easeInOut(t: number): number {
 function forceCleanup() {
   document.querySelectorAll(CLONE_SEL).forEach((el) => el.remove());
   document.documentElement.classList.remove(
-    'is-page-exiting', 'is-thumb-exiting', 'is-work-exiting',
+    'is-page-exiting', 'is-thumb-exiting', 'is-work-exiting', 'is-page-entering',
   );
   const main = document.getElementById('main-content');
   if (main) {
@@ -131,7 +131,10 @@ export default function PageTransition({ children }: { children: React.ReactNode
       clone.style.clipPath   = 'inset(0 0 100% 0)';
 
       // curtain 50% → main slide up + fade in
+      // Hand off from exit classes to `is-page-entering` so the overflow
+      // lock stays in place until the slide-up + curtain finish.
       setTimeout(() => {
+        document.documentElement.classList.add('is-page-entering');
         document.documentElement.classList.remove(
           'is-page-exiting', 'is-thumb-exiting', 'is-work-exiting',
         );
@@ -155,6 +158,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
           m.style.transition = '';
           m.style.opacity    = '';
         }
+        document.documentElement.classList.remove('is-page-entering');
         resetLenisAndStart(lenisRef);
       }, CURTAIN_MS + 120);
     };
