@@ -584,3 +584,55 @@
     }
   }
 }
+
+// ── Inline code (within Portable Text) ────────────────────────────
+.story-inline-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.9em;
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  background: rgba(127, 127, 127, 0.15);
+  color: var(--foreground);
+}
+
+// ── Code block (Portable Text `codeBlock` type) ───────────────────
+.story-code {
+  margin: fvw(24) 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(127, 127, 127, 0.2);
+  background: rgba(20, 20, 22, 0.92);
+  color: #e6e6e6;
+
+  @media (max-width: 1023.98px) { margin: 20px 0; }
+
+  &__filename {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px;
+    padding: 10px 16px;
+    background: rgba(0, 0, 0, 0.35);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(230, 230, 230, 0.7);
+  }
+
+  &__pre {
+    margin: 0;
+    padding: fvw(20) fvw(24);
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    tab-size: 2;
+
+    @media (max-width: 1023.98px) { padding: 16px 18px; font-size: 12.5px; }
+  }
+
+  &__code {
+    display: block;
+    white-space: pre;
+    font-family: inherit;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
+}

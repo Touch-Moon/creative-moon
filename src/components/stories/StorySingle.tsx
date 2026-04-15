@@ -25,6 +25,13 @@ const EASE_INOUT: BezierDefinition = [0.76, 0, 0.24, 1];
 // ── Portable Text components ──────────────────────────────────────
 type LinkMark = { _type: 'link'; href: string; blank?: boolean };
 
+type CodeBlockValue = {
+  _type: 'codeBlock';
+  language?: string;
+  filename?: string;
+  code?: string;
+};
+
 const ptComponents = {
   types: {
     // Guard inline image blocks: skip rendering when asset URL is missing
@@ -38,6 +45,21 @@ const ptComponents = {
         </span>
       );
     },
+    codeBlock: ({ value }: { value?: CodeBlockValue }) => {
+      const code = value?.code;
+      if (!code) return null;
+      const language = value?.language || 'text';
+      return (
+        <figure className="story-code" data-language={language}>
+          {value?.filename && (
+            <figcaption className="story-code__filename">{value.filename}</figcaption>
+          )}
+          <pre className={`story-code__pre language-${language}`}>
+            <code className={`story-code__code language-${language}`}>{code}</code>
+          </pre>
+        </figure>
+      );
+    },
   },
   block: {
     normal: (({ children }) => (
@@ -45,6 +67,9 @@ const ptComponents = {
     )) as PortableTextBlockComponent,
   },
   marks: {
+    code: ({ children }: { children?: React.ReactNode }) => (
+      <code className="story-inline-code">{children}</code>
+    ),
     link: ({ children, value }: PortableTextMarkComponentProps<LinkMark>) => (
       <a
         href={value?.href}
