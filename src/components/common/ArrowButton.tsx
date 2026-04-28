@@ -5,7 +5,7 @@ import './ArrowButton.scss';
 const EASE = 'cubic-bezier(0.19, 1, 0.22, 1)';
 const DUR  = '0.45s';
 
-// plastic.design standard: line + chevron, same SVG flipped with rotate(180deg) for prev
+// Line + chevron arrow, same SVG flipped with rotate(180deg) for prev
 const Arrow = () => (
   <svg width="38" height="18" viewBox="0 0 38 18" fill="none" aria-hidden="true">
     <line x1="0.75" y1="8.75" x2="36.5" y2="8.75" stroke="currentColor" strokeWidth="1.5" />

@@ -15,18 +15,15 @@ import WorksSlider from '@/components/common/WorksSlider';
 
 const MAX_WORKS = 10;
 
-// ── Convert Sanity data → works array (falls back to SELECTED_WORKS if absent) ──
+// ── Convert Sanity data → works array ───────────────────────────────────────────────
 function buildWorksList(serverWorks?: SelectedWorkSanity[]): SelectedWork[] {
-  if (!serverWorks || serverWorks.length === 0) return SELECTED_WORKS;
+  if (!serverWorks || serverWorks.length === 0) return [];
   return serverWorks.map((sw, i) => {
-    const fallback =
-      SELECTED_WORKS.find((w) => w.slug === sw.slug.current) ??
-      SELECTED_WORKS[i % SELECTED_WORKS.length];
     const useLandscape = sw.cardSize === 'large' || sw.cardSize === 'wide';
     const sanityUrl = useLandscape
       ? (getThumbLandscape(sw.thumbnailLandscape) ?? getThumbPortrait(sw.thumbnailPortrait, undefined))
       : getThumbPortrait(sw.thumbnailPortrait, sw.thumbnailLandscape);
-    const rawSrc = sanityUrl ?? fallback.src;
+    const rawSrc = sanityUrl ?? '';
     // Canvas (WaveImage): same-origin /_next/image proxy
     // w must be a value from next.config.ts deviceSizes (other values return a 400 error)
     // large/wide → w=1920 / tall/compact → w=960
@@ -39,7 +36,7 @@ function buildWorksList(serverWorks?: SelectedWorkSanity[]): SelectedWork[] {
       title: sw.title,
       slug: sw.slug.current,
       src,
-      size: (sw.cardSize ?? fallback.size) as CardSize,
+      size: (sw.cardSize ?? 'compact') as CardSize,
     };
   });
 }

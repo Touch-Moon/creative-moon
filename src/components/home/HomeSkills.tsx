@@ -92,7 +92,7 @@ function SkillItem({ item, index, isRevealed, setItemRef }: SkillItemProps) {
         <p className="home-skills__desc">{item.desc}</p>
       </div>
 
-      {/* ── Line animation (plastic.design home-service__line approach) ── */}
+      {/* ── Line animation (per-item rule) ── */}
       <div className="home-skills__rule">
         <m.span
           className="home-skills__rule-inner"

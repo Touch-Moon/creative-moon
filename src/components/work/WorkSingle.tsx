@@ -50,31 +50,6 @@ const fadeUpVariants: Variants = {
   }),
 };
 
-// ── Dummy single data ─────────────────────────────────────────────
-const DUMMY_SINGLE: WorkSingleData = {
-  _id: 'dummy',
-  title: 'Hyundai Annual Convention.',
-  slug: { current: 'hyundai' },
-  year: '2025',
-  subtitle: 'Designing the visual concept and identity for a large-scale brand experience event.',
-  overview:
-    'Hyundai Motor Company approached us to conceptualize and design the full visual identity for their annual convention — a gathering of thousands of dealers, partners, and stakeholders.',
-  services: ['Strategic Design', 'Visual Identity', 'Motion Design', 'Experiences'],
-  siteUrl: 'https://www.hyundai.com',
-  githubUrl: undefined,
-  categories: [],
-  heroMedia: { type: 'image', image: undefined },
-  modules: [
-    { _type: 'textBlock', _key: 'm1', heading: 'Challenge',
-      body: 'The convention needed to feel both premium and approachable — reflecting Hyundai\'s ambition while remaining human-centered.', columnWidth: 7 } as TextBlock,
-    { _type: 'mediaBlock', _key: 'm2', layout: '1col', fullBleed: true, image1: undefined } as unknown as MediaBlock,
-    { _type: 'mediaBlock', _key: 'm3', layout: '2col', image1: undefined, image2: undefined } as unknown as MediaBlock,
-    { _type: 'textBlock', _key: 'm4', heading: 'Outcome',
-      body: 'The final identity was implemented across 14 event spaces and 200+ assets.', columnWidth: 7 } as TextBlock,
-    { _type: 'mediaBlock', _key: 'm5', layout: '1col', image1: undefined } as unknown as MediaBlock,
-  ],
-};
-
 // ── Placeholder URL utility ──────────────────────────────────────
 function ph(w: number, h: number, n = '') {
   return `https://placehold.co/${w}x${h}/1a1a1a/555555${n ? `?text=${encodeURIComponent(n)}` : ''}`;
@@ -384,7 +359,8 @@ function renderModule(mod: ModuleType, index: number) {
 type Props = { data?: WorkSingleData | null; selectedWorks?: SelectedWorkSanity[] };
 
 export default function WorkSingle({ data, selectedWorks }: Props) {
-  const work = data || DUMMY_SINGLE;
+  if (!data) return null;
+  const work = data;
   const heroRawUrl = (work.heroMedia?.image as { asset?: { url?: string } })?.asset?.url ?? null;
   const heroSrc = sanityImg(heroRawUrl, 1440, 85) ?? ph(1440, 900, work.title);
 

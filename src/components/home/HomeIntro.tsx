@@ -18,7 +18,7 @@ export default function HomeIntro() {
   return (
     <section className="home-intro" data-theme="light">
       <div className="wrap">
-      {/* ── Video placeholder — matches the plastic.design home-intro-video area ── */}
+      {/* ── Intro video placeholder ── */}
       <m.div
         ref={videoRef}
         className="home-intro-video"

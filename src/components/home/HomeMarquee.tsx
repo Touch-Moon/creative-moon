@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from 'react';
 import './HomeMarquee.scss';
 
 // 4 rows — UX/UI design & development philosophy keywords
-// Character-count ratios match plastic.design .clients to maintain grid:
+// Character-count ratios per row are tuned to maintain a balanced grid:
 // rows 1–2: 3 items  (6–7 chars each — space-between)
 // row  3:   2 items  (11 + 7 chars  — space-between)
 // row  4:   2 items  (12 + 7 chars  — flex-start + margin-left)
@@ -33,7 +33,6 @@ export default function HomeMarquee() {
     const el = ref.current;
     if (!el) return;
 
-    // IntersectionObserver — same mechanism as plastic.design
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {

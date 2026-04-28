@@ -53,7 +53,7 @@
   text-transform: uppercase;
 }
 
-// ── Tablet (≤1024px) — plastic.design 768px base ────────────
+// ── Tablet (≤1024px) — 768px base ────────────────────────────
 @media (max-width: 1023.98px) {
   .body-text-1    { font-size: calc(20 / 768 * 100vw); }
   .body-text-2    { font-size: calc(20 / 768 * 100vw); }
@@ -63,7 +63,7 @@
   .body-text-caps { font-size: calc(11 / 768 * 100vw); }
 }
 
-// ── Mobile (≤576px) — plastic.design @ 375px base ───────────
+// ── Mobile (≤576px) — 375px base ─────────────────────────────
 @media (max-width: 575.98px) {
   .body-text-1    { font-size: calc(24 / 375 * 100vw); }
   .body-text-2    { font-size: calc(22 / 375 * 100vw); }

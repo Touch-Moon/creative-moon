@@ -313,7 +313,7 @@ export default function Header() {
       if (!isReturningToParent) {
         window.scrollTo(0, 0);
       }
-    }, 380); // same timing as plastic.design
+    }, 380);
 
     return () => clearTimeout(timer);
   }, [pathname]);

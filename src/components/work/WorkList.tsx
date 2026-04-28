@@ -29,54 +29,6 @@ export type WorkItem = {
   order?: number;
 };
 
-// ── Dummy data ────────────────────────────────────────────────────
-// thumbnailPortraitUrl: 50% vertical (Portrait)
-// thumbnailLandscapeUrl: 100% horizontal (Landscape)
-// portraitAspectRatio: width÷height (e.g. 0.8 = portrait, 1.35 = nearly square)
-const DUMMY_WORKS: WorkItem[] = [
-  {
-    _id: 'd1', title: 'Hyundai Annual Convention.', slug: { current: 'hyundai' },
-    thumbnailPortraitUrl: 'https://placehold.co/864x1037/1a1a1a/555555?text=01',
-    thumbnailLandscapeUrl: 'https://placehold.co/1792x1008/1a1a1a/555555?text=01',
-    listDescription: 'Hyundai annual convention. Designing the visual concept for a large-scale brand experience.',
-    categories: ['Strategic design', 'Experiences'], order: 1,
-  },
-  {
-    _id: 'd2', title: 'Lobelia Brand Identity.', slug: { current: 'lobelia' },
-    thumbnailPortraitUrl: 'https://placehold.co/864x1037/222222/555555?text=02',
-    thumbnailLandscapeUrl: 'https://placehold.co/1792x1008/222222/555555?text=02',
-    listDescription: 'Lobelia. A complete brand identity for a premium botanical skincare label.',
-    categories: ['Branding', 'Digital products'], order: 2,
-  },
-  {
-    _id: 'd3', title: 'Nu Era Seeds.', slug: { current: 'nu-era-seeds' },
-    thumbnailPortraitUrl: 'https://placehold.co/864x1037/2b2b2b/555555?text=03',
-    thumbnailLandscapeUrl: 'https://placehold.co/1792x1008/2b2b2b/555555?text=03',
-    listDescription: 'Nu Era Seeds. Reimagining the digital presence of an agricultural innovator.',
-    categories: ['Digital products', 'Technology'], order: 3,
-  },
-  {
-    _id: 'd4', title: 'Cobre Creative Studio.', slug: { current: 'cobre' },
-    thumbnailPortraitUrl: 'https://placehold.co/864x1037/333333/555555?text=04',
-    thumbnailLandscapeUrl: 'https://placehold.co/1792x1008/333333/555555?text=04',
-    listDescription: 'Cobre Creative Studio. Brand identity and website for a multidisciplinary studio.',
-    categories: ['Branding', 'Consultancy'], order: 4,
-  },
-  {
-    _id: 'd5', title: 'Planta Digital Platform.', slug: { current: 'planta' },
-    thumbnailPortraitUrl: 'https://placehold.co/864x1037/3a3a3a/555555?text=05',
-    thumbnailLandscapeUrl: 'https://placehold.co/1792x1008/3a3a3a/555555?text=05',
-    listDescription: 'Planta. A digital product for plant parents to track, learn and connect.',
-    categories: ['Digital products', 'Technology'], order: 5,
-  },
-  {
-    _id: 'd6', title: 'Archetype Research.', slug: { current: 'archetype' },
-    thumbnailPortraitUrl: 'https://placehold.co/864x1037/252525/555555?text=06',
-    thumbnailLandscapeUrl: 'https://placehold.co/1792x1008/252525/555555?text=06',
-    listDescription: 'Archetype Research. Crafting the brand for a strategic research consultancy.',
-    categories: ['Consultancy', 'Strategic design'], order: 6,
-  },
-];
 
 // ── Category utility ──────────────────────────────────────────────
 function buildCategories(works: WorkItem[]) {
@@ -139,7 +91,7 @@ function WorkCard({ work, layout, animDelay, onImageEnter, onImageLeave }: {
 type Props = { initialWorks?: WorkItem[] };
 
 export default function WorkList({ initialWorks }: Props) {
-  const works = initialWorks && initialWorks.length > 0 ? initialWorks : DUMMY_WORKS;
+  const works = initialWorks ?? [];
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const allCategories = buildCategories(works);
   const cursorRef = useRef<HTMLDivElement>(null);

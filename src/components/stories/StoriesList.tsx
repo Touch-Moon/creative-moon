@@ -11,55 +11,6 @@ import './StoriesList.scss';
 
 const EASE_OUT: BezierDefinition = [0.19, 1, 0.22, 1];
 
-// ── Dummy data (used when Sanity is not connected) ────────────────
-const DUMMY_STORIES: StoryListItem[] = [
-  {
-    _id: '1',
-    title: 'The digital challenge of the industrial sector.',
-    slug: { current: 'the-digital-challenge-of-the-industrial-sector' },
-    category: 'Insights',
-    publishedAt: '2024-11-20T00:00:00Z',
-    excerpt: 'Exploring how digital transformation is reshaping industrial companies and what design can do to help.',
-    order: 1,
-  },
-  {
-    _id: '2',
-    title: 'Reflections on design, current context.',
-    slug: { current: 'reflections-on-design-current-context' },
-    category: 'Process',
-    publishedAt: '2024-09-10T00:00:00Z',
-    excerpt: 'A look at how design practice evolves with technology and changing user expectations.',
-    order: 2,
-  },
-  {
-    _id: '3',
-    title: 'Digital symphony: branding evolution.',
-    slug: { current: 'digital-symphony-branding-evolution' },
-    category: 'Branding',
-    publishedAt: '2024-07-05T00:00:00Z',
-    excerpt: 'Successful brands act like master orchestras — a symphony that evolves with each customer interaction.',
-    order: 3,
-  },
-  {
-    _id: '4',
-    title: 'Tech innovation and effective healthcare.',
-    slug: { current: 'tech-innovation-effective-healthcare' },
-    category: 'Technology',
-    publishedAt: '2024-04-18T00:00:00Z',
-    excerpt: 'How technology and thoughtful design are transforming patient experiences across the healthcare sector.',
-    order: 4,
-  },
-  {
-    _id: '5',
-    title: 'We review a decade of experience in retail.',
-    slug: { current: 'a-decade-of-experience-in-retail' },
-    category: 'Insights',
-    publishedAt: '2024-01-15T00:00:00Z',
-    excerpt: 'Reflecting on ten years of e-commerce retail work — conversion, creativity, and what design really sells.',
-    order: 5,
-  },
-];
-
 function formatDate(dateStr?: string) {
   if (!dateStr) return '';
   return new Date(dateStr).toLocaleDateString('en-US', {
@@ -140,7 +91,7 @@ function StoryCard({ story, index }: { story: StoryListItem; index: number }) {
 
 // ── Main Component ────────────────────────────────────────────────
 export default function StoriesList({ stories: initialStories }: { stories: StoryListItem[] }) {
-  const stories = initialStories.length > 0 ? initialStories : DUMMY_STORIES;
+  const stories = initialStories;
   const [viewMode, setViewMode] = useState<'column' | 'list'>('column');
 
   const headerRef = useRef(null);

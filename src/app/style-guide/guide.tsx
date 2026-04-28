@@ -76,7 +76,7 @@ export const styleManual: ManualSection[] = [
     subtitle: 'Headlines',
     description:
       'Seven fluid headline scales using calc(px / 1440 * 100vw) on desktop, capped at 1920px on Desktop XL. ' +
-      'Tablet uses plastic.design 768px base · Mobile uses plastic.design 375px base. ' +
+      'Tablet uses a 768px base · Mobile uses a 375px base. ' +
       'All weights are 400.',
     groups: [
       {
@@ -114,7 +114,7 @@ export const styleManual: ManualSection[] = [
     description:
       'Fluid vw-based body text scale using calc(px / 1440 * 100vw) on desktop, capped at 1920px on Desktop XL. ' +
       'Six levels from large editorial text to functional captions. ' +
-      'Tablet uses 768px base · Mobile uses 375px base (matching plastic.design).',
+      'Tablet uses a 768px base · Mobile uses a 375px base.',
     groups: [
       {
         label: 'Classes',
@@ -274,7 +274,7 @@ export const styleManual: ManualSection[] = [
     title: 'Mobile Overrides',
     subtitle: 'Component Typography',
     description:
-      'Component-level font-size overrides at mobile (≤ 575.98px) to match plastic.design proportions. ' +
+      'Component-level font-size overrides at mobile (≤ 575.98px) for tighter on-screen proportions. ' +
       'These override the global token values for specific elements that need tighter sizing on small screens.',
     groups: [
       {
