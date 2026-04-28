@@ -252,7 +252,7 @@ const textBlock = defineType({
         layout: "radio",
       },
       initialValue: "default",
-      description: "Split: 좌측 본문 + 우측 대형 헤딩 (plastic.design 스타일)",
+      description: "Split: 좌측 본문 + 우측 대형 헤딩",
     }),
     defineField({ name: "heading", title: "Section Heading", type: "string" }),
     defineField({ name: "body", title: "Body Text", type: "text", rows: 5 }),
@@ -364,7 +364,7 @@ export const work = defineType({
       name: "title",
       title: "Title",
       type: "string",
-      description: 'e.g. "Hyundai annual convention."',
+      description: 'e.g. "Project name."',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -417,7 +417,7 @@ export const work = defineType({
       name: "listDescription",
       title: "List Description",
       type: "string",
-      description: 'Shown under thumbnail on list page. e.g. "Hyundai annual convention. Designing the visual concept..."',
+      description: 'Shown under thumbnail on list page. Short one-line summary.',
     }),
 
     // ── Selected Works Carousel Fields

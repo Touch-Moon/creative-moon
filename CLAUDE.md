@@ -359,7 +359,7 @@ Component SCSS는 해당 컴포넌트 파일 옆에 배치 후 직접 import.
 .__line-v { position: absolute; width: 1px; height: ...; background: var(--foreground-dim); transform-origin: left top; will-change: transform; }
 ```
 
-### 복수 라인 시퀀스 (plastic.design 방식)
+### 복수 라인 시퀀스
 여러 라인이 함께 있으면 **순서대로 딜레이**를 주어 사각형을 그리듯 연출:
 - top 수평선: `delay: 0`
 - 수직선: `delay: 0.3`
