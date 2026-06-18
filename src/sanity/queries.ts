@@ -420,9 +420,9 @@ export type StorySingleData = {
 
 // ── Story GROQ Queries ────────────────────────────────────────────
 
-// Stories list
+// Stories list — newest first (by publish date, falling back to creation time)
 export const STORIES_LIST_QUERY = `
-  *[_type == "story" && !(_id in path("drafts.**"))] | order(order asc, publishedAt desc) {
+  *[_type == "story" && !(_id in path("drafts.**"))] | order(coalesce(publishedAt, _createdAt) desc) {
     _id,
     title,
     slug,
@@ -435,8 +435,7 @@ export const STORIES_LIST_QUERY = `
     "thumbnailPortraitUrl": coalesce(thumbnailPortrait.asset->url, thumbnail.asset->url),
     "thumbnailVideoUrl": thumbnailVideo.asset->url,
     excerpt,
-    listDescription,
-    order
+    listDescription
   }
 `;
 
@@ -490,7 +489,7 @@ export const STORY_BY_SLUG_QUERY = `
 
 // Stories for HomeStories carousel (ordered)
 export const STORIES_CAROUSEL_QUERY = `
-  *[_type == "story" && !(_id in path("drafts.**"))] | order(order asc, publishedAt desc) [0...8] {
+  *[_type == "story" && !(_id in path("drafts.**"))] | order(coalesce(publishedAt, _createdAt) desc) [0...8] {
     _id,
     title,
     slug,
