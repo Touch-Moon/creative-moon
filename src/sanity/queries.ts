@@ -403,6 +403,7 @@ export type StorySingleData = {
   category?: string;
   categories?: { _id: string; title: string; slug: string }[];
   tags?: string[];
+  liveUrl?: string;
   githubUrl?: string;
   stackblitzUrl?: string;
   publishedAt?: string;
@@ -448,6 +449,7 @@ export const STORY_BY_SLUG_QUERY = `
     "category": coalesce(categories[0]->title, category),
     "categories": categories[]->{ _id, title, "slug": slug.current },
     tags,
+    liveUrl,
     githubUrl,
     stackblitzUrl,
     publishedAt,

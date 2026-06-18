@@ -614,11 +614,16 @@ function adaptLegacyText(mod: LegacyStoryTextModule): StoryTextBlock {
   };
 }
 
-// ── External Links (GitHub / StackBlitz) ─────────────────────────
-function StoryLinks({ githubUrl, stackblitzUrl }: { githubUrl?: string; stackblitzUrl?: string }) {
-  if (!githubUrl && !stackblitzUrl) return null;
+// ── External Links (Live / GitHub / StackBlitz) ──────────────────
+function StoryLinks({ liveUrl, githubUrl, stackblitzUrl }: { liveUrl?: string; githubUrl?: string; stackblitzUrl?: string }) {
+  if (!liveUrl && !githubUrl && !stackblitzUrl) return null;
   return (
     <div className="story-single__links">
+      {liveUrl && (
+        <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="button button--m">
+          <span>Live ↗</span>
+        </a>
+      )}
       {githubUrl && (
         <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="button button--m">
           <span>GitHub</span>
@@ -675,8 +680,8 @@ export default function StorySingle({ data }: { data: StorySingleData | null }) 
         return null;
       })}
 
-      {/* External links (GitHub / StackBlitz) */}
-      <StoryLinks githubUrl={story.githubUrl} stackblitzUrl={story.stackblitzUrl} />
+      {/* External links (Live / GitHub / StackBlitz) */}
+      <StoryLinks liveUrl={story.liveUrl} githubUrl={story.githubUrl} stackblitzUrl={story.stackblitzUrl} />
 
       {/* Bottom spacer */}
       <div className="story-single__end" />
