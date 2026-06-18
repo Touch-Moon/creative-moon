@@ -10,12 +10,12 @@ const skills = [
   {
     number: '01',
     title: 'Design & Development.',
-    desc: 'Building responsive, interactive websites from concept to deployment. Focused on layout, typography, m, and clean code — shaping how users see, feel, and move through every page.',
+    desc: 'Building responsive, interactive websites from concept to launch. Focused on layout, typography, motion, and the small details that shape how people see, feel, and move through every page.',
   },
   {
     number: '02',
     title: 'Commerce & Shopify.',
-    desc: 'Custom theme builds, performance optimization, and seamless integrations for Shopify stores. Focused on conversion, speed, and an experience that keeps customers coming back.',
+    desc: 'Custom theme builds, performance, and integrations for Shopify stores. Focused on a shopping experience that\'s fast, considered, and keeps people coming back.',
   },
   {
     number: '03',
@@ -25,12 +25,12 @@ const skills = [
   {
     number: '04',
     title: 'Interface & Interaction.',
-    desc: 'Designing interfaces where every interaction is intentional — from micro-animations to user flow. Wireframes to polished, accessible experiences with clarity at every touchpoint.',
+    desc: 'Designing interfaces where every interaction is intentional, from micro-animations to user flow. Wireframes to polished, accessible experiences with clarity at every touchpoint.',
   },
   {
     number: '05',
     title: 'Engineering & Performance.',
-    desc: 'Building modern front-end applications with React and Next.js — from component architecture to production builds. The foundation for interactive, high-performance work.',
+    desc: 'Building front-end applications with React and Next.js, so the design ships exactly as I intended. Fast, solid, and made to hold up, with the craft carried all the way to production.',
   },
 ];
 
