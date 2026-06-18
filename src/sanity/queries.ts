@@ -420,9 +420,9 @@ export type StorySingleData = {
 
 // ── Story GROQ Queries ────────────────────────────────────────────
 
-// Stories list — newest first (by publish date, falling back to creation time)
+// Stories list — manual drag order from Sanity (orderRank ascending)
 export const STORIES_LIST_QUERY = `
-  *[_type == "story" && !(_id in path("drafts.**"))] | order(coalesce(publishedAt, _createdAt) desc) {
+  *[_type == "story" && !(_id in path("drafts.**"))] | order(orderRank) {
     _id,
     title,
     slug,
@@ -487,9 +487,9 @@ export const STORY_BY_SLUG_QUERY = `
   }
 `;
 
-// Stories for HomeStories carousel (ordered)
+// Stories for HomeStories carousel (manual drag order — orderRank ascending)
 export const STORIES_CAROUSEL_QUERY = `
-  *[_type == "story" && !(_id in path("drafts.**"))] | order(coalesce(publishedAt, _createdAt) desc) [0...8] {
+  *[_type == "story" && !(_id in path("drafts.**"))] | order(orderRank) [0...8] {
     _id,
     title,
     slug,
