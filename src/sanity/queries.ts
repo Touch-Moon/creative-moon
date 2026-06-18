@@ -495,7 +495,8 @@ export const STORIES_CAROUSEL_QUERY = `
     title,
     slug,
     "category": coalesce(categories[0]->title, category),
-    "thumbnailUrl": coalesce(thumbnail.asset->url, thumbnailPortrait.asset->url, thumbnailLandscape.asset->url)
+    "thumbnailUrl": coalesce(thumbnail.asset->url, thumbnailPortrait.asset->url, thumbnailLandscape.asset->url),
+    "thumbnailVideoUrl": thumbnailVideo.asset->url
   }
 `;
 

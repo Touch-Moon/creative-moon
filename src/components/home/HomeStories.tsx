@@ -387,7 +387,20 @@ export default function HomeStories({ initialStories }: { initialStories?: Story
             draggable={false}
           >
             <div className="home-stories__card-img">
-              {optimizedThumb ? (
+              {item.thumbnailVideoUrl ? (
+                <video
+                  src={item.thumbnailVideoUrl}
+                  poster={optimizedThumb ?? undefined}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="metadata"
+                  draggable={false}
+                  aria-label={item.title}
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none', userSelect: 'none' }}
+                />
+              ) : optimizedThumb ? (
                 <Image
                   src={optimizedThumb}
                   alt={item.title}
