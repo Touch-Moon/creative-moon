@@ -19,7 +19,7 @@ import SmoothScroll from "@/components/common/SmoothScroll";
 import MotionProvider from "@/components/common/MotionProvider";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://creative-moon.com';
-const OG_DESC = "I'm a Design Engineer based in Canada — I design in Figma and ship in Next.js. Crafting interaction-driven websites where design and engineering are owned end-to-end.";
+const OG_DESC = "I'm a designer based in Canada. I make functional things beautiful, always for the people who use them, and build them myself, from the first idea to the last detail.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

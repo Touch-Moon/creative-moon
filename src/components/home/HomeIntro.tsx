@@ -58,10 +58,7 @@ export default function HomeIntro() {
         transition={{ duration: 1.2, ease: EASE_OUT }}
       >
         <p>
-          I&apos;m a Design Engineer based in Canada — I design in Figma and ship in Next.js.
-          Focused on responsive, interaction-driven websites where every detail is considered,
-          from how a page looks to how it responds. Every project holds the same standard:
-          intentional design, clean code, and a finished product that holds&nbsp;up.
+          I&apos;m a designer based in Canada. I make functional things beautiful, always for the people who use them. I care about how a page looks and how it feels to use, down to the smallest detail. Every project holds the same standard: design that&apos;s thought through, and made to last.
         </p>
       </m.div>
       </div>

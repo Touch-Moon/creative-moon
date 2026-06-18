@@ -44,7 +44,7 @@ export default async function Home() {
         url: SITE_URL,
         logo: { '@type': 'ImageObject', url: `${SITE_URL}/icon.svg` },
         email: 'touch@creative-moon.com',
-        description: "Design Engineer portfolio — I design in Figma and ship in Next.js. Interaction-driven websites with design and engineering owned end-to-end.",
+        description: "I'm a designer based in Canada. I make functional things beautiful, always for the people who use them, and build them myself, from the first idea to the last detail.",
       },
       {
         '@type': 'WebSite',
