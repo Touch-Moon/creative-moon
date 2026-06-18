@@ -8,26 +8,38 @@ const WAVE_SIGMA_PCT = 0.5;
 const WAVE_CYCLES    = 0.5;
 const PULSE_SPEED    = 0.032;
 
-function drawFrame(canvas: HTMLCanvasElement, img: HTMLImageElement, p: number) {
+// Wave source can be an image OR a (paused) video frame. drawImage accepts both;
+// since we never read pixels back, a cross-origin video taints the canvas harmlessly.
+type WaveSource = HTMLImageElement | HTMLVideoElement;
+
+function srcDims(src: WaveSource): { w: number; h: number } {
+  return {
+    w: (src as HTMLImageElement).naturalWidth || (src as HTMLVideoElement).videoWidth || 0,
+    h: (src as HTMLImageElement).naturalHeight || (src as HTMLVideoElement).videoHeight || 0,
+  };
+}
+
+function drawFrame(canvas: HTMLCanvasElement, img: WaveSource, p: number) {
   if (canvas.width === 0 || canvas.height === 0) return;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
-  // ★ Keep canvas empty if image fails to load (prevents errors)
-  if (!img.naturalWidth || !img.naturalHeight) return;
+  // ★ Keep canvas empty if the source has no frame yet (prevents errors)
+  const { w: nw, h: nh } = srcDims(img);
+  if (!nw || !nh) return;
 
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
 
-  const ir = img.naturalWidth / img.naturalHeight;
+  const ir = nw / nh;
   const cr = W / H;
   let sx: number, sy: number, sw: number, sh: number;
 
   if (ir > cr) {
-    sh = img.naturalHeight; sw = sh * cr;
-    sx = (img.naturalWidth - sw) / 2; sy = 0;
+    sh = nh; sw = sh * cr;
+    sx = (nw - sw) / 2; sy = 0;
   } else {
-    sw = img.naturalWidth; sh = sw / cr;
-    sx = 0; sy = (img.naturalHeight - sh) / 2;
+    sw = nw; sh = sw / cr;
+    sx = 0; sy = (nh - sh) / 2;
   }
 
   if (p === 0) {
@@ -81,9 +93,14 @@ export function initCanvas(
  * Calls onComplete() when the wave finishes.
  * Starts immediately without delay since this is for page transitions.
  */
+/** Draw a single static frame (p=0) from an image or video source. */
+export function drawStill(canvas: HTMLCanvasElement, src: WaveSource): void {
+  drawFrame(canvas, src, 0);
+}
+
 export function runWave(
   canvas: HTMLCanvasElement,
-  img: HTMLImageElement,
+  img: WaveSource,
   onComplete: () => void,
 ): void {
   let progress = 0;

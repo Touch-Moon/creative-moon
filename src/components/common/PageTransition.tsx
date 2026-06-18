@@ -14,7 +14,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useLayoutEffect, useRef } from 'react';
-import { initCanvas, runWave } from '@/lib/canvasWave';
+import { initCanvas, runWave, drawStill } from '@/lib/canvasWave';
 import { useLenis } from './LenisContext';
 import './PageTransition.scss';
 
@@ -163,8 +163,28 @@ export default function PageTransition({ children }: { children: React.ReactNode
       }, CURTAIN_MS + 120);
     };
 
+    // ── Frozen video frame → wave → curtain (Dept-style, no image swap) ──
+    const ptVideo = (clone as unknown as { __ptVideo?: HTMLVideoElement }).__ptVideo;
+    if (ptVideo && ptVideo.videoWidth > 0) {
+      const dpr = window.devicePixelRatio || 1;
+      const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
+      if (cw > 0 && ch > 0) {
+        canvas.width  = Math.round(cw * dpr);
+        canvas.height = Math.round(ch * dpr);
+      }
+      let waveTimerId: ReturnType<typeof setTimeout> | null = setTimeout(() => startCurtain(), WAVE_TIMEOUT_MS);
+      try {
+        runWave(canvas, ptVideo, () => {
+          if (waveTimerId) clearTimeout(waveTimerId);
+          startCurtain();
+        });
+      } catch {
+        if (waveTimerId) clearTimeout(waveTimerId);
+        startCurtain();
+      }
+    }
     // ── Image load → wave (+ timeout) → curtain ─────────────────
-    if (imgSrc) {
+    else if (imgSrc) {
       const img = new window.Image();
       img.crossOrigin = 'anonymous';
 
@@ -298,8 +318,21 @@ export default function PageTransition({ children }: { children: React.ReactNode
         clone.appendChild(canvas);   // above: canvas for wave (transparent before load)
         document.body.appendChild(clone);
 
-        // ③ draw image to canvas (used during wave ENTER)
-        initCanvas(canvas, src, () => {});
+        // ③ draw onto canvas (used during wave ENTER)
+        //    If the card thumbnail is a playing <video>, freeze it on the current
+        //    frame and use that frame for the wave — no jarring video→poster swap.
+        const thumbVideo = imgEl.querySelector('video') as HTMLVideoElement | null;
+        const hasFrame = !!thumbVideo && thumbVideo.readyState >= 2 && thumbVideo.videoWidth > 0;
+        if (hasFrame && thumbVideo) {
+          thumbVideo.pause();
+          const dpr = window.devicePixelRatio || 1;
+          canvas.width  = Math.round(rect.width * dpr);
+          canvas.height = Math.round(rect.height * dpr);
+          try { drawStill(canvas, thumbVideo); } catch { /* canvas may taint — still fine */ }
+          (clone as unknown as { __ptVideo?: HTMLVideoElement }).__ptVideo = thumbVideo;
+        } else {
+          initCanvas(canvas, src, () => {});
+        }
 
         // ④ EXIT failsafe — force navigate if scroll + navigate don't complete
         const exitFailsafe = setTimeout(() => {
