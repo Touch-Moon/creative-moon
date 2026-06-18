@@ -291,6 +291,7 @@ export type StoryListItem = {
   tags?: string[];
   publishedAt?: string;
   thumbnailUrl?: string;
+  thumbnailVideoUrl?: string;
   excerpt?: string;
   order?: number;
 };
@@ -432,6 +433,7 @@ export const STORIES_LIST_QUERY = `
     "thumbnailUrl": coalesce(thumbnail.asset->url, thumbnailPortrait.asset->url, thumbnailLandscape.asset->url),
     "thumbnailLandscapeUrl": coalesce(thumbnailLandscape.asset->url, thumbnail.asset->url),
     "thumbnailPortraitUrl": coalesce(thumbnailPortrait.asset->url, thumbnail.asset->url),
+    "thumbnailVideoUrl": thumbnailVideo.asset->url,
     excerpt,
     listDescription,
     order

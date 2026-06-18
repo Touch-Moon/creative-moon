@@ -43,9 +43,21 @@ function StoryCard({ story, index }: { story: StoryListItem; index: number }) {
       transition={{ duration: 1.1, ease: EASE_OUT, delay: (index % 2) * 0.1 }}
     >
       <Link href={`/stories/${story.slug.current}`} className="story-card__link">
-        {/* Thumbnail */}
+        {/* Thumbnail — looping video (Dept-style) when present, else image */}
         <div className="story-card__image">
-          {optimizedThumb ? (
+          {story.thumbnailVideoUrl ? (
+            <video
+              className="story-card__img story-card__video"
+              src={story.thumbnailVideoUrl}
+              poster={optimizedThumb ?? undefined}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              aria-label={story.title}
+            />
+          ) : optimizedThumb ? (
             <Image
               src={optimizedThumb}
               alt={story.title}

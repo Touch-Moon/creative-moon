@@ -220,6 +220,15 @@ $story-view-btn-icon:          16px; // icon inside view toggle
   transition: transform 0.7s ease;
 }
 
+// Looping video thumbnail fills the frame like next/image `fill`
+video.story-card__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .story-card__meta {
   display: flex;
   align-items: center;
