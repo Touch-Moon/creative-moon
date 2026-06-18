@@ -50,32 +50,36 @@ const imageReveal: Variants = {
 
 // ── Tech stack data ────────────────────────────────────────────
 const awards = [
+  { org: 'Figma', name: 'UI/UX Design & Prototyping', year: 'Design' },
+  { org: 'Adobe CC', name: 'Brand, Video & Visual Design', year: 'Design' },
+  { org: 'HTML / CSS / SCSS', name: 'Responsive Layouts & Design Systems', year: 'Core' },
+  { org: 'Three.js / R3F', name: 'Real-time 3D Scenes', year: '3D' },
+  { org: 'WebGL / GLSL', name: 'Custom Shaders & Graphics', year: 'Shaders' },
+  { org: 'GSAP', name: 'Motion & Interaction', year: 'Motion' },
   { org: 'React', name: 'Component Architecture & Modern Front-End', year: 'JS' },
   { org: 'Next.js', name: 'Full-Stack Applications & Static Sites', year: 'JS' },
   { org: 'TypeScript', name: 'Type-Safe Front-End Engineering', year: 'JS' },
-  { org: 'Shopify', name: 'Custom Theme Development & Optimization', year: 'E-COM' },
-  { org: 'WordPress', name: 'Custom Themes, Plugins & CMS Architecture', year: 'CMS' },
+  { org: 'WordPress', name: 'Custom Themes, Plugins & CMS', year: 'CMS' },
+  { org: 'Shopify', name: 'Custom Theme Development', year: 'E-COM' },
   { org: 'Sanity / Supabase', name: 'Headless CMS & Backend Integration', year: 'Stack' },
-  { org: 'Figma', name: 'UI/UX Design & Prototyping Workflows', year: 'Design' },
-  { org: 'HTML / CSS / SCSS', name: 'Responsive Layouts & Design Systems', year: 'Core' },
 ];
 
 // ── Approach data ──────────────────────────────────────────────
 const compliance = [
   {
     number: '01.',
-    heading: 'Design before code.',
-    desc: 'Every project starts with layout, hierarchy, and user flow — before touching a line of code. Design decisions shape technical ones, not the other way around.',
+    heading: 'Start with people.',
+    desc: 'Every project begins with the people who\'ll use it: how they feel, what they need, and where the experience can do more. Design leads, and everything else follows from there.',
   },
   {
     number: '02.',
-    heading: 'Clear communication, always.',
-    desc: 'Transparent updates from kickoff to launch. What\'s being built, why, and how — no surprises at delivery. Documented setups and clean handoffs come standard.',
+    heading: 'Nothing less than great.',
+    desc: 'Quality isn\'t a final step, it\'s there the whole way through. If the work isn\'t great, it isn\'t finished. Every project is treated as something to be proud of, not just delivered.',
   },
   {
     number: '03.',
-    heading: 'Performance by default.',
-    desc: 'Page speed, semantic markup, and accessibility are built in from the start, not added on. Every site is optimized for real-world performance, not just a dev preview.',
+    heading: 'Honest, start to finish.',
+    desc: 'Clear updates, honest timelines, and no surprises at the end. The same care that shapes how I work shapes the user experience it leads to.',
   },
 ];
 
@@ -114,9 +118,9 @@ export default function AboutPage() {
         <div className="wrapper">
           <h1 className="about-title__content">
             {[
-              'Design-driven work.',
-              'Built with precision',
-              'and purpose.',
+              'The functional,',
+              'made beautiful.',
+              'Always for people.',
             ].map((line, i) => (
               <span key={i} className="line">
                 <m.span
@@ -173,11 +177,8 @@ export default function AboutPage() {
             animate={fullImg.inView ? 'visible' : 'hidden'}
           >
             <p>
-              I&apos;m a Design Engineer based in Canada — I design in Figma and ship in Next.js.
-              Grounded in years of experience across design and development, every
-              project is delivered with the same commitment — strong design, clean code,
-              and a product that performs after launch. From WordPress builds to React
-              applications, the focus is always on owning the full&nbsp;path.
+              I&apos;m a designer based in Canada. I take the functional and make it beautiful, always for the people who use it. I build it myself, so nothing gets lost along the way.
+              After years across design and development, the way I work doesn&apos;t change: design that&apos;s thought through, made with care, and built to last. I design in Figma and build in Next.js, but the tools only ever serve the idea. Whatever the project, I stay with it from the first idea to the last detail.
             </p>
           </m.div>
         </div>
@@ -217,7 +218,7 @@ export default function AboutPage() {
                 Design that works,<br />from the first click.
               </h2>
               <p className="about-image-text__desc">
-                Every decision starts with the user — how they move through a page,
+                Every decision starts with the user: how they move through a page,
                 what draws attention, and where friction lives. The goal is always
                 the same: a website that feels intuitive, loads fast, and guides
                 visitors toward what matters. Work spans{' '}
@@ -296,7 +297,7 @@ export default function AboutPage() {
             animate={textLeft.inView ? 'visible' : 'hidden'}
           >
             <p>
-              Good websites aren&apos;t assembled — they&apos;re considered. That means
+              Good websites aren&apos;t assembled. They&apos;re considered. That means
               understanding the project&apos;s purpose before writing a line of code,
               choosing the right approach for the job, and building something that
               lasts. Every project is treated as a long-term investment in quality,
@@ -321,13 +322,10 @@ export default function AboutPage() {
               animate={textRight.inView ? 'visible' : 'hidden'}
             >
               <h2 className="about-text-right__heading">
-                Clean code today.<br />Less trouble tomorrow.
+                Made with care.<br />Made to last.
               </h2>
               <p className="about-text-right__desc">
-                Code written without care becomes a problem down the line. Fast load
-                times, structured markup, documented setups — not just for launch,
-                but for everything that comes after. Whatever the project, whatever
-                the platform, the standard doesn&apos;t change.
+                Anything rushed shows it later. So I make things with care, so they last, stay easy to live with, and still feel right long after launch. Whatever the project, the standard doesn&apos;t change.
               </p>
             </m.div>
           </div>

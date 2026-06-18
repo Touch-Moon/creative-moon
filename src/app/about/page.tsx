@@ -3,7 +3,7 @@ import AboutPage from '@/components/about/AboutPage';
 
 export const metadata: Metadata = {
   title: 'About',
-  description: "About me — I'm a Design Engineer based in Canada. I design in Figma and ship in Next.js, focused on interaction-driven digital experiences.",
+  description: "I'm a designer based in Canada. I make functional things beautiful, always for the people who use them, and build them myself, from the first idea to the last detail.",
   alternates: { canonical: '/about' },
 };
 
